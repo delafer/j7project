@@ -1,0 +1,16 @@
+www.modernizr.com
+jQuery UI
+requireJS
+
+Google Fonts API 
+
+http://lokeshdhakar.com/projects/lightbox2/
+
+AddThis 300
+
+http://ckeditor.com/demo#standard
+
+http://www.freesmileys.org/free-smileys-IM-MSN.php
+http://www.sherv.net/sad-emoticons.html
+http://freeemoticonsandsmileys.com/freeemoticonsandsmileys/
+http://www.smileyarena.com/emoticons/packs/free-msn-smileys-miranda-yelow-1.aspx

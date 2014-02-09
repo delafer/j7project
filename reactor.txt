@@ -1,0 +1,26 @@
+<div ng-controller="MyCtrl">
+    <input ng-model="strText"/>
+    
+   <sender on-change="strText"/>
+    <p>{{strText}}</p>
+</div>
+
+
+
+var app=angular.module('myApp', []);
+
+app.directive('sender', function() {    
+    return {
+        restrict: 'E',
+        scope:{'onChange':'=' },
+        link: function(scope, elm, attrs) {            
+            scope.$watch('onChange', function(nVal) { 
+                alert(nVal);
+            });            
+        }
+    };        
+});
+
+app.controller('MyCtrl', function($scope) { 
+    $scope.strText = "Hello";
+});
