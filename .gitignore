@@ -30,3 +30,15 @@ proguard/
 *.ipr
 *.iws
 .idea/
+
+# Other files
+**/.settings
+**/src/generated
+*.classpath
+*.project
+*.prefs
+*.log
+*.orig
+*.releaseBackup
+.checkstyle
+*.coffee
