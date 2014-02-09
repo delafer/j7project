@@ -1,11 +1,10 @@
 
-
 *.class
 
 # Package Files #
 *.jar
 *.war
-
+*.ear
 
 # more caches and things from deploy #
 target/
