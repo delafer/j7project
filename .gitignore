@@ -1,1 +1,13 @@
+
+
+*.class
+
+# Package Files #
+*.jar
+*.war
+
+
+# more caches and things from deploy #
 target/
+target/WEB-INF/deploy/
+target/WEB-INF/classes/
