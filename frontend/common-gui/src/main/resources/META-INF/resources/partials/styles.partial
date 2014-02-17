@@ -1,0 +1,10 @@
+<link href="webjars/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet">
+<link href="crefowebjars/angular-toastr/0.4.1/toaster.css" rel="stylesheet">
+<link href="crefowebjars/ng-table/0.3.1/ng-table.css" rel="stylesheet">
+<link href="crefowebjars/chosen/1.0.0/chosen.css" rel="stylesheet">
+<link href="crefowebjars/angular-chosen/1.0.4/chosen-spinner.css" rel="stylesheet">
+<link rel="stylesheet" href="styles/themes/bootstrap/bootstrap-theme.min.css">
+<link rel="stylesheet" href="styles/main.css">
+<link rel="stylesheet" href="styles/crefo-backward.css">
+
+<link rel="shortcut icon" href="favicon.ico" />

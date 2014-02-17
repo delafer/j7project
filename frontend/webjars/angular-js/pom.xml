@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"> 
+    <modelVersion>4.0.0</modelVersion> 
+    <parent> 
+        <groupId>net.j7.frontend.webjars</groupId> 
+        <artifactId>webjars-parent</artifactId> 
+        <version>1.0.0</version> 
+    </parent> 
+    <packaging>jar</packaging> 
+    <version>${angularjs.version}</version>
+    <groupId>org.webjars</groupId> 
+    <artifactId>angularjs</artifactId> 
+    <name>angularjs</name> 
+    <description>AngularJS library</description> 
+    <dependencies> 
+    </dependencies> 
+
+<!--
+    <properties> 
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding> 
+        <upstream.version>0.7.0</upstream.version> 
+        <destDir>${project.build.outputDirectory}/META-INF/resources/crefowebjars/${project.artifactId}/${upstream.version}</destDir> 
+    </properties> 
+    <build> 
+        <plugins> 
+            <plugin> 
+                <artifactId>maven-antrun-plugin</artifactId> 
+                <version>1.7</version> 
+                <executions> 
+                    <execution> 
+                        <phase>process-resources</phase> 
+                        <goals> 
+                            <goal>run</goal> 
+                        </goals> 
+                        <configuration> 
+                            <target> 
+                                <copy tofile="${destDir}/ui-bootstrap.js" file="${project.basedir}/js/ui-bootstrap-${upstream.version}.js" /> 
+                                <copy tofile="${destDir}/ui-bootstrap.min.js" file="${project.basedir}/js/ui-bootstrap-${upstream.version}.min.js" /> 
+                                <copy tofile="${destDir}/ui-bootstrap-tpls.js" file="${project.basedir}/js/ui-bootstrap-tpls-${upstream.version}.js" /> 
+                                <copy tofile="${destDir}/ui-bootstrap-tpls.min.js" file="${project.basedir}/js/ui-bootstrap-tpls-${upstream.version}.min.js" /> 
+                            </target> 
+                        </configuration> 
+                    </execution> 
+                </executions> 
+            </plugin> 
+            <plugin> 
+                <groupId>org.apache.maven.plugins</groupId> 
+                <artifactId>maven-release-plugin</artifactId> 
+                <version>2.3.2</version> 
+            </plugin> 
+        </plugins> 
+        <resources> 
+            <resource> 
+                <directory>${project.basedir}/src/main/resources</directory> 
+                <targetPath>${destDir}</targetPath> 
+            </resource> 
+        </resources> 
+    </build>
+    -->
+</project> 

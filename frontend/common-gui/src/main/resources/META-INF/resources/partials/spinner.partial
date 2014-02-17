@@ -1,0 +1,7 @@
+<div class="spinner_container">
+    <div class="row">
+        <div class="col-lg-12 ">
+            <img class="spinner center-block img-responsive" alt="loading image" src="images/ajax-loader.gif" />
+        </div>
+    </div>
+</div>

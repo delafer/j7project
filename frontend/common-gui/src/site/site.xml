@@ -1,0 +1,77 @@
+<project
+    xmlns="http://maven.apache.org/DECORATION/1.3.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/DECORATION/1.3.0 http://maven.apache.org/xsd/decoration-1.3.0.xsd">
+    
+    <bannerRight>
+        <name>J7 Project</name>
+        <src>images/logo-hell.png</src>
+        <href>/</href>
+        <width>265</width>
+    </bannerRight>
+    
+    <body>
+        <head>
+            <link rel="icon" href="favicon.ico"/>
+        </head>
+    </body>
+    <custom>
+        <reflowSkin>
+
+            <bottomDescription>
+              <![CDATA[
+                   GUI <span class="color-highlight">Angular</span> - the easy
+                   way creating angular and bootstrap powerd frontends with 
+                   Crefo-<span class="color-highlight">J7</span>
+              ]]>
+            </bottomDescription>
+            
+            <bottomNav maxSpan="9" >
+                <column>reports</column>
+            </bottomNav>
+
+            <pages>
+
+                <!-- index.html -->
+                <index>
+                    <shortTitle>GUI Angular</shortTitle>
+                    <breadcrumbs>true</breadcrumbs>
+                    <toc>top</toc>
+                    <sections>
+                        <!-- Allgemein -->
+                        <columns>1</columns>
+                        <!-- Direktiven Header -->
+                        <body/>
+                        <!-- Direktiven 2 Spaltig -->
+                        <columns>2</columns>
+                        <!-- Partials Header -->
+                        <body/>
+                        <!-- Partials 2 Spaltig -->
+                        <columns>2</columns>
+                        <!-- Infrastructure Header -->
+                        <body/>
+                        <!-- Infrastructure 2 Spaltig -->
+                        <columns>2</columns>
+                        <!-- Config Header -->
+                        <body/>
+                        <!-- Config 2 Spaltig -->
+                        <columns>2</columns>
+                    </sections>
+                </index>
+        
+                <integration>
+                    <highlightJs>false</highlightJs>
+                </integration>
+
+                <issue-tracking>
+                    <highlightJs>false</highlightJs>
+                </issue-tracking>
+
+                <source-repository>
+                    <highlightJs>false</highlightJs>
+                </source-repository>
+
+            </pages>
+        </reflowSkin>
+    </custom>
+</project>
