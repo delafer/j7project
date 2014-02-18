@@ -1,11 +1,8 @@
 define(['jquery','./module'],
         function($,module) {
             'use strict';
-            
             var runningCounter = 0;
-
             /*global jQuery:true */
-            
             // register the interceptor as a service, intercepts ALL angular ajax http
             // calls
             module.factory('SpinnerHttpInterceptor', ['$q','spinner',function($q,spinner) {

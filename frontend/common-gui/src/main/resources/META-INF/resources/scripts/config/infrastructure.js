@@ -6,9 +6,6 @@ define(['./module', './configConstants'],
                     $httpProvider.interceptors.push('HttpAuthInterceptor');
                 }]);
 
-//            configs.config(['$httpProvider', function($httpProvider) {
-//                    $httpProvider.interceptors.push("HttpHmacInterceptor");
-//                }]);
             configs.config(['$httpProvider', function($httpProvider) {
                     $httpProvider.interceptors.push('SpinnerHttpInterceptor');
                 }]);

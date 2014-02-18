@@ -1,7 +1,6 @@
 define(['./module'],
         function(factories) {
             'use strict';
-
             factories.factory('HttpErrorInterceptor', ['$q', '$rootScope', 'toaster',
                 function($q, $rootScope, toaster) {
 

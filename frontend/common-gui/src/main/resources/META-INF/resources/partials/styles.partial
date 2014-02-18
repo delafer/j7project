@@ -4,7 +4,5 @@
 <link href="crefowebjars/chosen/1.0.0/chosen.css" rel="stylesheet">
 <link href="crefowebjars/angular-chosen/1.0.4/chosen-spinner.css" rel="stylesheet">
 <link rel="stylesheet" href="styles/themes/bootstrap/bootstrap-theme.min.css">
-<link rel="stylesheet" href="styles/main.css">
-<link rel="stylesheet" href="styles/crefo-backward.css">
-
+<link rel="stylesheet" href="styles/j7.css">
 <link rel="shortcut icon" href="favicon.ico" />

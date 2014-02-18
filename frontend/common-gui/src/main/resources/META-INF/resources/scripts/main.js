@@ -15,12 +15,12 @@ require.config({
         'angularUiSelect2': '../webjars/ui-select2/0.0.5/ui-select2',
         'angularUiUtils': '../webjars/angular-ui-utils/0.1.0/ui-utils',
         'angularUiBootstrap': '../webjars/angular-ui-bootstrap/0.10.0/ui-bootstrap-tpls',
-        'angularToastr': '../crefowebjars/angular-toastr/0.4.1/toaster',
-        'chosen': '../crefowebjars/chosen/1.0.0/chosen.jquery',
-        'ngTable': '../crefowebjars/ng-table/0.3.1/ng-table',
-        'angularChosen': '../crefowebjars/angular-chosen/1.0.4/chosen',
+        'angularToastr': '../webjars/angular-toastr/0.4.1/toaster',
+        'chosen': '../webjars/chosen/1.0.0/chosen.jquery',
+        'ngTable': '../webjars/ng-table/0.3.1/ng-table',
+        'angularChosen': '../webjars/angular-chosen/1.0.4/chosen',
         'jquery': '../webjars/jquery/1.11.0/jquery',
-        'easyxdm': '../crefowebjars/easyxdm/2.4.19.3/easyXDM.debug'
+        'easyxdm': '../webjars/easyxdm/2.4.19.3/easyXDM.debug'
     },
     // angular does not support AMD out of the box, put it in a shim
     shim: {

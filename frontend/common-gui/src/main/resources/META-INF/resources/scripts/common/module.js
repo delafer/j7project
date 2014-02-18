@@ -1,4 +1,4 @@
 define(['angular'], function (ng) {
     'use strict';
-    return ng.module('crefo.common', []);
+    return ng.module('j7.common', []);
 });

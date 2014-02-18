@@ -13,7 +13,7 @@
     <packaging>pom</packaging> 
     <modules> 
         <module>webjars</module> 
-    <!--    <module>common-gui</module> -->
+        <module>common-gui</module> 
     </modules> 
     <properties> 
         <angularjs.version>1.2.14</angularjs.version> 
@@ -36,6 +36,15 @@
     </properties> 
     <dependencyManagement> 
         <dependencies> 
+
+<!-- Same module dependencies -->
+            <dependency> 
+                <groupId>net.j7.frontend.webjars</groupId> 
+                <artifactId>webjars-parent</artifactId> 
+                <version>${project.version}</version> 
+            </dependency> 
+
+<!-- Third party dependencies -->
             <dependency> 
                 <groupId>org.webjars</groupId> 
                 <artifactId>angularjs</artifactId> 

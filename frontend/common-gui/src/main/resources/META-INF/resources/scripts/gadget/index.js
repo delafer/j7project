@@ -1,1 +1,1 @@
-define(['./module','./xdm-gagdet-service','./infrastructure','./token-http-interceptor'], function () {});
+define(['./module'], function () {});
