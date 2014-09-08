@@ -1,0 +1,58 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@page import="net.j7.system.core.registry.Registry"%>
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<!--<![endif]-->
+<html class="no-js" lang="de-DE" xmlns="http://www.w3.org/1999/xhtml" xml:lang="de-DE">
+    <head>
+        <meta content="IE=Edge,chrome=1" http-equiv="X-UA-Compatible"/>
+        <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+        <meta charset="utf-8"/>
+        <meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+        <meta content="de" property="og:locale"/>
+        <meta content="text/javascript" http-equiv="Content-Script-Type"/>
+
+        <meta content="no-cache" http-equiv="Cache-Control"/>
+        <meta content="no-cache" http-equiv="Pragma"/>
+        <META content="-1" http-equiv="Expires"/>
+
+        <meta name="description" content=""/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <jsp:include page="partials/styles.partial"/>
+
+        <title>Historische Altdaten</title>
+
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+          <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+        <!--[if lt IE 9]>
+          <script src="webjars/es5-shim/2.3.0/es5-shim.js"></script>
+          <script src="webjars/json3/3.2.5a/json3.js"></script>
+        <![endif]-->
+
+        <div  ng-controller="SearchCtrl">
+			<app-url name="baseUrl" remote-url="<%=Registry.getNextURI("historicalagencies")%>"/>
+			<resizer min-height="410"/>
+            <div class="row">
+                <toaster-container toaster-options="{'position-class':'toast-top-right', 'body-template': 'toasterBodyTmpl.html'}"> </toaster-container>
+            </div>
+
+
+            <!-- Add your site or application content here -->
+            <div ng-view=""></div>
+
+
+            <!--<jsp:include page="partials/spinner.partial"/>-->
+        </div>
+
+        <script src="webjars/requirejs/2.1.10/require.min.js" data-main="scripts/main.js"></script>
+    </body>
+</html>
