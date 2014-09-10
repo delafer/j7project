@@ -7,6 +7,8 @@
  */
 package net.j7.system.utils;
 
+import java.util.Iterator;
+
 /**
  * Class <b>Args.fill(String template, Object... args)</b> <br><br>
  * This is really easy and lightweight <b>(only about 50 lines of code)</b><br>
@@ -77,6 +79,7 @@ public final class Args {
       }
 
       flush(sb, num, no, args);
+
 
       return sb.toString();
    }
