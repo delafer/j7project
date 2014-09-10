@@ -1,8 +1,8 @@
-<link href="webjars/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet">
-<link href="crefowebjars/angular-toastr/0.4.1/toaster.css" rel="stylesheet">
-<link href="crefowebjars/ng-table/0.3.1/ng-table.css" rel="stylesheet">
-<link href="crefowebjars/chosen/1.0.0/chosen.css" rel="stylesheet">
-<link href="crefowebjars/angular-chosen/1.0.4/chosen-spinner.css" rel="stylesheet">
-<link rel="stylesheet" href="styles/themes/bootstrap/bootstrap-theme.min.css">
-<link rel="stylesheet" href="styles/j7.css">
-<link rel="shortcut icon" href="favicon.ico" />
+<link href="webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+<link href="webjars/angular-toastr/toaster.css" rel="stylesheet"/>
+<link href="webjars/ng-table/ng-table.css" rel="stylesheet"/>
+<link href="webjars/chosen/chosen.css" rel="stylesheet"/>
+<link href="webjars/angular-chosen/chosen-spinner.css" rel="stylesheet"/>
+<link href="styles/themes/bootstrap/bootstrap-theme.min.css" rel="stylesheet"/>
+<link href="styles/j7.css" rel="stylesheet" />
+<link href="favicon.ico" rel="shortcut icon"/>

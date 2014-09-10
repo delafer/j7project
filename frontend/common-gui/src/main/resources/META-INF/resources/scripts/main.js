@@ -11,10 +11,12 @@ require.config({
         'bootstrap3': '../webjars/bootstrap/js/bootstrap',
         'es5Shim': '../webjars/es5-shim/es5-shim',
         'angularUiBootstrap': '../webjars/angular-ui-bootstrap/ui-bootstrap-tpls',
-        'angularToastr': '../crefowebjars/angular-toastr/toaster',
-        'ngTable': '../crefowebjars/ng-table/ng-table',
-        'ui.select': '../crefowebjars/ui-select/select',
-        'jquery': '../webjars/jquery/jquery'
+        'angularToastr': '../webjars/angular-toastr/toaster',
+        'ngTable': '../webjars/ng-table/ng-table',
+        'ui.select': '../webjars/ui-select/select',
+        'jquery': '../webjars/jquery/jquery',
+        'chosen': '../webjars/chosen/chosen.jquery',
+        'angularChosen': '../webjars/angular-chosen/chosen'
     },
     // angular does not support AMD out of the box, put it in a shim
     shim: {
@@ -33,6 +35,10 @@ require.config({
         'bootstrap3': {
             deps: ['jquery'],
             exports: 'bootstrap3'
+        },
+        'chosen': {
+            deps: ['jquery'],
+            exports: 'chosen'
         },
         'es5Shim': {
             exports: 'es5Shim'

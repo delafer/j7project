@@ -24,9 +24,9 @@ define([
         'ui.bootstrap',
         'toaster',
         'localytics.directives',
+        'ngTable',
         'j7.config',
         'j7.common',
-        'ngTable',
         'j7.infrastructure',
         'j7.directives']
             );
