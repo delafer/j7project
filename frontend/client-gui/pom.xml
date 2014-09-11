@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+<?xml version="1.0" encoding="UTF-8" ?> 
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"> 
+    <modelVersion>4.0.0</modelVersion> 
     <parent> 
         <artifactId>frontend-parent</artifactId> 
         <groupId>net.j7.frontend</groupId> 
@@ -8,31 +8,31 @@
     </parent> 
     <artifactId>client-gui</artifactId> 
     <name>client-gui</name> 
-	<packaging>war</packaging>
-	<dependencies>
-		<dependency>
-		        <artifactId>common-gui</artifactId> 
-				<groupId>net.j7.frontend</groupId> 
-		</dependency>
-	</dependencies>
-	<build>
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-				<filtering>true</filtering>
-			</resource>
-		</resources>
-		<plugins>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>wagon-maven-plugin</artifactId>
-				<configuration>
-					<serverId>tomcatDeploy</serverId>
-					<fromFile>target/${project.artifactId}-${project.version}.war</fromFile>
-					<url>${config.deploy.dir}</url>
-					<toFile>${project.artifactId}.war</toFile>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
-</project>
+    <packaging>war</packaging> 
+    <dependencies> 
+        <dependency> 
+            <artifactId>common-gui</artifactId> 
+            <groupId>net.j7.frontend</groupId> 
+        </dependency> 
+    </dependencies> 
+    <build> 
+        <resources> 
+            <resource> 
+                <directory>src/main/resources</directory> 
+                <filtering>true</filtering> 
+            </resource> 
+        </resources> 
+        <plugins> 
+            <plugin> 
+                <groupId>org.codehaus.mojo</groupId> 
+                <artifactId>wagon-maven-plugin</artifactId> 
+                <configuration> 
+                    <serverId>tomcatDeploy</serverId> 
+                    <fromFile>target/${project.artifactId}-${project.version}.war</fromFile> 
+                    <url>${config.deploy.dir}</url> 
+                    <toFile>${project.artifactId}.war</toFile> 
+                </configuration> 
+            </plugin> 
+        </plugins> 
+    </build> 
+</project> 

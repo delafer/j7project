@@ -21,7 +21,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
-        <jsp:include page="partials/styles.partial"/>
+        <!-- <jsp:include page="partials/styles.partial"/> -->
 
         <title>Test1</title>
 
@@ -32,20 +32,21 @@
         <![endif]-->
 
         <!--[if lt IE 9]>
-          <script src="webjars/es5-shim/2.3.0/es5-shim.js"></script>
-          <!--<script src="webjars/json3/3.2.5a/json3.js"></script>-->
+          <script src="webjars/es5-shim/es5-shim.js"></script>
         <![endif]-->
 
         <div  ng-controller="SearchCtrl">
             <div class="row">
+                <!--
                 <toaster-container toaster-options="{'position-class':'toast-top-right', 'body-template': 'toasterBodyTmpl.html'}"> </toaster-container>
+                 -->
             </div>
 
 
             <!-- Add your site or application content here -->
             <div ng-view="">
                 test
-                
+
             </div>
 
 

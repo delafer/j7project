@@ -11,7 +11,12 @@
     <artifactId>frontend-parent</artifactId> 
     <name>frontend-parent</name> 
     <packaging>pom</packaging> 
-    <modules></modules> 
+   <modules>
+      <module>client-gui</module>
+      <module>common-gui</module>
+      <module>webjars</module>
+   </modules>
+
     <properties> 
         <jquery.version>1.11.1</jquery.version> 
         <es5-shim.version>4.0.3</es5-shim.version> 

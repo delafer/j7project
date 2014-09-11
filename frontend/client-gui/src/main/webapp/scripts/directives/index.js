@@ -1,1 +1,1 @@
-define(['./module','./resizer','./registry'], function () {});
+define(['./module'], function () {});

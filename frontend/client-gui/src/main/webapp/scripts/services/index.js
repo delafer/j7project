@@ -1,1 +1,1 @@
-define(['./module','./histAgency','./histAgencyDetails'], function () {});
+define(['./module','./testService'], function () {});

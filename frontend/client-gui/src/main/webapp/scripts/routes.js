@@ -7,21 +7,10 @@ define(['./app'], function (app) {
     'use strict';
     return app.config(['$routeProvider', function ($routeProvider) {
         $routeProvider.when('/', {
-            templateUrl: 'views/search.jsp',
-        }).when('/:crefonr', {
-        	controller: 'SearchCtrl',
-        	templateUrl: 'views/search.jsp',
-          }).when('/details/:uuid', {
-        	controller: 'DetailsCtrl',
-        	templateUrl: 'views/details.jsp',
-          }).when('/details/:crefonr/:version', {
-        	controller: 'DetailsCtrl',
-        	templateUrl: 'views/details.jsp',
-          }).otherwise({
+            templateUrl: 'views/search.html',
+        }).otherwise({
         	   redirectTo : '/'
           });
-//        $routeProvider.otherwise({
-//            redirectTo: '/'
-//        });
+
     }]);
 });
