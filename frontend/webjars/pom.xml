@@ -15,5 +15,6 @@
     <modules> 
         <module>angular-js</module> 
         <module>angular-chosen</module> 
+        <module>requirejs</module> 
     </modules> 
 </project> 
