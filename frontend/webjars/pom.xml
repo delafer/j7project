@@ -13,8 +13,6 @@
     <version>1.0.0</version>
     <packaging>pom</packaging> 
     <modules> 
-        <module>angular-chosen</module> 
-        <module>angular-js</module> 
         <module>angular-ng-table</module> 
         <module>angular-toastr</module> 
         <module>bootstrap</module> 

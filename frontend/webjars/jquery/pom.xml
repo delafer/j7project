@@ -7,11 +7,10 @@
         <version>1.0.0</version>
     </parent>
     <packaging>jar</packaging>
-    <version>${angular-chosen.version}</version>
-    <groupId>org.webjars</groupId>
-    <artifactId>wj-requirejs</artifactId>
-    <name>wj-requirejs</name>
-    <description>requirejs addon</description>
+    <version>${jquery.version}</version>
+    <artifactId>jquery</artifactId>
+    <name>wj-jquery</name>
+    <description>jquery addon</description>
     <dependencies>
     </dependencies>
     <build>

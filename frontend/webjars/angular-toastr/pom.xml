@@ -7,11 +7,10 @@
         <version>1.0.0</version>
     </parent>
     <packaging>jar</packaging>
-    <version>${angular-chosen.version}</version>
-    <groupId>org.webjars</groupId>
-    <artifactId>wj-requirejs</artifactId>
-    <name>wj-requirejs</name>
-    <description>requirejs addon</description>
+    <version>${angular-toastr.version}</version>
+    <artifactId>angular-toastr</artifactId>
+    <name>wj-angular-toastr</name>
+    <description>angular-toastr addon</description>
     <dependencies>
     </dependencies>
     <build>

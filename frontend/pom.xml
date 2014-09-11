@@ -11,25 +11,19 @@
     <artifactId>frontend-parent</artifactId> 
     <name>frontend-parent</name> 
     <packaging>pom</packaging> 
-    <modules> 
-        <module>webjars</module> 
-        <module>common-gui</module> 
-        <module>client-gui</module> 
-    </modules> 
+    <modules></modules> 
     <properties> 
-		<jquery.version>1.11.1</jquery.version>
-		<es5-shim.version>4.0.3</es5-shim.version>
-		<requirejs.version>2.1.15</requirejs.version> 
-		<requirejs-domready.version>2.0.1</requirejs-domready.version> 
-		<angularjs.version>1.3.0</angularjs.version> 
-		<angular-toastr.version>1.4.7</angular-toastr.version> 
-		<ng-table.version>0.3.2</ng-table.version> 
-		<bootstrap.version>3.2.0</bootstrap.version> 
-		<angular-ui-bootstrap.version>0.11.0</angular-ui-bootstrap.version> 
-		<angular-ui-select.version>0.7.0</angular-ui-select.version> 
-		<angular-bootstrap3.version>1.0.0-SNAPSHOT</angular-bootstrap3.version> 
-		<angular-chosen.version>1.0.4</angular-chosen.version> 
-		<json3.version>3.2.5a</json3.version>  
+        <jquery.version>1.11.1</jquery.version> 
+        <es5-shim.version>4.0.3</es5-shim.version> 
+        <requirejs.version>2.1.15</requirejs.version> 
+        <requirejs-domready.version>2.0.1</requirejs-domready.version> 
+        <angularjs.version>1.3.0</angularjs.version> 
+        <angular-toastr.version>1.4.7</angular-toastr.version> 
+        <ng-table.version>0.3.2</ng-table.version> 
+        <bootstrap.version>3.2.0</bootstrap.version> 
+        <angular-ui-bootstrap.version>0.11.0</angular-ui-bootstrap.version> 
+        <angular-ui-select.version>0.7.0</angular-ui-select.version> 
+        <angular-chosen.version>1.0.4</angular-chosen.version> 
     </properties> 
     <dependencyManagement> 
         <dependencies> 
@@ -45,32 +39,77 @@
                 <artifactId>common-gui</artifactId> 
                 <version>${project.version}</version> 
             </dependency> 
+            <dependency> 
+                <groupId>net.j7.frontend</groupId> 
+                <artifactId>client-gui</artifactId> 
+                <version>${project.version}</version> 
+            </dependency> 
 
 <!-- Third party dependencies -->
             <dependency> 
-                <groupId>org.webjars</groupId> 
-                <artifactId>angularjs</artifactId> 
-                <version>${angularjs.version}</version> 
-            </dependency> 
-            <dependency> 
-                <groupId>org.webjars</groupId> 
+                <groupId>net.j7.frontend.webjars</groupId> 
                 <artifactId>jquery</artifactId> 
                 <version>${jquery.version}</version> 
             </dependency> 
             <dependency> 
-                <groupId>org.webjars</groupId> 
+                <groupId>net.j7.frontend.webjars</groupId> 
+                <artifactId>es5-shim</artifactId> 
+                <version>${es5-shim.version}</version> 
+            </dependency> 
+            <dependency> 
+                <groupId>net.j7.frontend.webjars</groupId> 
+                <artifactId>requirejs</artifactId> 
+                <version>${requirejs.version}</version> 
+            </dependency> 
+            <dependency> 
+                <groupId>net.j7.frontend.webjars</groupId> 
+                <artifactId>requirejs-domready</artifactId> 
+                <version>${requirejs-domready.version}</version> 
+            </dependency> 
+            <dependency> 
+                <groupId>net.j7.frontend.webjars</groupId> 
+                <artifactId>angularjs</artifactId> 
+                <version>${angularjs.version}</version> 
+            </dependency> 
+            <dependency> 
+                <groupId>net.j7.frontend.webjars</groupId> 
+                <artifactId>angular-toastr</artifactId> 
+                <version>${angular-toastr.version}</version> 
+            </dependency> 
+            <dependency> 
+                <groupId>net.j7.frontend.webjars</groupId> 
+                <artifactId>ng-table</artifactId> 
+                <version>${ng-table.version}</version> 
+            </dependency> 
+            <dependency> 
+                <groupId>net.j7.frontend.webjars</groupId> 
                 <artifactId>bootstrap</artifactId> 
                 <version>${bootstrap.version}</version> 
             </dependency> 
             <dependency> 
-                <groupId>org.webjars</groupId> 
-                <artifactId>select2</artifactId> 
-                <version>${select2.version}</version> 
+                <groupId>net.j7.frontend.webjars</groupId> 
+                <artifactId>bootstrap</artifactId> 
+                <version>${bootstrap.version}</version> 
             </dependency> 
             <dependency> 
-                <groupId>org.webjars</groupId> 
-                <artifactId>easyxdm</artifactId> 
-                <version>${easyxdm.version}</version> 
+                <groupId>net.j7.frontend.webjars</groupId> 
+                <artifactId>angular-ui-bootstrap</artifactId> 
+                <version>${angular-ui-bootstrap.version}</version> 
+            </dependency> 
+            <dependency> 
+                <groupId>net.j7.frontend.webjars</groupId> 
+                <artifactId>angular-ui-select</artifactId> 
+                <version>${angular-ui-select.version}</version> 
+            </dependency> 
+            <dependency> 
+                <groupId>net.j7.frontend.webjars</groupId> 
+                <artifactId>angular-bootstrap3</artifactId> 
+                <version>${angular-bootstrap3.version}</version> 
+            </dependency> 
+            <dependency> 
+                <groupId>net.j7.frontend.webjars</groupId> 
+                <artifactId>angular-chosen</artifactId> 
+                <version>${angular-chosen.version}</version> 
             </dependency> 
         </dependencies> 
     </dependencyManagement> 

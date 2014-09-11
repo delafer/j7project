@@ -8,7 +8,6 @@
     </parent> 
     <packaging>jar</packaging> 
     <version>${angularjs.version}</version>
-    <groupId>org.webjars</groupId> 
     <artifactId>angularjs</artifactId> 
     <name>ws-angularjs</name> 
     <description>AngularJS library</description> 
