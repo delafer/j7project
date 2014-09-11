@@ -10,8 +10,12 @@
     <version>${angular-chosen.version}</version> 
     <groupId>org.webjars</groupId> 
     <artifactId>angular-chosen</artifactId> 
-    <name>angular-chosen</name> 
+    <name>ws-angular-chosen</name> 
     <description>angular-chosen addon</description> 
     <dependencies> 
     </dependencies> 
+    <build>
+    	<sourceDirectory>src/main/resources</sourceDirectory>
+    	<testSourceDirectory>src/main/resources</testSourceDirectory>
+    </build>
 </project> 

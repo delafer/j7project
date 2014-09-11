@@ -13,8 +13,16 @@
     <version>1.0.0</version>
     <packaging>pom</packaging> 
     <modules> 
-        <module>angular-js</module> 
         <module>angular-chosen</module> 
+        <module>angular-js</module> 
+        <module>angular-ng-table</module> 
+        <module>angular-toastr</module> 
+        <module>bootstrap</module> 
+        <module>es5-shim</module> 
+        <module>jquery</module> 
         <module>requirejs</module> 
+        <module>requirejs-domready</module> 
+        <module>ui-bootstrap</module> 
+        <module>ui-select</module> 
     </modules> 
 </project> 

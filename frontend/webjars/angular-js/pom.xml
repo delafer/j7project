@@ -10,10 +10,14 @@
     <version>${angularjs.version}</version>
     <groupId>org.webjars</groupId> 
     <artifactId>angularjs</artifactId> 
-    <name>angularjs</name> 
+    <name>ws-angularjs</name> 
     <description>AngularJS library</description> 
     <dependencies> 
     </dependencies> 
+    <build>
+    	<sourceDirectory>src/main/resources</sourceDirectory>
+    	<testSourceDirectory>src/main/resources</testSourceDirectory>
+    </build>
 
 <!--
     <properties> 
