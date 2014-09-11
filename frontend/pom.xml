@@ -12,9 +12,9 @@
     <name>frontend-parent</name> 
     <packaging>pom</packaging> 
    <modules>
-      <module>client-gui</module>
-      <module>common-gui</module>
       <module>webjars</module>
+      <module>common-gui</module>
+      <module>client-gui</module>
    </modules>
 
     <properties> 
