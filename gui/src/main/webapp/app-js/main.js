@@ -22,7 +22,9 @@ require.config({
         'angularBootstrap': '../webjars/ui-bootstrap/ui-bootstrap-tpls',
         'routeSegment': '../webjars/route-segment/angular-route-segment',
         'ngTable': '../webjars/ng-table/ng-table',
-        'ui.select': '../webjars/ui-select/select'
+        'ui.select': '../webjars/ui-select/select',
+        'sockjs': '../webjars/sockjs/sockjs',
+	'angularSocket': '../webjars/angular-socket/angular-socket'
     },
     /**
      * for libs that either do not support AMD out of the box, or
@@ -66,7 +68,16 @@ require.config({
             exports: 'jquery'
         },
         'ngTable': ['angular'],
-        'ui.select': ['angular']
+        'ui.select': ['angular'],
+        'sockjs': {
+            deps: ['jquery'],
+            exports: 'sockjs'
+        },
+	'angularSocket': {
+            deps: ['sockjs'],
+            exports: 'angularSocket'
+        }
+
     },
     priority: [
         'angular'
