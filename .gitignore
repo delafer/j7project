@@ -84,26 +84,23 @@ nb-configuration.xml
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
-workspace/Servers/Jetty v8.1 Server at localhost-config/adminPort
-workspace/Servers/Jetty v8.1 Server at localhost-config/etc/jetty-annotations.xml
-workspace/Servers/Jetty v8.1 Server at localhost-config/etc/jetty-contexts.xml
-workspace/Servers/Jetty v8.1 Server at localhost-config/etc/jetty-deploy.xml
-workspace/Servers/Jetty v8.1 Server at localhost-config/etc/jetty-testrealm.xml
-workspace/Servers/Jetty v8.1 Server at localhost-config/etc/jetty-webapps.xml
-workspace/Servers/Jetty v8.1 Server at localhost-config/etc/jetty.xml
-workspace/Servers/Jetty v8.1 Server at localhost-config/etc/realm.properties
-workspace/Servers/Jetty v8.1 Server at localhost-config/etc/webdefault.xml
-workspace/Servers/Jetty v8.1 Server at localhost-config/start.config
-workspace/Servers/Jetty v8.1 Server at localhost-config/start.ini
-workspace/Servers/Tomcat v8.0 Server at localhost (2)-config/catalina.policy
-workspace/Servers/Tomcat v8.0 Server at localhost (2)-config/catalina.properties
-workspace/Servers/Tomcat v8.0 Server at localhost (2)-config/context.xml
-workspace/Servers/Tomcat v8.0 Server at localhost (2)-config/server.xml
-workspace/Servers/Tomcat v8.0 Server at localhost (2)-config/tomcat-users.xml
-workspace/Servers/Tomcat v8.0 Server at localhost (2)-config/web.xml
-workspace/Servers/Tomcat v8.0 Server at localhost-config/catalina.policy
-workspace/Servers/Tomcat v8.0 Server at localhost-config/catalina.properties
-workspace/Servers/Tomcat v8.0 Server at localhost-config/context.xml
-workspace/Servers/Tomcat v8.0 Server at localhost-config/server.xml
-workspace/Servers/Tomcat v8.0 Server at localhost-config/tomcat-users.xml
-workspace/Servers/Tomcat v8.0 Server at localhost-config/web.xml
+
+#jetty ignore
+**/adminPort
+**/etc/jetty-annotations.xml
+**/etc/jetty-contexts.xml
+**/etc/jetty-deploy.xml
+**/etc/jetty-testrealm.xml
+**/etc/jetty-webapps.xml
+**/etc/jetty.xml
+**/etc/realm.properties
+**/etc/webdefault.xml
+**/start.config
+**/start.ini
+workspace/Servers/*/catalina.policy
+workspace/Servers/*/catalina.properties
+workspace/Servers/*/context.xml
+workspace/Servers/*/server.xml
+workspace/Servers/*/tomcat-users.xml
+workspace/Servers/*/web.xml
+
