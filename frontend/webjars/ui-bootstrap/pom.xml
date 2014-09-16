@@ -13,8 +13,10 @@
     <description>angular-ui-bootstrap addon</description>
     <dependencies>
     </dependencies>
+<!--
     <build>
     	<sourceDirectory>src/main/resources</sourceDirectory>
     	<testSourceDirectory>src/main/resources</testSourceDirectory>
     </build>
+-->
 </project>

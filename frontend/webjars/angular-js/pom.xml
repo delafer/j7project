@@ -13,11 +13,12 @@
     <description>AngularJS library</description> 
     <dependencies> 
     </dependencies> 
+<!--
     <build>
     	<sourceDirectory>src/main/resources</sourceDirectory>
     	<testSourceDirectory>src/main/resources</testSourceDirectory>
     </build>
-
+-->
 <!--
     <properties> 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding> 

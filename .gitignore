@@ -84,3 +84,26 @@ nb-configuration.xml
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+workspace/Servers/Jetty v8.1 Server at localhost-config/adminPort
+workspace/Servers/Jetty v8.1 Server at localhost-config/etc/jetty-annotations.xml
+workspace/Servers/Jetty v8.1 Server at localhost-config/etc/jetty-contexts.xml
+workspace/Servers/Jetty v8.1 Server at localhost-config/etc/jetty-deploy.xml
+workspace/Servers/Jetty v8.1 Server at localhost-config/etc/jetty-testrealm.xml
+workspace/Servers/Jetty v8.1 Server at localhost-config/etc/jetty-webapps.xml
+workspace/Servers/Jetty v8.1 Server at localhost-config/etc/jetty.xml
+workspace/Servers/Jetty v8.1 Server at localhost-config/etc/realm.properties
+workspace/Servers/Jetty v8.1 Server at localhost-config/etc/webdefault.xml
+workspace/Servers/Jetty v8.1 Server at localhost-config/start.config
+workspace/Servers/Jetty v8.1 Server at localhost-config/start.ini
+workspace/Servers/Tomcat v8.0 Server at localhost (2)-config/catalina.policy
+workspace/Servers/Tomcat v8.0 Server at localhost (2)-config/catalina.properties
+workspace/Servers/Tomcat v8.0 Server at localhost (2)-config/context.xml
+workspace/Servers/Tomcat v8.0 Server at localhost (2)-config/server.xml
+workspace/Servers/Tomcat v8.0 Server at localhost (2)-config/tomcat-users.xml
+workspace/Servers/Tomcat v8.0 Server at localhost (2)-config/web.xml
+workspace/Servers/Tomcat v8.0 Server at localhost-config/catalina.policy
+workspace/Servers/Tomcat v8.0 Server at localhost-config/catalina.properties
+workspace/Servers/Tomcat v8.0 Server at localhost-config/context.xml
+workspace/Servers/Tomcat v8.0 Server at localhost-config/server.xml
+workspace/Servers/Tomcat v8.0 Server at localhost-config/tomcat-users.xml
+workspace/Servers/Tomcat v8.0 Server at localhost-config/web.xml

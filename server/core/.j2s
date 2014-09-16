@@ -1,0 +1,6 @@
+#Java2Script Configuration
+#Sun Sep 14 20:08:14 CEST 2014
+j2s.resources.list=../../../developer/eclipse.mars/plugins/net.sf.j2s.lib_2.0.0/j2slib/java.runtime.j2x
+j2s.abandoned.resources.list=
+j2s.output.path=target/classes
+j2s.compiler.status=enable

@@ -4,5 +4,6 @@ define(['./module'],
 
             constants.constant('production', true);
             constants.constant('spinner', true);
+
 });
 

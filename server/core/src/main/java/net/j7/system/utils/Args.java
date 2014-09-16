@@ -7,7 +7,6 @@
  */
 package net.j7.system.utils;
 
-import java.util.Iterator;
 
 /**
  * Class <b>Args.fill(String template, Object... args)</b> <br><br>
@@ -26,6 +25,11 @@ import java.util.Iterator;
  * @see java alternative - Strings.format(" %s... ", 0001);
  */
 public final class Args {
+
+public static void main(String[] args) {
+	System.out.println(1);
+}
+
 
    /**
     * Fills string with arguments use "\" (Escape character) for special chars eG.

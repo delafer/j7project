@@ -1,4 +1,4 @@
-define([ './module', '../infrastructure/index' ], function(factories) {
+define([ './module' ], function(factories) {
 
     'use strict';
 
