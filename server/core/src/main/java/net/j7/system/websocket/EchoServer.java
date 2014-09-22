@@ -1,16 +1,12 @@
 package net.j7.system.websocket;
 
 import java.io.IOException;
-import java.lang.annotation.Annotation;
 
-import javax.websocket.Decoder;
-import javax.websocket.Encoder;
 import javax.websocket.OnClose;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
-import javax.websocket.server.ServerEndpointConfig.Configurator;
 
 /**
  * @ServerEndpoint gives the relative name for the end point
@@ -18,6 +14,8 @@ import javax.websocket.server.ServerEndpointConfig.Configurator;
  * Where "localhost" is the address of the host,
  * "EchoChamber" is the name of the package
  * and "echo" is the address to access this class from the server
+ *
+ * path: ws://localhost:8080/sever-delivery/echo
  */
 @ServerEndpoint("/echo")
 public class EchoServer   {
@@ -45,7 +43,7 @@ public class EchoServer   {
     public void onMessage(String message, Session session){
         System.out.println("Message from " + session.getId() + ": " + message);
         try {
-            session.getBasicRemote().sendText(message);
+            session.getBasicRemote().sendText(message.toUpperCase());
         } catch (IOException ex) {
             ex.printStackTrace();
         }
