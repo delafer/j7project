@@ -1,0 +1,1082 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ns2:reportResponse xmlns:ns2="https://onlineservice.creditreform.de/webservice/0400-0005"
+	xmlns:env="http://www.w3.org/2003/05/soap-envelope" xmlns:soapenv="http://www.w3.org/2003/05/soap-envelope">
+	<ns2:header>
+		<ns2:communicationlanguage>de</ns2:communicationlanguage>
+		<ns2:transmissiontimestamp>2014-05-26T10:38:31.421+02:00</ns2:transmissiontimestamp>
+		<ns2:keylistversion>10</ns2:keylistversion>
+		<ns2:clientapplicationname>CrefoSystem</ns2:clientapplicationname>
+		<ns2:clientapplicationversion>10</ns2:clientapplicationversion>
+		<ns2:useraccount>345401820001</ns2:useraccount>
+	</ns2:header>
+	<ns2:body>
+		<ns2:referencenumber>40015536</ns2:referencenumber>
+		<ns2:customerreference>CrefoSystem Test</ns2:customerreference>
+		<ns2:identificationnumber>03453452013764</ns2:identificationnumber>
+		<ns2:creationtime>2012-02-17T16:59:07.425+01:00</ns2:creationtime>
+		<ns2:producttype>
+			<ns2:key>PRTY-2</ns2:key>
+			<ns2:designation>Wirtschaftsauskunft</ns2:designation>
+		</ns2:producttype>
+		<ns2:reportlanguage>de</ns2:reportlanguage>
+		<ns2:useraccount>345401820001</ns2:useraccount>
+		<ns2:endofstandardmonitoring>2013-02-16</ns2:endofstandardmonitoring>
+		<ns2:negativereport>false</ns2:negativereport>
+		<ns2:provider>Creditreform Weimar</ns2:provider>
+		<ns2:reportdata>
+			<ns2:companyidentification>
+				<ns2:identificationnumber>03453452013764</ns2:identificationnumber>
+				<ns2:status>
+					<ns2:key>PEST-1</ns2:key>
+					<ns2:designation>aktiv</ns2:designation>
+				</ns2:status>
+				<ns2:companyname>Kundentestsystem GmbH 3 Boni 600 - BITTE NICHT ÄNDERN</ns2:companyname>
+				<ns2:street>Hindenburgstrasse</ns2:street>
+				<ns2:housenumber>22</ns2:housenumber>
+				<ns2:postcode>99423</ns2:postcode>
+				<ns2:city>Weimar</ns2:city>
+				<ns2:country>
+					<ns2:key>DE</ns2:key>
+					<ns2:designation>Deutschland</ns2:designation>
+				</ns2:country>
+				<ns2:phone>
+					<ns2:countrycode>+49</ns2:countrycode>
+					<ns2:diallingcode>3646</ns2:diallingcode>
+					<ns2:phonenumber>23070</ns2:phonenumber>
+				</ns2:phone>
+				<ns2:fax>
+					<ns2:countrycode>+49</ns2:countrycode>
+					<ns2:diallingcode>3646</ns2:diallingcode>
+					<ns2:phonenumber>23071</ns2:phonenumber>
+				</ns2:fax>
+			</ns2:companyidentification>
+			<ns2:taxdata/>
+			<ns2:solvencyindex>
+				<ns2:solvencyindextwozerosupported>true</ns2:solvencyindextwozerosupported>
+				<ns2:solvencyindexone>600</ns2:solvencyindexone>
+				<ns2:solvencyindexoneexplanation>
+					Unter Anwendung der Berechnungsmethode für den bisherigen Bonitätsindex 1.0 ergibt
+						sich ein Wert von 600 für dieses Unternehmen.
+				</ns2:solvencyindexoneexplanation>
+				<ns2:solvencyindextwozero>600</ns2:solvencyindextwozero>
+				<ns2:solvencyindexmeaning>nicht vorhandene Bonität</ns2:solvencyindexmeaning>
+				<ns2:solvencyindexexplanation>
+					Dieser Bonitätsindex gilt unter Basel II-Kriterien als Ausfall.
+				</ns2:solvencyindexexplanation>
+				<ns2:probabilityofdefault>
+					<ns2:duetosolvencyindex>95.28</ns2:duetosolvencyindex>
+					<ns2:companiesaverage>1.82</ns2:companiesaverage>
+					<ns2:date>2011-09-30</ns2:date>
+					<ns2:assignments>
+						<ns2:assignment>
+							<ns2:solvencyindex>100</ns2:solvencyindex>
+							<ns2:probabilityofdefault>0.00</ns2:probabilityofdefault>
+						</ns2:assignment>
+						<ns2:assignment>
+							<ns2:solvencyindex>150</ns2:solvencyindex>
+							<ns2:probabilityofdefault>0.17</ns2:probabilityofdefault>
+						</ns2:assignment>
+						<ns2:assignment>
+							<ns2:solvencyindex>200</ns2:solvencyindex>
+							<ns2:probabilityofdefault>0.38</ns2:probabilityofdefault>
+						</ns2:assignment>
+						<ns2:assignment>
+							<ns2:solvencyindex>250</ns2:solvencyindex>
+							<ns2:probabilityofdefault>1.11</ns2:probabilityofdefault>
+						</ns2:assignment>
+						<ns2:assignment>
+							<ns2:solvencyindex>300</ns2:solvencyindex>
+							<ns2:probabilityofdefault>3.98</ns2:probabilityofdefault>
+						</ns2:assignment>
+						<ns2:assignment>
+							<ns2:solvencyindex>350</ns2:solvencyindex>
+							<ns2:probabilityofdefault>8.32</ns2:probabilityofdefault>
+						</ns2:assignment>
+						<ns2:assignment>
+							<ns2:solvencyindex>400</ns2:solvencyindex>
+							<ns2:probabilityofdefault>17.18</ns2:probabilityofdefault>
+						</ns2:assignment>
+						<ns2:assignment>
+							<ns2:solvencyindex>450</ns2:solvencyindex>
+							<ns2:probabilityofdefault>30.20</ns2:probabilityofdefault>
+						</ns2:assignment>
+						<ns2:assignment>
+							<ns2:solvencyindex>500</ns2:solvencyindex>
+							<ns2:probabilityofdefault>89.39</ns2:probabilityofdefault>
+						</ns2:assignment>
+						<ns2:assignment>
+							<ns2:solvencyindex>600</ns2:solvencyindex>
+							<ns2:probabilityofdefault>95.53</ns2:probabilityofdefault>
+						</ns2:assignment>
+					</ns2:assignments>
+					<ns2:explanation>
+						<ns2:paragraph>
+							Die PD (Probability of Default) gibt die Wahrscheinlichkeit an, dass ein Kreditnehmer
+								innerhalb eines Jahres gemäß Basel II-Kriterien ausfällt. Übertragen auf Creditreform
+								gelten der Bonitätsindex 500 und 600 als Ausfall.
+						</ns2:paragraph>
+					</ns2:explanation>
+				</ns2:probabilityofdefault>
+				<ns2:trafficlight>
+					<ns2:key>TL-30</ns2:key>
+					<ns2:designation>rot</ns2:designation>
+					<ns2:grade>30</ns2:grade>
+				</ns2:trafficlight>
+			</ns2:solvencyindex>
+			<ns2:legalform>
+				<ns2:presentlegalform>
+					<ns2:key>LEFO-DE-10</ns2:key>
+					<ns2:designation>Gesellschaft mit beschränkter Haftung</ns2:designation>
+					<ns2:shortdesignation>GmbH</ns2:shortdesignation>
+				</ns2:presentlegalform>
+			</ns2:legalform>
+			<ns2:foundation>
+				<ns2:dateoffoundation>1990-12-18</ns2:dateoffoundation>
+				<ns2:ageofcompany>21</ns2:ageofcompany>
+				<ns2:firstlegalform>
+					<ns2:key>LEFO-DE-10</ns2:key>
+					<ns2:designation>Gesellschaft mit beschränkter Haftung</ns2:designation>
+					<ns2:shortdesignation>GmbH</ns2:shortdesignation>
+				</ns2:firstlegalform>
+				<ns2:text>
+					<ns2:paragraph>
+						Die ursprüngliche Gründung erfolgte am 01.01.68 als Gewerbebetrieb in Wesel.
+Mit
+							Änderung der Rechtsform siedelte die Firma nach Wesel über, wo sie bis 1999
+							von Hans-Christina Morgenstern geführt wurde.
+					</ns2:paragraph>
+				</ns2:text>
+			</ns2:foundation>
+			<ns2:register>
+				<ns2:chapterheading>Handelsregister</ns2:chapterheading>
+				<ns2:datelegalform>1999-04-22</ns2:datelegalform>
+				<ns2:datelastregisterentry>1999-04-22</ns2:datelastregisterentry>
+				<ns2:registertype>
+					<ns2:key>RETY-DE-2</ns2:key>
+					<ns2:designation>Handelsregister Abteilung B (HRB)</ns2:designation>
+					<ns2:shortdesignation>HRB</ns2:shortdesignation>
+				</ns2:registertype>
+				<ns2:registerid>575</ns2:registerid>
+				<ns2:register>
+					<ns2:court>Amtsgericht</ns2:court>
+					<ns2:shortdesignationcourt>AG</ns2:shortdesignationcourt>
+					<ns2:city>Weimar</ns2:city>
+					<ns2:postcode>99423</ns2:postcode>
+				</ns2:register>
+				<ns2:reasonofregister>
+					<ns2:key>RERS-19</ns2:key>
+					<ns2:designation>Neueintrag</ns2:designation>
+				</ns2:reasonofregister>
+			</ns2:register>
+			<ns2:shareholdercapital>
+				<ns2:capacitiesshareholder>
+					<ns2:capacity>
+						<ns2:key>PAPP-110</ns2:key>
+						<ns2:designation>Gesellschafter</ns2:designation>
+					</ns2:capacity>
+					<ns2:active>
+						<ns2:identificationnumber>03453452013741</ns2:identificationnumber>
+						<ns2:privateperson>
+							<ns2:maritalstatus>
+								<ns2:key>MAST-1</ns2:key>
+								<ns2:designation>ledig</ns2:designation>
+							</ns2:maritalstatus>
+							<ns2:surname>Morgenstern KTO</ns2:surname>
+							<ns2:firstname>Hans-Christian</ns2:firstname>
+							<ns2:dateofbirth>1935-09-13</ns2:dateofbirth>
+						</ns2:privateperson>
+						<ns2:status>
+							<ns2:key>PEST-8</ns2:key>
+							<ns2:designation>geschäftsfähig</ns2:designation>
+						</ns2:status>
+						<ns2:capitalshare>
+							<ns2:value>25564.59</ns2:value>
+							<ns2:currency>
+								<ns2:key>EUR</ns2:key>
+								<ns2:designation>EUR</ns2:designation>
+							</ns2:currency>
+						</ns2:capitalshare>
+						<ns2:street>Erfurter Strasse</ns2:street>
+						<ns2:housenumber>96</ns2:housenumber>
+						<ns2:postcode>99432</ns2:postcode>
+						<ns2:city>Weimar</ns2:city>
+						<ns2:country>
+							<ns2:key>DE</ns2:key>
+							<ns2:designation>Deutschland</ns2:designation>
+						</ns2:country>
+						<ns2:trafficlight>
+							<ns2:key>TL-10</ns2:key>
+							<ns2:designation>grün</ns2:designation>
+							<ns2:grade>10</ns2:grade>
+						</ns2:trafficlight>
+					</ns2:active>
+					<ns2:active>
+						<ns2:identificationnumber>05395392000525</ns2:identificationnumber>
+						<ns2:privateperson>
+							<ns2:surname>Stolperstein KTO</ns2:surname>
+							<ns2:firstname>Fritz</ns2:firstname>
+							<ns2:dateofbirth>1967-10-09</ns2:dateofbirth>
+						</ns2:privateperson>
+						<ns2:status>
+							<ns2:key>PEST-8</ns2:key>
+							<ns2:designation>geschäftsfähig</ns2:designation>
+						</ns2:status>
+						<ns2:capitalshare>
+							<ns2:value>47960</ns2:value>
+							<ns2:currency>
+								<ns2:key>EUR</ns2:key>
+								<ns2:designation>EUR</ns2:designation>
+							</ns2:currency>
+						</ns2:capitalshare>
+						<ns2:participatingsince>2004-04-22</ns2:participatingsince>
+						<ns2:street>Am hohen Weg</ns2:street>
+						<ns2:housenumber>33</ns2:housenumber>
+						<ns2:postcode>46483</ns2:postcode>
+						<ns2:city>Wesel</ns2:city>
+						<ns2:country>
+							<ns2:key>DE</ns2:key>
+							<ns2:designation>Deutschland</ns2:designation>
+						</ns2:country>
+						<ns2:trafficlight>
+							<ns2:key>TL-10</ns2:key>
+							<ns2:designation>grün</ns2:designation>
+							<ns2:grade>10</ns2:grade>
+						</ns2:trafficlight>
+					</ns2:active>
+					<ns2:sharecapital>
+						<ns2:value>73524.59</ns2:value>
+						<ns2:currency>
+							<ns2:key>EUR</ns2:key>
+							<ns2:designation>EUR</ns2:designation>
+						</ns2:currency>
+						<ns2:capitaltype>Stammkapital</ns2:capitaltype>
+					</ns2:sharecapital>
+				</ns2:capacitiesshareholder>
+			</ns2:shareholdercapital>
+			<ns2:deputymanagement>
+				<ns2:participantcapacities>
+					<ns2:capacity>
+						<ns2:key>PAPP-200</ns2:key>
+						<ns2:designation>Geschäftsführer</ns2:designation>
+					</ns2:capacity>
+					<ns2:active>
+						<ns2:identificationnumber>03453452013756</ns2:identificationnumber>
+						<ns2:status>
+							<ns2:key>PEST-8</ns2:key>
+							<ns2:designation>geschäftsfähig</ns2:designation>
+						</ns2:status>
+						<ns2:privateperson>
+							<ns2:maritalstatus>
+								<ns2:key>MAST-4</ns2:key>
+								<ns2:designation>geschieden</ns2:designation>
+							</ns2:maritalstatus>
+							<ns2:surname>Becker KTO</ns2:surname>
+							<ns2:firstname>Bernd Michael</ns2:firstname>
+							<ns2:dateofbirth>1956-04-29</ns2:dateofbirth>
+							<ns2:profession>Landwirt</ns2:profession>
+						</ns2:privateperson>
+						<ns2:powerofrepresentation>
+							<ns2:key>PWRP-5</ns2:key>
+							<ns2:designation>alleinvertretungsberechtigt</ns2:designation>
+						</ns2:powerofrepresentation>
+						<ns2:function>
+							<ns2:key>SCFU-10</ns2:key>
+							<ns2:designation>Hauptgeschäftsführer</ns2:designation>
+						</ns2:function>
+						<ns2:participatingsince>2011-06-21</ns2:participatingsince>
+						<ns2:street>MIttelstrasse</ns2:street>
+						<ns2:housenumber>15</ns2:housenumber>
+						<ns2:postcode>80568</ns2:postcode>
+						<ns2:city>München</ns2:city>
+						<ns2:country>
+							<ns2:key>DE</ns2:key>
+							<ns2:designation>Deutschland</ns2:designation>
+						</ns2:country>
+						<ns2:warnings>
+							<ns2:warning>Es liegen schuldnerregisterliche Eintragungen vor.</ns2:warning>
+						</ns2:warnings>
+						<ns2:trafficlight>
+							<ns2:key>TL-30</ns2:key>
+							<ns2:designation>rot</ns2:designation>
+							<ns2:grade>30</ns2:grade>
+						</ns2:trafficlight>
+					</ns2:active>
+					<ns2:active>
+						<ns2:identificationnumber>05395392000525</ns2:identificationnumber>
+						<ns2:status>
+							<ns2:key>PEST-8</ns2:key>
+							<ns2:designation>geschäftsfähig</ns2:designation>
+						</ns2:status>
+						<ns2:privateperson>
+							<ns2:surname>Stolperstein KTO</ns2:surname>
+							<ns2:firstname>Fritz</ns2:firstname>
+							<ns2:dateofbirth>1967-10-09</ns2:dateofbirth>
+						</ns2:privateperson>
+						<ns2:powerofrepresentation>
+							<ns2:key>PWRP-5</ns2:key>
+							<ns2:designation>alleinvertretungsberechtigt</ns2:designation>
+						</ns2:powerofrepresentation>
+						<ns2:street>Am hohen Weg</ns2:street>
+						<ns2:housenumber>33</ns2:housenumber>
+						<ns2:postcode>46483</ns2:postcode>
+						<ns2:city>Wesel</ns2:city>
+						<ns2:country>
+							<ns2:key>DE</ns2:key>
+							<ns2:designation>Deutschland</ns2:designation>
+						</ns2:country>
+						<ns2:trafficlight>
+							<ns2:key>TL-10</ns2:key>
+							<ns2:designation>grün</ns2:designation>
+							<ns2:grade>10</ns2:grade>
+						</ns2:trafficlight>
+					</ns2:active>
+				</ns2:participantcapacities>
+			</ns2:deputymanagement>
+			<ns2:participationscompany/>
+			<ns2:participationsparticipants>
+				<ns2:furtherparticipants>false</ns2:furtherparticipants>
+			</ns2:participationsparticipants>
+			<ns2:businesspurpose>
+				<ns2:businessregistered>
+					<ns2:paragraph>
+						Betrieb eines Dachdeckergeschäftes und
+Fassadenbau sowie die Verarbeitung und der
+							Handel
+mit Baustoffen aller Art.
+					</ns2:paragraph>
+				</ns2:businessregistered>
+			</ns2:businesspurpose>
+			<ns2:branch>
+				<ns2:typeofbranch>
+					<ns2:branchcodeedition>
+						<ns2:key>BRCDED-7</ns2:key>
+						<ns2:designation>WZ 2008</ns2:designation>
+						<ns2:shortdesignation>Ausgabe 2008</ns2:shortdesignation>
+					</ns2:branchcodeedition>
+					<ns2:branch>
+						<ns2:code>43911</ns2:code>
+						<ns2:description>Dachdeckerei und Bauspenglerei</ns2:description>
+						<ns2:probabilityofdefault>
+							<ns2:date>2011-09-30</ns2:date>
+							<ns2:duetobranch>2.30</ns2:duetobranch>
+						</ns2:probabilityofdefault>
+					</ns2:branch>
+					<ns2:branch>
+						<ns2:code>46731</ns2:code>
+						<ns2:description>
+							Großhandel mit Holz, Baustoffen, Anstrichmitteln und Sanitärkeramik, ohne ausgeprägten
+								Schwerpunkt
+						</ns2:description>
+						<ns2:probabilityofdefault>
+							<ns2:date>2011-09-30</ns2:date>
+							<ns2:duetobranch>1.56</ns2:duetobranch>
+						</ns2:probabilityofdefault>
+					</ns2:branch>
+					<ns2:branch>
+						<ns2:code>46734</ns2:code>
+						<ns2:description>
+							Großhandel mit Baustoffen und Bauelementen aus mineralischen Stoffen
+						</ns2:description>
+						<ns2:probabilityofdefault>
+							<ns2:date>2011-09-30</ns2:date>
+							<ns2:duetobranch>1.72</ns2:duetobranch>
+						</ns2:probabilityofdefault>
+					</ns2:branch>
+				</ns2:typeofbranch>
+				<ns2:probabilityofdefault>
+					<ns2:date>2011-09-30</ns2:date>
+					<ns2:pdlow>1.5</ns2:pdlow>
+					<ns2:pdhigh>3</ns2:pdhigh>
+					<ns2:pdaverage>1.82</ns2:pdaverage>
+					<ns2:explanation>
+						Die PD (Probability of Default / Ausfallwahrscheinlichkeit) von 2,30 % beschreibt
+							ein mittleres Ausfallrisiko von Firmen dieser Branche. Bis 1,50 % bezeichnen
+							wir das Risiko als gering, ab 3,00 % wird es als hoch bewertet.
+Der Durchschnitt
+							über alle Branchen in Deutschland liegt bei 1,82 %. (Stand: September 2011)
+					</ns2:explanation>
+				</ns2:probabilityofdefault>
+				<ns2:trafficlight>
+					<ns2:key>TL-20</ns2:key>
+					<ns2:designation>gelb</ns2:designation>
+					<ns2:grade>20</ns2:grade>
+				</ns2:trafficlight>
+				<ns2:evaluation>mittel</ns2:evaluation>
+			</ns2:branch>
+			<ns2:staffcompany>
+				<ns2:fiscalyear>
+					<ns2:period>
+						<ns2:datestart>2009</ns2:datestart>
+						<ns2:dateend>2009</ns2:dateend>
+					</ns2:period>
+					<ns2:totalstaff>4</ns2:totalstaff>
+					<ns2:stafflist>
+						<ns2:type>
+							<ns2:key>SFTY-9</ns2:key>
+							<ns2:designation>Geschäftsführer</ns2:designation>
+						</ns2:type>
+						<ns2:number>1</ns2:number>
+					</ns2:stafflist>
+					<ns2:stafflist>
+						<ns2:type>
+							<ns2:key>SFTY-2</ns2:key>
+							<ns2:designation>Angestellte</ns2:designation>
+						</ns2:type>
+						<ns2:number>3</ns2:number>
+					</ns2:stafflist>
+				</ns2:fiscalyear>
+				<ns2:fiscalyear>
+					<ns2:period>
+						<ns2:datestart>2008</ns2:datestart>
+						<ns2:dateend>2008</ns2:dateend>
+					</ns2:period>
+					<ns2:totalstaff>9</ns2:totalstaff>
+					<ns2:stafflist>
+						<ns2:type>
+							<ns2:key>SFTY-9</ns2:key>
+							<ns2:designation>Geschäftsführer</ns2:designation>
+						</ns2:type>
+						<ns2:number>2</ns2:number>
+					</ns2:stafflist>
+					<ns2:stafflist>
+						<ns2:type>
+							<ns2:key>SFTY-1</ns2:key>
+							<ns2:designation>Gewerbliche Mitarbeiter</ns2:designation>
+						</ns2:type>
+						<ns2:number>7</ns2:number>
+					</ns2:stafflist>
+				</ns2:fiscalyear>
+			</ns2:staffcompany>
+			<ns2:staffgroup/>
+			<ns2:turnovercompany>
+				<ns2:fiscalyear>
+					<ns2:balancetype>
+						<ns2:key>BATY-1</ns2:key>
+						<ns2:designation>Jahresbericht</ns2:designation>
+					</ns2:balancetype>
+					<ns2:period>
+						<ns2:datestart>2009</ns2:datestart>
+						<ns2:dateend>2009</ns2:dateend>
+					</ns2:period>
+					<ns2:turnoverlist>
+						<ns2:type>
+							<ns2:key>TOTY-1</ns2:key>
+							<ns2:designation>Umsatz</ns2:designation>
+						</ns2:type>
+						<ns2:expectation>false</ns2:expectation>
+						<ns2:amount>
+							<ns2:value>127345</ns2:value>
+							<ns2:currency>
+								<ns2:key>EUR</ns2:key>
+								<ns2:designation>EUR</ns2:designation>
+							</ns2:currency>
+						</ns2:amount>
+					</ns2:turnoverlist>
+				</ns2:fiscalyear>
+				<ns2:fiscalyear>
+					<ns2:balancetype>
+						<ns2:key>BATY-1</ns2:key>
+						<ns2:designation>Jahresbericht</ns2:designation>
+					</ns2:balancetype>
+					<ns2:period>
+						<ns2:datestart>2008</ns2:datestart>
+						<ns2:dateend>2008</ns2:dateend>
+					</ns2:period>
+					<ns2:turnoverlist>
+						<ns2:type>
+							<ns2:key>TOTY-1</ns2:key>
+							<ns2:designation>Umsatz</ns2:designation>
+						</ns2:type>
+						<ns2:expectation>false</ns2:expectation>
+						<ns2:amount>
+							<ns2:value>485727.29</ns2:value>
+							<ns2:currency>
+								<ns2:key>EUR</ns2:key>
+								<ns2:designation>EUR</ns2:designation>
+							</ns2:currency>
+						</ns2:amount>
+					</ns2:turnoverlist>
+				</ns2:fiscalyear>
+			</ns2:turnovercompany>
+			<ns2:turnovergroup/>
+			<ns2:balancesheet/>
+			<ns2:remarks>
+				<ns2:paragraph>
+					Aus datenschutzrechtlichen Gründen können wir nur Auskunft über die angefragte Person
+						erteilen. Sofern Sie auch Informationen über den Ehepartner benötigen, bitten
+						wir um eine separate Anfrage.
+				</ns2:paragraph>
+			</ns2:remarks>
+			<ns2:banks>
+				<ns2:bank>
+					<ns2:country>
+						<ns2:key>DE</ns2:key>
+						<ns2:designation>Deutschland</ns2:designation>
+					</ns2:country>
+					<ns2:bankname>Sparkasse Marburg-Biedenkopf</ns2:bankname>
+					<ns2:address>35096 Weimar, Lahn</ns2:address>
+					<ns2:bankcode>53350000</ns2:bankcode>
+				</ns2:bank>
+				<ns2:bank>
+					<ns2:country>
+						<ns2:key>DE</ns2:key>
+						<ns2:designation>Deutschland</ns2:designation>
+					</ns2:country>
+					<ns2:bankname>Raiffeisenbank eG Ebsdorfergrund</ns2:bankname>
+					<ns2:address>35096 Weimar, Lahn</ns2:address>
+					<ns2:bankcode>53361724</ns2:bankcode>
+				</ns2:bank>
+			</ns2:banks>
+			<ns2:enquirycounter>
+				<ns2:requests28days>
+					<ns2:numberofrequests>5</ns2:numberofrequests>
+					<ns2:datestart>2012-01-21</ns2:datestart>
+					<ns2:dateend>2012-02-17</ns2:dateend>
+				</ns2:requests28days>
+				<ns2:requests56days>
+					<ns2:numberofrequests>7</ns2:numberofrequests>
+					<ns2:datestart>2011-12-24</ns2:datestart>
+					<ns2:dateend>2012-02-17</ns2:dateend>
+				</ns2:requests56days>
+				<ns2:requests365days>
+					<ns2:numberofrequests>40</ns2:numberofrequests>
+					<ns2:datestart>2011-02-18</ns2:datestart>
+					<ns2:dateend>2012-02-17</ns2:dateend>
+				</ns2:requests365days>
+				<ns2:explanation>
+					Der Anfragezähler zählt sämtliche erteilten Auskünfte über das beauskunftete Unternehmen
+						in den aufgezeigten Zeiträumen. Eine hohe Anzahl von Anfragen ist ein Indikator
+						für eine hohe Geschäftsaktivität. Bei einem sprunghaften Anstieg der Anfragen
+						innerhalb der letzten vier Wochen empfehlen wir eine zusätzliche Prüfung. Weitergehende
+						Fragen beantworten wir Ihnen unter anfragezaehler@verband.creditreform.de
+				</ns2:explanation>
+			</ns2:enquirycounter>
+			<ns2:businessdevelopment>
+				<ns2:businessdevelopment>
+					<ns2:key>BUDV-9</ns2:key>
+					<ns2:designation>expansive Geschäftsentwicklung</ns2:designation>
+					<ns2:grade>9</ns2:grade>
+				</ns2:businessdevelopment>
+				<ns2:ordersituation>
+					<ns2:key>ORSI-10</ns2:key>
+					<ns2:designation>sehr gute Auftragslage</ns2:designation>
+					<ns2:grade>10</ns2:grade>
+				</ns2:ordersituation>
+			</ns2:businessdevelopment>
+			<ns2:ancillaryinformation/>
+			<ns2:financialdata/>
+			<ns2:businessarea/>
+			<ns2:realestates>
+				<ns2:realestate>
+					<ns2:landregisterinspection>false</ns2:landregisterinspection>
+					<ns2:values>
+						<ns2:amount>
+							<ns2:value>250000</ns2:value>
+							<ns2:currency>
+								<ns2:key>EUR</ns2:key>
+								<ns2:designation>EUR</ns2:designation>
+							</ns2:currency>
+							<ns2:amounttype>
+								<ns2:key>RLESAMTY-10102</ns2:key>
+								<ns2:designation>Marktwert/Verkaufswert</ns2:designation>
+							</ns2:amounttype>
+						</ns2:amount>
+					</ns2:values>
+					<ns2:mortgages>
+						<ns2:amount>
+							<ns2:value>150000</ns2:value>
+							<ns2:currency>
+								<ns2:key>EUR</ns2:key>
+								<ns2:designation>EUR</ns2:designation>
+							</ns2:currency>
+							<ns2:amounttype>
+								<ns2:key>RLESAMTY-10104</ns2:key>
+								<ns2:designation>Belastung</ns2:designation>
+							</ns2:amounttype>
+						</ns2:amount>
+					</ns2:mortgages>
+					<ns2:street>Hindenburgstrasse</ns2:street>
+					<ns2:housenumber>22</ns2:housenumber>
+					<ns2:postcode>99432</ns2:postcode>
+					<ns2:city>Weimar</ns2:city>
+					<ns2:country>
+						<ns2:key>DE</ns2:key>
+						<ns2:designation>Deutschland</ns2:designation>
+					</ns2:country>
+					<ns2:realestatetype>
+						<ns2:key>RLESTY-13</ns2:key>
+						<ns2:designation>Gewerberäume</ns2:designation>
+					</ns2:realestatetype>
+				</ns2:realestate>
+				<ns2:totallandregisterinspection>false</ns2:totallandregisterinspection>
+				<ns2:totallandregisterinspectionmeaning>
+					Eine Überprüfung der Angaben zum Immobilieneigentum durch Grundbucheinsicht ist uns
+						leider nicht möglich.
+				</ns2:totallandregisterinspectionmeaning>
+				<ns2:text>
+					<ns2:paragraph>
+						Betriebsräume in Größe von etwa 240 qm sind für monatlich ca. 1.600 EUR gemietet.
+					</ns2:paragraph>
+				</ns2:text>
+			</ns2:realestates>
+			<ns2:importexport>
+				<ns2:import>
+					<ns2:rate>0</ns2:rate>
+				</ns2:import>
+				<ns2:export>
+					<ns2:rate>0</ns2:rate>
+				</ns2:export>
+			</ns2:importexport>
+			<ns2:paymentmode>
+				<ns2:paymentmode>
+					<ns2:key>PYMD-60</ns2:key>
+					<ns2:designation>Negativmerkmale</ns2:designation>
+					<ns2:grade>60</ns2:grade>
+				</ns2:paymentmode>
+			</ns2:paymentmode>
+			<ns2:creditopinion>
+				<ns2:creditlimitstatement>
+					<ns2:key>CROP-10074</ns2:key>
+					<ns2:designation>- entfällt -</ns2:designation>
+					<ns2:grade>0</ns2:grade>
+				</ns2:creditlimitstatement>
+				<ns2:typeofcreditopinion>
+					<ns2:key>CROP-61</ns2:key>
+					<ns2:designation>
+						Kredite werden abgelehnt. Von einer Geschäftsverbindung wird abgeraten.
+					</ns2:designation>
+					<ns2:grade>61</ns2:grade>
+				</ns2:typeofcreditopinion>
+			</ns2:creditopinion>
+			<ns2:negativefacts>
+				<ns2:typeofnegativefacts>
+					<ns2:key>NEFATY-1</ns2:key>
+					<ns2:designation>Negativmerkmale</ns2:designation>
+				</ns2:typeofnegativefacts>
+				<ns2:negativefact>
+					<ns2:negativefact>
+						<ns2:key>NEFA-DE-940</ns2:key>
+						<ns2:designation>
+							Abgabe der eidesstattlichen Versicherung über die Vermögensverhältnisse
+						</ns2:designation>
+					</ns2:negativefact>
+					<ns2:reportingdate>2009-08-13</ns2:reportingdate>
+					<ns2:localcourt>
+						<ns2:court>Amtsgericht</ns2:court>
+						<ns2:shortdesignationcourt>AG</ns2:shortdesignationcourt>
+						<ns2:city>Weimar</ns2:city>
+						<ns2:postcode>99423</ns2:postcode>
+					</ns2:localcourt>
+				</ns2:negativefact>
+				<ns2:negativefact>
+					<ns2:negativefact>
+						<ns2:key>NEFA-DE-930</ns2:key>
+						<ns2:designation>Haftanordnung zur Abgabe der eidesstattlichen Versicherung</ns2:designation>
+					</ns2:negativefact>
+					<ns2:reportingdate>2011-06-20</ns2:reportingdate>
+					<ns2:filenumber>XYZ 100456</ns2:filenumber>
+					<ns2:localcourt>
+						<ns2:court>Amtsgericht</ns2:court>
+						<ns2:shortdesignationcourt>AG</ns2:shortdesignationcourt>
+						<ns2:city>Weimar</ns2:city>
+						<ns2:postcode>99423</ns2:postcode>
+					</ns2:localcourt>
+				</ns2:negativefact>
+				<ns2:evaluation>
+					<ns2:trafficlight>
+						<ns2:key>TL-30</ns2:key>
+						<ns2:designation>rot</ns2:designation>
+						<ns2:grade>30</ns2:grade>
+					</ns2:trafficlight>
+					<ns2:note>
+						Es liegen Informationen zu mindestens einem Negativmerkmal vor!
+					</ns2:note>
+				</ns2:evaluation>
+			</ns2:negativefacts>
+			<ns2:registerhistory>
+				<ns2:historyentry>
+					<ns2:date>1999-04-22</ns2:date>
+					<ns2:reason>
+						<ns2:key>RERS-36</ns2:key>
+						<ns2:designation>Ersteintragung</ns2:designation>
+					</ns2:reason>
+					<ns2:registration>
+						<ns2:registertype>
+							<ns2:key>RETY-DE-2</ns2:key>
+							<ns2:designation>Handelsregister Abteilung B (HRB)</ns2:designation>
+							<ns2:shortdesignation>HRB</ns2:shortdesignation>
+						</ns2:registertype>
+						<ns2:registerid>575</ns2:registerid>
+						<ns2:register>
+							<ns2:court>Amtsgericht</ns2:court>
+							<ns2:shortdesignationcourt>AG</ns2:shortdesignationcourt>
+							<ns2:city>Weimar</ns2:city>
+							<ns2:postcode>99423</ns2:postcode>
+						</ns2:register>
+						<ns2:legalform>
+							<ns2:key>LEFO-DE-10</ns2:key>
+							<ns2:designation>Gesellschaft mit beschränkter Haftung</ns2:designation>
+							<ns2:shortdesignation>GmbH</ns2:shortdesignation>
+						</ns2:legalform>
+					</ns2:registration>
+				</ns2:historyentry>
+			</ns2:registerhistory>
+			<ns2:profitslosses/>
+			<ns2:affiliatedgroup/>
+			<ns2:balancesheetgroup/>
+			<ns2:evaluationsfinanceindustry>
+				<ns2:class>VI</ns2:class>
+				<ns2:classmeaning>Unternehmen mit sehr hohem Risiko</ns2:classmeaning>
+				<ns2:pdrange>8,0 % - 100 %</ns2:pdrange>
+				<ns2:pdexplanation>
+					Die PD (Probability of Default) gibt die Wahrscheinlichkeit an, dass ein Kreditnehmer
+						innerhalb eines Jahres gemäß Basel II-Kriterien ausfällt. Übertragen auf Creditreform
+						gelten der Bonitätsindex 500 und 600 als Ausfall. Angabe des PD-Bereichs von
+						(inkl.) bis (exkl.)
+				</ns2:pdexplanation>
+				<ns2:evaluator>
+					<ns2:name>Creditreform Bonitätsindex 2.0</ns2:name>
+					<ns2:assignment>
+						<ns2:class>I</ns2:class>
+						<ns2:classofevaluator>100 - 195</ns2:classofevaluator>
+					</ns2:assignment>
+					<ns2:assignment>
+						<ns2:class>II</ns2:class>
+						<ns2:classofevaluator>196 - 231</ns2:classofevaluator>
+					</ns2:assignment>
+					<ns2:assignment>
+						<ns2:class>III</ns2:class>
+						<ns2:classofevaluator>232 - 272</ns2:classofevaluator>
+					</ns2:assignment>
+					<ns2:assignment>
+						<ns2:class>IV</ns2:class>
+						<ns2:classofevaluator>273 - 292</ns2:classofevaluator>
+					</ns2:assignment>
+					<ns2:assignment>
+						<ns2:class>V</ns2:class>
+						<ns2:classofevaluator>293 - 353</ns2:classofevaluator>
+					</ns2:assignment>
+					<ns2:assignment>
+						<ns2:class>VI</ns2:class>
+						<ns2:classofevaluator>354 - 600</ns2:classofevaluator>
+					</ns2:assignment>
+				</ns2:evaluator>
+				<ns2:evaluator>
+					<ns2:name>Creditreform Rating AG</ns2:name>
+					<ns2:assignment>
+						<ns2:class>I</ns2:class>
+						<ns2:classofevaluator>AAA - BBB</ns2:classofevaluator>
+					</ns2:assignment>
+					<ns2:assignment>
+						<ns2:class>II</ns2:class>
+						<ns2:classofevaluator>BBB - BB+</ns2:classofevaluator>
+					</ns2:assignment>
+					<ns2:assignment>
+						<ns2:class>III</ns2:class>
+						<ns2:classofevaluator>BB+ - BB</ns2:classofevaluator>
+					</ns2:assignment>
+					<ns2:assignment>
+						<ns2:class>IV</ns2:class>
+						<ns2:classofevaluator>BB - B+</ns2:classofevaluator>
+					</ns2:assignment>
+					<ns2:assignment>
+						<ns2:class>V</ns2:class>
+						<ns2:classofevaluator>B+ - B-</ns2:classofevaluator>
+					</ns2:assignment>
+					<ns2:assignment>
+						<ns2:class>VI</ns2:class>
+						<ns2:classofevaluator>>= B-</ns2:classofevaluator>
+					</ns2:assignment>
+				</ns2:evaluator>
+				<ns2:evaluator>
+					<ns2:name>Commerzbank</ns2:name>
+					<ns2:assignment>
+						<ns2:class>I</ns2:class>
+						<ns2:classofevaluator>1,0 - 2,4</ns2:classofevaluator>
+					</ns2:assignment>
+					<ns2:assignment>
+						<ns2:class>II</ns2:class>
+						<ns2:classofevaluator>2,4 - 3,0</ns2:classofevaluator>
+					</ns2:assignment>
+					<ns2:assignment>
+						<ns2:class>III</ns2:class>
+						<ns2:classofevaluator>3,0 - 3,4</ns2:classofevaluator>
+					</ns2:assignment>
+					<ns2:assignment>
+						<ns2:class>IV</ns2:class>
+						<ns2:classofevaluator>3,4 - 4,0</ns2:classofevaluator>
+					</ns2:assignment>
+					<ns2:assignment>
+						<ns2:class>V</ns2:class>
+						<ns2:classofevaluator>4,0 - 4,8</ns2:classofevaluator>
+					</ns2:assignment>
+					<ns2:assignment>
+						<ns2:class>VI</ns2:class>
+						<ns2:classofevaluator>>= 4,8</ns2:classofevaluator>
+					</ns2:assignment>
+				</ns2:evaluator>
+				<ns2:evaluator>
+					<ns2:name>Deutsche Bank</ns2:name>
+					<ns2:assignment>
+						<ns2:class>I</ns2:class>
+						<ns2:classofevaluator>iAAA - iBBB</ns2:classofevaluator>
+					</ns2:assignment>
+					<ns2:assignment>
+						<ns2:class>II</ns2:class>
+						<ns2:classofevaluator>iBBB - iBB+</ns2:classofevaluator>
+					</ns2:assignment>
+					<ns2:assignment>
+						<ns2:class>III</ns2:class>
+						<ns2:classofevaluator>iBB+ - iBB-</ns2:classofevaluator>
+					</ns2:assignment>
+					<ns2:assignment>
+						<ns2:class>IV</ns2:class>
+						<ns2:classofevaluator>iBB- - iB+</ns2:classofevaluator>
+					</ns2:assignment>
+					<ns2:assignment>
+						<ns2:class>V</ns2:class>
+						<ns2:classofevaluator>iB+ - iB-</ns2:classofevaluator>
+					</ns2:assignment>
+					<ns2:assignment>
+						<ns2:class>VI</ns2:class>
+						<ns2:classofevaluator>>= iB-</ns2:classofevaluator>
+					</ns2:assignment>
+				</ns2:evaluator>
+				<ns2:evaluator>
+					<ns2:name>HypoVereinsbank - UniCredit</ns2:name>
+					<ns2:assignment>
+						<ns2:class>I</ns2:class>
+						<ns2:classofevaluator>1+ - 2</ns2:classofevaluator>
+					</ns2:assignment>
+					<ns2:assignment>
+						<ns2:class>II</ns2:class>
+						<ns2:classofevaluator>2 - 3</ns2:classofevaluator>
+					</ns2:assignment>
+					<ns2:assignment>
+						<ns2:class>III</ns2:class>
+						<ns2:classofevaluator>3 - 4</ns2:classofevaluator>
+					</ns2:assignment>
+					<ns2:assignment>
+						<ns2:class>IV</ns2:class>
+						<ns2:classofevaluator>4 - 5</ns2:classofevaluator>
+					</ns2:assignment>
+					<ns2:assignment>
+						<ns2:class>V</ns2:class>
+						<ns2:classofevaluator>5 - 6</ns2:classofevaluator>
+					</ns2:assignment>
+					<ns2:assignment>
+						<ns2:class>VI</ns2:class>
+						<ns2:classofevaluator>>= 6-</ns2:classofevaluator>
+					</ns2:assignment>
+				</ns2:evaluator>
+				<ns2:evaluator>
+					<ns2:name>KFW Bankengruppe</ns2:name>
+					<ns2:assignment>
+						<ns2:class>I</ns2:class>
+						<ns2:classofevaluator>BK1 - BK2</ns2:classofevaluator>
+					</ns2:assignment>
+					<ns2:assignment>
+						<ns2:class>II</ns2:class>
+						<ns2:classofevaluator>BK2 - BK3</ns2:classofevaluator>
+					</ns2:assignment>
+					<ns2:assignment>
+						<ns2:class>III</ns2:class>
+						<ns2:classofevaluator>BK3 - BK4</ns2:classofevaluator>
+					</ns2:assignment>
+					<ns2:assignment>
+						<ns2:class>IV</ns2:class>
+						<ns2:classofevaluator>BK4 - BK6</ns2:classofevaluator>
+					</ns2:assignment>
+					<ns2:assignment>
+						<ns2:class>V</ns2:class>
+						<ns2:classofevaluator>BK6 - BK7</ns2:classofevaluator>
+					</ns2:assignment>
+					<ns2:assignment>
+						<ns2:class>VI</ns2:class>
+						<ns2:classofevaluator>BK7</ns2:classofevaluator>
+					</ns2:assignment>
+				</ns2:evaluator>
+				<ns2:evaluator>
+					<ns2:name>RMS Risk Management Solutions</ns2:name>
+					<ns2:assignment>
+						<ns2:class>I</ns2:class>
+						<ns2:classofevaluator>1 - 5</ns2:classofevaluator>
+					</ns2:assignment>
+					<ns2:assignment>
+						<ns2:class>II</ns2:class>
+						<ns2:classofevaluator>5 - 7</ns2:classofevaluator>
+					</ns2:assignment>
+					<ns2:assignment>
+						<ns2:class>III</ns2:class>
+						<ns2:classofevaluator>7 - 9</ns2:classofevaluator>
+					</ns2:assignment>
+					<ns2:assignment>
+						<ns2:class>IV</ns2:class>
+						<ns2:classofevaluator>9 - 11</ns2:classofevaluator>
+					</ns2:assignment>
+					<ns2:assignment>
+						<ns2:class>V</ns2:class>
+						<ns2:classofevaluator>11 - 13</ns2:classofevaluator>
+					</ns2:assignment>
+					<ns2:assignment>
+						<ns2:class>VI</ns2:class>
+						<ns2:classofevaluator>13 - 15</ns2:classofevaluator>
+					</ns2:assignment>
+				</ns2:evaluator>
+				<ns2:evaluator>
+					<ns2:name>Sparkassen Finanzgruppe</ns2:name>
+					<ns2:assignment>
+						<ns2:class>I</ns2:class>
+						<ns2:classofevaluator>1 - 4</ns2:classofevaluator>
+					</ns2:assignment>
+					<ns2:assignment>
+						<ns2:class>II</ns2:class>
+						<ns2:classofevaluator>4 - 6</ns2:classofevaluator>
+					</ns2:assignment>
+					<ns2:assignment>
+						<ns2:class>III</ns2:class>
+						<ns2:classofevaluator>6 - 8</ns2:classofevaluator>
+					</ns2:assignment>
+					<ns2:assignment>
+						<ns2:class>IV</ns2:class>
+						<ns2:classofevaluator>8 - 10</ns2:classofevaluator>
+					</ns2:assignment>
+					<ns2:assignment>
+						<ns2:class>V</ns2:class>
+						<ns2:classofevaluator>10 - 12</ns2:classofevaluator>
+					</ns2:assignment>
+					<ns2:assignment>
+						<ns2:class>VI</ns2:class>
+						<ns2:classofevaluator>>= 12</ns2:classofevaluator>
+					</ns2:assignment>
+				</ns2:evaluator>
+				<ns2:evaluator>
+					<ns2:name>Postbank</ns2:name>
+					<ns2:assignment>
+						<ns2:class>I</ns2:class>
+						<ns2:classofevaluator>pAAA - pBBB+</ns2:classofevaluator>
+					</ns2:assignment>
+					<ns2:assignment>
+						<ns2:class>II</ns2:class>
+						<ns2:classofevaluator>pBBB+ - pBBB-</ns2:classofevaluator>
+					</ns2:assignment>
+					<ns2:assignment>
+						<ns2:class>III</ns2:class>
+						<ns2:classofevaluator>pBBB- - pBB</ns2:classofevaluator>
+					</ns2:assignment>
+					<ns2:assignment>
+						<ns2:class>IV</ns2:class>
+						<ns2:classofevaluator>pBB - pB+</ns2:classofevaluator>
+					</ns2:assignment>
+					<ns2:assignment>
+						<ns2:class>V</ns2:class>
+						<ns2:classofevaluator>pB+ - pB</ns2:classofevaluator>
+					</ns2:assignment>
+					<ns2:assignment>
+						<ns2:class>VI</ns2:class>
+						<ns2:classofevaluator>>= pB-</ns2:classofevaluator>
+					</ns2:assignment>
+				</ns2:evaluator>
+				<ns2:evaluator>
+					<ns2:name>Volksbanken Raiffeisenbanken</ns2:name>
+					<ns2:assignment>
+						<ns2:class>I</ns2:class>
+						<ns2:classofevaluator>0+ - 1d</ns2:classofevaluator>
+					</ns2:assignment>
+					<ns2:assignment>
+						<ns2:class>II</ns2:class>
+						<ns2:classofevaluator>1e - 2a</ns2:classofevaluator>
+					</ns2:assignment>
+					<ns2:assignment>
+						<ns2:class>III</ns2:class>
+						<ns2:classofevaluator>2b - 2c</ns2:classofevaluator>
+					</ns2:assignment>
+					<ns2:assignment>
+						<ns2:class>IV</ns2:class>
+						<ns2:classofevaluator>2d - 2e</ns2:classofevaluator>
+					</ns2:assignment>
+					<ns2:assignment>
+						<ns2:class>V</ns2:class>
+						<ns2:classofevaluator>3a - 3b</ns2:classofevaluator>
+					</ns2:assignment>
+					<ns2:assignment>
+						<ns2:class>VI</ns2:class>
+						<ns2:classofevaluator>>= 3c</ns2:classofevaluator>
+					</ns2:assignment>
+				</ns2:evaluator>
+				<ns2:evaluator>
+					<ns2:name>Standard &amp; Poor's</ns2:name>
+					<ns2:assignment>
+						<ns2:class>I</ns2:class>
+						<ns2:classofevaluator>AAA - BBB</ns2:classofevaluator>
+					</ns2:assignment>
+					<ns2:assignment>
+						<ns2:class>II</ns2:class>
+						<ns2:classofevaluator>BBB - BB+</ns2:classofevaluator>
+					</ns2:assignment>
+					<ns2:assignment>
+						<ns2:class>III</ns2:class>
+						<ns2:classofevaluator>BB+ - BB</ns2:classofevaluator>
+					</ns2:assignment>
+					<ns2:assignment>
+						<ns2:class>IV</ns2:class>
+						<ns2:classofevaluator>BB - B+</ns2:classofevaluator>
+					</ns2:assignment>
+					<ns2:assignment>
+						<ns2:class>V</ns2:class>
+						<ns2:classofevaluator>B+ - B-</ns2:classofevaluator>
+					</ns2:assignment>
+					<ns2:assignment>
+						<ns2:class>VI</ns2:class>
+						<ns2:classofevaluator>>= B-</ns2:classofevaluator>
+					</ns2:assignment>
+				</ns2:evaluator>
+				<ns2:classvalue>
+					<ns2:class>I</ns2:class>
+					<ns2:classmeaning>Unternehmen mit sehr guter bis guter Bonität</ns2:classmeaning>
+					<ns2:pdrange>0 % - 0,3 %</ns2:pdrange>
+				</ns2:classvalue>
+				<ns2:classvalue>
+					<ns2:class>II</ns2:class>
+					<ns2:classmeaning>Unternehmen mit guter bis zufriedenstellender Bonität</ns2:classmeaning>
+					<ns2:pdrange>0,3 % - 0,7 %</ns2:pdrange>
+				</ns2:classvalue>
+				<ns2:classvalue>
+					<ns2:class>III</ns2:class>
+					<ns2:classmeaning>Unternehmen mit befriedigender bzw. noch guter Bonität</ns2:classmeaning>
+					<ns2:pdrange>0,7 % - 1,5 %</ns2:pdrange>
+				</ns2:classvalue>
+				<ns2:classvalue>
+					<ns2:class>IV</ns2:class>
+					<ns2:classmeaning>Unternehmen mit überdurchschnittlichem bis erhöhtem Risiko</ns2:classmeaning>
+					<ns2:pdrange>1,5 % - 3,0 %</ns2:pdrange>
+				</ns2:classvalue>
+				<ns2:classvalue>
+					<ns2:class>V</ns2:class>
+					<ns2:classmeaning>Unternehmen mit hohem Risiko</ns2:classmeaning>
+					<ns2:pdrange>3,0 % - 8,0 %</ns2:pdrange>
+				</ns2:classvalue>
+				<ns2:classvalue>
+					<ns2:class>VI</ns2:class>
+					<ns2:classmeaning>Unternehmen mit sehr hohem Risiko</ns2:classmeaning>
+					<ns2:pdrange>8,0 % - 100 %</ns2:pdrange>
+				</ns2:classvalue>
+			</ns2:evaluationsfinanceindustry>
+			<ns2:financialstatementfigures/>
+			<ns2:paymentbehaviour>
+				<ns2:history/>
+				<ns2:branch>
+					<ns2:history/>
+				</ns2:branch>
+			</ns2:paymentbehaviour>
+			<ns2:legaldisclaimer>
+				Diese Auskunft ist nur für den Empfänger bestimmt. Für den Inhalt wird jede Haftung
+					für Fahrlässigkeit abgelehnt. Das gilt auch für Erfüllungsgehilfen. Wer die Auskunft
+					zur Kenntnis nimmt, unterwirft sich diesen Bedingungen. Der Empfänger darf die
+					übermittelten Daten gemäß §28 Abs. 5 BDSG nur für den Zweck verarbeiten oder
+					nutzen, zu dessen Erfüllung sie ihm übermittelt worden sind. Eine Nutzung für
+					andere Zwecke ist nur unter der Voraussetzung des § 28 Abs. 2 und 3 BDSG zulässig.
+			</ns2:legaldisclaimer>
+		</ns2:reportdata>
+	</ns2:body>
+</ns2:reportResponse>

@@ -1,0 +1,12 @@
+@page {
+    size: A4;
+    margin: 0.5in .5in 1in .5in;
+
+    @bottom-left {
+        content : element(footer);
+    }
+
+    @bottom-right {
+        content: "Seite " counter(page) " von " counter(pages);
+    }
+}

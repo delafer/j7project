@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AgencyInquiry>
+	<head>
+		<version>001</version>
+		<title>AgencyInquiry</title>
+		<uuid>[UUID]</uuid>
+		<crefo>[CREFO]</crefo>
+		<sendDate>[SEND_DATE]</sendDate>
+	</head>
+	<body>
+		<inquiry>
+			<textformat>[AGENCY_INQUIRY]</textformat>
+		</inquiry>
+	</body>
+</AgencyInquiry>
