@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.creditreform.common.xml.model.IEntry.DocumentType;
 import de.creditreform.common.xml.model.resources.MultiValue;
 
 public class XmlModel implements Serializable {

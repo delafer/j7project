@@ -9,11 +9,11 @@ import java.util.Properties;
 public class CliArgs {
 
 
-	private String dbDriver;
-	private String dbURL;
-	private String dbUser;
-	private String dbPassword;
-	private String dbSchema;
+	private boolean pdfGeneration;
+	private String outputPdf;
+	private String outputXml;
+	private String inputXml;
+	private String xmlRules;
 
 	public CliArgs(String fileName) throws FileNotFoundException, IOException {
 
@@ -27,56 +27,49 @@ public class CliArgs {
 		Properties p = new Properties();
 		p.load(new FileInputStream(fileName));
 
-		this.dbSchema = p.getProperty(EntryPointCLI.IMPORTER_DB_SCHEMA);
-		this.dbDriver = p.getProperty(EntryPointCLI.IMPORTER_JDBC_DRIVER);
-		this.dbURL = p.getProperty(EntryPointCLI.IMPORTER_JDBC_URL);
-		this.dbUser = p.getProperty(EntryPointCLI.IMPORTER_DB_USER);
-		this.dbPassword = p.getProperty(EntryPointCLI.IMPORTER_DB_PASSWORD);
+		this.xmlRules = p.getProperty(EntryPointCLI.PROPERTIES_XML_RULES);
+		this.pdfGeneration = asBoolean(p.getProperty(EntryPointCLI.ENABLE_PDF_GENERATION));
+		this.outputPdf = p.getProperty(EntryPointCLI.OUTPUT_PDF_PATH);
+		this.outputXml = p.getProperty(EntryPointCLI.OUTPUT_XML_PATH);
+		this.inputXml = p.getProperty(EntryPointCLI.INPUT_XML_PATH);
 	}
 
-	/**
-	 * @return the dbDriver
-	 */
-	public String getDbDriver() {
-		return dbDriver;
+
+
+
+	public boolean isPdfGeneration() {
+		return pdfGeneration;
 	}
 
-	/**
-	 * @return the dbURL
-	 */
-	public String getDbURL() {
-		return dbURL;
+	public String getOutputPdf() {
+		return outputPdf;
 	}
 
-	/**
-	 * @return the dbUser
-	 */
-	public String getDbUser() {
-		return dbUser;
+	public String getOutputXml() {
+		return outputXml;
 	}
 
-	/**
-	 * @return the dbPassword
-	 */
-	public String getDbPassword() {
-		return dbPassword;
+	public String getInputXml() {
+		return inputXml;
 	}
 
-	/**
-	 * @return the dbSchema
-	 */
-	public String getDbSchema() {
-		return dbSchema;
+	public String getXmlRules() {
+		return xmlRules;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
+	private static boolean asBoolean(String str) {
+		if (str == null || str.length()==0) return false;
+		str = str.trim();
+		if ("1".equals(str)) return true;
+		str = str.toLowerCase();
+		return "true".equals(str) || "yes".equals(str) || "on".equals(str) || "ja".equals(str) || "enable".equals(str);
+	}
+
 	@Override
 	public String toString() {
-		return String.format("ArgsParser [dbDriver=%s, dbURL=%s, dbUser=%s, dbPassword=%s, dbSchema=%s]", dbDriver,
-				dbURL, dbUser, "XXXXX", dbSchema);
+		return String.format("CliArgs [pdfGeneration=%s, outputPdf=%s, outputXml=%s, inputXml=%s, xmlRules=%s]", pdfGeneration, outputPdf, outputXml, inputXml, xmlRules);
 	}
+
 
 
 

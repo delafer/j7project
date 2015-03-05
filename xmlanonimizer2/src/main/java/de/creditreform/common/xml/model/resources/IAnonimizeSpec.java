@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
 
-import de.creditreform.common.xml.model.IEntry.DocumentType;
+import de.creditreform.common.xml.model.DocumentType;
 import de.creditreform.common.xml.model.MetaTag;
 
 public interface IAnonimizeSpec {

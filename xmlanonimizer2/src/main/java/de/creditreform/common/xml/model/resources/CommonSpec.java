@@ -2,7 +2,7 @@ package de.creditreform.common.xml.model.resources;
 
 import java.util.Map;
 
-import de.creditreform.common.xml.model.IEntry.DocumentType;
+import de.creditreform.common.xml.model.DocumentType;
 import de.creditreform.common.xml.model.MetaTag;
 
 public class CommonSpec extends AnonimizeSpec {

@@ -7,11 +7,11 @@ public interface IEntry extends Serializable {
 	public enum Type {XmlTag, XmlText};
 
 
-	public enum DocumentType {
-		ReportResponse("ns2:reportResponse"), MainBoxEntryResponse("ns2:mailboxentryResponse"), Lieferung("Lieferung"), Unknown("Unknown"); // unknown document type
-
-		DocumentType(String id) {tag = id;} public String tag;
-	}
+//	public enum DocumentType {
+//		ReportResponse("ns2:reportResponse"), MainBoxEntryResponse("ns2:mailboxentryResponse"), Lieferung("Lieferung"), Unknown("Unknown"); // unknown document type
+//
+//		DocumentType(String id) {tag = id;} public String tag;
+//	}
 
 
 //	public static class MetaTag {

@@ -6,8 +6,8 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import de.creditreform.common.xml.model.DocumentType;
 import de.creditreform.common.xml.model.EntryXml;
-import de.creditreform.common.xml.model.IEntry.DocumentType;
 import de.creditreform.common.xml.model.MetaTag;
 import de.creditreform.common.xml.model.XmlModel;
 import de.creditreform.common.xml.model.resources.MultiValue;
@@ -97,7 +97,7 @@ public class XmlHandler extends DefaultHandler {
 
 	private DocumentType detectDocumentType(String qName) {
 		DocumentType res = AnonimizeData.instance().getTypes(qName);
-		return res != null ? res : DocumentType.Unknown;
+		return res != null ? res : DocumentType.TYPE_UNKNOWN;
 	}
 
 	/**
@@ -124,7 +124,7 @@ public class XmlHandler extends DefaultHandler {
 		if (null == parent) {
 			model.documentType = detectDocumentType(qName);
 			model.xmlModel = newNode;
-			putData(MetaTag.valueOf("DocumentType").name(), model.documentType.tag);
+			putData(MetaTag.valueOf("DocumentType").name(), model.documentType.tag());
 		}
 		this.elementStack.push(newNode);
 	}

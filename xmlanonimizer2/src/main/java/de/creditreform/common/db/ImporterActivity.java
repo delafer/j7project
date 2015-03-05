@@ -29,9 +29,9 @@ public class ImporterActivity {
 
 	private void initJDBCDriver() {
 		try {
-			Class.forName(args.getDbDriver());
+			//Class.forName(args.getDbDriver());
 			dbInitialized = true;
-		} catch (ClassNotFoundException e) {
+		} catch (Exception e) {
 			log.error("Can't initialize jdbc driver:", e);
 		}
 	}
@@ -48,7 +48,7 @@ public class ImporterActivity {
 				if (!dbInitialized) {
 					initJDBCDriver();
 				}
-				conn = DriverManager.getConnection(args.getDbURL(), args.getDbUser(), args.getDbPassword());
+				conn =  null; //DriverManager.getConnection(args.getDbURL(), args.getDbUser(), args.getDbPassword());
 				conn.setAutoCommit(false);
 
 //				if (isFilled(dbSchema))
@@ -65,7 +65,7 @@ public class ImporterActivity {
 
 
 	public void doWork() throws Exception {
-		DataUpdater exec = new DataUpdater(this.getConnection(), args.getDbSchema());
+		DataUpdater exec = new DataUpdater(this.getConnection(), "args.getDbSchema()");
 		exec.listAllXmls();
 
 	}

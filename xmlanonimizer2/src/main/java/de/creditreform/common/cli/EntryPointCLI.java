@@ -13,11 +13,11 @@ public class EntryPointCLI {
 	private static CommandLineParser parser;
 	private static Options options;
 
-	public static String IMPORTER_DB_SCHEMA = "jdbc.schema";
-	public static String IMPORTER_DB_PASSWORD = "jdbc.password";
-	public static String IMPORTER_DB_USER = "jdbc.user";
-	public static String IMPORTER_JDBC_URL = "jdbc.url";
-	public static String IMPORTER_JDBC_DRIVER = "jdbc.driver";
+	public static String PROPERTIES_XML_RULES = "zipped.xml.rules";
+	public static String INPUT_XML_PATH = "input.path.xml";
+	public static String OUTPUT_XML_PATH = "output.path.xml";
+	public static String OUTPUT_PDF_PATH = "output.path.pdf";
+	public static String ENABLE_PDF_GENERATION = "enable.pdf.generation";
 
 
 	public EntryPointCLI() {
@@ -31,12 +31,14 @@ public class EntryPointCLI {
 
 		StringBuilder sb = new StringBuilder();
 		sb.append(StringUtils.LF).append(StringUtils.LF).
-		append(">> Config example [dbConnection.properties]: <<").append(StringUtils.LF).
-		append(IMPORTER_JDBC_DRIVER+" = oracle.jdbc.driver.OracleDriver").append(StringUtils.LF).
-		append(IMPORTER_JDBC_URL+" = jdbc:oracle:thin:@tux121b004:1521:QUALITY").append(StringUtils.LF).
-		append(IMPORTER_DB_USER+" = <db_user>").append(StringUtils.LF).
-		append(IMPORTER_DB_PASSWORD+" = <db_pass>").append(StringUtils.LF).
-		append(IMPORTER_DB_SCHEMA+" = <n5_schema>").append(StringUtils.LF).
+		append(">> Config example [anonymization.properties]: <<").append(StringUtils.LF).
+		append(PROPERTIES_XML_RULES+" = {rules.jar} or {rules.zip}").append(StringUtils.LF).
+		append(INPUT_XML_PATH+" = {input xml path}").append(StringUtils.LF).
+		append(OUTPUT_XML_PATH+" = {output xml path}").append(StringUtils.LF).
+		append(ENABLE_PDF_GENERATION+" = {true/false} | {yes/no} | {1/0}").append(StringUtils.LF).
+		append(OUTPUT_PDF_PATH+" =  {output pdf path}").append(StringUtils.LF).
+
+
 		append(StringUtils.LF);
 
 		System.out.println(sb.toString());

@@ -2,8 +2,7 @@ package de.creditreform.common.xml.model.resources;
 
 import java.util.Map;
 
-import de.creditreform.common.helpers.StringUtils;
-import de.creditreform.common.xml.model.IEntry.DocumentType;
+import de.creditreform.common.xml.model.DocumentType;
 import de.creditreform.common.xml.model.MetaTag;
 
 public class ReportResponse extends AnonimizeSpec {
@@ -18,7 +17,7 @@ public class ReportResponse extends AnonimizeSpec {
 
 	@Override
 	public DocumentType getDocumentType() {
-		return DocumentType.ReportResponse; //ReportResponse("ns2:reportResponse")
+		return de.creditreform.common.xml.model.DocumentType.valueOf("ns2:reportResponse");
 	}
 
 	@Override

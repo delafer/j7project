@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import de.creditreform.common.xml.model.IEntry.DocumentType;
+import de.creditreform.common.xml.model.DocumentType;
 import de.creditreform.common.xml.model.MetaTag;
 import de.creditreform.common.xml.model.resources.IAnonimizeSpec;
 import de.creditreform.common.xml.model.resources.IAnonimizeSpec.TagData;
@@ -60,7 +60,7 @@ public final class AnonimizeData implements Serializable {
 			processors.put(next.getDocumentType(), next);
 
 			DocumentType dType = next.getDocumentType();
-			types.put(dType.tag, dType);
+			types.put(dType.tag(), dType);
 			Map<String, MetaTag> subMap = new HashMap<String, MetaTag>();
 			metaTags.put(dType, subMap);
 			fillTagsByType(next, subMap);

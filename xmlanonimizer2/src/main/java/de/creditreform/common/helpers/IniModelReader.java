@@ -10,16 +10,16 @@ public class IniModelReader extends IniReader {
 	private CommonSpec cs;
 
 	public enum BlockType {
-		General("general"), Tags("tags"), DataTags("datatags"), Rules("rules"), ReplacementMode("replacement.rules"), Unknown("");
+		General("general"), Tags("tags"), DataTags("datatags"), Rules("replace.values"), ReplacementMode("replace.mode"), Unknown("");
 
 		public String tag;
 		BlockType(String id) {
 			tag = id;
-			Values.values.put(id, this);
+			Values.values.put(id.toLowerCase(), this);
 		}
 
 		public static BlockType valueBy(String name) {
-			BlockType ret = Values.values.get(name);
+			BlockType ret = Values.values.get(name.toLowerCase());
 			return ret != null ? ret : BlockType.Unknown;
 		}
 
@@ -33,15 +33,21 @@ public class IniModelReader extends IniReader {
 	}
 
 	public enum KeyType {
-		DocumentType("DocumentType"), Namespace("Namespace"), DataTags("datatags"), Unknown("");
+		RootElement("RootElement"),
+		Namespace("Namespace"),
+		IgnoreCase("IgnoreCase"),
+		PrettyPrint("Pretty.print.xml"),
+		DefaultReplace("Default.replace.mode"),
+		DataTags("datatags"),//deprecated
+		Unknown("");
 
 		public String tag;
 		KeyType(String id) {
-			Values.values.put(id, this);
+			Values.values.put(id.toLowerCase(), this);
 		}
 
 		public static KeyType valueBy(String name) {
-			KeyType ret = Values.values.get(name);
+			KeyType ret = Values.values.get(name.toLowerCase());
 			return ret != null ? ret : KeyType.Unknown;
 		}
 
@@ -60,7 +66,6 @@ public class IniModelReader extends IniReader {
 
 	public IniModelReader() {
 		super();
-		Integer a;
 		cs = new CommonSpec();
 	}
 
@@ -75,9 +80,9 @@ public class IniModelReader extends IniReader {
 	}
 
 	private void newValue(String keyText, KeyType keyEnum, String value, BlockType block) {
+		//2222
+		System.out.println(Args.fill("Key(enum)=%1, Key(txt)=%2, block=%3, value=[%4]", keyEnum.toString(), keyText, block.toString(), value));
 		switch (block) {
-		case General:
-			break;
 		case Tags:
 			break;
 		case DataTags:
@@ -85,6 +90,9 @@ public class IniModelReader extends IniReader {
 		case Rules:
 			break;
 		case ReplacementMode:
+			break;
+		case General:
+			readGeneral(keyText, keyEnum, value);
 			break;
 		case Unknown:
 		default:
@@ -94,7 +102,21 @@ public class IniModelReader extends IniReader {
 	}
 
 
+	private void readGeneral(String keyText, KeyType keyEnum, String value) {
+		switch (keyEnum) {
+		case Namespace:
+
+			break;
+
+		default:
+			break;
+		}
+
+	}
+
+
 	private void newBlock(BlockType block) {
+		///111
 		this.blckName = block;
 
 	}

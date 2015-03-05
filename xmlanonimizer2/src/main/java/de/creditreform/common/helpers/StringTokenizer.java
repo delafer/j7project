@@ -1,8 +1,8 @@
 package de.creditreform.common.helpers;
 
+import de.creditreform.common.xml.model.DocumentType;
 import de.creditreform.common.xml.model.EntryText.Content;
 import de.creditreform.common.xml.model.EntryXml;
-import de.creditreform.common.xml.model.IEntry.DocumentType;
 
 public class StringTokenizer {
 
@@ -57,7 +57,7 @@ public class StringTokenizer {
 
 
 	public static void main(String[] args) {
-		EntryXml x = new EntryXml("test",null,null, DocumentType.ReportResponse);
+		EntryXml x = new EntryXml("test",null,null, DocumentType.valueOf("ReportResponse"));
 		tokenize(x, "                   ");
 		System.out.println(x.render());
 //		tokenize(x, null);

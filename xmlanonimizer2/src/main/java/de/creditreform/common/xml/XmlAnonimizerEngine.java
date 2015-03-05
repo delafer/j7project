@@ -1,14 +1,18 @@
 package de.creditreform.common.xml;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.creditreform.common.xml.model.DocumentType;
 import de.creditreform.common.xml.model.EntryXml;
-import de.creditreform.common.xml.model.IEntry.DocumentType;
 import de.creditreform.common.xml.model.MetaTag;
 import de.creditreform.common.xml.model.XmlModel;
 import de.creditreform.common.xml.model.resources.IAnonimizeSpec;
@@ -43,7 +47,7 @@ public class XmlAnonimizerEngine {
 		try {
 			XmlModel model = sp.readXmlModel(is);
 
-			if (DocumentType.Unknown.equals(model.documentType)) return Result.error();
+			if (DocumentType.TYPE_UNKNOWN.equals(model.documentType)) return Result.error();
 
 			IAnonimizeSpec spec = AnonimizeData.instance().getProcessor(model.documentType);
 

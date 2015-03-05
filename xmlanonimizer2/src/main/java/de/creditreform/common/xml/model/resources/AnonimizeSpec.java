@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.Map;
 
 import de.creditreform.common.helpers.StringUtils;
-import de.creditreform.common.xml.model.IEntry.DocumentType;
+import de.creditreform.common.xml.model.DocumentType;
 import de.creditreform.common.xml.model.MetaTag;
 
 /**

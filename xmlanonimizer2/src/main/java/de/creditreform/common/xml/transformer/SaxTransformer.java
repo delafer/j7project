@@ -15,7 +15,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
-import de.creditreform.common.xml.model.IEntry.DocumentType;
+import de.creditreform.common.xml.model.DocumentType;
 import de.creditreform.common.xml.model.MetaTag;
 import de.creditreform.common.xml.model.XmlModel;
 
@@ -117,7 +117,7 @@ public class SaxTransformer {
 
 	public static MetaTag getTagByPath(String qName, DocumentType docType) {
 
-		if (!DocumentType.Unknown.equals(docType)) {
+		if (!DocumentType.TYPE_UNKNOWN.equals(docType)) {
 			Map<String, MetaTag> metaTag = AnonimizeData.instance().getMetaTags(docType);
 			return metaTag.get(qName);
 		}
