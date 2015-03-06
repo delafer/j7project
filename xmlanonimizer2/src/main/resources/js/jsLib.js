@@ -49,5 +49,9 @@ nvl2 = function(str) {
  return str;
 };
 
-result = substr(upper(random(25)),1,5)+lower(var1);
-resul2 = 2;
+
+var var1 = 'abc';
+var resultJs = new Array();
+resultJs = {"CrefoNr":substr(upper(random(25)),1,5)+lower(var1), "City":"bcd"};
+
+

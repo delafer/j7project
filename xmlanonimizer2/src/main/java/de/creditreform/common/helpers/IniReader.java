@@ -22,7 +22,7 @@ public abstract class IniReader {
 		  if (s.startsWith("#")) continue;
 
 		  if (s.length()> 2 && s.startsWith("[") && s.endsWith("]")) {
-			  onNewBlockInt(s.substring(1, s.length()-1).toLowerCase());
+			  onNewBlockInt(s.substring(1, s.length()-1).trim());
 		  } else
 	      if ((id = s.indexOf('=', 1))>0) {
 	    	  onNewValueInt(s.substring(0, id), s.substring(id+1));

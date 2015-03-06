@@ -1011,5 +1011,23 @@ public final class StringUtils {
 	   return hasUpperLetter(s) ? s.toLowerCase() : s;
    }
 
+   public static boolean asBoolean(String str) {
+		if (str == null || str.length()==0) return false;
+		str = str.trim();
+		if ("1".equals(str)) return true;
+		str = str.toLowerCase();
+		return "true".equals(str) || "yes".equals(str) || "y".equals(str) || "on".equals(str) || "ja".equals(str) || "enable".equals(str);
+	}
+
+
+   public static String[] splitValues(String values) {
+	   String[] arr = values.split(",");
+	   if (arr.length<=1) {
+		   String[] tmp = values.split(";");
+		   if (tmp.length>arr.length) arr = tmp;
+	   }
+	   return arr;
+   }
+
 }
 

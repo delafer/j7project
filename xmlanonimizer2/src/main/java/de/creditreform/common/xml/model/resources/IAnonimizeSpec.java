@@ -1,5 +1,6 @@
 package de.creditreform.common.xml.model.resources;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
@@ -10,7 +11,29 @@ import de.creditreform.common.xml.model.MetaTag;
 public interface IAnonimizeSpec {
 
 
-	public enum ReplacementType {OnlyText, TextRecursive, ReplaceAll, Ignore, RemoveBlock};
+	public enum ReplacementType {OnlyText, TextRecursive, ReplaceAll, Ignore, RemoveBlock;
+
+	public static ReplacementType RT_UNKNOWN = ReplacementType.Ignore;
+	public static ReplacementType RT_DEFAULT = ReplacementType.OnlyText;
+	ReplacementType() {
+		Values.values.put(this.name(), this);
+	}
+
+	public static ReplacementType valueBy(String name, ReplacementType defValue) {
+		ReplacementType ret = Values.values.get(name.toLowerCase());
+		return ret != null ? ret : defValue;
+	}
+
+	private static class Values {
+		static final Map<String, ReplacementType> values;
+		static {
+			values = new HashMap<String, ReplacementType>();
+		}
+		private Values() {};
+	}
+
+
+	};
 
 	public DocumentType getDocumentType();
 

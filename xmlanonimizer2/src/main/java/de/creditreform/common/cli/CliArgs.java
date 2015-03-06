@@ -6,6 +6,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 
+import de.creditreform.common.helpers.StringUtils;
+
 public class CliArgs {
 
 
@@ -28,7 +30,7 @@ public class CliArgs {
 		p.load(new FileInputStream(fileName));
 
 		this.xmlRules = p.getProperty(EntryPointCLI.PROPERTIES_XML_RULES);
-		this.pdfGeneration = asBoolean(p.getProperty(EntryPointCLI.ENABLE_PDF_GENERATION));
+		this.pdfGeneration = StringUtils.asBoolean(p.getProperty(EntryPointCLI.ENABLE_PDF_GENERATION));
 		this.outputPdf = p.getProperty(EntryPointCLI.OUTPUT_PDF_PATH);
 		this.outputXml = p.getProperty(EntryPointCLI.OUTPUT_XML_PATH);
 		this.inputXml = p.getProperty(EntryPointCLI.INPUT_XML_PATH);
@@ -57,13 +59,6 @@ public class CliArgs {
 		return xmlRules;
 	}
 
-	private static boolean asBoolean(String str) {
-		if (str == null || str.length()==0) return false;
-		str = str.trim();
-		if ("1".equals(str)) return true;
-		str = str.toLowerCase();
-		return "true".equals(str) || "yes".equals(str) || "on".equals(str) || "ja".equals(str) || "enable".equals(str);
-	}
 
 	@Override
 	public String toString() {
