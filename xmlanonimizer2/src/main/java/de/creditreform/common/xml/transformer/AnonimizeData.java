@@ -1,8 +1,10 @@
 package de.creditreform.common.xml.transformer;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -37,17 +39,19 @@ public final class AnonimizeData implements Serializable {
 	private Map<DocumentType, IAnonimizeSpec> processors;
 
 	private AnonimizeData() {
-		init();
+		formats = new ArrayList<IAnonimizeSpec>();
 	}
 
 
-	private IAnonimizeSpec[] formats;
+	private List<IAnonimizeSpec> formats;
 
 
-	private void init() {
+	public void addDocumentFormat(IAnonimizeSpec spec) {
+		formats.add(spec);
+	}
 
 
-		formats = new IAnonimizeSpec[] {new ReportResponse()};
+	public void initialize() {
 
 		// register xml tags
 		types = new HashMap<String, DocumentType>();

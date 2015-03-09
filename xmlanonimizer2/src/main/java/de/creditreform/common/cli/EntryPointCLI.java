@@ -95,17 +95,6 @@ public class EntryPointCLI {
 		ImporterActivity importer = new ImporterActivity(arp);
 		importer.doWork();
 
-
-//		Configuration cfg = HibernateUtil.getConfiguration();
-//		importer.setInputDirectoryPath(destinationDir);
-//		importer.setDBDriver(nvl(cfg.getProperty(CONFIG_HIBERNATE_DRIVER), CONFIG_DEFAULT_DRIVER));
-//		importer.setDBURL(cfg.getProperty(CONFIG_HIBERNATE_URL));
-//		importer.setDBUser(cfg.getProperty(CONFIG_HIBERNATE_USER));
-//		importer.setDBPassword(cfg.getProperty(CONFIG_HIBERNATE_PWD));
-//		importer.setDBSchema(CONFIG_DB_SCHEMA_NAME);
-//
-//		importer.doWork();
-
 	}
 
 

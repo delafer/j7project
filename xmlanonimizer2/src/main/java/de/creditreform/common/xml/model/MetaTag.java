@@ -12,7 +12,7 @@ public final class MetaTag implements Serializable, Comparable<MetaTag> {
 	private static final long serialVersionUID = -6090589192904945882L;
 
 
-	public static final boolean CASE_SENSITIVE = false;
+	public static final boolean CASE_SENSITIVE = true;
 
 
 	private String name;

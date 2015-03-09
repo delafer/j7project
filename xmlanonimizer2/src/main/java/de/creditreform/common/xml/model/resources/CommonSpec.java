@@ -82,9 +82,12 @@ public class CommonSpec extends AnonimizeSpec {
 	}
 
 	public String getNewData(MetaTag tag, int at) {
+		if (tag.name().equals("CustRef")) {
+			System.out.println(111);
+		}
 		IReplacement replObj = newValues.get(tag);
 		if (null != replObj) {
-			replObj.getNewValue(at, data);
+			return replObj.getNewValue(at, data);
 		}
 		return null;
 	}

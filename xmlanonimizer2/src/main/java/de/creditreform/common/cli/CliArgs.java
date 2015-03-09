@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 
+import de.creditreform.common.helpers.AbstractZipParser.FileUtils;
 import de.creditreform.common.helpers.StringUtils;
 
 public class CliArgs {
@@ -31,11 +32,17 @@ public class CliArgs {
 
 		this.xmlRules = p.getProperty(EntryPointCLI.PROPERTIES_XML_RULES);
 		this.pdfGeneration = StringUtils.asBoolean(p.getProperty(EntryPointCLI.ENABLE_PDF_GENERATION));
-		this.outputPdf = p.getProperty(EntryPointCLI.OUTPUT_PDF_PATH);
-		this.outputXml = p.getProperty(EntryPointCLI.OUTPUT_XML_PATH);
-		this.inputXml = p.getProperty(EntryPointCLI.INPUT_XML_PATH);
+		this.outputPdf = correctDirectoryPath(p.getProperty(EntryPointCLI.OUTPUT_PDF_PATH));
+		this.outputXml = correctDirectoryPath(p.getProperty(EntryPointCLI.OUTPUT_XML_PATH));
+		this.inputXml = correctDirectoryPath(p.getProperty(EntryPointCLI.INPUT_XML_PATH));
 	}
 
+	private String correctDirectoryPath(String str) {
+		if (StringUtils.isEmpty(str)) return "";
+		str = str.trim();
+		if (!str.endsWith("\\") && !str.endsWith("/")) str += "/";
+		return FileUtils.convertToSystemPath(str);
+	}
 
 
 

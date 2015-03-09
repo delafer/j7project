@@ -85,7 +85,7 @@ public class IniModelReader extends IniReader {
 
 	private DocumentType getDocumentType() {
 		if (StringUtils.isNotEmpty(namespace) && !rootElement.contains(":"))
-			return DocumentType.valueOf(namespace+':'+rootElement);
+			return DocumentType.valueOf(namespace+rootElement);
 		else
 			return DocumentType.valueOf(rootElement);
 
@@ -210,7 +210,12 @@ public class IniModelReader extends IniReader {
 	private void readGeneral(String keyText, KeyType keyEnum, String value) {
 		switch (keyEnum) {
 		case Namespace:
-			this.namespace = value; break;
+			if (StringUtils.isNotEmpty(value)) {
+				if (!value.endsWith(":")) value += ":";
+				this.namespace = value;
+			}
+
+			break;
 		case PrettyPrint:
 			this.prettyPrint = StringUtils.asBoolean(value); break;
 		case RootElement:

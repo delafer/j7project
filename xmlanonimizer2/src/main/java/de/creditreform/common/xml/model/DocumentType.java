@@ -12,7 +12,7 @@ public final class DocumentType implements Serializable, Comparable<DocumentType
 	private static final long serialVersionUID = -6090589192904945882L;
 
 
-	public static final boolean CASE_SENSITIVE = false;
+	public static final boolean CASE_SENSITIVE = true;
 
 
 	public static final DocumentType TYPE_UNKNOWN = DocumentType.valueOf("Unknown");

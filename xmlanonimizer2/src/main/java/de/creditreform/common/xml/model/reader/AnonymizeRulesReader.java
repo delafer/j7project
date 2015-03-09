@@ -7,25 +7,11 @@ import java.util.zip.ZipEntry;
 import de.creditreform.common.helpers.AbstractZipParser;
 import de.creditreform.common.helpers.IniModelReader;
 import de.creditreform.common.helpers.AbstractZipParser.EntryInfo;
+import de.creditreform.common.xml.transformer.AnonimizeData;
 
 public class AnonymizeRulesReader {
 
 
-
-
-
-
-	public static void main(String[] args) {
-
-		try {
-			AnonymizeRulesReader reader = new AnonymizeRulesReader();
-			reader.read("D:/Anonym/rules.zip");
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-	}
 
 
 	public void read(String zippedModelName) throws IOException {
@@ -39,7 +25,7 @@ public class AnonymizeRulesReader {
 		};
 
 		zipPrs.read();
-
+		AnonimizeData.instance().initialize();
 	}
 
 
@@ -47,6 +33,7 @@ public class AnonymizeRulesReader {
 		IniModelReader ir = new IniModelReader();
 		entryInfo.readFileData();
 		ir.read(entryInfo.getFileData());
+		AnonimizeData.instance().addDocumentFormat(ir.getCommonSpec());
 
 	}
 

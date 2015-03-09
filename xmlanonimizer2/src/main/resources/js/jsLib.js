@@ -9,6 +9,7 @@ $upper = function(str) {
 
 $random = function(len, charSet) {
     charSet = charSet || 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    len = len || 16;
     var ret = '';
     for (var i = 0; i < len; i++) {
     ret += charSet.charAt(Math.floor(Math.random() * charSet.length));
@@ -24,6 +25,14 @@ $randomNumber = function(min, max) {
 
 $substr = function(str, i, j) {
   return str.substr(i, j);
+};
+
+$left = function(str) {
+	  return str.toString();
+};
+
+$right = function(str) {
+	  return str.toString();
 };
 
 $revert = function(str) {

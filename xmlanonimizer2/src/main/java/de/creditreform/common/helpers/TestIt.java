@@ -13,17 +13,17 @@ public class TestIt {
 	}
 
 	public static void main(String[] args) {
-		try {
-			List<String> lines = Files.readAllLines(Paths.get("d:\\ReportResponse.properties"), Charset.forName("UTF-8"));
-			StringBuilder sb = new StringBuilder();
-			for (String string : lines) {
-				sb.append(string).append(StringUtils.LF_DOS);
-			}
-			IniModelReader ir = new IniModelReader();
-			ir.read(sb.toString());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+//		try {
+//			List<String> lines = Files.readAllLines(Paths.get("d:\\ReportResponse.properties"), Charset.forName("UTF-8"));
+//			StringBuilder sb = new StringBuilder();
+//			for (String string : lines) {
+//				sb.append(string).append(StringUtils.LF_DOS);
+//			}
+//			IniModelReader ir = new IniModelReader();
+//			ir.read(sb.toString());
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 
 	}
 
