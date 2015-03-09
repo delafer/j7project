@@ -32,7 +32,7 @@ $left = function(str, length) {
 };
 
 $right = function(str, length) {
-	  return str.substr(-length);
+	  return str.slice(-length);
 };
 
 $revert = function(str) {
