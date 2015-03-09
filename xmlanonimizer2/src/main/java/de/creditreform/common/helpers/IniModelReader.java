@@ -160,8 +160,8 @@ public class IniModelReader extends IniReader {
 	}
 
 	private void newValue(String keyText, KeyType keyEnum, String value, BlockType block) throws ScriptException {
-		//2222
-		System.out.println(Args.fill("Key(enum)=%1, Key(txt)=%2, block=%3, value=[%4]", keyEnum.toString(), keyText, block.toString(), value));
+//		2222
+//		System.out.println(Args.fill("Key(enum)=%1, Key(txt)=%2, block=%3, value=[%4]", keyEnum.toString(), keyText, block.toString(), value));
 		switch (block) {
 		case Tags:
 			readTags(keyText, keyEnum, value); break;

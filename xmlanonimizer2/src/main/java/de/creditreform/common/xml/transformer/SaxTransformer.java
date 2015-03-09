@@ -15,6 +15,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
+import de.creditreform.common.helpers.WildcardMatcher;
 import de.creditreform.common.xml.model.DocumentType;
 import de.creditreform.common.xml.model.MetaTag;
 import de.creditreform.common.xml.model.XmlModel;
@@ -119,9 +120,24 @@ public class SaxTransformer {
 
 		if (!DocumentType.TYPE_UNKNOWN.equals(docType)) {
 			Map<String, MetaTag> metaTag = AnonimizeData.instance().getMetaTags(docType);
-			return metaTag.get(qName);
+			return findTag(metaTag,qName);
 		}
 		return null;
+	}
+
+	public final static boolean USE_WILDCARDS = true;
+
+	private static MetaTag findTag(Map<String, MetaTag> metaTag, String qName) {
+		MetaTag t = metaTag.get(qName);
+		if (null == t && USE_WILDCARDS) {
+			for (String next : metaTag.keySet()) {
+				if (WildcardMatcher.isEqual(qName, next, false)) {
+					t = metaTag.get(next);
+					break;
+				}
+			}
+		}
+		return t;
 	}
 
 	/**

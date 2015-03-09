@@ -12,10 +12,10 @@ import org.slf4j.LoggerFactory;
 import de.creditreform.common.cli.CliArgs;
 import de.creditreform.common.db.batch.DocumentTransformer;
 import de.creditreform.common.helpers.AbstractFileProcessor;
+import de.creditreform.common.helpers.AbstractFileProcessor.FileInfo;
 import de.creditreform.common.helpers.StringUtils;
 import de.creditreform.common.helpers.TextFileUtils;
 import de.creditreform.common.helpers.TextFileUtils.TextWriter;
-import de.creditreform.common.xml.XmlAnonimizerEngine.Result;
 
 /**
  * The Class BatchExecutor.
@@ -68,7 +68,7 @@ public class DataUpdater {
 			@Override
 			public void processFile(File file, FileInfo fileInfo) throws Exception {
 				DocumentTransformer transformer = new DocumentTransformer(readFile(file));
-				writeFile(transformer);
+				writeFile(transformer, fileInfo);
 
 			}
 
@@ -93,9 +93,9 @@ public class DataUpdater {
 	 * @param prettyXml
 	 * @throws IOException
 	 */
-	private void writeFile(DocumentTransformer transformer) throws IOException {
+	private void writeFile(DocumentTransformer transformer, FileInfo fileInfo) throws IOException {
 		String crefo = transformer.getResult().getCrefoNr();
-		TextWriter tw = TextFileUtils.createTextWriter(args.getOutputXml()+"Firma_"+crefo+".xml", "UTF-8", false);
+		TextWriter tw = TextFileUtils.createTextWriter(args.getOutputXml()+fileInfo.getFileName(), "UTF-8", false);
 		tw.write(transformer.getPrettyXml());
 		tw.close();
 	}

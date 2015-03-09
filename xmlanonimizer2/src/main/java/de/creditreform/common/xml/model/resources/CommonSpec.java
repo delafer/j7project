@@ -76,6 +76,11 @@ public class CommonSpec extends AnonimizeSpec {
 
 	@Override
 	public ReplacementType getDataReplacementMode(MetaTag tag) {
+
+		if ("version".equalsIgnoreCase(tag.name())) {
+			System.out.println();
+		}
+
 		ReplacementType type = replMode.get(tag);
 
 		return type != null ? type : defaultReplMode;
@@ -83,7 +88,7 @@ public class CommonSpec extends AnonimizeSpec {
 
 	public String getNewData(MetaTag tag, int at) {
 		if (tag.name().equals("CustRef")) {
-			System.out.println(111);
+			System.out.println();
 		}
 		IReplacement replObj = newValues.get(tag);
 		if (null != replObj) {

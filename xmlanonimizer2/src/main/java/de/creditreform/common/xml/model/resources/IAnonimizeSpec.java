@@ -17,7 +17,7 @@ public interface IAnonimizeSpec {
 	public static ReplacementType RT_UNKNOWN = ReplacementType.Ignore;
 	public static ReplacementType RT_DEFAULT = ReplacementType.OnlyText;
 	ReplacementType() {
-		Values.values.put(this.name(), this);
+		Values.values.put(this.name().toLowerCase(), this);
 	}
 
 	public static ReplacementType valueBy(String name, ReplacementType defValue) {

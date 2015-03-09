@@ -4,10 +4,28 @@ import java.util.ArrayList;
 
 public class WildcardMatcher {
 
+	   private static final char ZV = '*';
+
 	   private static final String QUEST = "?".intern();
 
 	   private static final String STAR = "*".intern();
 
+
+	   private static boolean hasWildcard(final CharSequence s) {
+		   int len;
+			 if (null != s && (len = s.length())!=0)
+			 while (len > 0) if (s.charAt(--len)==ZV) return true;
+			 return false;
+	   }
+
+	   private final static boolean equal(String o1, String o2)
+	   {
+	      return o1==o2 ? true : o1 != null ? o1.equalsIgnoreCase(o2) : false;
+	   }
+
+	   public static boolean isEqual(String testString, String wildcard, boolean fullCheck) {
+		   return hasWildcard(wildcard) ? wildcardMatch(testString, wildcard) : fullCheck ? equal(testString, wildcard) : false;
+	   }
 
 	   public static boolean wildcardMatch(String testString, String wildcard) {
 		   return wildcardMatch(testString, wildcard, false);
