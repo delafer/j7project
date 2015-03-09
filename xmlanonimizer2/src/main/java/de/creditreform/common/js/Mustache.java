@@ -14,7 +14,7 @@ public class Mustache {
 
   public static void main(String... args) throws Throwable {
     ScriptEngineManager engineManager = new ScriptEngineManager();
-    ScriptEngine engine = engineManager.getEngineByName("nashorn");
+    ScriptEngine engine = engineManager.getEngineByName("JavaScript");
     Compilable compilingEngine = (Compilable)engine;
 
     String js = ResourceReader.resource("/js/jsLib.js");

@@ -2,13 +2,18 @@ package de.creditreform.common.helpers;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import javax.script.ScriptException;
+
+import de.creditreform.common.helpers.RuleSet.IReplacement;
+import de.creditreform.common.xml.model.DocumentType;
 import de.creditreform.common.xml.model.MetaTag;
 import de.creditreform.common.xml.model.resources.CommonSpec;
 import de.creditreform.common.xml.model.resources.IAnonimizeSpec.ReplacementType;
+import de.creditreform.common.xml.model.resources.IAnonimizeSpec.TagData;
 
 @SuppressWarnings("unused")
 public class IniModelReader extends IniReader {
@@ -22,6 +27,7 @@ public class IniModelReader extends IniReader {
 	private boolean ignoreCase;
 	private List<IniTag> tags;
 	private Map<MetaTag, ReplacementType> replMode;
+	RuleSet ruleSet;
 
 	public IniModelReader() {
 		super();
@@ -33,7 +39,58 @@ public class IniModelReader extends IniReader {
 		ignoreCase = true;
 		tags = new ArrayList<IniTag>();
 		replMode = new HashMap<MetaTag, ReplacementType>();
+		ruleSet = new RuleSet();
 	}
+
+
+	public CommonSpec getCommonSpec() {
+		CommonSpec cs = new CommonSpec();
+
+		cs.setDocType(getDocumentType());
+		cs.setRelevantTags(getRelevantTags());
+		cs.setReplMode(replMode);
+		cs.setDefaultReplMode(defaultReplType);
+		cs.setNewValues(getNewValues());
+		cs.setDataTags(getDataTags());
+		return cs;
+	}
+
+
+
+	private MetaTag[] getDataTags() {
+		Set<String> vars = ruleSet.getVariables();
+		MetaTag[] ret = new MetaTag[vars.size()];
+		int i = 0;
+		for (String next : vars) {
+			ret[i++] = MetaTag.valueOf(next);
+		}
+		return ret;
+	}
+
+
+	private Map<MetaTag, IReplacement> getNewValues() {
+		return ruleSet.getRules();
+	}
+
+
+	private TagData[] getRelevantTags() {
+		TagData[] tagData = new TagData[tags.size()];
+		int i = 0;
+		for (IniTag next : tags) {
+			tagData[i++] = TagData.as(namespace, next.path, next.name);
+		}
+		return tagData;
+	}
+
+
+	private DocumentType getDocumentType() {
+		if (StringUtils.isNotEmpty(namespace) && !rootElement.contains(":"))
+			return DocumentType.valueOf(namespace+':'+rootElement);
+		else
+			return DocumentType.valueOf(rootElement);
+
+	}
+
 
 
 	public enum BlockType {
@@ -93,7 +150,7 @@ public class IniModelReader extends IniReader {
 
 
 
-	public void onNewValue(String name, String value, String blockName) {
+	public void onNewValue(String name, String value, String blockName) throws Exception {
 		newValue(name, KeyType.valueBy(name), value, this.blckName);
 	}
 
@@ -102,7 +159,7 @@ public class IniModelReader extends IniReader {
 		newBlock(BlockType.valueBy(blockName));
 	}
 
-	private void newValue(String keyText, KeyType keyEnum, String value, BlockType block) {
+	private void newValue(String keyText, KeyType keyEnum, String value, BlockType block) throws ScriptException {
 		//2222
 		System.out.println(Args.fill("Key(enum)=%1, Key(txt)=%2, block=%3, value=[%4]", keyEnum.toString(), keyText, block.toString(), value));
 		switch (block) {
@@ -124,9 +181,8 @@ public class IniModelReader extends IniReader {
 
 
 
-	private void readRules(String keyText, KeyType keyEnum, String value) {
-		// TODO Auto-generated method stub
-
+	private void readRules(String keyText, KeyType keyEnum, String value) throws ScriptException {
+		ruleSet.addReplacementRule(MetaTag.valueOf(keyText), value);
 	}
 
 
@@ -146,7 +202,7 @@ public class IniModelReader extends IniReader {
 
 
 	private void readTags(String key, KeyType keyEnum, String value) {
-		this.tags.add(new IniTag(key, value));
+		this.tags.add(new IniTag(MetaTag.valueOf(key), value));
 
 	}
 
@@ -184,17 +240,17 @@ public class IniModelReader extends IniReader {
 
 
 	static class IniTag {
-		String name;
+		MetaTag name;
 		String path;
 
-		public IniTag(String name, String path) {
+		public IniTag(MetaTag name, String path) {
 			this.name = name;
 			this.path = path;
 		}
 
 		@Override
 		public int hashCode() {
-			int result = ((name == null) ? 0 : name.toLowerCase().hashCode());
+			int result = ((name == null) ? 0 : name.hashCode());
 			result = 31 * result + ((path == null) ? 0 : path.toLowerCase().hashCode());
 			return result;
 		}

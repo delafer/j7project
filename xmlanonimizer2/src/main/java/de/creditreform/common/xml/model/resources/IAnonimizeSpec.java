@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
 
+import de.creditreform.common.helpers.StringUtils;
 import de.creditreform.common.xml.model.DocumentType;
 import de.creditreform.common.xml.model.MetaTag;
 
@@ -98,7 +99,8 @@ public interface IAnonimizeSpec {
 		}
 
 		public static TagData as(String prefix, String path, MetaTag tag) {
-			return new TagData(build(prefix, path), tag);
+
+			return !StringUtils.empty(prefix) ? new TagData(build(prefix, path), tag) : new TagData(path, tag);
 
 		}
 

@@ -1,16 +1,13 @@
-lower = function(str) {
+$lower = function(str) {
    return str === null ? str : str.toString().toLowerCase();
 };
 
-upper = function(str) {
+$upper = function(str) {
   return str === null ? str : str.toString().toUpperCase();
 };
 
-upper = function(str) {
-  return str === null ? str : str.toString().toUpperCase();
-};
 
-random = function(len, charSet) {
+$random = function(len, charSet) {
     charSet = charSet || 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     var ret = '';
     for (var i = 0; i < len; i++) {
@@ -19,21 +16,21 @@ random = function(len, charSet) {
     return ret;
 };
 
-randomNumber = function(min, max) {
+$randomNumber = function(min, max) {
   min = min || 0;
   max = max || 16777215; //24bit
   return Math.floor((Math.random() * max) + min);
 };
 
-substr = function(str, i, j) {
+$substr = function(str, i, j) {
   return str.substr(i, j);
 };
 
-revert = function(str) {
+$revert = function(str) {
  return str === null ? str : str.toString().split("").reverse().join("");
 };
 
-trim = function(str) {
+$trim = function(str) {
  return str;
 };
 
@@ -50,8 +47,6 @@ nvl2 = function(str) {
 };
 
 
-var var1 = 'abc';
-var resultJs = new Array();
-resultJs = {"CrefoNr":substr(upper(random(25)),1,5)+lower(var1), "City":"bcd"};
+
 
 

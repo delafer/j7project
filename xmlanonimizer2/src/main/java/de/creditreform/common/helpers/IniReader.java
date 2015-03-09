@@ -10,7 +10,7 @@ public abstract class IniReader {
 	}
 
 
-	public void read(String str) {
+	public void read(String str) throws Exception {
 
 		Scanner scanner = new Scanner(str);
 		int id;
@@ -33,13 +33,12 @@ public abstract class IniReader {
 	}
 
 
-	private void onNewValueInt(String name, String value) {
+	private void onNewValueInt(String name, String value) throws Exception {
 		onNewValue(name.trim(), value.trim(), this.blkName);
 
 	}
 
-
-	public abstract void onNewValue(String name, String value, String blockName);
+	public abstract void onNewValue(String name, String value, String blockName)throws Exception;
 
 	private void onNewBlockInt(String blockName) {
 		this.blkName = blockName;

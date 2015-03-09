@@ -43,7 +43,7 @@ public class AnonymizeRulesReader {
 	}
 
 
-	protected void readModel(EntryInfo entryInfo) throws IOException {
+	protected void readModel(EntryInfo entryInfo) throws Exception {
 		IniModelReader ir = new IniModelReader();
 		entryInfo.readFileData();
 		ir.read(entryInfo.getFileData());
