@@ -1,8 +1,6 @@
 package de.creditreform.common.db;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
@@ -15,6 +13,7 @@ import de.creditreform.common.helpers.AbstractFileProcessor;
 import de.creditreform.common.helpers.AbstractFileProcessor.FileInfo;
 import de.creditreform.common.helpers.StringUtils;
 import de.creditreform.common.helpers.TextFileUtils;
+import de.creditreform.common.helpers.TextFileUtils.AbrstractFileParser;
 import de.creditreform.common.helpers.TextFileUtils.TextWriter;
 
 /**
@@ -45,19 +44,34 @@ public class DataUpdater {
 
 	}
 
-	private String readFile( File file ) throws IOException {
-	    BufferedReader reader = new BufferedReader( new FileReader (file));
-	    String         line = null;
-	    StringBuilder  stringBuilder = new StringBuilder();
+	private String readFile( File file ) throws Exception {
 
-	    while( ( line = reader.readLine() ) != null ) {
-	        stringBuilder.append( line );
-	        stringBuilder.append( StringUtils.LF_DOS );
-	    }
+		StringBuilder sb = new StringBuilder();
+		AbrstractFileParser afp = new TextFileUtils.AbrstractFileParser(file.getAbsolutePath(), "UTF-8") {
 
-	    reader.close();
+			@Override
+			public void processLine(String line, int lineNumber) throws Exception {
+				sb.append(line);
+				sb.append(StringUtils.LF_DOS);
+			}
 
-	    return stringBuilder.toString();
+		};
+		afp.read();
+
+		return sb.toString();
+
+//	    BufferedReader reader = new BufferedReader( new FileReader (file));
+//	    String         line = null;
+//	    StringBuilder  stringBuilder = new StringBuilder();
+//
+//	    while( ( line = reader.readLine() ) != null ) {
+//	        stringBuilder.append( line );
+//	        stringBuilder.append( StringUtils.LF_DOS );
+//	    }
+//
+//	    reader.close();
+//
+//	    return stringBuilder.toString();
 	}
 
 

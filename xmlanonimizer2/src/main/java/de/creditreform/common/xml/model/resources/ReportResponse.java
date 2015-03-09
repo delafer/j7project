@@ -20,6 +20,14 @@ public class ReportResponse extends AnonimizeSpec {
 		return de.creditreform.common.xml.model.DocumentType.valueOf("ns2:reportResponse");
 	}
 
+	public static void main(String[] args) {
+		ReportResponse r = new ReportResponse();
+		TagData[] d = r.getRelevantTags();
+		for (TagData t : d) {
+			System.out.println(t.getTag().name()+"="+t.getPath());
+		}
+	}
+
 	@Override
 	public TagData[] getRelevantTags() {
 		return new TagData[] {

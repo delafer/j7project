@@ -27,12 +27,12 @@ $substr = function(str, i, j) {
   return str.substr(i, j);
 };
 
-$left = function(str) {
-	  return str.toString();
+$left = function(str, length) {
+	  return str.substr(0, length);
 };
 
-$right = function(str) {
-	  return str.toString();
+$right = function(str, length) {
+	  return str.substr(-length);
 };
 
 $revert = function(str) {

@@ -42,7 +42,7 @@ public class RuleSet {
 
 
 	private static final Pattern pJsFunction = Pattern.compile("\\$[a-zA-Z]+\\s*\\([^\\)]*\\)(\\.[^\\)]*\\))?");
-	private static final Pattern pVariable = Pattern.compile("\\{[a-zA-Z]+\\}");
+	private static final Pattern pVariable = Pattern.compile("\\{[a-zA-Z_]+\\}");
 
 	public void addReplacementRule(MetaTag tag, String rule) throws ScriptException {
 		if (StringUtils.isEmpty(rule)) return ;
