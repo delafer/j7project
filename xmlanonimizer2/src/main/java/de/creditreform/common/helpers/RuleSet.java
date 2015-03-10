@@ -175,15 +175,25 @@ public class RuleSet {
 			public String getNewValue(int at, Map<String, MultiValue<String>> data) {
 					String ret = rawStr;
 					for (String next : vars) {
-						ret = ret.replaceFirst(Pattern.quote("{"+next+"}"), getData(data, next, at));
+						ret = ret.replaceFirst(Pattern.quote("{"+next+"}"), notNull(getData(data, next, at)));
 					}
 					return ret;
 
 				}
 
+			private String notNull(String data) {
+				return data != null ? data : "";
+			}
+
+
 			public String getData(Map<String, MultiValue<String>> data, String tagName, int at) {
 				MultiValue<String> mv = data.get(tagName);
-				return mv != null ? mv.getValue(at) : null;
+				String ret = null;
+				if (mv != null) {
+					ret = mv.getValue(at);
+					if (ret == null) ret = mv.getValue();
+				}
+				return ret;
 			}
 
 		  }
@@ -247,7 +257,12 @@ public class RuleSet {
 
 			public String getData(Map<String, MultiValue<String>> data, String tagName, int at) {
 				MultiValue<String> mv = data.get(tagName);
-				return mv != null ? mv.getValue(at) : null;
+				String ret = null;
+				if (mv != null) {
+					ret = mv.getValue(at);
+					if (ret == null) ret = mv.getValue();
+				}
+				return ret;
 			}
 
 		  }

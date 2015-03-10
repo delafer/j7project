@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.creditreform.common.helpers.RuleSet.IReplacement;
 import de.creditreform.common.xml.model.DocumentType;
 import de.creditreform.common.xml.model.EntryXml;
 import de.creditreform.common.xml.model.MetaTag;
@@ -51,7 +52,8 @@ public class XmlAnonimizerEngine {
 
 			IAnonimizeSpec spec = AnonimizeData.instance().getProcessor(model.documentType);
 
-			IAnonimizeSpec specNew = spec.getNewInstance(model.getValues());
+			Map<String, MultiValue<String>> modelValues = model.getValues();
+			IAnonimizeSpec specNew = spec.getNewInstance(modelValues);
 
 			Map<MetaTag, MultiValue<EntryXml>> fields = model.getAnonimizeFields();
 			for (Map.Entry<MetaTag, MultiValue<EntryXml>> next : fields.entrySet()) {
@@ -63,16 +65,24 @@ public class XmlAnonimizerEngine {
 
 					EntryXml nextEntry = value.getValue(i);
 
+					IReplacement replObj = specNew.getNewData(key, i);
+					ReplacementType repType =  specNew.getDataReplacementMode(key);
+					String newValue = null;
+					if (null != replObj) {
+						newValue = replObj.getNewValue(i, modelValues);
+					} else {
+						if (!ReplacementType.RemoveBlock.equals(repType)) repType =  ReplacementType.Ignore;
+					}
 
-					switch (specNew.getDataReplacementMode(key)) {
+					switch (repType) {
 					case ReplaceAll:
-						nextEntry.setValue(ReplacementType.ReplaceAll,specNew.getNewData(key, i));
+						nextEntry.setValue(ReplacementType.ReplaceAll,newValue);
 						break;
 					case TextRecursive:
-						nextEntry.setValue(ReplacementType.TextRecursive,specNew.getNewData(key, i));
+						nextEntry.setValue(ReplacementType.TextRecursive,newValue);
 						break;
 					case OnlyText:
-						nextEntry.setValue(ReplacementType.OnlyText,specNew.getNewData(key, i));
+						nextEntry.setValue(ReplacementType.OnlyText,newValue);
 						break;
 					case RemoveBlock:
 						nextEntry.setIgnored(true);
@@ -91,6 +101,7 @@ public class XmlAnonimizerEngine {
 			Result result = new Result();
 			result.setXml(model.xmlModel.render().toString());
 			result.setCrefoNr(specNew.getData(MetaTag.valueOf("CrefoNr")));
+			result.setPrettyPrint(spec.isPrettyPrintXml());
 			return result;
 
 		} catch (Exception e) {
@@ -111,6 +122,17 @@ public class XmlAnonimizerEngine {
 		public String xml;
 		public String crefoNr;
 		public int errorCode;
+		private boolean prettyPrint;
+
+		public boolean isPrettyPrint() {
+			return prettyPrint;
+		}
+
+
+		public void setPrettyPrint(boolean prettyPrint) {
+			this.prettyPrint = prettyPrint;
+		}
+
 
 		static int SUCCESS = 0;
 		static int ERROR = -1;

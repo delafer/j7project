@@ -16,6 +16,7 @@ public class CommonSpec extends AnonimizeSpec {
 	private Map<MetaTag, IReplacement> newValues;
 	private Map<MetaTag, ReplacementType> replMode;
 	private ReplacementType defaultReplMode;
+	private boolean prettyPrintXml;
 
 	public CommonSpec(Map<String, MultiValue<String>> data) {
 		super(data);
@@ -77,24 +78,23 @@ public class CommonSpec extends AnonimizeSpec {
 	@Override
 	public ReplacementType getDataReplacementMode(MetaTag tag) {
 
-		if ("version".equalsIgnoreCase(tag.name())) {
-			System.out.println();
-		}
-
 		ReplacementType type = replMode.get(tag);
 
 		return type != null ? type : defaultReplMode;
 	}
 
-	public String getNewData(MetaTag tag, int at) {
-		if (tag.name().equals("CustRef")) {
-			System.out.println();
-		}
-		IReplacement replObj = newValues.get(tag);
-		if (null != replObj) {
-			return replObj.getNewValue(at, data);
-		}
-		return null;
+	public IReplacement getNewData(MetaTag tag, int at) {
+		return newValues.get(tag);
+
 	}
+
+	public boolean isPrettyPrintXml() {
+		return prettyPrintXml;
+	}
+
+	public void setPrettyPrintXml(boolean prettyPrintXml) {
+		this.prettyPrintXml = prettyPrintXml;
+	}
+
 
 }

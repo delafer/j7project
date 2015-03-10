@@ -6,6 +6,7 @@ package de.creditreform.common.xml.model.resources;
 import java.util.Collections;
 import java.util.Map;
 
+import de.creditreform.common.helpers.RuleSet.IReplacement;
 import de.creditreform.common.helpers.StringUtils;
 import de.creditreform.common.xml.model.DocumentType;
 import de.creditreform.common.xml.model.MetaTag;
@@ -37,7 +38,7 @@ public abstract class AnonimizeSpec implements IAnonimizeSpec {
 
 	public abstract MetaTag[] getDataTags();
 
-	public abstract String getNewData(MetaTag tag, int at);
+	public abstract IReplacement getNewData(MetaTag tag, int at);
 
 	public ReplacementType getDataReplacementMode(MetaTag tag) {
 		return DEFAULT_MODE;

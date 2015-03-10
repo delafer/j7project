@@ -28,7 +28,7 @@ $substr = function(str, i, j) {
 };
 
 $left = function(str, length) {
-	  return str.substr(0, length);
+	  return str.slice(0, length);
 };
 
 $right = function(str, length) {

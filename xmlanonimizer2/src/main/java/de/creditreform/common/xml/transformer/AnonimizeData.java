@@ -12,7 +12,6 @@ import de.creditreform.common.xml.model.DocumentType;
 import de.creditreform.common.xml.model.MetaTag;
 import de.creditreform.common.xml.model.resources.IAnonimizeSpec;
 import de.creditreform.common.xml.model.resources.IAnonimizeSpec.TagData;
-import de.creditreform.common.xml.model.resources.ReportResponse;
 
 public final class AnonimizeData implements Serializable {
 

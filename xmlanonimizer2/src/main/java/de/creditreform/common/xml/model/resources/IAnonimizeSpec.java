@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
 
+import de.creditreform.common.helpers.RuleSet.IReplacement;
 import de.creditreform.common.helpers.StringUtils;
 import de.creditreform.common.xml.model.DocumentType;
 import de.creditreform.common.xml.model.MetaTag;
@@ -36,13 +37,16 @@ public interface IAnonimizeSpec {
 
 	};
 
+
+	public boolean isPrettyPrintXml();
+
 	public DocumentType getDocumentType();
 
 	public TagData[] getRelevantTags();
 
 	public MetaTag[] getDataTags();
 
-	public String getNewData(MetaTag tag, int at);
+	public IReplacement getNewData(MetaTag tag, int at);
 
 	public ReplacementType getDataReplacementMode(MetaTag tag);
 

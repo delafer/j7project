@@ -52,6 +52,7 @@ public class IniModelReader extends IniReader {
 		cs.setDefaultReplMode(defaultReplType);
 		cs.setNewValues(getNewValues());
 		cs.setDataTags(getDataTags());
+		cs.setPrettyPrintXml(this.prettyPrint);
 		return cs;
 	}
 

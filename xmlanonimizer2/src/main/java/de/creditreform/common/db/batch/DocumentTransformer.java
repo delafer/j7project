@@ -25,7 +25,7 @@ public final class DocumentTransformer implements Serializable, Cloneable {
 	}
 
 
-	public Result getResult() {
+	public Result result() {
 		if (null == result) {
 			result = XmlAnonimizerEngine.anonimize(originalXml);
 		}
@@ -34,18 +34,22 @@ public final class DocumentTransformer implements Serializable, Cloneable {
 
 	public String getTransformedXml() {
 
-			if (result.ok()) {
-					return XmlTools.prettyPrintXML(result.getXml(), "UTF-8");
+			if (result().ok()) {
+					return XmlTools.prettyPrintXML(result().getXml(), "UTF-8");
 			} else {
 					return "";
 			}
 	}
 
+	public String getXml() {
+		return result().isPrettyPrint() ? getPrettyXml() : getTransformedXml();
+	}
+
 	public String getPrettyXml() {
 		if (null == prettyPrintXml) {
 
-			if (result.ok()) {
-					this.prettyPrintXml = XmlTools.prettyPrintXML(result.getXml(), "UTF-8");
+			if (result().ok()) {
+					this.prettyPrintXml = XmlTools.prettyPrintXML(result().getXml(), "UTF-8");
 			} else {
 					this.prettyPrintXml = "";
 			}
@@ -59,6 +63,7 @@ public final class DocumentTransformer implements Serializable, Cloneable {
 			try {
 				pdf = Renderer.createPdf(getPrettyXml());
 			} catch (IOException e) {
+				e.printStackTrace();
 				pdf = new byte[0];
 			}
 		}
