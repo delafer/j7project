@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>net.j7</groupId>
+	<artifactId>j7-tools</artifactId>
+	<version>1.0.0</version>
+	<packaging>pom</packaging>
+	<url>http://maven.apache.org</url>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<net.j7.commons.version>1.0.0</net.j7.commons.version>
+	</properties>
+	<modules>
+		<module>commons-j7</module>
+		<module>filecleaner-j7</module>
+	</modules>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>net.j7.commons</groupId>
+				<artifactId>commons-j7</artifactId>
+				<version>${net.j7.commons.version}</version>
+				<type>jar</type>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+	<developers>
+		<developer>
+			<id>korvin</id>
+			<name>Alexandr Tavrovsky</name>
+			<email>weblogic@bk.ru</email>
+			<roles>
+				<role>Developer</role>
+			</roles>
+			<timezone>Europe/Berlin</timezone>
+		</developer>
+	</developers>
+</project>
