@@ -1,14 +1,13 @@
 package org.delafer.xanderView;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Image;
+import java.awt.*;
 import java.awt.font.TextAttribute;
 import java.awt.image.BufferedImage;
 import java.text.AttributedString;
 
 import javax.swing.JPanel;
+
+import net.j7.commons.utils.Metrics;
 
 import org.delafer.xanderView.file.FilePointer;
 import org.delafer.xanderView.file.ImageFinder;
@@ -17,57 +16,61 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.RowLayout;
+import org.eclipse.swt.widgets.*;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
-import org.eclipse.swt.widgets.Shell;
 import org.libjpegturbo.turbojpeg.TJDecompressor;
 import org.libjpegturbo.turbojpeg.TJScalingFactor;
 
 public class XanderViewer {
-	
+
 	private Display display;
 	private Shell shell;
 	private Composite cmpEmbedded;
 	private ImagePanel panel;
 	private static FilePointer pointer;
-	
-	
-	
+
+
+
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		String path = "L:\\best5.CCC\\CURRENT\\picu\\089.jpg";
+		String path = "C:\\daten\\Privat\\testbig.jpg";
 		String[] files = ImageFinder.getImages(path);
 		pointer = new FilePointer(files, path);
-		
+
 		XanderViewer app = new XanderViewer();
-		
+
 		app.open();
-		
+
 	}
-	
+
 	protected void loadImage(String location) {
 		try {
+			//ver1 1243,1255,1269,1249,1254,1254,1254
+			//ver 1224, 1225,1223,1233
+			//vs is faster
 			System.out.println(location);
-			TJScalingFactor sf =  new TJScalingFactor(1, 1);
-			long l1 = System.currentTimeMillis();
+			Metrics m = Metrics.start();
+			TJScalingFactor sf =  new TJScalingFactor(1, 2);
 			byte[] bytes = XFileReader.readNIO(location);
-			long l2 = System.currentTimeMillis();
-			System.out.println(">"+(l2-l1));
+
+
 			TJDecompressor tjd = new TJDecompressor(bytes);
 			int width = sf.getScaled(tjd.getWidth());
 			int height = sf.getScaled(tjd.getHeight());
-
+			System.out.println(width+" "+height);
 			BufferedImage img = tjd.decompress(width, height, BufferedImage.TYPE_INT_RGB, 0);
-			BufferedImage res = ScaleFactory.resize(img, 1680,1050);
+			BufferedImage res = ScaleFactory.resize(img, 1920,1200);
 			panel.image = res;
 			panel.updateUI();
+			m.end();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -76,6 +79,7 @@ public class XanderViewer {
 	private void open() {
 		// Create a window and set its title.
 		display = new Display();
+
 		display.addFilter(SWT.KeyDown, new Listener() {
 			public void handleEvent(Event e) {
 //				System.out.println("---------");
@@ -102,10 +106,14 @@ public class XanderViewer {
 					XanderViewer.this.loadImage(pointer.next());
 					break;
 				case SWT.CR:
-					shell.setFullScreen(!shell.getFullScreen());
+					//shell.setFullScreen(!shell.getFullScreen());
+					showDialog();
 					try {
-						Thread.currentThread().sleep(50);
+						Thread.currentThread().sleep(200);
 					} catch (InterruptedException e1) {
+
+
+
 						e1.printStackTrace();
 					}
 					e.doit = false;
@@ -114,12 +122,47 @@ public class XanderViewer {
 					System.out.println(e.keyCode);
 					break;
 				}
-				
+
+			}
+
+			private void showDialog() {
+
+			    final Shell dialog =new Shell(shell, SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
+//			    dialog.setLayout(new RowLayout());
+			    dialog.setText("Dialog Shell");
+			    dialog.setSize(100, 100);
+			    dialog.pack();
+			    dialog.open();
+
+			    // Move the dialog to the center of the top level shell.
+			    Rectangle shellBounds = shell.getBounds();
+			    org.eclipse.swt.graphics.Point dialogSize = dialog.getSize();
+
+			    dialog.setLocation(
+			      shellBounds.x + (shellBounds.width - dialogSize.x) / 2,
+			      shellBounds.y + (shellBounds.height - dialogSize.y) / 2);
+
 			}
 		});
-		
+
+
+
+
 		shell = new Shell(display, SWT.NO_TRIM | SWT.ON_TOP | SWT.NO_REDRAW_RESIZE | SWT.NO_BACKGROUND | SWT.APPLICATION_MODAL);
 		shell.setLayout(new FillLayout(SWT.HORIZONTAL));
+
+
+		Monitor primary = display.getPrimaryMonitor();
+	    Rectangle bounds = primary.getBounds();
+	    Rectangle rect = shell.getBounds();
+
+	    int x = 1920;//bounds.x + (bounds.width + rect.width);
+	    int y = 0;//bounds.y + (bounds.height + rect.height);
+
+	    shell.setLocation(x, y);
+
+
+
         shell.setMaximized (true);
         shell.setFullScreen(true);
 
@@ -130,17 +173,17 @@ public class XanderViewer {
         panel = new ImagePanel (null );
     	frm.add(panel);
     	panel.setBackground(Color.BLACK);
-    	
+
     	shell.open();
-    	
+
     	loadImage(pointer.current());
-		
+
 		runGlobalEventLoop();
 	}
-	
+
 	private void runGlobalEventLoop()
 	{
-		while (!shell.isDisposed ()) 
+		while (!shell.isDisposed ())
 			if (!display.readAndDispatch ()) display.sleep ();
 		display.dispose ();
 	}
@@ -193,9 +236,10 @@ public class XanderViewer {
 		item = new MenuItem(menuBar, SWT.CASCADE);
 
 	}
-	
+
 	class ImagePanel extends JPanel {
-	    Image image;
+		private static final long serialVersionUID = 9162619010168531038L;
+		Image image;
 
 	    public ImagePanel(Image image) {
 	        this.image = image;
@@ -203,22 +247,22 @@ public class XanderViewer {
 
 	    public void paintComponent(Graphics g) {
 	        super.paintComponent(g);  // Paint background
-
+//	        System.out.println(image.getWidth(null));
 	        // Draw image at its natural size first.
 	        if (image!=null)
 	        g.drawImage(image, 0, 0, null); //85x62 image
-	        
+
 	        AttributedString as = new AttributedString("An AttributedString holds text and related "+
                                 "attribute information.");
 	        as.addAttribute(TextAttribute.FONT, new Font("Courier New", Font.BOLD, 36));
 	        as.addAttribute(TextAttribute.FOREGROUND, Color.YELLOW);
-	        
-    
+
+
 	        g.setFont(new Font("Arial", Font.PLAIN, 20));
 	        g.drawString(as.getIterator(), 10, 20);
 
 	    }
 	}
-	
-	
+
+
 }
