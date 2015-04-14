@@ -33,7 +33,7 @@ public final class StringUtils {
    public final static transient char SPACE_CHAR = ' ';
 
    /** Empty String */
-   public final static transient String EMPTY = "";
+   public final static transient String EMPTY = "".intern();
 
    /** The Constant STRING_QUOTES. */
    public final static char[] STRING_QUOTES = new char[] { '\'', '"' };

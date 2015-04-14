@@ -1,9 +1,10 @@
 package net.j7.commons.io.zip;
 
-import java.io.*;
-import java.util.Enumeration;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
 
 import net.j7.commons.io.FileUtils;
 import net.j7.commons.io.helpers.WildcardMatcher;
@@ -15,16 +16,16 @@ import org.slf4j.LoggerFactory;
  * The Class AbstractFileProcessor.
  * @author Alexander Tawrowski
  */
-public abstract class AbstractZipParser {
+public abstract class AbstractZipReader {
 
    /** The technical logger to use. */
-   private static final Logger logger = LoggerFactory.getLogger(AbstractZipParser.class);
+   private static final Logger logger = LoggerFactory.getLogger(AbstractZipReader.class);
 
    /** The Constant ALL_FILES. */
    private final static String ALL_FILES = "*.*";
 
    /** The base path. */
-   public File rootPath;
+   public InputStream rootPath;
 
    /** The processed file count. */
    private int processedFiles;
@@ -42,7 +43,7 @@ public abstract class AbstractZipParser {
    /** The stop on exception. */
    private boolean stopOnException = false;
 
-   private ZipFile zipFile;
+   private ZipInputStream zipFile;
    private boolean zipFileOpen;
 
    /**
@@ -50,7 +51,7 @@ public abstract class AbstractZipParser {
     *
     * @param basePath the base path
     */
-   public AbstractZipParser(String basePath) {
+   public AbstractZipReader(InputStream basePath) {
       this(basePath, ALL_FILES);
    }
 
@@ -60,13 +61,10 @@ public abstract class AbstractZipParser {
     * @param basePath the base path
     * @param wildcardMask the wildcard mask
     */
-   public AbstractZipParser(String basePath, String wildcardMask) {
+   public AbstractZipReader(InputStream basePath, String wildcardMask) {
 
-      this.rootPath = new File(basePath);
+      this.rootPath = basePath;
 
-      if (!rootPath.exists()) {
-         rootPath = new File(FileUtils.correctPath(basePath));
-      }
 
       this.wildcard = new WildcardMask(wildcardMask);
       this.flagStopped = false;
@@ -130,18 +128,23 @@ public abstract class AbstractZipParser {
     */
    public void read() throws IOException {
       checkIfOpen();
-      zipFile = new ZipFile(rootPath, ZipFile.OPEN_READ);
+      zipFile = new ZipInputStream(rootPath);
       zipFileOpen = true;
       listContents(zipFile);
    }
 
    public void close() {
-      checkIfOpen();
+      try {
+		checkIfOpen();
+	} catch (IOException e) {
+		logger.warn("", e);
+	}
    }
 
-   private final void checkIfOpen() {
+   private final void checkIfOpen() throws IOException {
       if (zipFileOpen && zipFile!=null) {
          zipFileOpen = false;
+         zipFile.close();
          zipFile = null;
       }
    }
@@ -151,23 +154,24 @@ public abstract class AbstractZipParser {
     *
     * @param entry the entry
     * @param recurse the recurse
+ * @throws IOException
     */
-   private void listContents(ZipFile zipFile) {
+   private void listContents(ZipInputStream zipFile) throws IOException {
 
       if (flagStopped || zipFile==null) return ;
 
-      Enumeration<? extends ZipEntry> entries = zipFile.entries();
 
-      while (entries.hasMoreElements()) {
-         ZipEntry entry = entries.nextElement();
-         if (entry.isDirectory()) {
-            this.processedDirs++;
-            continue;
-         }
 
-         doFileIntern(entry);
+      ZipEntry entry = null;
+      while ( (entry = zipFile.getNextEntry()) != null ) {
+    	  if (entry.isDirectory()) {
+              this.processedDirs++;
+              continue;
+           }
 
+           doFileIntern(entry);
       }
+      zipFile.close();
 
    }
 
@@ -207,6 +211,8 @@ public abstract class AbstractZipParser {
       /** The full name. */
       private String fullName;
 
+      String fileData;
+
       /**
        * Instantiates a new file info.
        *
@@ -217,47 +223,34 @@ public abstract class AbstractZipParser {
          this.fullName = file.getName();
       }
 
+//
+//      public InputStream getDataInputStream() throws IOException {
+//    	  zipFile.
+//         InputStream is = zipFile.getInputStream(file);
+//         return is;
+//      }
 
-      public InputStream getDataInputStream() throws IOException {
-         InputStream is = zipFile.getInputStream(file);
-         return is;
+      public void readFileData() throws IOException {
+
+
+
+    	  ByteArrayOutputStream out=new ByteArrayOutputStream();
+    	  StringBuilder line = new StringBuilder();
+          byte[] buffer=new byte[2048];
+          int size;
+          while ((size=zipFile.read(buffer,0,buffer.length)) >= 0) {
+            out.write(buffer,0,size);
+          }
+          out.flush();
+          line.append(out.toString("UTF-8"));
+
+          this.fileData = line.toString();
+
+
       }
 
       public String getFileData() throws IOException {
-
-         InputStream is = zipFile.getInputStream(file);
-         int size = is.available();
-
-         char[] cbuf = new char[size];
-         InputStreamReader reader = new InputStreamReader(is, "UTF-8");
-         reader.read(cbuf, 0, size);
-
-         String str = new String(cbuf);
-         return str;
-
-
-
-//         InputStream is = zipFile.getInputStream(file);
-//         int size = is.available();
-//         byte[] buf = new byte[size];
-//         is.read(buf, 0, size);
-//         String str = new String(buf);
-//         return str;
-
-//         BufferedInputStream bis = new BufferedInputStream(zipFile.getInputStream(file));
-//
-//         StringBuilder sb = new StringBuilder(4096);
-//
-//         int size;
-//         byte[] buffer = new byte[512];
-//         BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(fullName), buffer.length);
-//
-//         while ((size = bis.read(buffer, 0, buffer.length)) != -1)
-//         {
-//            sb.append((char[])buffer, 0, size);
-//         }
-//         bos.flush();
-//         bos.close();
+          return this.fileData;
       }
 
       /**
@@ -330,15 +323,9 @@ public abstract class AbstractZipParser {
        * @return the path relative
        */
       public String getPathRelative() {
-         String fullPath = getPath();
-
-
-         String relativePath = fullPath.startsWith(rootPath.getPath())
-               ? fullPath.substring(rootPath.getPath().length() + 1)
-               : fullPath;
-
-         return relativePath;
-      }
+          String fullPath = getPath();
+          return fullPath;
+       }
 
    }
 
@@ -409,4 +396,9 @@ public abstract class AbstractZipParser {
       return processedDirs;
    }
 
+
+
+
+
 }
+

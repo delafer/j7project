@@ -21,10 +21,16 @@ import java.util.Comparator;
  * @param <E> the element type
  * @author Alexander Tawrowski
  */
-public class NaturalOrderComparator<E> implements Comparator<E> {
+public class NaturalOrderComparator implements Comparator<String> {
 
-   /** The Constant INSTANCE. */
-   public static final Comparator<Object> INSTANCE = new NaturalOrderComparator<Object>();
+    /**  Lazy-loaded Singleton, by Bill Pugh **/
+    private static class Holder {
+        private final static Comparator<String> INSTANCE = new NaturalOrderComparator();
+    }
+
+    public static Comparator<String> instance() {
+        return Holder.INSTANCE;
+    }
 
    /**
     * Instantiates a new natural order comparator.
@@ -77,13 +83,13 @@ public class NaturalOrderComparator<E> implements Comparator<E> {
     * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
     */
    @Override
-   public int compare(Object o1, Object o2) {
+   public int compare(String o1, String o2) {
 
       String a = o1 != null
-            ? o1.toString().toLowerCase()
+            ? o1.toLowerCase()
             : StringUtils.EMPTY;
       String b = o2 != null
-            ? o2.toString().toLowerCase()
+            ? o2.toLowerCase()
             : StringUtils.EMPTY;
 
       int ia = 0, ib = 0;
