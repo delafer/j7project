@@ -3,7 +3,7 @@ package org.delafer.xanderView.interfaces;
 public interface IFileEntry {
 
 
-	public long fastCRC();
+	public long quickCRC();
 
 	public byte[] CRC();
 

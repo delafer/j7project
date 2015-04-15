@@ -3,6 +3,8 @@ package net.j7.commons.collections;
 import java.util.*;
 import java.util.function.Consumer;
 
+import net.j7.commons.strings.BogusComparator;
+
 /**
  * Doubly-linked list implementation of the {@code List} and {@code Deque}
  * interfaces.  Implements all optional list operations, and permits all
@@ -95,7 +97,7 @@ public class SortedLinkedList<E> extends AbstractSequentialList<E> implements Li
      */
     public SortedLinkedList(Comparator<? super E> comparator) {
     	this();
-        this.comparator = comparator;
+        this.comparator = comparator instanceof BogusComparator ? null : comparator;
     }
 
     /**
@@ -104,8 +106,7 @@ public class SortedLinkedList<E> extends AbstractSequentialList<E> implements Li
      * @param comparator
      */
     public SortedLinkedList(Collection<? extends E> paramCollection, Comparator<? super E> comparator) {
-    	this();
-        this.comparator = comparator;
+    	this(comparator);
         addAll(paramCollection);
     }
 
@@ -304,7 +305,8 @@ public class SortedLinkedList<E> extends AbstractSequentialList<E> implements Li
      * <code>false</code>, otherwise.
      */
     public boolean containsElement(E element) {
-        return (Collections.binarySearch(this, element, comparator) > -1);
+
+        return comparator != null ?  (Collections.binarySearch(this, element, comparator) > -1) : contains(element);
     }
 
     /**
@@ -336,9 +338,12 @@ public class SortedLinkedList<E> extends AbstractSequentialList<E> implements Li
      * @param element
      */
     public boolean add(E element) {
-        int insertionPoint = Collections.binarySearch(this, element, comparator);
-        System.out.println(insertionPoint);
-        add((insertionPoint > -1) ? insertionPoint : (-insertionPoint) - 1, element);
+    	if (comparator == null) {
+    		linkLast(element);
+    	} else {
+    		int insertionPoint = Collections.binarySearch(this, element, comparator);
+        	add((insertionPoint > -1) ? insertionPoint : (-insertionPoint) - 1, element);
+    	}
         return true;
     }
 
@@ -382,7 +387,12 @@ public class SortedLinkedList<E> extends AbstractSequentialList<E> implements Li
      */
     @Override
     public boolean addAll(Collection<? extends E> paramCollection) {
-        boolean result = false;
+
+    	if (null == comparator) {
+    		return addAll(size, paramCollection);
+    	}
+
+    	boolean result = false;
         if (paramCollection.size() > 4) {
             result = addAll(size, paramCollection);
             Collections.sort(this, comparator);
@@ -853,7 +863,7 @@ public class SortedLinkedList<E> extends AbstractSequentialList<E> implements Li
 
 
     public ListIterator<E> listIterator(E element) {
-    	int insertionPoint = Collections.binarySearch(this, element, comparator);
+    	int insertionPoint = comparator != null ? Collections.binarySearch(this, element, comparator) : indexOf(element);
     	int index = (insertionPoint > -1) ? insertionPoint : (-insertionPoint) - 1;
         return new ListItr(index);
     }
