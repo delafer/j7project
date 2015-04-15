@@ -41,7 +41,7 @@ public class XanderViewer {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		String path = "C:\\daten\\Privat\\testbig.jpg";
+		String path = "E:\\torrent\\finished\\[hegre-art] 2014-12-10 milena - ukrainian beauty (x69) 7500x10000\\MilenaUkrainianBeauty_2014-12-10_058xxxxxl.jpg";
 		String[] files = ImageFinder.getImages(path);
 		pointer = new FilePointer(files, path);
 
@@ -58,19 +58,22 @@ public class XanderViewer {
 			//vs is faster
 			System.out.println(location);
 			Metrics m = Metrics.start();
-			TJScalingFactor sf =  new TJScalingFactor(1, 2);
+			TJScalingFactor sf =  new TJScalingFactor(1, 1);
 			byte[] bytes = XFileReader.readNIO(location);
-
+			m.measure("IO Read ");
 
 			TJDecompressor tjd = new TJDecompressor(bytes);
 			int width = sf.getScaled(tjd.getWidth());
 			int height = sf.getScaled(tjd.getHeight());
 			System.out.println(width+" "+height);
 			BufferedImage img = tjd.decompress(width, height, BufferedImage.TYPE_INT_RGB, 0);
+			m.measure("JPEGDecode ");
 			BufferedImage res = ScaleFactory.resize(img, 1920,1200);
+			m.measure("Scale ");
 			panel.image = res;
 			panel.updateUI();
-			m.end();
+			m.measure("Draw ");
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
