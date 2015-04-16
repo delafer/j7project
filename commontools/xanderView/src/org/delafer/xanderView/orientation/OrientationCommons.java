@@ -3,7 +3,7 @@ package org.delafer.xanderView.orientation;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Orientation {
+public class OrientationCommons {
 
 	//public enum Action {Left, Right, TurnAbout, VerticalFlip, HorizontalFlip };
 
@@ -23,7 +23,7 @@ public class Orientation {
 	final static int stHFlipAndLeft		= 7;
 
 
-	public enum State {
+	public enum Orientation {
 
 		Original(stOriginal, stRotatedLeft, stRotatedRight, stFlipVertical, stFlipHorizonal),
 		RotatedLeft(stRotatedLeft, stTurnedAbout, stOriginal, stHFlipAndLeft, stHFlipAndRight),
@@ -37,30 +37,30 @@ public class Orientation {
 
 	int[] gotos;
 
-	State(int ownCode, int onLeft, int onRight, int onVertical, int onHorizontal) {
+	Orientation(int ownCode, int onLeft, int onRight, int onVertical, int onHorizontal) {
 		gotos = new int[] {onLeft, onRight, onVertical, onHorizontal};
 
 	}
 
-	State newState(Action action) {
+	Orientation newState(Action action) {
 		int newCode = gotos[action.code];
 		switch (newCode) {
 		case stOriginal:
-			return State.Original;
+			return Orientation.Original;
 		case stRotatedLeft:
-			return State.RotatedLeft;
+			return Orientation.RotatedLeft;
 		case stRotatedRight:
-			return State.RotatedRight;
+			return Orientation.RotatedRight;
 		case stTurnedAbout:
-			return State.TurnedAbout;
+			return Orientation.TurnedAbout;
 		case stFlipVertical:
-			return State.FlipVertical;
+			return Orientation.FlipVertical;
 		case stFlipHorizonal:
-			return State.FlipHorizonal;
+			return Orientation.FlipHorizonal;
 		case stHFlipAndRight:
-			return State.HFlipAndRight;
+			return Orientation.HFlipAndRight;
 		case stHFlipAndLeft:
-			return State.HFlipAndLeft;
+			return Orientation.HFlipAndLeft;
 		default:
 			return this;
 		}
@@ -70,7 +70,7 @@ public class Orientation {
 
 
 	public static void main(String[] args) {
-		System.out.println(State.TurnedAbout.newState(Action.FlipHorizontal));
+		System.out.println(Orientation.TurnedAbout.newState(Action.FlipHorizontal));
 	}
 
 	//left vert = right horiz = vert right = horiz left

@@ -11,6 +11,9 @@ import net.j7.commons.utils.Metrics;
 
 import org.delafer.xanderView.file.FilePointer;
 import org.delafer.xanderView.file.ImageFinder;
+import org.delafer.xanderView.orientation.CommonRotator;
+import org.delafer.xanderView.orientation.OrientationCommons.Orientation;
+import org.delafer.xanderView.orientation.RotatorGPU;
 import org.delafer.xanderView.scale.ScaleFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
@@ -18,7 +21,6 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.*;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
@@ -41,7 +43,7 @@ public class XanderViewer {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		String path = "E:\\torrent\\finished\\[hegre-art] 2014-12-10 milena - ukrainian beauty (x69) 7500x10000\\MilenaUkrainianBeauty_2014-12-10_058xxxxxl.jpg";
+		String path = "D:\\Privat\\testbig.jpg";
 		String[] files = ImageFinder.getImages(path);
 		pointer = new FilePointer(files, path);
 
@@ -68,8 +70,17 @@ public class XanderViewer {
 			System.out.println(width+" "+height);
 			BufferedImage img = tjd.decompress(width, height, BufferedImage.TYPE_INT_RGB, 0);
 			m.measure("JPEGDecode ");
-			BufferedImage res = ScaleFactory.resize(img, 1920,1200);
-			m.measure("Scale ");
+		    BufferedImage res1 = ScaleFactory.resize(img, 1920,1200);
+		    m.measure("Scale1 ");
+//			ImageResizer is = new ImageResizer();
+//			BufferedImage res2 = is.resize(img, 1920, 1200);
+//			m.measure("Scale2 ");
+			CommonRotator ir = new RotatorGPU();
+
+
+			BufferedImage res = ir.rotate(res1, Orientation.RotatedRight);
+			m.measure("Flip ");
+
 			panel.image = res;
 			panel.updateUI();
 			m.measure("Draw ");
@@ -79,11 +90,13 @@ public class XanderViewer {
 		}
 	}
 
+	final static int left = 108;
 	private void open() {
 		// Create a window and set its title.
 		display = new Display();
-
 		display.addFilter(SWT.KeyDown, new Listener() {
+
+
 			public void handleEvent(Event e) {
 //				System.out.println("---------");
 //				System.out.println(e.character);
@@ -95,6 +108,9 @@ public class XanderViewer {
 				case SWT.ESC:
 					shell.close();
 					System.exit(0);
+					break;
+				case left:
+					showDialog();
 					break;
 				case SWT.ARROW_LEFT:
 				case SWT.ARROW_UP:
@@ -109,8 +125,12 @@ public class XanderViewer {
 					XanderViewer.this.loadImage(pointer.next());
 					break;
 				case SWT.CR:
-					//shell.setFullScreen(!shell.getFullScreen());
-					showDialog();
+					shell.setFullScreen(!shell.getFullScreen());
+					shell.setMaximized (shell.getFullScreen());
+					shell.setModified(true);
+//					shell.layout();
+//					shell.redraw();
+//					showDialog();
 					try {
 						Thread.currentThread().sleep(200);
 					} catch (InterruptedException e1) {
@@ -151,7 +171,7 @@ public class XanderViewer {
 
 
 
-		shell = new Shell(display, SWT.NO_TRIM | SWT.ON_TOP | SWT.NO_REDRAW_RESIZE | SWT.NO_BACKGROUND | SWT.APPLICATION_MODAL);
+		shell = new Shell(display, SWT.SHELL_TRIM | SWT.ON_TOP | SWT.NO_REDRAW_RESIZE | SWT.NO_BACKGROUND | SWT.APPLICATION_MODAL );
 		shell.setLayout(new FillLayout(SWT.HORIZONTAL));
 
 
@@ -168,8 +188,7 @@ public class XanderViewer {
 
         shell.setMaximized (true);
         shell.setFullScreen(true);
-
-		cmpEmbedded = new Composite(shell, SWT.EMBEDDED  | SWT.NO_REDRAW_RESIZE | SWT.NO_BACKGROUND);
+		cmpEmbedded = new Composite(shell,  SWT.EMBEDDED  | SWT.NO_REDRAW_RESIZE | SWT.NO_BACKGROUND);
 		java.awt.Frame frm = SWT_AWT.new_Frame( cmpEmbedded );
 		cmpEmbedded.setLayout(null);
 
