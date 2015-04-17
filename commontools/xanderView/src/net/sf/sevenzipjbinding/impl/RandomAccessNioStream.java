@@ -17,8 +17,8 @@ import com.sun.nio.file.ExtendedOpenOption;
 /**
  * Implementation of {@link IInStream} using {@link RandomAccessFile}.
  *
- * @author Boris Brodski
- * @version 4.65-1
+ * @author Alan Toy
+ * @version 1.0.0
  */
 public final class RandomAccessNioStream implements IInStream {
 	private final transient SeekableByteChannel  randomAccessFile;
@@ -34,7 +34,7 @@ public final class RandomAccessNioStream implements IInStream {
 		try {
 			raf = Files.newByteChannel(Paths.get(location), StandardOpenOption.READ, LinkOption.NOFOLLOW_LINKS,  ExtendedOpenOption.NOSHARE_WRITE);
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new IllegalArgumentException(String.format("Error opening: %s",location));
 		}
 		randomAccessFile = raf;
 	}

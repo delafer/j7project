@@ -269,7 +269,6 @@ public class XanderViewer {
 
 	    public void paintComponent(Graphics g) {
 	        super.paintComponent(g);  // Paint background
-//	        System.out.println(image.getWidth(null));
 	        // Draw image at its natural size first.
 	        if (image!=null)
 	        g.drawImage(image, 0, 0, null); //85x62 image
