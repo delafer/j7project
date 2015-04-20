@@ -58,14 +58,15 @@ public class SevenZipReader extends CommonContainer {
 						"%9s | %9s | %s", //
 						archive.getProperty(i, PropID.SIZE), archive.getProperty(i, PropID.PACKED_SIZE),
 						archive.getProperty(i, PropID.PATH));
+				System.out.println(a);
 			}
 			if (numberOfItems>10) numberOfItems = 10;
 			int[] in = new int[numberOfItems];
 			for (int i = 0; i < in.length; i++) {
 				in[i] = i;
 			}
-			archive.extract(in, false, // Non-test mode
-					new MyExtractCallback(archive));
+//			archive.extract(in, false, // Non-test mode
+//					new MyExtractCallback(archive));
 
 			archive.close();
 			m.measure("read time");

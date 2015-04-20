@@ -11,4 +11,6 @@ public interface IFileEntry<E> {
 
 	public long size();
 
+	public byte[] content();
+
 }

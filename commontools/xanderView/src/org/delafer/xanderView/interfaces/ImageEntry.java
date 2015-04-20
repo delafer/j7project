@@ -6,7 +6,6 @@ public abstract class ImageEntry<E> implements IImageEntry<E> {
 
 
 	protected String name;
-	protected String fullpath;
 	protected long size;
 	protected ImageSize imageSize;
 
