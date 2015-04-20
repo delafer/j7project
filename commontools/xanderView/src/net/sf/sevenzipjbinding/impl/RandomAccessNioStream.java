@@ -24,7 +24,7 @@ public final class RandomAccessNioStream implements IInStream {
 	private final transient SeekableByteChannel  randomAccessFile;
 
 	/**
-	 * Constructs instance of the class from random access file.
+	 * Constructs instance of the class from path name.
 	 *
 	 * @param randomAccessFile
 	 *            random access file to use
@@ -75,7 +75,7 @@ public final class RandomAccessNioStream implements IInStream {
 	public final int read(byte[] data) throws SevenZipException {
 		try {
 			int read = randomAccessFile.read(ByteBuffer.wrap(data));
-			return read == -1 ? 0 : read;
+			return read >= 0 ? read : 0;
 		} catch (IOException e) {
 			throw new SevenZipException("Error reading random access file", e);
 		}
@@ -90,3 +90,4 @@ public final class RandomAccessNioStream implements IInStream {
 		randomAccessFile.close();
 	}
 }
+

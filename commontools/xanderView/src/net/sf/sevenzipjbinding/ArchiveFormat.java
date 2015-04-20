@@ -1,5 +1,12 @@
 package net.sf.sevenzipjbinding;
 
+import net.sf.sevenzipjbinding.impl.OutArchive7zImpl;
+import net.sf.sevenzipjbinding.impl.OutArchiveBZip2Impl;
+import net.sf.sevenzipjbinding.impl.OutArchiveGZipImpl;
+import net.sf.sevenzipjbinding.impl.OutArchiveImpl;
+import net.sf.sevenzipjbinding.impl.OutArchiveTarImpl;
+import net.sf.sevenzipjbinding.impl.OutArchiveZipImpl;
+
 /**
  * Enumeration of all supported archive types. <blockquote>
  * 
@@ -185,136 +192,205 @@ package net.sf.sevenzipjbinding;
  * @version 4.65-1
  */
 public enum ArchiveFormat {
-	/**
-	 * Zip format.
-	 */
-	ZIP("Zip"),
+    /**
+     * Zip format.
+     */
+    ZIP("Zip", OutArchiveZipImpl.class),
 
-	/**
-	 * Tar format.
-	 */
-	TAR("Tar"),
+    /**
+     * Tar format.
+     */
+    TAR("Tar", OutArchiveTarImpl.class),
 
-	/**
-	 * Split format.
-	 */
-	SPLIT("Split"),
+    /**
+     * Split format.
+     */
+    SPLIT("Split"),
 
-	/**
-	 * Rar format.
-	 */
-	RAR("Rar"), //
+    /**
+     * Rar format.
+     */
+    RAR("Rar"), //
 
-	/**
-	 * Lzma format.
-	 */
-	LZMA("Lzma"),
+    /**
+     * Lzma format.
+     */
+    LZMA("Lzma"),
 
-	/**
-	 * Iso format.
-	 */
-	ISO("Iso"),
+    /**
+     * Iso format.
+     */
+    ISO("Iso"),
 
-	/**
-	 * Hfs format
-	 */
-	HFS("HFS"),
+    /**
+     * Hfs format
+     */
+    HFS("HFS"),
 
-	/**
-	 * Gzip format
-	 */
-	GZIP("GZip"),
+    /**
+     * Gzip format
+     */
+    GZIP("GZip", OutArchiveGZipImpl.class),
 
-	/**
-	 * Cpio format.
-	 */
-	CPIO("Cpio"),
+    /**
+     * Cpio format.
+     */
+    CPIO("Cpio"),
 
-	/**
-	 * BZip2 format.
-	 */
-	BZIP2("BZIP2"),
+    /**
+     * BZip2 format.
+     */
+    BZIP2("BZIP2", OutArchiveBZip2Impl.class),
 
-	/**
-	 * 7z format.
-	 */
-	SEVEN_ZIP("7z"),
+    /**
+     * 7z format.
+     */
+    SEVEN_ZIP("7z", OutArchive7zImpl.class),
 
-	/**
-	 * Z format.
-	 */
-	Z("Z"),
+    /**
+     * Z format.
+     */
+    Z("Z"),
 
-	/**
-	 * Arj format
-	 */
-	ARJ("Arj"), //
+    /**
+     * Arj format
+     */
+    ARJ("Arj"), //
 
-	/**
-	 * Cab format.
-	 */
-	CAB("Cab"),
+    /**
+     * Cab format.
+     */
+    CAB("Cab"),
 
-	/**
-	 * Lzh
-	 */
-	LZH("Lzh"),
+    /**
+     * Lzh
+     */
+    LZH("Lzh"),
 
-	/**
-	 * Chm
-	 */
-	CHM("Chm"),
+    /**
+     * Chm
+     */
+    CHM("Chm"),
 
-	/**
-	 * Nsis
-	 */
-	NSIS("Nsis"),
+    /**
+     * Nsis
+     */
+    NSIS("Nsis"),
 
-	/**
-	 * Deb
-	 */
-	DEB("Deb"),
+    /**
+     * Deb
+     */
+    DEB("Deb"),
 
-	/**
-	 * Rpm
-	 */
-	RPM("Rpm"),
+    /**
+     * Rpm
+     */
+    RPM("Rpm"),
 
-	/**
-	 * Udf
-	 */
-	UDF("Udf"),
-
-	    /**
+    /**
      * Udf
+     */
+    UDF("Udf"),
+
+    /**
+     * Wim
      */
     WIM("Wim"),
 
     /**
      * Xar
      */
-	XAR("Xar");
+    XAR("Xar");
 
-	private String methodName;
+    private String methodName;
 
-	ArchiveFormat(String methodName) {
-		this.methodName = methodName;
-	}
+    /**
+     * Index of the corresponding 7-Zip codec. This field used by native code to store/cache the index.
+     */
+    private int codecIndex = -2;
 
-	/**
-	 * Return name of the archive method
-	 * 
-	 * @return name of the archive method
-	 */
-	public String getMethodName() {
-		return methodName;
-	}
+    Class<? extends OutArchiveImpl<?>> outArchiveImplementation;
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String toString() {
-		return methodName;
-	}
+    private ArchiveFormat(String methodName) {
+        this(methodName, null);
+    }
+
+    private ArchiveFormat(String methodName, Class<? extends OutArchiveImpl<?>> outArchiveImplementation) {
+        this.methodName = methodName;
+        this.outArchiveImplementation = outArchiveImplementation;
+    }
+
+    /**
+     * Return name of the archive method
+     * 
+     * @return name of the archive method
+     */
+    public String getMethodName() {
+        return methodName;
+    }
+
+    /**
+     * Return whether this archive type supports creation/update operations
+     * 
+     * @return <code>true</code> - creation/update operations are supported,<br>
+     *         <code>false</code> - only archive extraction is supported
+     */
+    public boolean isOutArchiveSupported() {
+        return outArchiveImplementation != null;
+    }
+
+    /**
+     * Get corresponding implementation class for archive update operations.
+     * 
+     * @return the {@link IOutArchive} implementation class
+     */
+    public Class<? extends OutArchiveImpl<?>> getOutArchiveImplementation() {
+        return outArchiveImplementation;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return methodName;
+    }
+
+    /**
+     * Finds the {@link ArchiveFormat} corresponding to the given out-archive interface.
+     * 
+     * @param outArchiveInterface
+     *            out-archive interface
+     * @return corresponding out-archive implementation class
+     * @throws SevenZipException
+     *             if no implementation class could be found.
+     */
+    static ArchiveFormat findOutArchiveImplementationToInterface(
+            Class<? extends IOutCreateArchive<?>> outArchiveInterface) throws SevenZipException {
+        // TODO Test, that this check indeed isn't necessary
+        //        if (outArchiveInterface == IOutArchive.class) {
+        //            String iOutArchiveName = IOutArchive.class.getSimpleName();
+        //            throw new SevenZipException("Can't determine corresponding archive format to the interface "
+        //                    + iOutArchiveName + ". Please, provide a one of the concrete " + iOutArchiveName
+        //                    + "XXX interfaces.");
+        //        }
+        for (ArchiveFormat archiveFormat : values()) {
+            Class<? extends OutArchiveImpl<?>> implementation = archiveFormat.getOutArchiveImplementation();
+            if (implementation != null && outArchiveInterface.isAssignableFrom(implementation)) {
+                return archiveFormat;
+            }
+        }
+        throw new SevenZipException("Can't determine corresponding archive format to the interface "
+                + IOutArchive.class.getSimpleName() + ".");
+    }
+
+    /**
+     * Return internal index of the archive format.
+     * 
+     * @return internal archive format index. <code>-2</code> if uninitialized.
+     */
+    // TODO Make it package visibility
+    public int getCodecIndex() {
+        return codecIndex;
+    }
 }

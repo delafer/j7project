@@ -7,16 +7,7 @@ import java.util.Arrays;
 
 import net.j7.commons.collections.SortedLinkedList;
 import net.j7.commons.utils.Metrics;
-import net.sf.sevenzipjbinding.ArchiveFormat;
-import net.sf.sevenzipjbinding.ExtractAskMode;
-import net.sf.sevenzipjbinding.ExtractOperationResult;
-import net.sf.sevenzipjbinding.IArchiveExtractCallback;
-import net.sf.sevenzipjbinding.IInStream;
-import net.sf.sevenzipjbinding.ISequentialOutStream;
-import net.sf.sevenzipjbinding.ISevenZipInArchive;
-import net.sf.sevenzipjbinding.PropID;
-import net.sf.sevenzipjbinding.SevenZip;
-import net.sf.sevenzipjbinding.SevenZipException;
+import net.sf.sevenzipjbinding.*;
 import net.sf.sevenzipjbinding.impl.RandomAccessFileInStream;
 import net.sf.sevenzipjbinding.impl.RandomAccessNioStream;
 
@@ -28,7 +19,7 @@ public class SevenZipReader extends CommonContainer {
 
 	@Override
 	protected void readStructure(SortedLinkedList<IImageEntry> list) throws Exception {
-		ISevenZipInArchive archive;
+		IInArchive archive;
 		RandomAccessFile randomAccessFile;
 
 		randomAccessFile = new RandomAccessFile(location, "r");
@@ -49,10 +40,10 @@ public class SevenZipReader extends CommonContainer {
 
 	public static void main(String[] args) {
 		try {
-			ISevenZipInArchive archive;
+			IInArchive archive;
 			RandomAccessFile randomAccessFile;
 			String fileName = "d:\\test2.zip";
-			boolean neu = false;
+			boolean neu = true;
 			randomAccessFile = new RandomAccessFile(fileName, "r");
 			IInStream stream = !neu ? new RandomAccessFileInStream(randomAccessFile) : new RandomAccessNioStream(
 					fileName);
@@ -96,9 +87,9 @@ public class SevenZipReader extends CommonContainer {
 		private int size = 0;
 		private int index;
 		private boolean skipExtraction;
-		private ISevenZipInArchive inArchive;
+		private IInArchive inArchive;
 
-		public MyExtractCallback(ISevenZipInArchive inArchive) {
+		public MyExtractCallback(IInArchive inArchive) {
 			this.inArchive = inArchive;
 		}
 

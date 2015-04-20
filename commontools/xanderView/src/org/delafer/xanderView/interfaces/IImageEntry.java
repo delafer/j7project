@@ -1,12 +1,11 @@
 package org.delafer.xanderView.interfaces;
 
-import java.awt.Dimension;
+import org.delafer.xanderView.common.ImageSize;
 
-public interface IImageEntry extends IFileEntry {
+public interface IImageEntry<E> extends IFileEntry<E> {
 
 
-	public Dimension getImageSize();
+	public ImageSize getImageSize();
 
-	public long uuid();
 
 }

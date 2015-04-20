@@ -1,55 +1,34 @@
 package org.delafer.xanderView.interfaces;
 
-import java.awt.Dimension;
+import org.delafer.xanderView.common.ImageSize;
 
-public class ImageEntry implements IImageEntry {
+public abstract class ImageEntry<E> implements IImageEntry<E> {
 
 
 	protected String name;
 	protected String fullpath;
 	protected long size;
-	protected Dimension imageSize;
+	protected ImageSize imageSize;
 
 	public ImageEntry() {
-		// TODO Auto-generated constructor stub
 	}
 
-	@Override
-	public long quickCRC() {
 
-		return 0;
+	public long CRC() {
+		return 0l;
 	}
 
-	@Override
-	public byte[] CRC() {
-
-		return null;
-	}
-
-	@Override
 	public String name() {
 		return name;
 	}
 
-	@Override
-	public byte[] data() {
-
-		return null;
-	}
-
-	@Override
 	public long size() {
 		return size;
 	}
 
-	@Override
-	public Dimension getImageSize() {
-		return null;
+	public ImageSize getImageSize() {
+		return imageSize;
 	}
 
-	@Override
-	public long uuid() {
-		return 0;
-	}
 
 }

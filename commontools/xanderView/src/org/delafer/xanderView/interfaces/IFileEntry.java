@@ -1,15 +1,13 @@
 package org.delafer.xanderView.interfaces;
 
-public interface IFileEntry {
+public interface IFileEntry<E> {
 
 
-	public long quickCRC();
+	public E getIdentifier();
 
-	public byte[] CRC();
+	public long CRC();
 
 	public String name();
-
-	public byte[] data();
 
 	public long size();
 
