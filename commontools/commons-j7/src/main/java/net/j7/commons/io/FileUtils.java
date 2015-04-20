@@ -37,17 +37,17 @@ public final class FileUtils {
    /**
     * The system separator character.
     */
-   private static final char SYSTEM_SEPARATOR = File.separatorChar;
+   public static final char SYSTEM_SEPARATOR = File.separatorChar;
 
    /**
     * The Unix separator character.
     */
-   private static final char UNIX_SEPARATOR = '/';
+   public static final char UNIX_SEPARATOR = '/';
 
    /**
     * The Windows separator character.
     */
-   private static final char WINDOWS_SEPARATOR = '\\';
+   public static final char WINDOWS_SEPARATOR = '\\';
 
    /**
     * Converts all separators to the system separator.

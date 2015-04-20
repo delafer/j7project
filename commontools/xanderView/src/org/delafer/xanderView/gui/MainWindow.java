@@ -2,14 +2,19 @@ package org.delafer.xanderView.gui;
 
 import static org.eclipse.swt.SWT.*;
 
+import java.awt.Dimension;
+
 import org.delafer.xanderView.file.FilePointer;
 import org.delafer.xanderView.file.ImageFinder;
+import org.delafer.xanderView.gui.config.ApplConfiguration;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.*;
+
+import com.sun.glass.ui.Application;
 
 public final class MainWindow extends ToRefactor{
 
@@ -33,7 +38,7 @@ public final class MainWindow extends ToRefactor{
 	}
 
 	private void testInit() {
-		String path = "D:\\Privat\\testbig.jpg";
+		String path = "T:\\really.2015.new5.pb\\jane_k8037.jpg";
 		String[] files = ImageFinder.getImages(path);
 		pointer = new FilePointer(files, path);
 
@@ -41,7 +46,7 @@ public final class MainWindow extends ToRefactor{
 
 	protected void show () {
 
-		shell = new Shell(display, SHELL_TRIM | ON_TOP | NO_REDRAW_RESIZE | NO_BACKGROUND | APPLICATION_MODAL );
+		shell = new Shell(display, SHELL_TRIM | ON_TOP | NO_REDRAW_RESIZE | NO_BACKGROUND | APPLICATION_MODAL | NO_SCROLL );
 		shell.setLayout(new FillLayout(HORIZONTAL));
 		shell.setSize( SHELL_SIZE );
 
@@ -49,13 +54,28 @@ public final class MainWindow extends ToRefactor{
 
 	        public void handleEvent(Event e) {
 	            Rectangle rect = shell.getBounds();
-	           System.out.println(String.format("%s %s %s %s", rect.x, rect.y, rect.width, rect.height));
+	            ApplConfiguration cfg = ApplConfiguration.instance();
+	            cfg.set(ApplConfiguration.CFG_POS_X, rect.x);
+	            cfg.set(ApplConfiguration.CFG_POS_Y, rect.y);
+	            cfg.set(ApplConfiguration.CFG_WIDTH, rect.width);
+	            cfg.set(ApplConfiguration.CFG_HEIGHT, rect.height);
 	        }
 
 	    });
 
-		Monitor monitor = getCurrentMonitor();
-		centerWindow(monitor);
+		shell.addListener(SWT.Resize, new Listener() {
+	        public void handleEvent(Event e) {
+	        	System.out.println(">"+cmpEmbedded.getSize().x+ "<>"+cmpEmbedded.getSize().y);
+	        	System.out.println(">>"+cmpEmbedded.getClientArea().width+ "<>"+cmpEmbedded.getClientArea().height);
+	        	System.out.println(">>>"+panel.getWidth()+"<>"+panel.getHeight());
+	        	System.out.println("4>"+panel.getBounds().width+"<>"+panel.getBounds().height);
+	        	System.out.println("4>"+panel.getSize().width+"<>"+panel.getSize().height);
+	        }
+
+	    });
+
+		Monitor monitor = getActiveMonitor();
+		locateWindow(monitor);
 
 		createMenuBar();
 		createToolBar();
@@ -68,27 +88,29 @@ public final class MainWindow extends ToRefactor{
 	private void createImageCanvas() {
 		panel = new ImagePanel ();
 
-		cmpEmbedded = new Composite(shell,  EMBEDDED  | NO_REDRAW_RESIZE | NO_BACKGROUND);
+		cmpEmbedded = new Composite(shell,  EMBEDDED | NO_REDRAW_RESIZE  | NO_BACKGROUND  | NO_SCROLL );
 		cmpEmbedded.setLayout(null);
-
 		java.awt.Frame awtFrame = SWT_AWT.new_Frame( cmpEmbedded );
 		awtFrame.add(panel);
 	}
 
-	private Monitor getCurrentMonitor() {
-		return display.getPrimaryMonitor ();
-	}
+	private void locateWindow(Monitor monitor) {
 
-	private void centerWindow(Monitor monitor) {
-		Rectangle bounds = monitor.getBounds ();
-		Rectangle rect = shell.getBounds ();
-		int x = bounds.x + (bounds.width - rect.width) / 2;
-		int y = bounds.y + (bounds.height - rect.height) / 2;
+		ApplConfiguration cfg = ApplConfiguration.instance();
+		int x = cfg.getInt(ApplConfiguration.CFG_POS_X);
+		int y = cfg.getInt(ApplConfiguration.CFG_POS_Y);
+		if (x == 0 && y == 0) {
+			Rectangle bounds = monitor.getBounds ();
+			Rectangle rect = shell.getBounds ();
+			x = bounds.x + (bounds.width - rect.width) / 2;
+			y = bounds.y + (bounds.height - rect.height) / 2;
+		}
 		shell.setLocation (x, y);
 	}
 
 	private void intitialize() {
 		display = new Display ();
+		display.setWarnings(false);
 		display.addFilter(SWT.KeyDown, new Listener() {
 			public void handleEvent(Event e) { bindKeyEvent(e); }
 		});
@@ -133,6 +155,12 @@ public final class MainWindow extends ToRefactor{
 		}
 
 		shell.setModified(true);
+
+    	System.out.println(">"+cmpEmbedded.getSize().x+ "<>"+cmpEmbedded.getSize().y);
+    	System.out.println(">>"+cmpEmbedded.getClientArea().width+ "<>"+cmpEmbedded.getClientArea().height);
+    	System.out.println(">>>"+panel.getWidth()+"<>"+panel.getHeight());
+    	System.out.println("4>"+panel.getBounds().width+"<>"+panel.getBounds().height);
+    	System.out.println("4>"+panel.getSize().width+"<>"+panel.getSize().height);
 	}
 
 	Menu createMenuBar() {
@@ -155,9 +183,14 @@ public final class MainWindow extends ToRefactor{
 	}
 
 	private void createToolBar() {
-		ImageRepository.loadImages(display);
+		//ImageRepository.loadImages(display);
 	}
 
+
+	protected Monitor getActiveMonitor() {
+
+		return getClosestMonitor(Display.getCurrent(), shell.getLocation());
+	}
 
 	private static Monitor getClosestMonitor(Display toSearch, Point toFind) {
 		int closest = Integer.MAX_VALUE;
@@ -192,6 +225,10 @@ public final class MainWindow extends ToRefactor{
 			if (!display.readAndDispatch()) display.sleep ();
 
 		display.dispose ();
+	}
+
+	public Dimension getSize() {
+		return panel.getSize();
 	}
 
 

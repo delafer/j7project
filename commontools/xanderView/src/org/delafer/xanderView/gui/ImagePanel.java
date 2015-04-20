@@ -12,6 +12,8 @@ public class ImagePanel extends JPanel {
 
     public ImagePanel() {
         this.setBackground(Color.BLACK);
+//        this.setDoubleBuffered(true);
+//        this.setIgnoreRepaint(false);
     }
 
     public void showImage(Image image) {
@@ -21,19 +23,25 @@ public class ImagePanel extends JPanel {
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);  // Paint background
-//        System.out.println(image.getWidth(null));
         // Draw image at its natural size first.
-        if (image!=null)
-        g.drawImage(image, 0, 0, null); //85x62 image
-
-        AttributedString as = new AttributedString("An AttributedString holds text and related "+
-                            "attribute information.");
-        as.addAttribute(TextAttribute.FONT, new Font("Courier New", Font.BOLD, 36));
-        as.addAttribute(TextAttribute.FOREGROUND, Color.YELLOW);
+        if (image!=null) {
+        	Rectangle dim = g.getClipBounds();
+        	int x = (dim.width - image.getWidth(null)) / 2;
+        	int y  = (dim.height - image.getHeight(null)) / 2;
 
 
-        g.setFont(new Font("Arial", Font.PLAIN, 20));
-        g.drawString(as.getIterator(), 10, 20);
+        	g.drawImage(image, x, y, null);
+        }
+
+
+//        AttributedString as = new AttributedString("An AttributedString holds text and related attribute information.");
+//
+//        as.addAttribute(TextAttribute.FONT, new Font("Courier New", Font.BOLD, 36));
+//        as.addAttribute(TextAttribute.FOREGROUND, Color.YELLOW);
+//
+//
+//        g.setFont(new Font("Arial", Font.PLAIN, 20));
+//        g.drawString(as.getIterator(), 10, 20);
 
     }
 }

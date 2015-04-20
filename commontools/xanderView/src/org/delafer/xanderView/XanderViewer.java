@@ -14,7 +14,7 @@ import org.delafer.xanderView.file.ImageFinder;
 import org.delafer.xanderView.orientation.CommonRotator;
 import org.delafer.xanderView.orientation.OrientationCommons.Orientation;
 import org.delafer.xanderView.orientation.RotatorGPU;
-import org.delafer.xanderView.scale.ScaleFactory;
+import org.delafer.xanderView.scale.ResizerFastAwt2D;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -70,7 +70,8 @@ public class XanderViewer {
 			System.out.println(width+" "+height);
 			BufferedImage img = tjd.decompress(width, height, BufferedImage.TYPE_INT_RGB, 0);
 			m.measure("JPEGDecode ");
-		    BufferedImage res1 = ScaleFactory.resize(img, 1920,1200);
+			ResizerFastAwt2D scaler = new ResizerFastAwt2D();
+		    BufferedImage res1 = scaler.resize(img, 1920,1200);
 		    m.measure("Scale1 ");
 //			ImageResizer is = new ImageResizer();
 //			BufferedImage res2 = is.resize(img, 1920, 1200);

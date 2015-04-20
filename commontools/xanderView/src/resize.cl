@@ -6,7 +6,7 @@ const sampler_t samplerIn =
 const sampler_t samplerOut =
     CLK_NORMALIZED_COORDS_FALSE |
     CLK_ADDRESS_CLAMP |
-    CLK_FILTER_NEAREST;
+    CLK_FILTER_LINEAR;
 
 __kernel void resizeImage(
     __read_only  image2d_t sourceImage,

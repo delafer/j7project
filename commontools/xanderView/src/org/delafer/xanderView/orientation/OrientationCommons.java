@@ -1,7 +1,6 @@
 package org.delafer.xanderView.orientation;
 
-import java.util.HashMap;
-import java.util.Map;
+import org.delafer.xanderView.common.ImageSize;
 
 public class OrientationCommons {
 
@@ -68,6 +67,15 @@ public class OrientationCommons {
 
 	};
 
+	public static ImageSize getNewSize(int currentWidth, int currentHeight, int targetWidth, int targetHeight) {
+		float requestedHeightScaling = ((float) targetHeight / (float) currentHeight);
+		float requestedWidthScaling = ((float) targetWidth / (float) currentWidth);
+		float actualScaling = Math.min(requestedHeightScaling, requestedWidthScaling);
+
+		targetHeight = Math.round((float) currentHeight * actualScaling);
+		targetWidth = Math.round((float) currentWidth * actualScaling);
+		return new ImageSize(targetWidth, targetHeight);
+	}
 
 	public static void main(String[] args) {
 		System.out.println(Orientation.TurnedAbout.newState(Action.FlipHorizontal));

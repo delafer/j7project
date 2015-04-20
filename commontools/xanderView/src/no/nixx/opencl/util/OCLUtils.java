@@ -10,6 +10,7 @@ import static org.jocl.CL.*;
 /**
  * @author Oddbjørn Kvalsund
  */
+@SuppressWarnings("deprecation")
 public class OCLUtils {
 
     static {
@@ -108,7 +109,7 @@ public class OCLUtils {
         return createKernelFromSource(context, ClasspathUtils.getClasspathResourceAsString(resourceName), kernelName);
     }
 
-    public static cl_mem createReadOnlyImage(cl_context context, BufferedImage image) {
+	public static cl_mem createReadOnlyImage(cl_context context, BufferedImage image) {
         final DataBufferInt dataBufferSrc = (DataBufferInt) image.getRaster().getDataBuffer();
         final int dataSrc[] = dataBufferSrc.getData();
 

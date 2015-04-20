@@ -1,21 +1,41 @@
 package no.nixx.opencl;
 
-import no.nixx.opencl.util.ClasspathUtils;
-import org.jocl.*;
+import static no.nixx.opencl.util.BufferedImageUtils.getDataBufferInt;
+import static no.nixx.opencl.util.OCLUtils.createProgramFromSource;
+import static no.nixx.opencl.util.OCLUtils.createReadOnlyImage;
+import static no.nixx.opencl.util.OCLUtils.createWritableImage;
+import static no.nixx.opencl.util.OCLUtils.getCommandQueueForContextAndPlatformIdAndDeviceId;
+import static no.nixx.opencl.util.OCLUtils.getContextForPlatformIdAndDeviceId;
+import static org.jocl.CL.clCreateKernel;
+import static org.jocl.CL.clEnqueueNDRangeKernel;
+import static org.jocl.CL.clEnqueueReadImage;
+import static org.jocl.CL.clReleaseCommandQueue;
+import static org.jocl.CL.clReleaseContext;
+import static org.jocl.CL.clReleaseKernel;
+import static org.jocl.CL.clReleaseMemObject;
+import static org.jocl.CL.clReleaseProgram;
+import static org.jocl.CL.clSetKernelArg;
 
 import java.awt.image.BufferedImage;
 
-import static no.nixx.opencl.util.BufferedImageUtils.getDataBufferInt;
-import static no.nixx.opencl.util.OCLUtils.*;
-import static no.nixx.opencl.util.OCLUtils.createProgramFromSource;
-import static org.jocl.CL.*;
-import static org.jocl.CL.clReleaseKernel;
-import static org.jocl.CL.clReleaseMemObject;
+import no.nixx.opencl.util.ClasspathUtils;
+import no.nixx.opencl.util.JOCLFindFastestDevice;
+
+import org.delafer.xanderView.scale.IResizer;
+import org.jocl.Pointer;
+import org.jocl.Sizeof;
+import org.jocl.cl_command_queue;
+import org.jocl.cl_context;
+import org.jocl.cl_device_id;
+import org.jocl.cl_kernel;
+import org.jocl.cl_mem;
+import org.jocl.cl_platform_id;
+import org.jocl.cl_program;
 
 /**
  * Oddbjørn Kvalsund
  */
-public class ImageResizer {
+public class ImageResizer implements IResizer{
 
     private final cl_platform_id platformId;
     private final cl_device_id deviceId;
@@ -24,8 +44,12 @@ public class ImageResizer {
     private final cl_program program;
 
     public ImageResizer() {
-        platformId = getFirstPlatformId();
-        deviceId = getFirstDeviceIdForPlatformId(platformId);
+//        platformId = getFirstPlatformId();
+//        deviceId = getFirstDeviceIdForPlatformId(platformId);
+
+    	no.nixx.opencl.util.JOCLFindFastestDevice.Device device = JOCLFindFastestDevice.findBest();
+    	platformId = device.platform;
+    	deviceId = device.device;
         context = getContextForPlatformIdAndDeviceId(platformId, deviceId);
         commandQueue = getCommandQueueForContextAndPlatformIdAndDeviceId(context, deviceId);
         program = createProgramFromSource(context, ClasspathUtils.getClasspathResourceAsString("resize.cl"));

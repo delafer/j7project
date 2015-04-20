@@ -1,5 +1,7 @@
 package org.delafer.xanderView.general;
 
+import org.delafer.xanderView.gui.config.ApplConfiguration;
+
 
 public class Shutdown {
 
@@ -7,7 +9,7 @@ public class Shutdown {
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			public void run() {
 				System.out.println("Terminating application...");
-				Shutdown.exit();
+				ApplConfiguration.instance().save();
 			}
 		});
 	}

@@ -8,7 +8,7 @@ import java.nio.channels.FileChannel;
 import java.nio.channels.FileChannel.MapMode;
 
 import org.delafer.xanderView.XFileReader;
-import org.delafer.xanderView.scale.ScaleFactory;
+import org.delafer.xanderView.scale.ResizerFastAwt2D;
 import org.libjpegturbo.turbojpeg.TJDecompressor;
 import org.libjpegturbo.turbojpeg.TJScalingFactor;
 
@@ -26,7 +26,7 @@ public class TestAll {
         BufferedImage img = tjd.decompress(width, height, BufferedImage.TYPE_INT_RGB, 0);
 
    	  SWTDraw draw = new SWTDraw();
-   	  
-	  draw.drawImage(ScaleFactory.resize(img, 1680,1050));
+
+//	  draw.drawImage(ResizerFastAwt2D.resize(img, 1680,1050));
 	}
 }
