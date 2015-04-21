@@ -217,7 +217,7 @@ public abstract class AbstractFileProcessor {
    /**
     * The Class FileInfo.
     */
-   public class FileInfo {
+   public static class FileInfo {
 
       /**
        * The file.
@@ -325,7 +325,7 @@ public abstract class AbstractFileProcessor {
        *
        * @return the path relative
        */
-      public String getPathRelative() {
+      public String getPathRelative(File rootPath) {
          String fullPath = getPath();
          String relativePath = "";
          try {

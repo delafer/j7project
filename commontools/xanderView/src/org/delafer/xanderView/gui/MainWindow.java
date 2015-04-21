@@ -40,7 +40,7 @@ public final class MainWindow extends ToRefactor{
 
 	private void testInit() {
 //		String path = "D:\\test3.zip";
-		String path = "D:\\test3.zip";
+		String path = "D:\\test\\";
 		pointer = new CommonContainer(path, null);
 
 	}

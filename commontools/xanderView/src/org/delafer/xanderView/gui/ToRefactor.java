@@ -37,6 +37,7 @@ public abstract class ToRefactor {
 
 	protected void loadImage(ImageEntry<?> entry, ImagePanel panel) {
 		try {
+			if (entry == null) return ;
 			System.out.println(entry.name()+" "+entry.getIdentifier());
 			Metrics m = Metrics.start();
 			byte[] bytes = entry.content();
@@ -60,7 +61,7 @@ public abstract class ToRefactor {
 			TJDecompressor tjd = new TJDecompressor(bytes);
 			int width = sf.getScaled(tjd.getWidth());
 			int height = sf.getScaled(tjd.getHeight());
-			System.out.println(width+" "+height);
+//			System.out.println(width+" "+height);
 			BufferedImage img = tjd.decompress(width, height, BufferedImage.TYPE_INT_RGB, 0);
 			m.measure("JPEGDecode ");
 			Dimension dim = getSize();

@@ -56,7 +56,7 @@ public class ApplConfiguration {
 		Properties pro = new Properties();
 		pro.setProperty(CFG_HEIGHT, String.valueOf(600));
 		pro.setProperty(CFG_WIDTH, String.valueOf(800));
-		pro.setProperty(SCALER_FAST, String.valueOf(ScaleFactory.SCALER_OPENCL ));
+		pro.setProperty(SCALER_FAST, String.valueOf(ScaleFactory.SCALER_AWT_2D_FAST ));
 		return pro;
 	}
 

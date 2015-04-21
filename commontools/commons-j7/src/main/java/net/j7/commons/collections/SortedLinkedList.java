@@ -864,6 +864,7 @@ public class SortedLinkedList<E> extends AbstractSequentialList<E> implements Li
 
     public ListIterator<E> listIterator(E element) {
     	int insertionPoint = comparator != null ? Collections.binarySearch(this, element, comparator) : indexOf(element);
+    	System.out.println("Found: "+insertionPoint);
     	int index = (insertionPoint > -1) ? insertionPoint : (-insertionPoint) - 1;
         return new ListItr(index);
     }
