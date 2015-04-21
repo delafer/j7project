@@ -1,22 +1,38 @@
 package org.delafer.xanderView.interfaces;
 
+import java.io.File;
 import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.ListIterator;
 
 import net.j7.commons.collections.SortedLinkedList;
-import net.j7.commons.strings.BogusComparator;
 
 public class CommonContainer {
 
-	SortedLinkedList<IImageEntry> images;
-	ListIterator<IImageEntry> iterator;
+	SortedLinkedList<ImageEntry<?>> images;
+	ListIterator<ImageEntry<?>> iterator;
 	String location;
+	IAbstractReader reader;
+	ImageEntry current = null;
+	int direction = 0;
 
-	public CommonContainer(String location, Comparator<IImageEntry> comparator) {
+	public CommonContainer(String location, Comparator<ImageEntry<?>> comparator) {
 		super();
 		this.location = location;
-		images = new SortedLinkedList<IImageEntry>(comparator);
+		images = new SortedLinkedList<ImageEntry<?>>(comparator);
+		this.reader = getReader(location);
 		initialize();
+	}
+
+	private IAbstractReader getReader(String location) {
+		File aFile = new File(location);
+		boolean isFile = aFile.isFile();
+
+		if (isFile && location.toLowerCase().endsWith(".zip")) {
+			return new SevenZipReader();
+		}
+
+		return null;
 	}
 
 	public void initialize() {
@@ -30,20 +46,47 @@ public class CommonContainer {
 
 	}
 
-	protected void readStructure(SortedLinkedList<IImageEntry> list) throws Exception {
+	protected void readStructure(SortedLinkedList<ImageEntry<?>> list) throws Exception {
+		reader.read(location, list);
 	}
 
 
-	public IImageEntry getNext() {
-		return iterator.hasNext() ? iterator.next() : null;
+	public ImageEntry<?> getNext() {
+		if (direction == -1) {
+			if (iterator.hasNext()) {
+				iterator.next();
+				direction = 0;
+			}
+		}
+		if (iterator.hasNext()) {
+			current = iterator.next();
+			direction = 1;
+		} else {
+			current = null;
+		}
+
+		return current;
 	}
 
 	public int getNextIndex() {
 		return iterator.nextIndex();
 	}
 
-	public IImageEntry getPrevious() {
-		return iterator.hasPrevious() ? iterator.previous() : null;
+	public ImageEntry<?> getPrevious() {
+		if (direction == 1) {
+			if (iterator.hasPrevious()) {
+				iterator.previous();
+				direction = 0;
+			}
+		}
+		if (iterator.hasPrevious()) {
+			current = iterator.previous();
+			direction = -1;
+		} else {
+			current = null;
+		}
+
+		return current;
 	}
 
 	public int getPreviousIndex() {
@@ -54,22 +97,34 @@ public class CommonContainer {
 
 	}
 
+	public static void main(String[] args) {
+//		CommonContainer cc = new CommonContainer("d:\\test3.zip", null);
+//		show(cc.getNext());
+//		show(cc.getNext());
+////		show(cc.getPrevious());
+//		show(cc.getNext());
+//		show(cc.getPrevious());
+//		show(cc.getPrevious());
+//		show(cc.getPrevious());
 
-//	public static void main(String[] args) {
-//		SortedLinkedList<String> ts = new SortedLinkedList<String>(BogusComparator.instance());
-//
-//		ts.add("abcdd");
-//		ts.add("aaaa4");
-//		ts.add("aaaa3");
-//		ts.add("aaaa1");
-//		ts.add("abc");
-//
-//		ListIterator<String>a = ts.listIterator("aaaa3");
-//		a.next();
-//		System.out.println(a.next());
-//		System.out.println("xxx");
-//		for (String string : ts) {
-//			System.out.println(string);
-//		}
-//	}
+		LinkedList<Integer> l = new LinkedList<Integer>();
+		for (int i = 0; i < 10; i++) {
+			l.add(i);
+		}
+		ListIterator<Integer> li = l.listIterator();
+
+		System.out.println(li.next());
+		System.out.println(li.next());
+		System.out.println(li.previous());
+		System.out.println(li.previous());
+		System.out.println(li.next());
+		System.out.println(li.next());
+
+	}
+
+	private static void show(ImageEntry<?> next) {
+		System.out.println(next.name+" > "+next.getIdentifier());
+
+	}
+
 }

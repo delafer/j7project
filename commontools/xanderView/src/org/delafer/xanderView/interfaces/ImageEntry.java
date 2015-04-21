@@ -8,13 +8,14 @@ public abstract class ImageEntry<E> implements IImageEntry<E> {
 	protected String name;
 	protected long size;
 	protected ImageSize imageSize;
+	protected long crc;
 
 	public ImageEntry() {
 	}
 
 
 	public long CRC() {
-		return 0l;
+		return crc;
 	}
 
 	public String name() {

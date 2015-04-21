@@ -17,11 +17,17 @@ public class ImagePanel extends JPanel {
     }
 
     public void showImage(Image image) {
+    	System.out.println("redraw it");
     	 this.image = image;
+//    	 this.invalidate();
+//    	 this.doLayout();
+//    	 this.layout();
+//    	 this.revalidate();
     	 this.updateUI();
     }
 
     public void paintComponent(Graphics g) {
+    	System.out.println("redraw it2 " +image.getWidth(null)+" <> "+image.getHeight(null));
         super.paintComponent(g);  // Paint background
         // Draw image at its natural size first.
         if (image!=null) {

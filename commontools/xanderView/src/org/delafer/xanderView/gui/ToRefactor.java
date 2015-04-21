@@ -2,12 +2,14 @@ package org.delafer.xanderView.gui;
 
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 import net.j7.commons.utils.Metrics;
 import no.nixx.opencl.ImageResizer;
 
 import org.delafer.xanderView.XFileReader;
 import org.delafer.xanderView.common.ImageSize;
+import org.delafer.xanderView.interfaces.ImageEntry;
 import org.delafer.xanderView.orientation.CommonRotator;
 import org.delafer.xanderView.orientation.OrientationCommons;
 import org.delafer.xanderView.orientation.OrientationCommons.Orientation;
@@ -23,15 +25,38 @@ public abstract class ToRefactor {
 
 	protected void loadImage(String location, ImagePanel panel) {
 		try {
+			Metrics m = Metrics.start();
+			byte[] bytes = XFileReader.readNIO(location);
+			loadImage(bytes, panel);
+			m.measure("IO Read ");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+
+	protected void loadImage(ImageEntry<?> entry, ImagePanel panel) {
+		try {
+			System.out.println(entry.name()+" "+entry.getIdentifier());
+			Metrics m = Metrics.start();
+			byte[] bytes = entry.content();
+			loadImage(bytes, panel);
+			m.measure("IO Read ");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+
+
+	protected void loadImage(byte[] bytes, ImagePanel panel) {
+		try {
 			//ver1 1243,1255,1269,1249,1254,1254,1254
 			//ver 1224, 1225,1223,1233
 			//vs is faster
-			System.out.println(location);
 			Metrics m = Metrics.start();
-			TJScalingFactor sf =  new TJScalingFactor(1, 1);
-			byte[] bytes = XFileReader.readNIO(location);
-			m.measure("IO Read ");
 
+			TJScalingFactor sf =  new TJScalingFactor(1, 1);
 			TJDecompressor tjd = new TJDecompressor(bytes);
 			int width = sf.getScaled(tjd.getWidth());
 			int height = sf.getScaled(tjd.getHeight());
@@ -53,8 +78,7 @@ public abstract class ToRefactor {
 //			BufferedImage res = ir.rotate(res1, Orientation.RotatedRight);
 			m.measure("Flip ");
 
-			panel.image = res;
-			panel.updateUI();
+			panel.showImage(res);
 			m.measure("Draw ");
 
 		} catch (Exception e) {

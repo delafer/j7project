@@ -1,8 +1,12 @@
 package org.delafer.xanderView.interfaces;
 
-import java.util.Arrays;
-
-import net.sf.sevenzipjbinding.*;
+import net.sf.sevenzipjbinding.ExtractAskMode;
+import net.sf.sevenzipjbinding.ExtractOperationResult;
+import net.sf.sevenzipjbinding.IArchiveExtractCallback;
+import net.sf.sevenzipjbinding.IInArchive;
+import net.sf.sevenzipjbinding.ISequentialOutStream;
+import net.sf.sevenzipjbinding.PropID;
+import net.sf.sevenzipjbinding.SevenZipException;
 
 public class ZipImageEntry extends ImageEntry<Integer> {
 
@@ -27,7 +31,9 @@ public class ZipImageEntry extends ImageEntry<Integer> {
 	public byte[] content() {
 
 		try {
-			archive.extract(new int[] {identifier}, false, new MyExtractCallback(archive, size));
+			MyExtractCallback extract = new MyExtractCallback(archive, size);
+			archive.extract(new int[] {identifier}, false, extract);
+			return extract.data();
 		} catch (SevenZipException e) {
 			e.printStackTrace();
 		}
@@ -65,13 +71,16 @@ public class ZipImageEntry extends ImageEntry<Integer> {
 			};
 		}
 
+		public byte[] data() {
+			return this.content;
+		}
+
 		public void prepareOperation(ExtractAskMode extractAskMode) throws SevenZipException {}
 
 		public void setTotal(long total) throws SevenZipException {}
 
 		public void setCompleted(long completeValue) throws SevenZipException {}
 
-		@Override
 		public void setOperationResult(ExtractOperationResult extractOperationResult) throws SevenZipException {}
 
 	}

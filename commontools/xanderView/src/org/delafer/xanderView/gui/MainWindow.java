@@ -7,6 +7,7 @@ import java.awt.Dimension;
 import org.delafer.xanderView.file.FilePointer;
 import org.delafer.xanderView.file.ImageFinder;
 import org.delafer.xanderView.gui.config.ApplConfiguration;
+import org.delafer.xanderView.interfaces.CommonContainer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
 import org.eclipse.swt.graphics.Point;
@@ -22,7 +23,7 @@ public final class MainWindow extends ToRefactor{
 	private Display display;
 	private Composite cmpEmbedded;
 	private ImagePanel panel;
-	private static FilePointer pointer;
+	private static CommonContainer pointer;
 
 	private static final Point SHELL_SIZE = new Point(940, 720);
 
@@ -38,9 +39,9 @@ public final class MainWindow extends ToRefactor{
 	}
 
 	private void testInit() {
-		String path = "T:\\really.2015.new5.pb\\jane_k8037.jpg";
-		String[] files = ImageFinder.getImages(path);
-		pointer = new FilePointer(files, path);
+//		String path = "D:\\test3.zip";
+		String path = "D:\\test3.zip";
+		pointer = new CommonContainer(path, null);
 
 	}
 
@@ -126,13 +127,13 @@ public final class MainWindow extends ToRefactor{
 		case SWT.ARROW_UP:
 		case SWT.BS:
 		case SWT.PAGE_UP:
-			loadImage(pointer.prev(), panel);
+			loadImage(pointer.getPrevious(), panel);
 			break;
 		case SWT.ARROW_RIGHT:
 		case SWT.ARROW_DOWN:
 		case SWT.SPACE:
 		case SWT.PAGE_DOWN:
-			loadImage(pointer.next(), panel);
+			loadImage(pointer.getNext(), panel);
 			break;
 		case SWT.CR:
 			toggleFullscreen();
