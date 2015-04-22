@@ -91,6 +91,12 @@ public final class MainWindow extends ToRefactor{
 
 		cmpEmbedded = new Composite(shell,  EMBEDDED | NO_REDRAW_RESIZE  | NO_BACKGROUND  | NO_SCROLL );
 		cmpEmbedded.setLayout(null);
+		cmpEmbedded.addListener (SWT.Resize,  new Listener () {
+		    public void handleEvent (Event e) {
+		        Rectangle rect = shell.getClientArea ();
+		        System.out.println(rect);
+		      }
+		    });
 		java.awt.Frame awtFrame = SWT_AWT.new_Frame( cmpEmbedded );
 		awtFrame.add(panel);
 	}

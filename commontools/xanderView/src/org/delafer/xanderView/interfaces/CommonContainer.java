@@ -91,7 +91,6 @@ public class CommonContainer {
 	}
 
 	public int currentIndex() {
-		System.out.println(Args.fill("#(%1)#   %2 < x < %3", direction, this.getPreviousIndex(), this.getNextIndex()));
 		int idx = this.getNextIndex();
 		if (direction == -1) idx++;
 		return idx;
