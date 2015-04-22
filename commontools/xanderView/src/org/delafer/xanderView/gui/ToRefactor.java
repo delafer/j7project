@@ -2,19 +2,15 @@ package org.delafer.xanderView.gui;
 
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 
+import net.j7.commons.strings.Args;
 import net.j7.commons.utils.Metrics;
-import no.nixx.opencl.ImageResizer;
 
 import org.delafer.xanderView.XFileReader;
 import org.delafer.xanderView.common.ImageSize;
+import org.delafer.xanderView.interfaces.CommonContainer;
 import org.delafer.xanderView.interfaces.ImageEntry;
-import org.delafer.xanderView.orientation.CommonRotator;
 import org.delafer.xanderView.orientation.OrientationCommons;
-import org.delafer.xanderView.orientation.OrientationCommons.Orientation;
-import org.delafer.xanderView.orientation.Rotator2D;
-import org.delafer.xanderView.scale.ResizerFastAwt2D;
 import org.delafer.xanderView.scale.ScaleFactory;
 import org.libjpegturbo.turbojpeg.TJDecompressor;
 import org.libjpegturbo.turbojpeg.TJScalingFactor;
@@ -22,26 +18,27 @@ import org.libjpegturbo.turbojpeg.TJScalingFactor;
 public abstract class ToRefactor {
 
 	public abstract Dimension getSize();
+//
+//	protected void loadImage(String location, ImagePanel panel) {
+//		try {
+//			Metrics m = Metrics.start();
+//			byte[] bytes = XFileReader.readNIO(location);
+//			loadImage(bytes, panel);
+//			m.measure("IO Read ");
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//	}
 
-	protected void loadImage(String location, ImagePanel panel) {
-		try {
-			Metrics m = Metrics.start();
-			byte[] bytes = XFileReader.readNIO(location);
-			loadImage(bytes, panel);
-			m.measure("IO Read ");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 
-
-	protected void loadImage(ImageEntry<?> entry, ImagePanel panel) {
+	protected void loadImage(CommonContainer container, ImageEntry<?> entry, ImagePanel panel) {
 		try {
 			if (entry == null) return ;
 			System.out.println(entry.name()+" "+entry.getIdentifier());
 			Metrics m = Metrics.start();
 			byte[] bytes = entry.content();
-			loadImage(bytes, panel);
+			String info = Args.fill("%1 [%2/%3]", entry.name(),""+container.currentIndex(),""+container.size() );
+			loadImage(bytes, info, panel);
 			m.measure("IO Read ");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -50,7 +47,7 @@ public abstract class ToRefactor {
 
 
 
-	protected void loadImage(byte[] bytes, ImagePanel panel) {
+	protected void loadImage(byte[] bytes, String text, ImagePanel panel) {
 		try {
 			//ver1 1243,1255,1269,1249,1254,1254,1254
 			//ver 1224, 1225,1223,1233
@@ -79,7 +76,7 @@ public abstract class ToRefactor {
 //			BufferedImage res = ir.rotate(res1, Orientation.RotatedRight);
 			m.measure("Flip ");
 
-			panel.showImage(res);
+			panel.showImage(res, text);
 			m.measure("Draw ");
 
 		} catch (Exception e) {

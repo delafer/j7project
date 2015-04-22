@@ -86,13 +86,13 @@ public class ResourceReader {
 	 * @param name the name
 	 * @return the resource
 	 */
-	private String getResource(String name) {
+	private String getResource(Class<?> clz, String name) {
 
 		  String ret = cached.get(name);
 
 		  if (null == ret) {
 			  try {
-				  InputStream stream = this.getClass().getResourceAsStream(name);
+				  InputStream stream = clz.getResourceAsStream(name);
 				  ret = convertStreamToString(stream, DEFAULT_ENCODING);
 			  } catch (IOException e) {
 				  logger.error("",e);
@@ -111,8 +111,8 @@ public class ResourceReader {
 	 * @param name the name
 	 * @return the template
 	 */
-	public static String resource(String name) {
-		   return ResourceReader.instance().getResource(name);
+	public static String resource(Class<?> clz, String name) {
+		   return ResourceReader.instance().getResource(clz, name);
 	 }
 
 

@@ -6,9 +6,14 @@ import java.text.AttributedString;
 
 import javax.swing.JPanel;
 
+import net.j7.commons.strings.StringUtils;
+
 public class ImagePanel extends JPanel {
 	private static final long serialVersionUID = 9162619010168531038L;
 	Image image;
+	String text;
+
+	private final static transient Font font = new Font("MS Reference Sans Serif", Font.BOLD, 20);
 
     public ImagePanel() {
         this.setBackground(Color.BLACK);
@@ -16,8 +21,9 @@ public class ImagePanel extends JPanel {
 //        this.setIgnoreRepaint(false);
     }
 
-    public void showImage(Image image) {
+    public void showImage(Image image, String text) {
     	 this.image = image;
+    	 this.text = text;
 //    	 this.invalidate();
 //    	 this.doLayout();
 //    	 this.layout();
@@ -39,15 +45,17 @@ public class ImagePanel extends JPanel {
         	g.drawImage(image, x, y, null);
         }
 
+        if (!StringUtils.isEmpty(text)) {
 
-//        AttributedString as = new AttributedString("An AttributedString holds text and related attribute information.");
-//
-//        as.addAttribute(TextAttribute.FONT, new Font("Courier New", Font.BOLD, 36));
-//        as.addAttribute(TextAttribute.FOREGROUND, Color.YELLOW);
-//
-//
-//        g.setFont(new Font("Arial", Font.PLAIN, 20));
-//        g.drawString(as.getIterator(), 10, 20);
+        	AttributedString as = new AttributedString(text);
+
+            as.addAttribute(TextAttribute.FONT,font);
+            as.addAttribute(TextAttribute.FOREGROUND, Color.GREEN);
+
+//            g.setFont(font);
+            g.drawString(as.getIterator(), 12, g.getClipBounds().height - 15);
+        }
+
 
     }
 }

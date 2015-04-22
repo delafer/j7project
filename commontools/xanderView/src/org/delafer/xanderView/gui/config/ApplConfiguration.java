@@ -24,6 +24,7 @@ public class ApplConfiguration {
 	public static final String CFG_HEIGHT = "Height";
 	public static final String SCALER_FAST = "scale.speed";
 	public static final String SCALER_QUALITY = "scale.quality";
+	public static final String LOOP_CURRENT_SOURCE = "loop.source";
 
 	/**
 	 * Lazy-loaded Singleton, by Bill Pugh *.
@@ -56,7 +57,8 @@ public class ApplConfiguration {
 		Properties pro = new Properties();
 		pro.setProperty(CFG_HEIGHT, String.valueOf(600));
 		pro.setProperty(CFG_WIDTH, String.valueOf(800));
-		pro.setProperty(SCALER_FAST, String.valueOf(ScaleFactory.SCALER_AWT_2D_FAST ));
+		pro.setProperty(SCALER_FAST, String.valueOf(ScaleFactory.SCALER_OPENCL ));
+		pro.setProperty(LOOP_CURRENT_SOURCE, String.valueOf(true));
 		return pro;
 	}
 

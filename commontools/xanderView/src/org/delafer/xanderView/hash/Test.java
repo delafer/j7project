@@ -21,7 +21,7 @@ public class Test {
 
 		long ii= 0;
 		Metrics m1 = Metrics.start();
-		for (long i = 10000000; i < 10100000; i++) {
+		for (long i = 10000000; i < 20100000; i++) {
 			ii = i;
 			byte[] buf = ByteUtils.longToByteArray(ii);
 			long res = hash.hash64().hash(buf, 0, buf.length, 65536);

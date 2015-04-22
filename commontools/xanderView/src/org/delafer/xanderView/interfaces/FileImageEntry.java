@@ -2,18 +2,14 @@ package org.delafer.xanderView.interfaces;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.lang.reflect.Method;
+import java.nio.ByteBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileChannel.MapMode;
 
 import net.j7.commons.base.Equals;
-import net.sf.sevenzipjbinding.ExtractAskMode;
-import net.sf.sevenzipjbinding.ExtractOperationResult;
-import net.sf.sevenzipjbinding.IArchiveExtractCallback;
 import net.sf.sevenzipjbinding.IInArchive;
-import net.sf.sevenzipjbinding.ISequentialOutStream;
-import net.sf.sevenzipjbinding.PropID;
-import net.sf.sevenzipjbinding.SevenZipException;
 
 public class FileImageEntry extends ImageEntry<String> {
 
@@ -44,6 +40,22 @@ public class FileImageEntry extends ImageEntry<String> {
 		return null;
 	}
 
+	private static void closeDirectBuffer(ByteBuffer cb) {
+	    if (!cb.isDirect()) return;
+
+	    // we could use this type cast and call functions without reflection code,
+	    // but static import from sun.* package is risky for non-SUN virtual machine.
+	    //try { ((sun.nio.ch.DirectBuffer)cb).cleaner().clean(); } catch (Exception ex) { }
+	    try {
+	        Method cleaner = cb.getClass().getMethod("cleaner");
+	        cleaner.setAccessible(true);
+	        Method clean = Class.forName("sun.misc.Cleaner").getMethod("clean");
+	        clean.setAccessible(true);
+	        clean.invoke(cleaner.invoke(cb));
+	    } catch(Exception ex) { }
+	    cb = null;
+	}
+
 	public final static byte[] readNIO(String fileName) throws IOException {
 		FileInputStream fis = new FileInputStream(fileName);
 		FileChannel fc = fis.getChannel();
@@ -51,9 +63,12 @@ public class FileImageEntry extends ImageEntry<String> {
 		MappedByteBuffer buf = fc.map(MapMode.READ_ONLY, 0, size);
         final byte[] bytes = new byte[size];
         buf.get(bytes);
-
-        fis.close();
+        buf.clear();
+        fc.force(true);
         fc.close();
+        fis.close();
+        closeDirectBuffer(buf);
+
         return bytes;
 	}
 

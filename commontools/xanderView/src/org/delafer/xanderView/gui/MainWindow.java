@@ -127,13 +127,13 @@ public final class MainWindow extends ToRefactor{
 		case SWT.ARROW_UP:
 		case SWT.BS:
 		case SWT.PAGE_UP:
-			loadImage(pointer.getPrevious(), panel);
+			loadImage(pointer, pointer.getPrevious(), panel);
 			break;
 		case SWT.ARROW_RIGHT:
 		case SWT.ARROW_DOWN:
 		case SWT.SPACE:
 		case SWT.PAGE_DOWN:
-			loadImage(pointer.getNext(), panel);
+			loadImage(pointer, pointer.getNext(), panel);
 			break;
 		case SWT.CR:
 			toggleFullscreen();

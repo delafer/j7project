@@ -8,7 +8,9 @@ import java.util.ListIterator;
 
 import net.j7.commons.base.Equals;
 import net.j7.commons.collections.SortedLinkedList;
+import net.j7.commons.strings.Args;
 
+import org.delafer.xanderView.gui.config.ApplConfiguration;
 import org.delafer.xanderView.interfaces.IAbstractReader.FileEvent;
 
 public class CommonContainer {
@@ -19,12 +21,19 @@ public class CommonContainer {
 	IAbstractReader reader;
 	ImageEntry<?> current = null;
 	int direction = 0;
+	boolean loop;
+
+
+	public int size() {
+		return images.size();
+	}
 
 	public CommonContainer(String location, Comparator<ImageEntry<?>> comparator) {
 		super();
 		this.location = location;
 		images = new SortedLinkedList<ImageEntry<?>>(comparator);
 		this.reader = getReader(location);
+		loop = ApplConfiguration.instance().getBoolean(ApplConfiguration.LOOP_CURRENT_SOURCE);
 		initialize();
 	}
 
@@ -81,6 +90,12 @@ public class CommonContainer {
 		reader.read(location, list);
 	}
 
+	public int currentIndex() {
+		System.out.println(Args.fill("#(%1)#   %2 < x < %3", direction, this.getPreviousIndex(), this.getNextIndex()));
+		int idx = this.getNextIndex();
+		if (direction == -1) idx++;
+		return idx;
+	}
 
 	public ImageEntry<?> getNext() {
 		if (direction == -1) {
@@ -93,10 +108,34 @@ public class CommonContainer {
 			current = iterator.next();
 			direction = 1;
 		} else {
+			if (loop) {
+				gotoFirst();
+			}
 			//current = null;
 		}
 
 		return current;
+	}
+
+	private void gotoLast() {
+		while (iterator.hasNext()) {
+			current = iterator.next();
+		}
+		beep();
+		direction = 1;
+	}
+
+	private void beep() {
+		java.awt.Toolkit.getDefaultToolkit().beep();
+
+	}
+
+	private void gotoFirst() {
+		while (iterator.hasPrevious()) {
+			current = iterator.previous();
+		}
+		beep();
+		direction = -1;
 	}
 
 	public int getNextIndex() {
@@ -114,6 +153,9 @@ public class CommonContainer {
 			current = iterator.previous();
 			direction = -1;
 		} else {
+			if (loop) {
+				gotoLast();
+			}
 			//current = null;
 		}
 
@@ -129,13 +171,18 @@ public class CommonContainer {
 	}
 
 	private void updateIterator() {
-		System.out.println(1);
-		System.out.println(iterator.nextIndex()+" <> "+iterator.previousIndex());
-		System.out.println("Current: "+current);
+//		System.out.println(1);
+//		System.out.println(iterator.nextIndex()+" <> "+iterator.previousIndex());
+//		System.out.println("Current: "+current);
 		iterator = current != null ? images.listIterator(current) : images.listIterator();
-		iterator.next();
-		System.out.println(iterator.nextIndex()+" <> "+iterator.previousIndex());
-		direction = 1;
+		if (iterator.hasNext()) {
+			iterator.next();
+			direction = 1;
+		} else {
+			direction = 0;
+		}
+//		System.out.println(iterator.nextIndex()+" <> "+iterator.previousIndex());
+
 	}
 
 	public interface ContentChangeWatcher {
@@ -144,35 +191,6 @@ public class CommonContainer {
 
 	}
 
-	public static void main(String[] args) {
-//		CommonContainer cc = new CommonContainer("d:\\test3.zip", null);
-//		show(cc.getNext());
-//		show(cc.getNext());
-////		show(cc.getPrevious());
-//		show(cc.getNext());
-//		show(cc.getPrevious());
-//		show(cc.getPrevious());
-//		show(cc.getPrevious());
-
-		LinkedList<Integer> l = new LinkedList<Integer>();
-		for (int i = 0; i < 10; i++) {
-			l.add(i);
-		}
-		ListIterator<Integer> li = l.listIterator();
-
-		System.out.println(li.next());
-		System.out.println(li.next());
-		System.out.println(li.previous());
-		System.out.println(li.previous());
-		System.out.println(li.next());
-		System.out.println(li.next());
-
-	}
-
-	private static void show(ImageEntry<?> next) {
-		System.out.println(next.name+" > "+next.getIdentifier());
-
-	}
 
 	public ImageEntry<?> getCurrent() {
 		return current;
