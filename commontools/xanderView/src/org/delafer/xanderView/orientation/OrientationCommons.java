@@ -24,24 +24,28 @@ public class OrientationCommons {
 
 	public enum Orientation {
 
-		Original(stOriginal, stRotatedLeft, stRotatedRight, stFlipVertical, stFlipHorizonal),
-		RotatedLeft(stRotatedLeft, stTurnedAbout, stOriginal, stHFlipAndLeft, stHFlipAndRight),
-		RotatedRight(stRotatedRight, stOriginal, stTurnedAbout, stHFlipAndRight, stHFlipAndLeft),
-		TurnedAbout(stTurnedAbout, stRotatedRight, stRotatedLeft, stFlipHorizonal, stFlipVertical),
-		FlipVertical(stFlipVertical, stHFlipAndRight, stHFlipAndLeft, stOriginal, stTurnedAbout),
-		FlipHorizonal(stFlipHorizonal, stHFlipAndLeft, stHFlipAndRight, stTurnedAbout, stOriginal),
+		Original(stOriginal, stRotatedLeft, stRotatedRight, stFlipVertical, stFlipHorizonal, false),
+		RotatedLeft(stRotatedLeft, stTurnedAbout, stOriginal, stHFlipAndLeft, stHFlipAndRight, true),
+		RotatedRight(stRotatedRight, stOriginal, stTurnedAbout, stHFlipAndRight, stHFlipAndLeft, true),
+		TurnedAbout(stTurnedAbout, stRotatedRight, stRotatedLeft, stFlipHorizonal, stFlipVertical, false),
+		FlipVertical(stFlipVertical, stHFlipAndRight, stHFlipAndLeft, stOriginal, stTurnedAbout, false),
+		FlipHorizonal(stFlipHorizonal, stHFlipAndLeft, stHFlipAndRight, stTurnedAbout, stOriginal, false),
 
-		HFlipAndRight(stHFlipAndRight, stFlipHorizonal, stFlipVertical, stRotatedRight, stRotatedLeft),
-		HFlipAndLeft(stHFlipAndLeft, stFlipVertical, stFlipHorizonal, stRotatedLeft, stRotatedRight);
+		HFlipAndRight(stHFlipAndRight, stFlipHorizonal, stFlipVertical, stRotatedRight, stRotatedLeft, true),
+		HFlipAndLeft(stHFlipAndLeft, stFlipVertical, stFlipHorizonal, stRotatedLeft, stRotatedRight, true);
 
 	int[] gotos;
-
-	Orientation(int ownCode, int onLeft, int onRight, int onVertical, int onHorizontal) {
+	boolean swapXY;
+	Orientation(int ownCode, int onLeft, int onRight, int onVertical, int onHorizontal, boolean swapXY) {
 		gotos = new int[] {onLeft, onRight, onVertical, onHorizontal};
+		this.swapXY = swapXY;
+
 
 	}
 
-	Orientation newState(Action action) {
+	public boolean swapXY() {return swapXY;}
+
+	public Orientation newState(Action action) {
 		int newCode = gotos[action.code];
 		switch (newCode) {
 		case stOriginal:

@@ -7,22 +7,21 @@ import no.nixx.opencl.ImageRotator.Rotation;
 
 public class RotatorCPU extends CommonRotator {
 
-	private ImageRotator rotator;
 
 	public RotatorCPU() {
-		this.rotator = new ImageRotator();
 	}
 
 	@Override
 	public BufferedImage flipVertical(BufferedImage inp) {
 		// TODO Auto-generated method stub
-		return null;
+		Rotator2D dd = new Rotator2D();
+		return dd.flipVertical(inp);
 	}
 
 	@Override
 	public BufferedImage flipHorizontal(BufferedImage inp) {
-		// TODO Auto-generated method stub
-		return null;
+		Rotator2D dd = new Rotator2D();
+		return dd.flipHorizontal(inp);
 	}
 
 	@Override
