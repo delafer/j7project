@@ -1,6 +1,9 @@
 package org.delafer.xanderView.gui;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.font.TextAttribute;
 import java.awt.image.BufferedImage;
 import java.text.AttributedString;
@@ -10,9 +13,11 @@ import javax.swing.JPanel;
 import net.j7.commons.strings.StringUtils;
 
 import org.delafer.xanderView.common.ImageSize;
-import org.delafer.xanderView.orientation.*;
+import org.delafer.xanderView.orientation.CommonRotator;
+import org.delafer.xanderView.orientation.OrientationCommons;
 import org.delafer.xanderView.orientation.OrientationCommons.Action;
 import org.delafer.xanderView.orientation.OrientationCommons.Orientation;
+import org.delafer.xanderView.orientation.RotatorCPU;
 import org.delafer.xanderView.scale.ScaleFactory;
 
 public class ImagePanel extends JPanel {
@@ -26,8 +31,10 @@ public class ImagePanel extends JPanel {
 
     public ImagePanel() {
         this.setBackground(Color.BLACK);
+        this.setForeground(Color.BLACK);
         this.setDoubleBuffered(true);
-        this.setIgnoreRepaint(false);
+        this.setIgnoreRepaint(true);
+        this.setOpaque(false);
     }
 
 
@@ -100,22 +107,98 @@ public class ImagePanel extends JPanel {
 
 
     public void showImage() {
-//    	 this.invalidate(); this.doLayout(); this.layout(); this.revalidate();
-    	 this.updateUI();
+    	Graphics g = getGraphics();
+    	paint(g);
     }
 
-    public void paintComponent(Graphics g) {
-
-    	super.paintComponent(g);
-
-		if(updater == null || !updater.isAlive()) {
-			updater = new LazyUpdater(this, g);
-		}
-		updater.update(g);
 
 
+//    @Override
+//    public void repaint() {
+//    	System.out.println("repaint");
+//    	super.repaint();
+//    }
+//
+//    @Override
+//	public void updateUI() {
+//    	System.out.println("updateUI");
+//		super.updateUI();
+//	}
+//
+//
+//
+//	@Override
+//	public void update(Graphics g) {
+//		System.out.println("update(Graphics g)");
+//		super.update(g);
+//	}
+//
+//
+//
+//	@Override
+//	public void paint(Graphics g) {
+//		System.out.println("paint(Graphics g)");
+//		super.paint(g);
+//	}
+//
+//
+//
+//	@Override
+//	public void paintImmediately(Rectangle r) {
+//		System.out.println("paintImmediately(Rectangle r)");
+//		super.paintImmediately(r);
+//	}
+//
+//
+//
+//	@Override
+//	public void paintComponents(Graphics g) {
+//		System.out.println("paintComponents(Graphics g)");
+//		super.paintComponents(g);
+//	}
+//
+//
+//
+//	@Override
+//	public void paintAll(Graphics g) {
+//		System.out.println("paintAll(Graphics g)");
+//		super.paintAll(g);
+//	}
+
+
+
+	public void paintComponent(Graphics g) {
+//		System.out.println("paintComponent(Graphics g)");
+        super.paintComponent(g);  // Paint background
+        paintCanvas(this, g);
 
     }
+
+
+
+	public static void paintCanvas(ImagePanel panel, Graphics g) {
+
+		g.setColor(Color.BLACK);
+		g.fillRect(0, 0, g.getClipBounds().width, g.getClipBounds().height);
+        if (panel.drawImage!=null) {
+        	Rectangle dim = g.getClipBounds();
+        	int x = (dim.width - panel.drawImage.getWidth(null)) / 2;
+        	int y  = (dim.height - panel.drawImage.getHeight(null)) / 2;
+
+        	g.drawImage(panel.drawImage, x, y, null);
+        }
+
+        if (!StringUtils.isEmpty(panel.text)) {
+
+        	AttributedString as = new AttributedString(panel.text);
+
+            as.addAttribute(TextAttribute.FONT,font);
+            as.addAttribute(TextAttribute.FOREGROUND, Color.GREEN);
+
+//            g.setFont(font);
+            g.drawString(as.getIterator(), 12, g.getClipBounds().height - 15);
+        }
+	}
 
 
 	private static class LazyUpdater extends Thread {

@@ -1,22 +1,38 @@
 package org.delafer.xanderView.gui;
 
-import static org.eclipse.swt.SWT.*;
+import static org.eclipse.swt.SWT.APPLICATION_MODAL;
+import static org.eclipse.swt.SWT.DOUBLE_BUFFERED;
+import static org.eclipse.swt.SWT.EMBEDDED;
+import static org.eclipse.swt.SWT.HORIZONTAL;
+import static org.eclipse.swt.SWT.NO_BACKGROUND;
+import static org.eclipse.swt.SWT.NO_REDRAW_RESIZE;
+import static org.eclipse.swt.SWT.NO_SCROLL;
+import static org.eclipse.swt.SWT.ON_TOP;
+import static org.eclipse.swt.SWT.SHELL_TRIM;
 
 import java.awt.Dimension;
+import java.awt.event.MouseAdapter;
 
-import org.delafer.xanderView.file.FilePointer;
-import org.delafer.xanderView.file.ImageFinder;
+import javax.swing.SwingUtilities;
+
 import org.delafer.xanderView.gui.config.ApplConfiguration;
 import org.delafer.xanderView.interfaces.CommonContainer;
 import org.delafer.xanderView.orientation.OrientationCommons.Action;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.widgets.*;
-
-import com.sun.glass.ui.Application;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.swt.widgets.Monitor;
+import org.eclipse.swt.widgets.Shell;
 
 public final class MainWindow extends ToRefactor{
 
@@ -48,7 +64,7 @@ public final class MainWindow extends ToRefactor{
 
 	protected void show () {
 
-		shell = new Shell(display, SHELL_TRIM | ON_TOP | NO_REDRAW_RESIZE | NO_BACKGROUND | APPLICATION_MODAL | NO_SCROLL );
+		shell = new Shell(display, SHELL_TRIM | ON_TOP | NO_REDRAW_RESIZE | NO_BACKGROUND | APPLICATION_MODAL | NO_SCROLL | DOUBLE_BUFFERED );
 		shell.setLayout(new FillLayout(HORIZONTAL));
 		shell.setSize( SHELL_SIZE );
 
@@ -67,11 +83,12 @@ public final class MainWindow extends ToRefactor{
 
 		shell.addListener(SWT.Resize, new Listener() {
 	        public void handleEvent(Event e) {
-	        	System.out.println(">"+cmpEmbedded.getSize().x+ "<>"+cmpEmbedded.getSize().y);
-	        	System.out.println(">>"+cmpEmbedded.getClientArea().width+ "<>"+cmpEmbedded.getClientArea().height);
-	        	System.out.println(">>>"+panel.getWidth()+"<>"+panel.getHeight());
-	        	System.out.println("4>"+panel.getBounds().width+"<>"+panel.getBounds().height);
-	        	System.out.println("4>"+panel.getSize().width+"<>"+panel.getSize().height);
+	          SwingUtilities.invokeLater(new Runnable() {
+	            public void run() {
+	            	MainWindow.this.panel.preRenderImage();
+	            	MainWindow.this.panel.showImage();
+	            }
+	         });
 	        }
 
 	    });
@@ -92,7 +109,7 @@ public final class MainWindow extends ToRefactor{
 	private void createImageCanvas() {
 		panel = new ImagePanel ();
 
-		cmpEmbedded = new Composite(shell,  EMBEDDED | NO_REDRAW_RESIZE  | NO_BACKGROUND  | NO_SCROLL );
+		cmpEmbedded = new Composite(shell,  EMBEDDED | NO_REDRAW_RESIZE  | NO_BACKGROUND  | NO_SCROLL | DOUBLE_BUFFERED);
 		cmpEmbedded.setLayout(null);
 		cmpEmbedded.addListener (SWT.Resize,  new Listener () {
 		    public void handleEvent (Event e) {
@@ -101,6 +118,21 @@ public final class MainWindow extends ToRefactor{
 		      }
 		    });
 		java.awt.Frame awtFrame = SWT_AWT.new_Frame( cmpEmbedded );
+		awtFrame.addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mouseClicked(java.awt.event.MouseEvent e) {
+				if(e.getClickCount()==2){
+					Display.getDefault().asyncExec(new Runnable() {
+						public void run() {
+							toggleFullscreen();
+						}
+					});
+
+		        }
+			}
+
+		});
 		awtFrame.add(panel);
 	}
 
@@ -182,11 +214,11 @@ public final class MainWindow extends ToRefactor{
 
 		shell.setModified(true);
 
-    	System.out.println(">"+cmpEmbedded.getSize().x+ "<>"+cmpEmbedded.getSize().y);
-    	System.out.println(">>"+cmpEmbedded.getClientArea().width+ "<>"+cmpEmbedded.getClientArea().height);
-    	System.out.println(">>>"+panel.getWidth()+"<>"+panel.getHeight());
-    	System.out.println("4>"+panel.getBounds().width+"<>"+panel.getBounds().height);
-    	System.out.println("4>"+panel.getSize().width+"<>"+panel.getSize().height);
+//    	System.out.println(">"+cmpEmbedded.getSize().x+ "<>"+cmpEmbedded.getSize().y);
+//    	System.out.println(">>"+cmpEmbedded.getClientArea().width+ "<>"+cmpEmbedded.getClientArea().height);
+//    	System.out.println(">>>"+panel.getWidth()+"<>"+panel.getHeight());
+//    	System.out.println("4>"+panel.getBounds().width+"<>"+panel.getBounds().height);
+//    	System.out.println("4>"+panel.getSize().width+"<>"+panel.getSize().height);
 	}
 
 	Menu createMenuBar() {
