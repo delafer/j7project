@@ -8,6 +8,7 @@ import org.delafer.xanderView.file.FilePointer;
 import org.delafer.xanderView.file.ImageFinder;
 import org.delafer.xanderView.gui.config.ApplConfiguration;
 import org.delafer.xanderView.interfaces.CommonContainer;
+import org.delafer.xanderView.orientation.OrientationCommons.Action;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
 import org.eclipse.swt.graphics.Point;
@@ -136,6 +137,22 @@ public final class MainWindow extends ToRefactor{
 		case SWT.BS:
 		case SWT.PAGE_UP:
 			loadImage(pointer, pointer.getPrevious(), panel);
+			break;
+		case 108:
+			panel.rotate(Action.RotateLeft);
+			panel.showImage();
+			break;
+		case 114:
+			panel.rotate(Action.RotateRight);
+			panel.showImage();
+			break;
+		case 118:
+			panel.rotate(Action.FlipVertical);
+			panel.showImage();
+			break;
+		case 104:
+			panel.rotate(Action.FlipHorizontal);
+			panel.showImage();
 			break;
 		case SWT.ARROW_RIGHT:
 		case SWT.ARROW_DOWN:

@@ -13,6 +13,12 @@ public final class ImageSize {
 		this.height = height;
 	}
 
+	public void swapXY() {
+		final int hTmp = this.height;
+		this.height = this.width;
+		this.width = hTmp;
+	}
+
 	public final static ImageSize as(int width, int height) {
 		return new ImageSize(width, height);
 	}
