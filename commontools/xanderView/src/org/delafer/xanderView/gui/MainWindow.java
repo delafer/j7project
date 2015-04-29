@@ -41,7 +41,7 @@ public final class MainWindow extends ToRefactor{
 	private void testInit() {
 //		String path = "D:\\test3.zip";
 		String path = "D:\\test\\";
-		pointer = new CommonContainer(path, null);
+		pointer = new CommonContainer(path);
 
 	}
 
@@ -81,8 +81,10 @@ public final class MainWindow extends ToRefactor{
 		createMenuBar();
 		createToolBar();
 		createImageCanvas();
-
 		shell.open ();
+		if (pointer.getCurrent() != null ){
+			loadImage(pointer, pointer.getCurrent(), panel);
+		}
 
 	}
 

@@ -12,6 +12,7 @@ import net.j7.commons.strings.Args;
 
 import org.delafer.xanderView.gui.config.ApplConfiguration;
 import org.delafer.xanderView.interfaces.IAbstractReader.FileEvent;
+import org.delafer.xanderView.sound.SoundBeep;
 
 public class CommonContainer {
 
@@ -28,11 +29,12 @@ public class CommonContainer {
 		return images.size();
 	}
 
-	public CommonContainer(String location, Comparator<ImageEntry<?>> comparator) {
+	public CommonContainer(String location) {
 		super();
 		this.location = location;
-		images = new SortedLinkedList<ImageEntry<?>>(comparator);
 		this.reader = getReader(location);
+		Comparator<ImageEntry<?>> comparator = this.reader.getComparator();
+		this.images = new SortedLinkedList<ImageEntry<?>>(comparator);
 		loop = ApplConfiguration.instance().getBoolean(ApplConfiguration.LOOP_CURRENT_SOURCE);
 		initialize();
 	}
@@ -80,6 +82,9 @@ public class CommonContainer {
 			reader.initialize(location);
 			readStructure(images);
 			iterator = images.listIterator();
+			if (images.size()>0) {
+				getNext();
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -125,7 +130,7 @@ public class CommonContainer {
 	}
 
 	private void beep() {
-		java.awt.Toolkit.getDefaultToolkit().beep();
+		SoundBeep.beep();
 
 	}
 

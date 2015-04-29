@@ -49,16 +49,12 @@ public abstract class ToRefactor {
 
 	protected void loadImage(byte[] bytes, String text, ImagePanel panel) {
 		try {
-			//ver1 1243,1255,1269,1249,1254,1254,1254
-			//ver 1224, 1225,1223,1233
-			//vs is faster
 			Metrics m = Metrics.start();
 
 			TJScalingFactor sf =  new TJScalingFactor(1, 1);
 			TJDecompressor tjd = new TJDecompressor(bytes);
 			int width = sf.getScaled(tjd.getWidth());
 			int height = sf.getScaled(tjd.getHeight());
-//			System.out.println(width+" "+height);
 			BufferedImage img = tjd.decompress(width, height, BufferedImage.TYPE_INT_RGB, 0);
 			m.measure("JPEGDecode ");
 			Dimension dim = getSize();
@@ -66,14 +62,7 @@ public abstract class ToRefactor {
 			ImageSize size = OrientationCommons.getNewSize(img.getWidth(), img.getHeight(), dim.width, dim.height);
 
 		    BufferedImage res = ScaleFactory.instance().resize(img, size.width, size.height);
-//			ImageResizer ir = new ImageResizer();
-//			BufferedImage res = ir.resize(img, dim.width,dim.height);
 		    m.measure("Scale1 ");
-//			ImageResizer is = new ImageResizer();
-//			BufferedImage res2 = is.resize(img, 1920, 1200);
-//			m.measure("Scale2 ");
-//			CommonRotator ir = new Rotator2D();
-//			BufferedImage res = ir.rotate(res1, Orientation.RotatedRight);
 			m.measure("Flip ");
 
 			panel.showImage(res, text);

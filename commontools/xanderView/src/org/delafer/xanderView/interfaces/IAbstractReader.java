@@ -1,6 +1,7 @@
 package org.delafer.xanderView.interfaces;
 
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.List;
 
 import org.delafer.xanderView.interfaces.CommonContainer.ContentChangeWatcher;
@@ -20,4 +21,5 @@ public interface IAbstractReader {
 
 	public <E extends ImageEntry<?>>E getEntryByIdentifier(Object id) throws IOException ;
 
+	public Comparator<ImageEntry<?>> getComparator();
 }

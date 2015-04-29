@@ -8,12 +8,14 @@ import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.WatchEvent.Kind;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import net.j7.commons.io.AbstractFileProcessor;
 import net.j7.commons.io.AbstractFileProcessor.FileInfo;
 
+import org.delafer.xanderView.comparator.BasicFileComparator;
 import org.delafer.xanderView.interfaces.CommonContainer.ContentChangeWatcher;
 
 import com.sun.nio.file.ExtendedWatchEventModifier;
@@ -139,6 +141,11 @@ public class FileReader implements IAbstractReader {
 		FileInfo fileInfo = new FileInfo(new File(filePath));
 		FileImageEntry entry = new FileImageEntry(fileInfo.getNameWithPath(), fileInfo.getFileName(), fileInfo.getFileSize());
 		return entry;
+	}
+
+	@Override
+	public Comparator<ImageEntry<?>> getComparator() {
+		return BasicFileComparator.instance();
 	}
 
 }

@@ -1,29 +1,63 @@
 package org.delafer.xanderView.sound;
 
-import java.io.*;
+import java.io.InputStream;
 
-import net.j7.commons.streams.ReusableStream;
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.DataLine;
 
-import com.sun.media.sound.JavaSoundAudioClip;
+import net.j7.commons.streams.Streams;
 
 public class SoundBeep {
-	void beep() {
+
+//	public  void beep2()
+//	{ InputStream is = SoundBeep.class.getResourceAsStream("sound01.wav");
+//	    try
+//	    {
+//	        Clip clip = AudioSystem.getClip();
+//	        clip.open(AudioSystem.getAudioInputStream(is));
+//	        clip.start();
+//	    }
+//	    catch (Exception exc)
+//	    {
+//	        exc.printStackTrace(System.out);
+//	    }
+//	}
+	public final static void beep() {
+		InputStream is = null;
+		AudioInputStream stream= null;
 		try {
-			InputStream is = SoundBeep.class.getResourceAsStream("sound01.wav");
-			System.out.println(is);
-			JavaSoundAudioClip clip = new JavaSoundAudioClip(is);
-			clip.play();
+			is = SoundBeep.class.getResourceAsStream("sound01.wav");
+		    AudioFormat format;
+		    DataLine.Info info;
+		    Clip clip;
 
-
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
+		    stream = AudioSystem.getAudioInputStream(is);
+		    format = stream.getFormat();
+		    info = new DataLine.Info(Clip.class, format);
+		    clip = (Clip) AudioSystem.getLine(info);
+		    clip.open(stream);
+		    clip.start();
 		}
+		catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			Streams.close(stream);
+		}
+
+
 	}
 
 	public static void main(String[] args) {
 		SoundBeep b = new SoundBeep();
 		b.beep();
+		try {
+			Thread.currentThread().sleep(1500);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

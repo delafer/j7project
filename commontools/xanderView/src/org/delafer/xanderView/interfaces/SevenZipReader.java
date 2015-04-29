@@ -2,6 +2,7 @@ package org.delafer.xanderView.interfaces;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.Comparator;
 import java.util.List;
 
 import org.delafer.xanderView.interfaces.CommonContainer.ContentChangeWatcher;
@@ -64,6 +65,11 @@ public class SevenZipReader implements IAbstractReader {
 		String pathName = (String)archive.getProperty(i, PropID.PATH);
 		Long size = (Long)archive.getProperty(i, PropID.SIZE);
 		return new ZipImageEntry(archive, i, pathName, size);
+	}
+
+	@Override
+	public Comparator<ImageEntry<?>> getComparator() {
+		return null;
 	}
 
 }
