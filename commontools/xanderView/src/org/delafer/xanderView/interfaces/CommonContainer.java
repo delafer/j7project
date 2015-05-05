@@ -3,12 +3,10 @@ package org.delafer.xanderView.interfaces;
 import java.io.File;
 import java.io.IOException;
 import java.util.Comparator;
-import java.util.LinkedList;
 import java.util.ListIterator;
 
 import net.j7.commons.base.Equals;
 import net.j7.commons.collections.SortedLinkedList;
-import net.j7.commons.strings.Args;
 
 import org.delafer.xanderView.gui.config.ApplConfiguration;
 import org.delafer.xanderView.interfaces.IAbstractReader.FileEvent;
@@ -18,7 +16,8 @@ public class CommonContainer {
 
 	SortedLinkedList<ImageEntry<?>> images;
 	ListIterator<ImageEntry<?>> iterator;
-	String location;
+	File pathFile;
+//	String pathContainer;
 	IAbstractReader reader;
 	ImageEntry<?> current = null;
 	int direction = 0;
@@ -29,25 +28,40 @@ public class CommonContainer {
 		return images.size();
 	}
 
-	public CommonContainer(String location) {
+	public CommonContainer(String locationArg) {
 		super();
-		this.location = location;
-		this.reader = getReader(location);
+		this.pathFile = new File(locationArg);
+		this.reader = getReader(pathFile);
+//		this.pathContainer = reader.getContainerPath();
 		Comparator<ImageEntry<?>> comparator = this.reader.getComparator();
 		this.images = new SortedLinkedList<ImageEntry<?>>(comparator);
 		loop = ApplConfiguration.instance().getBoolean(ApplConfiguration.LOOP_CURRENT_SOURCE);
 		initialize();
-	}
 
-	private IAbstractReader getReader(String location) {
-		File aFile = new File(location);
-		boolean isFile = aFile.isFile();
-
-		if (isFile && location.toLowerCase().endsWith(".zip")) {
-			return new SevenZipReader();
+		Object entry = reader.getSingleEntry();
+		if (entry == null) {
+			if (images.size()>0) {
+				getNext();
+			}
+		} else {
+			try {
+				current = reader.getEntryByIdentifier(entry);
+				updateIterator();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 
-		return new FileReader();
+	}
+
+	private IAbstractReader getReader(File aFile) {
+		boolean isFile = aFile.isFile();
+
+		if (isFile && aFile.getName().toLowerCase().endsWith(".zip")) {
+			return new SevenZipReader(aFile);
+		}
+
+		return new FileReader(aFile);
 	}
 
 	public void initialize() {
@@ -79,12 +93,10 @@ public class CommonContainer {
 				}
 
 			});
-			reader.initialize(location);
+
+			reader.initialize();
 			readStructure(images);
 			iterator = images.listIterator();
-			if (images.size()>0) {
-				getNext();
-			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -92,7 +104,7 @@ public class CommonContainer {
 	}
 
 	protected void readStructure(SortedLinkedList<ImageEntry<?>> list) throws Exception {
-		reader.read(location, list);
+		reader.read(list);
 	}
 
 	public int currentIndex() {
@@ -175,9 +187,6 @@ public class CommonContainer {
 	}
 
 	private void updateIterator() {
-//		System.out.println(1);
-//		System.out.println(iterator.nextIndex()+" <> "+iterator.previousIndex());
-//		System.out.println("Current: "+current);
 		iterator = current != null ? images.listIterator(current) : images.listIterator();
 		if (iterator.hasNext()) {
 			iterator.next();
@@ -185,14 +194,6 @@ public class CommonContainer {
 		} else {
 			direction = 0;
 		}
-//		System.out.println(iterator.nextIndex()+" <> "+iterator.previousIndex());
-
-	}
-
-	public interface ContentChangeWatcher {
-
-		void onEvent(FileEvent type, Object identifier) throws IOException;
-
 	}
 
 

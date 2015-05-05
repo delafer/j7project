@@ -1,12 +1,12 @@
 package org.delafer.xanderView.interfaces;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.Comparator;
 import java.util.List;
 
-import org.delafer.xanderView.interfaces.CommonContainer.ContentChangeWatcher;
-
+import net.j7.commons.io.FileUtils;
 import net.sf.sevenzipjbinding.*;
 import net.sf.sevenzipjbinding.impl.RandomAccessFileInStream;
 import net.sf.sevenzipjbinding.impl.RandomAccessNioStream;
@@ -16,11 +16,18 @@ public class SevenZipReader implements IAbstractReader {
 
 	private RandomAccessFile randomAccessFile;
 	private IInArchive archive;
+	private File sourceFile;
 
 
-	public void read(String fileName, List<ImageEntry<?>> entries) {
+
+	public SevenZipReader(File sourceFile) {
+		super();
+		this.sourceFile = sourceFile;
+	}
+
+	public void read(List<ImageEntry<?>> entries) {
 		try {
-
+			String fileName = getContainerPath();
 			boolean neu = true;
 			randomAccessFile = new RandomAccessFile(fileName, "r");
 			IInStream stream = !neu ? new RandomAccessFileInStream(randomAccessFile) : new RandomAccessNioStream(fileName);
@@ -54,8 +61,7 @@ public class SevenZipReader implements IAbstractReader {
 	}
 
 	@Override
-	public void initialize(String location) {
-
+	public void initialize() {
 	}
 
 	@SuppressWarnings("unchecked")
@@ -69,6 +75,16 @@ public class SevenZipReader implements IAbstractReader {
 
 	@Override
 	public Comparator<ImageEntry<?>> getComparator() {
+		return null;
+	}
+
+	@Override
+	public String getContainerPath() {
+		return FileUtils.extractFullPathName(sourceFile);
+	}
+
+	@Override
+	public Object getSingleEntry() {
 		return null;
 	}
 

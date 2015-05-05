@@ -75,7 +75,9 @@ public class ImagePanel extends JPanel {
     }
 
     private ImageSize getCanvasImageSize() {
+
     	return new ImageSize(getWidth(), getHeight());
+//    	return new ImageSize((int)getSize().getWidth(), (int)getSize().getHeight());
     }
 
     private ImageSize getImageSize(boolean swapXY) {
@@ -90,8 +92,8 @@ public class ImagePanel extends JPanel {
     	boolean swapXY = Orientation.Original != ccwNew && ccwNew.swapXY();
     	ImageSize imgSize = getImageSize(swapXY);
     	ImageSize cnvSize = getCanvasImageSize();
-
     	if (!imgSize.equals(cnvSize)) {
+    		System.out.println("resising"+cnvSize);
     		ImageSize size = OrientationCommons.getNewSize(imgSize.width(), imgSize.height(), cnvSize.width(), cnvSize.height());
     		drawImage = ScaleFactory.instance().resize(imageSource, !swapXY ? size.width() : size.height(), !swapXY ? size.height() : size.width());
     	} else {

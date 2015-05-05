@@ -14,9 +14,9 @@ import java.util.concurrent.TimeUnit;
 
 import net.j7.commons.io.AbstractFileProcessor;
 import net.j7.commons.io.AbstractFileProcessor.FileInfo;
+import net.j7.commons.io.FileUtils;
 
 import org.delafer.xanderView.comparator.BasicFileComparator;
-import org.delafer.xanderView.interfaces.CommonContainer.ContentChangeWatcher;
 
 import com.sun.nio.file.ExtendedWatchEventModifier;
 
@@ -24,11 +24,19 @@ public class FileReader implements IAbstractReader {
 
 	ContentChangeWatcher watcher;
 	private WatchService watchService;
+	private File sourceFile;
 
-	public void read(String fileName, final List<ImageEntry<?>> entries) {
+
+
+	public FileReader(File sourceFile) {
+		super();
+		this.sourceFile = sourceFile;
+	}
+
+	public void read(final List<ImageEntry<?>> entries) {
 		try {
 
-			AbstractFileProcessor scanner = new AbstractFileProcessor(fileName) {
+			AbstractFileProcessor scanner = new AbstractFileProcessor(getContainerPath()) {
 
 
 				@Override
@@ -75,14 +83,14 @@ public class FileReader implements IAbstractReader {
 	}
 
 	@Override
-	public void initialize(String location) {
+	public void initialize() {
 
 		Thread t = new Thread() {
 
 			@Override
 			public void run() {
 				try {
-					Path path = Paths.get(location);
+					Path path = Paths.get(getContainerPath());
 					watchService = path.getFileSystem().newWatchService();
 
 					path.register(watchService,new Kind[] {ENTRY_CREATE,ENTRY_DELETE}, ExtendedWatchEventModifier.FILE_TREE);
@@ -130,10 +138,10 @@ public class FileReader implements IAbstractReader {
 		return FileEvent.Other;
 	}
 
-	public static void main(String[] args) {
-		FileReader r = new FileReader();
-		r.initialize("C:\\work\\cc\\");
-	}
+//	public static void main(String[] args) {
+//		FileReader r = new FileReader();
+//		r.initialize("C:\\work\\cc\\");
+//	}
 
 	@SuppressWarnings("unchecked")
 	public FileImageEntry getEntryByIdentifier(Object id) throws IOException {
@@ -147,5 +155,25 @@ public class FileReader implements IAbstractReader {
 	public Comparator<ImageEntry<?>> getComparator() {
 		return BasicFileComparator.instance();
 	}
+
+	@Override
+	public String getContainerPath() {
+		File aFile = sourceFile;
+		if (aFile.isFile()) {
+			aFile = aFile.getParentFile();
+		}
+
+		return aFile.isDirectory() && aFile.exists() ? FileUtils.extractFullPathName(aFile) : "";
+	}
+
+	@Override
+	public Object getSingleEntry() {
+		return sourceFile.isFile() ? FileUtils.extractFullPathName(sourceFile) : null ;
+	}
+
+//	public static void main(String[] args) {
+//		FileReader r = new FileReader();
+//		System.out.println("x"+r.getContainerPath(new File("C:\\work\\workspaces\\abovo\\abovo.7z")));
+//	}
 
 }

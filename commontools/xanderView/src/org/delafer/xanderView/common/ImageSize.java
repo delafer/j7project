@@ -53,7 +53,7 @@ public final class ImageSize {
 		if (!(obj instanceof ImageSize)) return false;
 
 		final ImageSize o = (ImageSize) obj;
-		return width == o.width && height == o.height;
+		return this.width == o.width && this.height == o.height;
 	}
 
 	@Override

@@ -57,6 +57,7 @@ public class JOCLFindFastestDevice
 
         // Collect all devices of all platforms
         List<Device> devices = new ArrayList<Device>();
+        System.out.println("Devices:"+platforms.length);
         for (cl_platform_id platform : platforms) {
             // Obtain the number of devices for the current platform
             int numDevices[] = new int[1];

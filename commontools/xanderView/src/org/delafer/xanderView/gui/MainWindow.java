@@ -57,7 +57,7 @@ public final class MainWindow extends ToRefactor{
 
 	private void testInit() {
 //		String path = "D:\\test3.zip";
-		String path = "D:\\test\\";
+		String path = "D:\\test\\foto003.jpg";
 		pointer = new CommonContainer(path);
 
 	}
