@@ -8,13 +8,15 @@ import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileChannel.MapMode;
 
+import org.delafer.xanderView.hash.Hasher;
+
 import net.j7.commons.base.Equals;
 import net.sf.sevenzipjbinding.IInArchive;
 
 public class FileImageEntry extends ImageEntry<String> {
 
 
-	IInArchive archive;
+//	IInArchive archive;
 	String identifier;
 
 
@@ -33,11 +35,17 @@ public class FileImageEntry extends ImageEntry<String> {
 	public byte[] content() {
 
 		try {
-			return readNIO(identifier);
+			byte[] ret = readNIO(identifier);
+			calcCRC(ret);
+			return ret;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	private void calcCRC(byte[] ret) {
+		this.crc = Hasher.hash().calc(ret, this.size);
 	}
 
 	private static void closeDirectBuffer(ByteBuffer cb) {

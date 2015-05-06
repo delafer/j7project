@@ -37,7 +37,7 @@ public abstract class ToRefactor {
 			System.out.println(entry.name()+" "+entry.getIdentifier());
 			Metrics m = Metrics.start();
 			byte[] bytes = entry.content();
-			String info = Args.fill("%1 [%2/%3]", entry.name(),""+container.currentIndex(),""+container.size() );
+			String info = Args.fill("%1 [%2/%3]: %4", entry.name(),""+container.currentIndex(),""+container.size(), entry.CRC() );
 			loadImage(bytes, info, panel);
 			m.measure("IO Read ");
 		} catch (Exception e) {

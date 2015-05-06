@@ -1,5 +1,7 @@
 package org.delafer.xanderView.interfaces;
 
+import org.delafer.xanderView.hash.Hasher;
+
 import net.sf.sevenzipjbinding.ExtractAskMode;
 import net.sf.sevenzipjbinding.ExtractOperationResult;
 import net.sf.sevenzipjbinding.IArchiveExtractCallback;
@@ -33,11 +35,17 @@ public class ZipImageEntry extends ImageEntry<Integer> {
 		try {
 			MyExtractCallback extract = new MyExtractCallback(archive, size);
 			archive.extract(new int[] {identifier}, false, extract);
-			return extract.data();
+			byte[] ret =  extract.data();
+			calcCRC(ret);
+			return ret;
 		} catch (SevenZipException e) {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	private void calcCRC(byte[] ret) {
+		this.crc = Hasher.hash().calc(ret, this.size);
 	}
 
 	public static class MyExtractCallback implements IArchiveExtractCallback {

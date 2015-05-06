@@ -17,6 +17,7 @@ import javax.swing.SwingUtilities;
 
 import org.delafer.xanderView.gui.config.ApplConfiguration;
 import org.delafer.xanderView.interfaces.CommonContainer;
+import org.delafer.xanderView.interfaces.CopyService;
 import org.delafer.xanderView.orientation.OrientationCommons.Action;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
@@ -57,7 +58,7 @@ public final class MainWindow extends ToRefactor{
 
 	private void testInit() {
 //		String path = "D:\\test3.zip";
-		String path = "D:\\test\\foto003.jpg";
+		String path = "D:\\test\\";
 		pointer = new CommonContainer(path);
 
 	}
@@ -169,6 +170,11 @@ public final class MainWindow extends ToRefactor{
 		case SWT.BS:
 		case SWT.PAGE_UP:
 			loadImage(pointer, pointer.getPrevious(), panel);
+			break;
+
+		case 16777233://F8
+		case 16777232://F7
+			CopyService.instance().copy(pointer.getCurrent());
 			break;
 		case 108:
 			panel.rotate(Action.RotateLeft);

@@ -60,7 +60,7 @@ public class ApplConfiguration {
 		pro.setProperty(CFG_WIDTH, String.valueOf(800));
 		pro.setProperty(SCALER_FAST, String.valueOf(ScaleFactory.SCALER_AWT_2D_FAST ));
 		pro.setProperty(LOOP_CURRENT_SOURCE, String.valueOf(true));
-		pro.setProperty(CFG_COPY_DIR, "d:\\copied");
+		pro.setProperty(CFG_COPY_DIR, "d:\\test2");
 		return pro;
 	}
 

@@ -2,24 +2,44 @@ package org.delafer.xanderView.interfaces;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Comparator;
-import java.util.ListIterator;
+import java.util.*;
 
 import net.j7.commons.base.Equals;
-import net.j7.commons.collections.SortedLinkedList;
 
 import org.delafer.xanderView.gui.config.ApplConfiguration;
 import org.delafer.xanderView.interfaces.IAbstractReader.FileEvent;
-import org.delafer.xanderView.sound.SoundBeep;
 
 public class CopyService {
 
-	SortedLinkedList<ImageEntry<?>> images;
-	ListIterator<ImageEntry<?>> iterator;
+
+	/**
+	 * Lazy-loaded Singleton, by Bill Pugh *.
+	 */
+	private static final class Holder {
+		/** The Constant INSTANCE. */
+		private final static transient CopyService INSTANCE = new CopyService();
+	}
+
+	/**
+	 * Gets the single instance of ResourcesDR.
+	 *
+	 * @return single instance of ResourcesDR
+	 */
+	public final static CopyService instance() {
+		return Holder.INSTANCE;
+	}
+
+
+	private CopyService() {
+		init();
+	}
+
+
+
+	Set<FileDirEntry> images;
+//	ListIterator<FileImageEntry> iterator;
 	File pathFile;
-//	String pathContainer;
-	IAbstractReader reader;
-	ImageEntry<?> current = null;
+	FileReader reader;
 
 
 	public int size() {
@@ -34,21 +54,28 @@ public class CopyService {
 
 	private void initializeByPath(String locationArg) {
 		this.pathFile = new File(locationArg);
-		this.reader = getReader(pathFile);
-		Comparator<ImageEntry<?>> comparator = this.reader.getComparator();
-		this.images = new SortedLinkedList<ImageEntry<?>>(comparator);
+		this.reader = new FileReader(pathFile);
+		this.images = new HashSet<FileDirEntry>();
 		initializeInternal();
 
 	}
 
-	private IAbstractReader getReader(File aFile) {
-		boolean isFile = aFile.isFile();
-
-		if (isFile && aFile.getName().toLowerCase().endsWith(".zip")) {
-			return new SevenZipReader(aFile);
+	private FileDirEntry findByName(String name) {
+		for (FileDirEntry next : images) {
+			if (Equals.equal(next.getIdentifier(), name)) return next;
 		}
+		return null;
 
-		return new FileReader(aFile);
+	}
+
+	public void copy(ImageEntry<?> entry) {
+		FileDirEntry fde = new FileDirEntry(null,null,0);
+		fde.crc = entry.CRC();
+
+		System.out.println();
+		System.out.println(entry.getIdentifier());
+		System.out.println(images.contains(fde));
+
 	}
 
 	private void initializeInternal() {
@@ -60,17 +87,13 @@ public class CopyService {
 				public void onEvent(FileEvent type, Object id)throws IOException {
 					switch (type) {
 					case Create:
-						ImageEntry<?> entryNew = reader.getEntryByIdentifier(id);
-						images.add(entryNew);
+						FileImageEntry entryNew = reader.getEntryByIdentifier(id);
+						images.add(FileDirEntry.as(entryNew));
 						break;
 					case Delete:
-						ImageEntry<?> entryDel = reader.getEntryByIdentifier(id);
-						images.remove(entryDel);
-						if (current != null) {
-							if (Equals.equal(current.getIdentifier(), entryDel.getIdentifier())) {
-								current = null;
-							}
-						}
+						FileImageEntry entryDel = reader.getEntryByIdentifier(id);
+						FileDirEntry fde = CopyService.this.findByName(entryDel.getIdentifier());
+						images.remove(fde);
 						break;
 					default:
 					}
@@ -80,24 +103,30 @@ public class CopyService {
 			});
 
 			reader.initialize();
-			readStructure(images);
-			iterator = images.listIterator();
+			readStructure();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 	}
 
-	protected void readStructure(SortedLinkedList<ImageEntry<?>> list) throws Exception {
-		reader.read(list);
+	protected void readStructure() throws Exception {
+		List<ImageEntry<?>> toAdd = new ArrayList<ImageEntry<?>>();
+		reader.read(toAdd);
+
+		for (ImageEntry<?> next : toAdd) {
+			images.add(FileDirEntry.as((FileImageEntry)next));
+		}
+	}
+
+	public void test() {
+		for (FileDirEntry fileDirEntry : images) {
+			System.out.println(fileDirEntry);
+		}
 	}
 
 
-
-	public void onContainerContentChange() {
-
-	}
-
-
+//	public void onContainerContentChange() {
+//	}
 
 }

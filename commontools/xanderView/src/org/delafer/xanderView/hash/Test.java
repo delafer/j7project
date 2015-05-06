@@ -1,18 +1,24 @@
 package org.delafer.xanderView.hash;
 
-import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;
 
-import net.j7.commons.collections.SortedLinkedList;
 import net.j7.commons.utils.ByteUtils;
 import net.j7.commons.utils.Metrics;
 import net.jpountz.xxhash.XXHashFactory;
+
+import org.delafer.xanderView.interfaces.CopyService;
 
 public class Test {
 	int ab;
 	int cd;
 	public static void main(String[] args) {
+
+
+		CopyService cs = CopyService.instance();
+		cs.init();
+		cs.test();
+		System.exit(0);
 
 		XXHashFactory hash = XXHashFactory.fastestInstance();
 		System.out.println(hash);
