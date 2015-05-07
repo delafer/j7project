@@ -73,7 +73,7 @@ public class CopyService {
 		fde.crc = entry.CRC();
 
 		System.out.println();
-		System.out.println(entry.getIdentifier());
+		System.out.println(entry.name());
 		System.out.println(images.contains(fde));
 
 	}
