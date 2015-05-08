@@ -47,7 +47,7 @@ public final class ZipPacker {
    private static final String CLASS_AUTHOR = "TavrovsA";
 
    /** The Constant DEFAULT_COMMENT. */
-   private static final String DEFAULT_COMMENT = "Created by Crefo ZipPacker.%3Creation date: %1.%3Author: %2";
+   private static final String DEFAULT_COMMENT = "Created by Korvin ZipPacker.%3Creation date: %1.%3Author: %2";
 
    /** The Constant MSG_COMPR_FILE. */
    private static final String MSG_COMPR_FILE = "Compression file: ";

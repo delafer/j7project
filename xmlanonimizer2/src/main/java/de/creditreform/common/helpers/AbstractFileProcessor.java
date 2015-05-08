@@ -3,9 +3,6 @@ package de.creditreform.common.helpers;
 /*
  * @File: AbstractFileProcessor.java
  *
- * 
- * Hellersbergstr. 12, 41460 Neuss, Germany.
- * All rights reserved.
  *
  * @Author: Alexander Tawrowski
  *

@@ -296,35 +296,6 @@ public final  class Equals {
       return Arrays.equals(arg1, arg2);
    }
 
-   /**
-    * Compare two crefo numbers
-    * eG.
-    * compare(4110017766, 4110017767) = false
-    * compare(4110017766, 04114110017766) = true
-    * compare(04114110017766, 4110017766) = true
-    *
-    * @param crefo1 the crefo1
-    * @param crefo2 the crefo2
-    * @return true, if successful
-    */
-   public final static boolean compareCrefoNr(String crefo1, String crefo2) {
-      if (crefo1 == null || crefo2 == null) return false;
-      final int l1 = crefo1.length();
-      final int l2 = crefo2.length();
-      if (l1==l2) return crefo1.equals(crefo2);
-      if (l1>l2 && l2>=10 && (l1-l2)==4) return crefo1.endsWith(crefo2);
-      if (l2>l1 && l1>=10 && (l2-l1)==4) return crefo2.endsWith(crefo1);
-      return false;
-   }
-
-//   public static void main(String[] args) {
-//      System.out.println(compareCrefoNr("4110017766","4110017766"));
-//      System.out.println(compareCrefoNr("04114110017766","4110017766"));
-//      System.out.println(compareCrefoNr("4110017766","04114110017766"));
-//      System.out.println(compareCrefoNr("04114110017766","04114110017766"));
-//      System.out.println(compareCrefoNr("04114110017766","04114110017763"));
-//
-//   }
 
 
 }
