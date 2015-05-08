@@ -67,7 +67,7 @@ public interface IAnonimizeSpec {
 		public TagData(String path, MetaTag tag) {
 
 			if (d.contains(path)) {
-				System.out.println(path+" = "+tag);
+				System.out.println("Error dublicate entry: "+path+" = "+tag);
 				System.exit(-1);
 			}
 			d.add(path);

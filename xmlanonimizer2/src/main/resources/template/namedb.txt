@@ -1,4 +1,4 @@
-Draco Malfoy
+ï»¿Draco Malfoy
 George Lucas
 Luke Skywalker
 Darth Vader 
@@ -67,7 +67,7 @@ Ron Weasley
 Hermione Granger
 Dexter Morgan
 Debra Morgan
-María LaGuerta
+Maria LaGuerta
 Angel Batista
 Vince Masuka
 Jamie Batista
@@ -163,7 +163,7 @@ Hendrik Lorentz
 Nikola Tesla
 Marie Curie
 Niels Bohr
-Erwin Schrödinger
+Erwin SchrÃ¶dinger
 Enrico Fermi
 Paul Dirac 
 Stephen Hawking
@@ -180,7 +180,7 @@ Robert Schumann
 Felix Mendelssohn
 Johann Strauss
 Franz Beckenbauer
-Jürgen Klinsmann
+JÃ¼rgen Klinsmann
 Oliver Kahn
 Michelangelo Buonarroti
 Raphael Sanzio
@@ -270,4 +270,3 @@ Oscar Wilde
 Walt Disney
 Che Guevara
 Julius Caesar
-
