@@ -3,7 +3,7 @@ package net.j7.commons.types;
 /**
  * Class MutableLong.
  *
- * @author Alexander Tawrowski
+ * @author  tavrovsa
  * @version $Revision: #1 $
  */
 public final class MutableLong extends Number implements Comparable<MutableLong> {

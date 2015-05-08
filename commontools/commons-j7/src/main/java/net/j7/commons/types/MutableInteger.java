@@ -4,7 +4,7 @@ package net.j7.commons.types;
 /**
  * Class MutableInteger.
  *
- * @author Alexander Tawrowski
+ * @author  tavrovsa
  * @version $Revision: #2 $
  */
 public final class MutableInteger extends Number implements Comparable<MutableInteger> {

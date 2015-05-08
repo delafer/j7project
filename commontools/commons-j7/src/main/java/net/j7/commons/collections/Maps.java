@@ -11,7 +11,7 @@ import net.j7.commons.base.NotNull;
 /**
  * The Class Maps.
  *  Factory class and common methods for Map classes
- * @author Alexander Tawrowski
+ * @author  tavrovsa
  */
 public final class Maps {
 

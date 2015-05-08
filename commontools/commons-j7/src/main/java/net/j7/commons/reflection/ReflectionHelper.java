@@ -1,11 +1,11 @@
 /*
  * @File: ReflectionHelper.java
  *
- * Copyright (c) 2005 Verband der Vereine Creditreform.
- * Hellersbergstr. 12, 41460 Neuss, Germany.
+ * 
+ * 
  * All rights reserved.
  *
- * @Author: Alexander Tawrowski
+ * @Author:  tavrovsa
  *
  * @Version $Revision: #4 $Date: $
  *
@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * The Class ReflectionHelper.
- * @author Alexander Tawrowski
+ * @author  tavrovsa
  */
 @SuppressWarnings({"unused"})
 public final class ReflectionHelper {

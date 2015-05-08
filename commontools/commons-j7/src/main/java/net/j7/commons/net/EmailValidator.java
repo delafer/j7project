@@ -254,12 +254,12 @@ public final class EmailValidator {
 	 * <john.smith@u.washington.edu>"; System.out.println(addy);
 	 * System.out.println(isValidEmail(addy));
 	 * System.out.println(isValidEmail("at@gmail.com"));
-	 * System.out.println(isValidEmail("alexandru.tavrovschi@gmail.com"));
+	 * System.out.println(isValidEmail("u.tavrovsa@gmail.com"));
 	 * System.out.println(isValidEmail("at@"));
 	 * System.out.println(isValidEmail("@gmail.com"));
 	 * System.out.println(isValidEmail("at@abovo@de"));
-	 * System.out.println(isValidEmail("alexandru.v.tavrovschi@gmail.com"));
-	 * System.out.println(isValidEmail("alexandru.v.tavrovschi@abovo"));
+	 * System.out.println(isValidEmail("u.v.tavrovsa@gmail.com"));
+	 * System.out.println(isValidEmail("u.v.tavrovsa@abovo"));
 	 *  }
 	 */
 }

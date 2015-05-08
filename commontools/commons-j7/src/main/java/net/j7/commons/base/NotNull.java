@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
  * The Class NotNull
  * Null object Pattern -  Avoid null references by providing a default object.
  * http://en.wikipedia.org/wiki/Null_Object_pattern
- * @author Alexander Tavrovschi
+ * @author  tavrovsa
  */
 @SuppressWarnings({"unchecked","rawtypes"})
 public final class NotNull {

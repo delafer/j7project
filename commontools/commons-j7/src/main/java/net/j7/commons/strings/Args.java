@@ -1,11 +1,11 @@
 /*
  * @File: Args.java
  *
- * Copyright (c) 2005 Verband der Vereine Creditreform.
- * Hellersbergstr. 12, 41460 Neuss, Germany.
+ * 
+ * 
  * All rights reserved.
  *
- * @Author: Alexander Tawrowski
+ * @Author:  tavrovsa
  *
  * @Version $Revision: #1 $Date: $
  *
@@ -19,7 +19,7 @@ package net.j7.commons.strings;
  * Args.fill("%3 %2 = %1, %3 %4 = %1", "false","isCompany","boolean", "readOnly") =
  * "boolean isCompany = false, boolean readOnly = false"
  *
- * @author Alexander Tawrowski
+ * @author  tavrovsa
  * @version $Revision: #1 $
  * @category Parametric string functionality
  * @see java alternative - Strings.format(" %s... ", 0001);
@@ -119,9 +119,9 @@ public class Args {
    // System.out.println(fill("%11%1 %2 %3 %4 %5 %6%7%8%9%10%10%10", 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11));
    // System.out.println(fill("%1x%5", 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11));
    // System.out.println(fill("%1\\1", 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11));
-   // System.out.println(fill("%1%%%3%", 1, 2, "alexander", 4, 5));
-   // System.out.println(fill("%%%1%%", 1, 2, "alexander", 4, 5));
-   // System.out.println(fill("hight!", 1, 2, "alexander", 4, 5));
+   // System.out.println(fill("%1%%%3%", 1, 2, "", 4, 5));
+   // System.out.println(fill("%%%1%%", 1, 2, "", 4, 5));
+   // System.out.println(fill("hight!", 1, 2, "", 4, 5));
    // System.out.println(fill("%1 %2 %3", null, null));
    // System.out.println(fill("privet(%1) masha - %2,%3", "Sasha", 12, 99));
    // }

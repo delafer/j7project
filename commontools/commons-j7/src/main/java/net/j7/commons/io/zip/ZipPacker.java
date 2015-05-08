@@ -1,11 +1,11 @@
 /*
  * @File: ZipPacker.java
  *
- * Copyright (c) 2005 Verband der Vereine Creditreform.
- * Hellersbergstr. 12, 41460 Neuss, Germany.
+ * 
+ * 
  * All rights reserved.
  *
- * @Author: Alexander Tawrowski
+ * @Author:  tavrovsa
  *
  * @Version $Revision: #2 $Date: $
  *
@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
  * compress a single file or a whole directory with all sub directories<br>
  * and ability to filter some unnecessary entries. See EntriesFilter interface<br>
  *
- * @author Alexander Tawrowski
+ * @author  tavrovsa
  * @version $Revision: #2 $
  */
 public final class ZipPacker {

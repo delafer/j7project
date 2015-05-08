@@ -8,7 +8,7 @@ import net.j7.commons.base.NotNull;
 /**
  * Factory class and common methods for java Sets
  * The Class Sets.
- * @author Alexander Tawrowski
+ * @author  tavrovsa
  */
 public final class Sets {
 

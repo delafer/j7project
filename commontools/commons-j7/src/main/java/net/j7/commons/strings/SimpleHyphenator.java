@@ -1,11 +1,11 @@
 /*
  * @File: TextJoin.java
  *
- * Copyright (c) 2005 Verband der Vereine Creditreform.
- * Hellersbergstr. 12, 41460 Neuss, Germany.
+ * 
+ * 
  * All rights reserved.
  *
- * @Author: Alexander Tawrowski
+ * @Author:  tavrovsa
  *
  * @Version $Revision: #1 $Date: $
  *
@@ -43,7 +43,7 @@ import java.util.List;
  * so it could produce "bad break"'s in some cases. But in most cases ( about 98-99% ) it produces right results.<br>
  * For 100% correct hyphenation results you should use other most powerfull algorithm.<br>
  *
- * @author Alexander Tawrowski
+ * @author  tavrovsa
  * @version $Revision: #1 $
  */
 public class SimpleHyphenator {
@@ -816,7 +816,7 @@ protected static class WordInfo {
 //
 //   System.out.println("alex".substring(0, 2));
 //   StringBuilder a = new StringBuilder();
-//   a.append("alexander");
+//   a.append("");
 //   a.delete(0, 3);
 //   System.out.println(a);
 //

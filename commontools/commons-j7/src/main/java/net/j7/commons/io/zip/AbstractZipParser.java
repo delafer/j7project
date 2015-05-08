@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * The Class AbstractFileProcessor.
- * @author Alexander Tawrowski
+ * @author  tavrovsa
  */
 public abstract class AbstractZipParser {
 

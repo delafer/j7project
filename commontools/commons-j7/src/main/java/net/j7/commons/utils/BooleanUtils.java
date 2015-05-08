@@ -5,7 +5,7 @@ package net.j7.commons.utils;
  * Class to convert a String boolean representation to an Boolean
  * Operations on boolean primitives and Boolean objects.
  * This class tries to handle null input gracefully. An exception will not be thrown for a null input. Each method documents its behaviour in more detail.
- * @author vollmarf
+ * @author  tavrovsa
  * @version $Revision: #3 $
  */
 public class BooleanUtils  {

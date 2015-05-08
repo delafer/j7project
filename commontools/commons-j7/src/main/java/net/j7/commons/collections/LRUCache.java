@@ -1,11 +1,11 @@
 /*
  * @File: LRUCache.java
  *
- * Copyright (c) 2005 Verband der Vereine Creditreform.
- * Hellersbergstr. 12, 41460 Neuss, Germany.
+ * 
+ * 
  * All rights reserved.
  *
- * @Author: bretza
+ * @author  tavrovsa
  *
  * @Version $Revision: #4 $Date: $
  *
@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * @author bretza
+ * @author Alexander Tawrowski
  * @version $Revision: #4 $ $Date: 2012/03/19 $
  */
 public class LRUCache<K,V> implements Serializable {

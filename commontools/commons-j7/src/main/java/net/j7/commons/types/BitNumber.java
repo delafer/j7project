@@ -1,11 +1,11 @@
 /*
  * @File: BitNumber.java
  *
- * Copyright (c) 2005 Verband der Vereine Creditreform.
- * Hellersbergstr. 12, 41460 Neuss, Germany.
+ * 
+ * 
  * All rights reserved.
  *
- * @Author: Alexander Tawrowski
+ * @Author:  tavrovsa
  *
  * @Version $Revision: #3 $Date: $
  *
@@ -20,7 +20,7 @@ import net.j7.commons.utils.BitUtils;
 /**
  * The Class BitNumber to work with bit masks.
  *
- * @author Alexander Tawrowski
+ * @author  tavrovsa
  * @version $Revision: #3 $
  * @see BitUtils
  */

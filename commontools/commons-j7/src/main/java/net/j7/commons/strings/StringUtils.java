@@ -10,7 +10,7 @@ import java.util.Set;
 /**
  * Utility class for any string manipulations.
  *
- * @author bretza
+ * @author  tavrovsa
  * @version $Revision: #1 $ $Date: 2013/11/12 $
  */
 public final class StringUtils {

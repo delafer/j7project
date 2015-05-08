@@ -14,7 +14,7 @@ import net.j7.commons.strings.StringUtils;
 /**
  * The Class CoreFormats
  *
- * @author Alexander Tawrowski
+ * @author  tavrovsa
  * @version $Revision: #1 $
  */
 public class FormatUtils {

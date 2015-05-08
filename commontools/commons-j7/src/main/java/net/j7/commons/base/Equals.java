@@ -9,7 +9,7 @@ import net.j7.commons.strings.StringUtils;
 /**
  * The Class Equals.
  *
- * @author Alexander Tawrowski
+ * @author  tavrovsa
  * @version $Revision: #1 $
  */
 @SuppressWarnings({"unchecked", "rawtypes"})

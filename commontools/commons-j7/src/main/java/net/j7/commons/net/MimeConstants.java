@@ -2,7 +2,7 @@ package net.j7.commons.net;
 /**
  * Constants for MimeType enumeration
  *
- * @author  <a href="TavrovsA@creditreform.de">Alexander Tawrowski</a>
+ * @author  <a href="delafer2000@mail.ru"> tavrovsa</a>
  * @see <a href="http://www.iana.org/assignments/media-types">Registered IANA Media Types List</a>
  *
  */

@@ -19,7 +19,7 @@ package net.j7.system.utils;
  * Args.fill("if this %1 is %2, than other %1 is also %2", "statement", true) = <br>
  * "if this statement is true, than other statement is also true"<br>
  *
- * @author  <a href="TavrovsA@gmail.com">Alexander Tawrowski</a>
+ * @author  <a href="TavrovsA@gmail.com"> tavrovsa</a>
  * @version $Revision: #1 $
  * @category Parametric string functionality
  * @see java alternative - Strings.format(" %s... ", 0001);
@@ -126,9 +126,9 @@ public static void main(String[] args) {
    // System.out.println(fill("%11%1 %2 %3 %4 %5 %6%7%8%9%10%10%10", 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11));
    // System.out.println(fill("%1x%5", 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11));
    // System.out.println(fill("%1\\1", 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11));
-   // System.out.println(fill("%1%%%3%", 1, 2, "alexander", 4, 5));
-   // System.out.println(fill("%%%1%%", 1, 2, "alexander", 4, 5));
-   // System.out.println(fill("hight!", 1, 2, "alexander", 4, 5));
+   // System.out.println(fill("%1%%%3%", 1, 2, "", 4, 5));
+   // System.out.println(fill("%%%1%%", 1, 2, "", 4, 5));
+   // System.out.println(fill("hight!", 1, 2, "", 4, 5));
    // System.out.println(fill("%1 %2 %3", null, null));
    // System.out.println(fill("privet(%1) masha - %2,%3", "Sasha", 12, 99));
    // }

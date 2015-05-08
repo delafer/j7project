@@ -3,7 +3,7 @@ package de.creditreform.common.helpers;
 /*
  * @File: AbstractFileProcessor.java
  *
- * Copyright (c) 2005 Verband der Vereine Creditreform.
+ * 
  * Hellersbergstr. 12, 41460 Neuss, Germany.
  * All rights reserved.
  *

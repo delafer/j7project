@@ -11,7 +11,7 @@ import java.util.Locale;
 
 /**
  * The usefull Class DatePeriod to work with some time period (Start Date < ....  < Finish Date) and not with single date only
- * @author Alexander Tavrovsky
+ * @author  tavrovsa
  */
 public class DatePeriod implements Comparable<DatePeriod>, Cloneable, Serializable {
 

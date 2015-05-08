@@ -1,11 +1,11 @@
 /*
  * @File: NamespaceFilter.java
  *
- * Copyright (c) 2013 Verband der Vereine Creditreform.
- * Hellersbergstr. 12, 41460 Neuss, Germany.
+ * Copyright (c) 2013 
+ * 
  * All rights reserved.
  *
- * @Author: Alexander Tawrowski
+ * @Author:  tavrovsa
  *
  * @Version $Revision: #1 $Date: $
  *

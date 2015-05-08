@@ -7,7 +7,7 @@ import java.util.Date;
 
 /**
  * jLead immutable date
- * @author Alexandru Tavrovschi
+ * @author u tavrovsa
  *
  */
 public final class ImmutableDate extends Date {

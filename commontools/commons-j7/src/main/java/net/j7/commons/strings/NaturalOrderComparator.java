@@ -1,11 +1,11 @@
 /*
  * @File: NaturalOrderComparator.java
  *
- * Copyright (c) 2005 Verband der Vereine Creditreform.
- * Hellersbergstr. 12, 41460 Neuss, Germany.
+ * 
+ * 
  * All rights reserved.
  *
- * @Author: Alexander Tawrowski
+ * @Author:  tavrovsa
  *
  * @Version $Revision: #1 $Date: $
  *
@@ -19,7 +19,7 @@ import java.util.Comparator;
  * A sorting comparator to sort strings numerically, ie [1, 2, 10], as opposed to [1, 10, 2].
  *
  * @param <E> the element type
- * @author Alexander Tawrowski
+ * @author  tavrovsa
  */
 public class NaturalOrderComparator implements Comparator<String> {
 

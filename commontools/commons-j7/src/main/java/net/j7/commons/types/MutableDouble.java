@@ -4,7 +4,7 @@ package net.j7.commons.types;
 /**
  * Class MutableDouble.
  *
- * @author Alexander Tawrowski
+ * @author  tavrovsa
  * @version $Revision: #1 $
  */
 public final class MutableDouble extends Number implements Comparable<MutableDouble> {

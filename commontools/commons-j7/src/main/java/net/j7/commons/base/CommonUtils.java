@@ -1,11 +1,11 @@
 /*
  * @File: CommonUtils.java
  *
- * Copyright (c) 2005 Verband der Vereine Creditreform.
- * Hellersbergstr. 12, 41460 Neuss, Germany.
+ * 
+ * 
  * All rights reserved.
  *
- * @Author: Alexander Tawrowski
+ * @Author:  tavrovsa
  *
  * @Version $Revision: #1 $Date: $
  *
@@ -23,7 +23,7 @@ import java.util.Map;
 /**
  * The Class CommonUtils with common simple, but useful methods
  * all methods in this class compatible with java 1.5 and higher
- * @author Alexander Tawrowski
+ * @author  tavrovsa
  */
 @SuppressWarnings("rawtypes")
 public class CommonUtils {
