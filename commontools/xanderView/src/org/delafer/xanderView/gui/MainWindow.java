@@ -203,7 +203,7 @@ public final class MainWindow extends ToRefactor{
 //			e.doit = false;
 			break;
 		default:
-			System.out.println(e.keyCode);
+			System.out.println("code:"+e.keyCode);
 			break;
 		}
 	}

@@ -17,6 +17,7 @@ public class FileDirEntry extends ImageEntry<String> {
 		return new FileDirEntry(entry.identifier, entry.name, entry.size);
 	}
 
+
 	public FileDirEntry(String fullPath, String name, long size) {
 		this.name = name;
 		this.size = size;
@@ -27,6 +28,13 @@ public class FileDirEntry extends ImageEntry<String> {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public FileDirEntry(String fullPath, String name, long size, long crc) {
+		this.name = name;
+		this.size = size;
+		this.identifier = fullPath;
+		this.crc  = crc;
 	}
 
 	@Override
@@ -40,6 +48,7 @@ public class FileDirEntry extends ImageEntry<String> {
 	}
 
 	private void calcCRC(byte[] ret) {
+		System.out.println("hash with size:"+this.size);
 		this.crc = Hasher.hash().calc(ret, this.size);
 	}
 
@@ -48,11 +57,12 @@ public class FileDirEntry extends ImageEntry<String> {
 		return (int) (a1 < a2 ? a1 : a2);
 	}
 
-	public final static byte[] readNIOHash(String fileName) throws IOException {
+	public final byte[] readNIOHash(String fileName) throws IOException {
 
 		RandomAccessFile raf = new RandomAccessFile(fileName, "r");
 
-		long size = raf.length();
+		this.size = raf.length();
+		System.out.println("size:"+size+" fileName"+fileName);
 
 		byte[] buf = new byte[min(size, Hasher.SIZE)];
 		raf.read(buf);
