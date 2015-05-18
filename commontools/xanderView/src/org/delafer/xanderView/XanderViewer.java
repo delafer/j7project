@@ -143,7 +143,7 @@ public class XanderViewer {
 					e.doit = false;
 					break;
 				default:
-					System.out.println(e.keyCode);
+					System.out.println("keyCode"+e.keyCode);
 					break;
 				}
 

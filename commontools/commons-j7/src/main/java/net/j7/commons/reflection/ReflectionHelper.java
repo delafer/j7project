@@ -16,6 +16,7 @@ package net.j7.commons.reflection;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import org.slf4j.Logger;
@@ -365,7 +366,43 @@ public final class ReflectionHelper {
       return res;
    }
 
+   /**
+    * Sets the field value.
+    *
+    * @param objectInstance the object instance
+    * @param fieldName the field name
+    * @param valueToSet the value to set
+    * @throws NoSuchFieldException the no such field exception
+    * @throws IllegalArgumentException the illegal argument exception
+    * @throws IllegalAccessException the illegal access exception
+    */
+   public static void setFieldValue(Object objectInstance, String fieldName, Object valueToSet) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+	   if (null == objectInstance) return ;
+	   Field fld  = getFieldByName(objectInstance.getClass(), fieldName);
+	   if (fld == null) throw new NoSuchFieldException("Field not found: "+fieldName);
+	   if (!fld.isAccessible()) fld.setAccessible(true);
+	   fld.set(objectInstance, valueToSet);
 
+   }
+
+   /**
+    * Sets the method value.
+    *
+    * @param objectInstance the object instance
+    * @param methodName the method name
+    * @param valueToSet the value to set
+    * @throws NoSuchMethodException the no such method exception
+    * @throws IllegalAccessException the illegal access exception
+    * @throws IllegalArgumentException the illegal argument exception
+    * @throws InvocationTargetException the invocation target exception
+    */
+   public static void setMethodValue(Object objectInstance, String methodName, Object valueToSet) throws NoSuchMethodException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	   if (null == objectInstance) return ;
+	   Method method  = assignedMethod(objectInstance.getClass(), methodName);
+	   if (method == null) throw new NoSuchMethodException("Method not found: "+methodName);
+	   if (!method.isAccessible()) method.setAccessible(true);
+	   method.invoke(objectInstance, valueToSet);
+   }
 
 
 }
