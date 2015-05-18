@@ -8,10 +8,21 @@ package net.j7.commons.types;
  */
 public final class MutableLong extends Number implements Comparable<MutableLong> {
 
-   private static final long serialVersionUID = 1L;
+
+
+private static final long serialVersionUID = 1L;
 
    /** The value. */
    public long value;
+
+   public MutableLong() {
+	   super();
+   }
+
+   public MutableLong(long value) {
+	    super();
+		this.value = value;
+	}
 
    /**
     * Gets the value.

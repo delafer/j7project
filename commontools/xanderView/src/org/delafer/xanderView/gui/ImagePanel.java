@@ -34,7 +34,7 @@ public class ImagePanel extends JPanel {
         this.setForeground(Color.BLACK);
         this.setDoubleBuffered(true);
         this.setIgnoreRepaint(true);
-        this.setOpaque(false);
+        this.setOpaque(true);
     }
 
 
@@ -93,7 +93,7 @@ public class ImagePanel extends JPanel {
     	ImageSize imgSize = getImageSize(swapXY);
     	ImageSize cnvSize = getCanvasImageSize();
     	if (!imgSize.equals(cnvSize)) {
-    		System.out.println("resising"+cnvSize);
+    		System.out.println("resising"+cnvSize+" "+imgSize);
     		ImageSize size = OrientationCommons.getNewSize(imgSize.width(), imgSize.height(), cnvSize.width(), cnvSize.height());
     		drawImage = ScaleFactory.instance().resize(imageSource, !swapXY ? size.width() : size.height(), !swapXY ? size.height() : size.width());
     	} else {
@@ -198,80 +198,79 @@ public class ImagePanel extends JPanel {
             as.addAttribute(TextAttribute.FOREGROUND, Color.GREEN);
 
 //            g.setFont(font);
-            g.drawString(as.getIterator(), 12, g.getClipBounds().height - 15);
+//            g.drawString(as.getIterator(), 12, g.getClipBounds().height - 15);
         }
 	}
 
 
-	private static class LazyUpdater extends Thread {
-
-		volatile long start;
-		final static long interval = 800;
-		private transient ImagePanel panel;
-		private transient Graphics g;
-
-
-		/**
-		 *
-		 */
-		public LazyUpdater(ImagePanel panel, Graphics gr) {
-			super("");
-			this.panel = panel;
-			this.g = gr;
-			this.setDaemon(true);
-			this.setPriority((Thread.MIN_PRIORITY + Thread.NORM_PRIORITY)>>1);
-		}
-
-		public synchronized void update(Graphics g) {
-
-			if (!this.isAlive()) this.start();
-
-			this.start = System.currentTimeMillis();
-
-			this.g = g;
-		}
-
-
-
-		/* (non-Javadoc)
-		 * @see java.lang.Thread#run()
-		 */
-		public void run() {
-			while (System.currentTimeMillis() - start < interval) {
-				try {
-					Thread.sleep(5);
-				} catch (InterruptedException e) {}
-			}
-			drawIt();
-		}
-
-		/**
-		 *
-		 */
-		private final void drawIt() {
-
-	        if (panel.drawImage!=null) {
-	        	Rectangle dim = g.getClipBounds();
-	        	int x = (dim.width - panel.drawImage.getWidth(null)) / 2;
-	        	int y  = (dim.height - panel.drawImage.getHeight(null)) / 2;
-
-	        	g.drawImage(panel.drawImage, x, y, null);
-	        }
-
-	        if (!StringUtils.isEmpty(panel.text)) {
-
-	        	AttributedString as = new AttributedString(panel.text);
-
-	            as.addAttribute(TextAttribute.FONT,font);
-	            as.addAttribute(TextAttribute.FOREGROUND, Color.GREEN);
-
-//	            g.setFont(font);
-	            g.drawString(as.getIterator(), 12, g.getClipBounds().height - 15);
-	        }
-	        System.out.println("done");
-		}
-
-	}
+//	private static class LazyUpdater extends Thread {
+//
+//		volatile long start;
+//		final static long interval = 800;
+//		private transient ImagePanel panel;
+//		private transient Graphics g;
+//
+//
+//		/**
+//		 *
+//		 */
+//		public LazyUpdater(ImagePanel panel, Graphics gr) {
+//			super("");
+//			this.panel = panel;
+//			this.g = gr;
+//			this.setDaemon(true);
+//			this.setPriority((Thread.MIN_PRIORITY + Thread.NORM_PRIORITY)>>1);
+//		}
+//
+//		public synchronized void update(Graphics g) {
+//
+//			if (!this.isAlive()) this.start();
+//
+//			this.start = System.currentTimeMillis();
+//
+//			this.g = g;
+//		}
+//
+//
+//
+//		/* (non-Javadoc)
+//		 * @see java.lang.Thread#run()
+//		 */
+//		public void run() {
+//			while (System.currentTimeMillis() - start < interval) {
+//				try {
+//					Thread.sleep(5);
+//				} catch (InterruptedException e) {}
+//			}
+//			drawIt();
+//		}
+//
+//		/**
+//		 *
+//		 */
+//		private final void drawIt() {
+//
+//	        if (panel.drawImage!=null) {
+//	        	Rectangle dim = g.getClipBounds();
+//	        	int x = (dim.width - panel.drawImage.getWidth(null)) / 2;
+//	        	int y  = (dim.height - panel.drawImage.getHeight(null)) / 2;
+//	        	g.drawImage(panel.drawImage, x, y, null);
+//	        }
+//
+//	        if (!StringUtils.isEmpty(panel.text)) {
+//
+//	        	AttributedString as = new AttributedString(panel.text);
+//
+//	            as.addAttribute(TextAttribute.FONT,font);
+//	            as.addAttribute(TextAttribute.FOREGROUND, Color.GREEN);
+//
+////	            g.setFont(font);
+//	            g.drawString(as.getIterator(), 12, g.getClipBounds().height - 15);
+//	        }
+//	        System.out.println("done");
+//		}
+//
+//	}
 
 }
 

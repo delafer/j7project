@@ -1,8 +1,8 @@
 /*
  * @File: ReflectionHelper.java
  *
- * 
- * 
+ *
+ *
  * All rights reserved.
  *
  * @Author:  tavrovsa
@@ -153,13 +153,29 @@ public final class ReflectionHelper {
       return assignedMethod(cls, name, SETPR);
     }
 
+    public static void setFieldValue(Object obj, String name, Object value) {
+    	Field fld = getFieldByName(obj.getClass(), name);
+    	if (fld != null) {
+    		fld.setAccessible(true);
+    		try {
+				fld.set(obj, value);
+			} catch (IllegalArgumentException e) {
+				e.printStackTrace();
+			}
+    		catch (IllegalAccessException e) {
+				e.printStackTrace();
+			}
+    	}
+
+    }
+
    /**
     * Gets the field by name.
     * @param cls the class to work with
     * @param name the name
     * @return the field by name
     */
-    private static Field getFieldByName(Class<?> cls, String name)  {
+    public static Field getFieldByName(Class<?> cls, String name)  {
 
        if (cls == null || cls.isPrimitive()) return null;
 

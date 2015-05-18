@@ -14,6 +14,10 @@ import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 
 import javax.swing.SwingUtilities;
+import javax.swing.text.MutableAttributeSet;
+
+import net.j7.commons.reflection.ReflectionHelper;
+import net.j7.commons.types.MutableLong;
 
 import org.delafer.xanderView.gui.config.ApplConfiguration;
 import org.delafer.xanderView.interfaces.CommonContainer;
@@ -27,6 +31,7 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Decorations;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
@@ -37,12 +42,12 @@ import org.eclipse.swt.widgets.Shell;
 
 public final class MainWindow extends ToRefactor{
 
-	private Shell shell;
+	private MultiShell shell;
 	private Display display;
 	private Composite cmpEmbedded;
 	private ImagePanel panel;
 	private static CommonContainer pointer;
-
+	LazyUpdater updater = null;
 	private static final Point SHELL_SIZE = new Point(940, 720);
 
 
@@ -65,7 +70,7 @@ public final class MainWindow extends ToRefactor{
 
 	protected void show () {
 
-		shell = new Shell(display, SHELL_TRIM | ON_TOP | NO_REDRAW_RESIZE | NO_BACKGROUND | APPLICATION_MODAL | NO_SCROLL | DOUBLE_BUFFERED );
+		shell = new MultiShell(display,  ON_TOP | NO_REDRAW_RESIZE | NO_BACKGROUND | APPLICATION_MODAL | NO_SCROLL | DOUBLE_BUFFERED  | SWT.SHELL_TRIM  );
 		shell.setLayout(new FillLayout(HORIZONTAL));
 		shell.setSize( SHELL_SIZE );
 
@@ -84,12 +89,12 @@ public final class MainWindow extends ToRefactor{
 
 		shell.addListener(SWT.Resize, new Listener() {
 	        public void handleEvent(Event e) {
-	          SwingUtilities.invokeLater(new Runnable() {
-	            public void run() {
-	            	MainWindow.this.panel.preRenderImage();
-	            	MainWindow.this.panel.showImage();
-	            }
-	         });
+	        	if(updater == null || !updater.isAlive()) {
+	    			updater = new LazyUpdater(MainWindow.this.panel);
+	    		}
+	    		updater.update();
+
+	    		e.doit = false;
 	        }
 
 	    });
@@ -110,7 +115,12 @@ public final class MainWindow extends ToRefactor{
 	private void createImageCanvas() {
 		panel = new ImagePanel ();
 
-		cmpEmbedded = new Composite(shell,  EMBEDDED | NO_REDRAW_RESIZE  | NO_BACKGROUND  | NO_SCROLL | DOUBLE_BUFFERED);
+
+		cmpEmbedded = new Composite(shell.active(),  EMBEDDED | NO_REDRAW_RESIZE  | NO_BACKGROUND  | NO_SCROLL | DOUBLE_BUFFERED );
+
+//		cmpEmbedded.setParent(shell);
+
+
 		cmpEmbedded.setLayout(null);
 		cmpEmbedded.addListener (SWT.Resize,  new Listener () {
 		    public void handleEvent (Event e) {
@@ -119,6 +129,9 @@ public final class MainWindow extends ToRefactor{
 		      }
 		    });
 		java.awt.Frame awtFrame = SWT_AWT.new_Frame( cmpEmbedded );
+//		awtFrame.setUndecorated(true);
+		awtFrame.setResizable(false);
+		awtFrame.setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
 		awtFrame.addMouseListener(new MouseAdapter() {
 
 			@Override
@@ -210,16 +223,29 @@ public final class MainWindow extends ToRefactor{
 
 	private void toggleFullscreen() {
 		boolean isFullScreen  = !shell.getFullScreen();
-		shell.setFullScreen(isFullScreen);
+
 		shell.setMaximized (isFullScreen);
+		shell.setFullScreen(isFullScreen);
+
+
 		if (isFullScreen) {
-			shell.getMenuBar().dispose();
+			int a = (Integer)ReflectionHelper.getFieldValue(shell, "style");
+//			System.out.println(a);
+//			int x = (ON_TOP  | NO_BACKGROUND  | NO_SCROLL | DOUBLE_BUFFERED  |  SWT.NO_TRIM);
+//			ReflectionHelper.setFieldValue(shell, "style", x);
+//			System.out.println("x="+x+" style"+shell.getStyle());
+//			shell.getMenuBar().dispose();
+//			shell.setBounds(this.getActiveMonitor().getBounds());
+//			shell.getVerticalBar().dispose();
+			shell.setVisible(false);
 		} else {
 			createMenuBar();
 		}
 
 		shell.setModified(true);
-
+//		shell.layout(true);
+//		shell.setRedraw(true);
+//		shell.redraw();
 //    	System.out.println(">"+cmpEmbedded.getSize().x+ "<>"+cmpEmbedded.getSize().y);
 //    	System.out.println(">>"+cmpEmbedded.getClientArea().width+ "<>"+cmpEmbedded.getClientArea().height);
 //    	System.out.println(">>>"+panel.getWidth()+"<>"+panel.getHeight());
@@ -229,7 +255,7 @@ public final class MainWindow extends ToRefactor{
 
 	Menu createMenuBar() {
 		// Menu bar.
-		Menu menuBar = new Menu(shell, SWT.BAR);
+		Menu menuBar = new Menu(shell.getWndShell(), SWT.BAR);
 		shell.setMenuBar(menuBar);
 		createFileMenu(menuBar);
 		return menuBar;
@@ -238,7 +264,7 @@ public final class MainWindow extends ToRefactor{
 	void createFileMenu(Menu bar) {
 		MenuItem fileItem = new MenuItem (bar, SWT.CASCADE);
 		fileItem.setText ("&Menu");
-		Menu submenu = new Menu (shell, SWT.DROP_DOWN);
+		Menu submenu = new Menu (shell.getWndShell(), SWT.DROP_DOWN);
 		fileItem.setMenu (submenu);
 
 		UIHelpers.addMenuItem(submenu, "Select &Templates to read\tCtrl+T", SWT.MOD1 + 'T', null);
@@ -285,8 +311,13 @@ public final class MainWindow extends ToRefactor{
 
 	private void runGlobalEventLoop()
 	{
-		while (!shell.isDisposed ())
-			if (!display.readAndDispatch()) display.sleep ();
+		Shell[] shells;
+		while (!display.isDisposed ())
+			if (!display.readAndDispatch()) {
+				shells = display.getShells();
+				if (shells.length == 0) break;
+				display.sleep();
+			}
 
 		display.dispose ();
 	}
