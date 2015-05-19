@@ -22,8 +22,7 @@ public class ApplConfiguration {
 	public static final String CFG_POS_Y = "PosY";
 	public static final String CFG_WIDTH = "Width";
 	public static final String CFG_HEIGHT = "Height";
-	public static final String SCALER_FAST = "scale.speed";
-	public static final String SCALER_QUALITY = "scale.quality";
+	public static final String SCALER = "Scaler";
 	public static final String LOOP_CURRENT_SOURCE = "loop.source";
 	public static final String CFG_COPY_DIR = "target.folder";
 
@@ -58,7 +57,7 @@ public class ApplConfiguration {
 		Properties pro = new Properties();
 		pro.setProperty(CFG_HEIGHT, String.valueOf(600));
 		pro.setProperty(CFG_WIDTH, String.valueOf(800));
-		pro.setProperty(SCALER_FAST, String.valueOf(ScaleFactory.SCALER_AWT_2D_FAST ));
+		pro.setProperty(SCALER, "1;3,1200x900");
 		pro.setProperty(LOOP_CURRENT_SOURCE, String.valueOf(true));
 		pro.setProperty(CFG_COPY_DIR, "d:\\test2");
 		return pro;

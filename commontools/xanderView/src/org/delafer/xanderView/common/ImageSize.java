@@ -40,6 +40,9 @@ public final class ImageSize {
 		this.height = height;
 	}
 
+	public long dims() {
+		return (long)width * (long)height;
+	}
 
 	@Override
 	public int hashCode() {

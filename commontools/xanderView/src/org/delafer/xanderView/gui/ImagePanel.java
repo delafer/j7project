@@ -95,7 +95,7 @@ public class ImagePanel extends JPanel {
     	if (!imgSize.equals(cnvSize)) {
     		System.out.println("resising"+cnvSize+" "+imgSize);
     		ImageSize size = OrientationCommons.getNewSize(imgSize.width(), imgSize.height(), cnvSize.width(), cnvSize.height());
-    		drawImage = ScaleFactory.instance().resize(imageSource, !swapXY ? size.width() : size.height(), !swapXY ? size.height() : size.width());
+    		drawImage = ScaleFactory.instance(imgSize).resize(imageSource, !swapXY ? size.width() : size.height(), !swapXY ? size.height() : size.width());
     	} else {
     		drawImage = imageSource;
     	}
