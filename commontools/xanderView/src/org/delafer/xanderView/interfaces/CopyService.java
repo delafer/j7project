@@ -9,6 +9,7 @@ import net.j7.commons.base.Equals;
 import net.j7.commons.io.FilePath;
 import net.j7.commons.io.FileUtils;
 
+import org.delafer.xanderView.general.State;
 import org.delafer.xanderView.gui.config.ApplConfiguration;
 import org.delafer.xanderView.interfaces.IAbstractReader.FileEvent;
 
@@ -74,38 +75,44 @@ public class CopyService {
 
 	}
 
-	public void copy(ImageEntry<?> entry) {
-		FileDirEntry fde = new FileDirEntry(null,null,0);
-		fde.crc = entry.CRC();
+	public State copy(ImageEntry<?> entry) {
+		try {
+			FileDirEntry fde = new FileDirEntry(null,null,0);
+			fde.crc = entry.CRC();
 
-		if (images.contains(fde)) {
-			System.out.println("Already exists!!!");
-			for (FileDirEntry next : images) {
-				System.out.println(next.identifier+" "+next.name+" "+next.crc);
+			if (images.contains(fde)) {
+				System.out.println("Already exists!!!");
+				for (FileDirEntry next : images) {
+					System.out.println(next.identifier+" "+next.name+" "+next.crc);
+				}
+				return State.Ignore;
 			}
-			return ;
+
+			String fileName = entry.name;
+			String baseName = FileUtils.getBaseName(fileName);
+			String ext = FileUtils.getExtension(fileName);
+
+			SimpleNameIncrementer nameInc = SimpleNameIncrementer.instance(baseName);
+
+			File aFile = null;
+			while ((aFile = getFile(ext, nameInc)).exists()) {
+				nameInc.increment();
+			}
+
+			nioTransferCopy(entry, aFile);
+
+
+			FileDirEntry newEntry = new FileDirEntry(FileUtils.extractFullPathName(aFile), fileName, entry.size, entry.crc);
+
+			FileDirEntry removeIt = CopyService.this.findByName(newEntry.getIdentifier());
+			images.remove(removeIt);
+
+			addImage(newEntry);
+			return State.Success;
+
+		} catch (Throwable e) {
+			return State.Error;
 		}
-
-		String fileName = entry.name;
-		String baseName = FileUtils.getBaseName(fileName);
-		String ext = FileUtils.getExtension(fileName);
-
-		SimpleNameIncrementer nameInc = SimpleNameIncrementer.instance(baseName);
-
-		File aFile = null;
-		while ((aFile = getFile(ext, nameInc)).exists()) {
-			nameInc.increment();
-		}
-
-		nioTransferCopy(entry, aFile);
-
-
-		FileDirEntry newEntry = new FileDirEntry(FileUtils.extractFullPathName(aFile), fileName, entry.size, entry.crc);
-
-		FileDirEntry removeIt = CopyService.this.findByName(newEntry.getIdentifier());
-		images.remove(removeIt);
-
-		addImage(newEntry);
 
 
 	}
@@ -130,15 +137,13 @@ public class CopyService {
 	    }
 	}
 
-    private static void nioTransferCopy(ImageEntry<?> entry, File target) {
+    private static void nioTransferCopy(ImageEntry<?> entry, File target) throws IOException {
         FileChannel out = null;
 
         try {
             out = new FileOutputStream(target).getChannel();
             out.write(ByteBuffer.wrap(entry.content()));
             out.force(true);
-        } catch (IOException e) {
-            e.printStackTrace();
         } finally {
             close(out);
         }

@@ -5,6 +5,8 @@ import static org.eclipse.swt.SWT.*;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 
+import org.delafer.xanderView.SplashWindow;
+import org.delafer.xanderView.general.State;
 import org.delafer.xanderView.gui.config.ApplConfiguration;
 import org.delafer.xanderView.interfaces.CommonContainer;
 import org.delafer.xanderView.interfaces.CopyService;
@@ -110,7 +112,6 @@ public final class MainWindow extends ToRefactor{
 		awtFrame.setResizable(false);
 		awtFrame.setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
 		awtFrame.addMouseListener(new MouseAdapter() {
-
 			@Override
 			public void mouseClicked(java.awt.event.MouseEvent e) {
 				if(e.getClickCount()==2){
@@ -164,7 +165,9 @@ public final class MainWindow extends ToRefactor{
 
 		case 16777233://F8
 		case 16777232://F7
-			CopyService.instance().copy(pointer.getCurrent());
+			State res = CopyService.instance().copy(pointer.getCurrent());
+
+			SplashWindow splash = new SplashWindow(shell.active(), res);
 			break;
 		case 108:
 			panel.rotate(Action.RotateLeft);
@@ -190,8 +193,6 @@ public final class MainWindow extends ToRefactor{
 			break;
 		case SWT.CR:
 			toggleFullscreen();
-			panel.preRenderImage();
-			panel.showImage();
 			break;
 		default:
 			System.out.println("code:"+e.keyCode);
@@ -210,22 +211,24 @@ public final class MainWindow extends ToRefactor{
 		shell.setModified(true);
 		shell.active().redraw();
 		shell.active().layout(true);
+
 		panel.preRenderImage();
-    	panel.showImage();
-//		shell.active().notifyListeners(SWT.Resize, getResizeEvent());
+		panel.showImage();
+
+		shell.active().notifyListeners(SWT.Resize, getResizeEvent());
 
 	}
 
-//	private Event getResizeEvent() {
-//		Event event = new Event();
-//		event.type = SWT.Resize;
-//		event.doit = true;
-//		event.display = Display.getCurrent();
-//		event.time = OS.GetMessageTime();
-//		event.widget = shell.active();
-//		event.item = event.widget;
-//		return event;
-//	}
+	private Event getResizeEvent() {
+		Event event = new Event();
+		event.type = SWT.Resize;
+		event.doit = true;
+		event.display = Display.getCurrent();
+		event.time = OS.GetMessageTime();
+		event.widget = shell.active();
+		event.item = event.widget;
+		return event;
+	}
 
 	Menu createMenuBar() {
 		// Menu bar.
