@@ -197,8 +197,8 @@ public class ImagePanel extends JPanel {
             as.addAttribute(TextAttribute.FONT,font);
             as.addAttribute(TextAttribute.FOREGROUND, Color.GREEN);
 
-//            g.setFont(font);
-//            g.drawString(as.getIterator(), 12, g.getClipBounds().height - 15);
+            g.setFont(font);
+            g.drawString(as.getIterator(), 12, g.getClipBounds().height - 15);
         }
 	}
 

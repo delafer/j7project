@@ -154,22 +154,6 @@ public final class ReflectionHelper {
       return assignedMethod(cls, name, SETPR);
     }
 
-    public static void setFieldValue(Object obj, String name, Object value) {
-    	Field fld = getFieldByName(obj.getClass(), name);
-    	if (fld != null) {
-    		fld.setAccessible(true);
-    		try {
-				fld.set(obj, value);
-			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
-			}
-    		catch (IllegalAccessException e) {
-				e.printStackTrace();
-			}
-    	}
-
-    }
-
    /**
     * Gets the field by name.
     * @param cls the class to work with

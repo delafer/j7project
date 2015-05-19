@@ -213,7 +213,8 @@ public final class MainWindow extends ToRefactor{
 			break;
 		case SWT.CR:
 			toggleFullscreen();
-//			e.doit = false;
+			panel.preRenderImage();
+			panel.showImage();
 			break;
 		default:
 			System.out.println("code:"+e.keyCode);
@@ -224,33 +225,16 @@ public final class MainWindow extends ToRefactor{
 	private void toggleFullscreen() {
 		boolean isFullScreen  = !shell.getFullScreen();
 
-		shell.setMaximized (isFullScreen);
 		shell.setFullScreen(isFullScreen);
+		shell.setMaximized (isFullScreen);
 
-
-		if (isFullScreen) {
-			int a = (Integer)ReflectionHelper.getFieldValue(shell, "style");
-//			System.out.println(a);
-//			int x = (ON_TOP  | NO_BACKGROUND  | NO_SCROLL | DOUBLE_BUFFERED  |  SWT.NO_TRIM);
-//			ReflectionHelper.setFieldValue(shell, "style", x);
-//			System.out.println("x="+x+" style"+shell.getStyle());
-//			shell.getMenuBar().dispose();
-//			shell.setBounds(this.getActiveMonitor().getBounds());
-//			shell.getVerticalBar().dispose();
-			shell.setVisible(false);
-		} else {
-			createMenuBar();
-		}
+		cmpEmbedded.setParent(shell.active());
 
 		shell.setModified(true);
-//		shell.layout(true);
-//		shell.setRedraw(true);
-//		shell.redraw();
-//    	System.out.println(">"+cmpEmbedded.getSize().x+ "<>"+cmpEmbedded.getSize().y);
-//    	System.out.println(">>"+cmpEmbedded.getClientArea().width+ "<>"+cmpEmbedded.getClientArea().height);
-//    	System.out.println(">>>"+panel.getWidth()+"<>"+panel.getHeight());
-//    	System.out.println("4>"+panel.getBounds().width+"<>"+panel.getBounds().height);
-//    	System.out.println("4>"+panel.getSize().width+"<>"+panel.getSize().height);
+		shell.active().redraw();
+		shell.active().layout(true);
+		shell.active().notifyListeners(SWT.Resize, new Event());
+
 	}
 
 	Menu createMenuBar() {
@@ -315,7 +299,7 @@ public final class MainWindow extends ToRefactor{
 		while (!display.isDisposed ())
 			if (!display.readAndDispatch()) {
 				shells = display.getShells();
-				if (shells.length == 0) break;
+				if (shells.length < 2) break;
 				display.sleep();
 			}
 

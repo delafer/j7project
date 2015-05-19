@@ -3,7 +3,7 @@ package org.delafer.xanderView.gui;
 class LazyUpdater extends Thread {
 
 	volatile long start;
-	final static long interval = 250;
+	final static long interval = 400;
 	private ImagePanel panel;
 
 	/**

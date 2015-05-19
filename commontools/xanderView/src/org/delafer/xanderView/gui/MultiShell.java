@@ -1,33 +1,36 @@
 package org.delafer.xanderView.gui;
 
-import static org.eclipse.swt.SWT.APPLICATION_MODAL;
-import static org.eclipse.swt.SWT.DOUBLE_BUFFERED;
-import static org.eclipse.swt.SWT.NO_BACKGROUND;
-import static org.eclipse.swt.SWT.NO_REDRAW_RESIZE;
-import static org.eclipse.swt.SWT.NO_SCROLL;
-import static org.eclipse.swt.SWT.ON_TOP;
+import static org.eclipse.swt.SWT.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import net.j7.commons.types.DoubleValue;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.*;
 
 public class MultiShell  {
 
 
 	Shell wndShell;
-	public Shell getWndShell() {
-		return wndShell;
-	}
+
 
 	Shell fsShell;
 	boolean fullscreen;
 
+
+	private List<DoubleValue<Integer, Listener>> listeners;
+
+	public Shell getWndShell() {
+		return wndShell;
+	}
+
 	public MultiShell(Display display, int style) {
+		listeners = new ArrayList<DoubleValue<Integer,Listener>>();
 		wndShell = new Shell(display,  ON_TOP | NO_REDRAW_RESIZE | NO_BACKGROUND | APPLICATION_MODAL | NO_SCROLL | DOUBLE_BUFFERED  | SWT.SHELL_TRIM  );
 		fsShell = new Shell(display,  ON_TOP | NO_REDRAW_RESIZE | NO_BACKGROUND | APPLICATION_MODAL | NO_SCROLL | DOUBLE_BUFFERED  | SWT.NO_TRIM  );
 	}
@@ -35,7 +38,6 @@ public class MultiShell  {
 	public void setLayout(FillLayout layout) {
 		wndShell.setLayout(layout);
 		fsShell.setLayout(layout);
-
 	}
 
 	public Shell active() {
@@ -48,9 +50,8 @@ public class MultiShell  {
 	}
 
 	public void addListener(int move, Listener listener) {
-		wndShell.addListener(move, listener);
-		fsShell.addListener(move, listener);
-
+		listeners.add(new DoubleValue<Integer, Listener>(move, listener));
+		active().addListener(move, listener);
 	}
 
 	public void open() {
@@ -92,13 +93,29 @@ public class MultiShell  {
 
 
 	public void setFullScreen(boolean isFullScreen) {
-		// TODO Auto-generated method stub
+
+		Point loc = active().getLocation();
+		for (DoubleValue<Integer, Listener> lst : listeners) {
+			active().removeListener(lst.getOne(), lst.getTwo());
+		}
+
+		fullscreen = isFullScreen;
+
+		fsShell.setVisible(isFullScreen);
+		wndShell.setVisible(!isFullScreen);
+
+		for (DoubleValue<Integer, Listener> lst : listeners) {
+			active().addListener(lst.getOne(), lst.getTwo());
+		}
+
+		active().setLocation(loc);
+		active().setActive();
+		active().setFocus();
 
 	}
 
 	public void setVisible(boolean b) {
-//		active().se
-
+		active().setVisible(b);
 	}
 
 	public void setMenuBar(Menu menuBar) {
