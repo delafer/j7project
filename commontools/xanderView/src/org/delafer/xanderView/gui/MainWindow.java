@@ -1,23 +1,9 @@
 package org.delafer.xanderView.gui;
 
-import static org.eclipse.swt.SWT.APPLICATION_MODAL;
-import static org.eclipse.swt.SWT.DOUBLE_BUFFERED;
-import static org.eclipse.swt.SWT.EMBEDDED;
-import static org.eclipse.swt.SWT.HORIZONTAL;
-import static org.eclipse.swt.SWT.NO_BACKGROUND;
-import static org.eclipse.swt.SWT.NO_REDRAW_RESIZE;
-import static org.eclipse.swt.SWT.NO_SCROLL;
-import static org.eclipse.swt.SWT.ON_TOP;
-import static org.eclipse.swt.SWT.SHELL_TRIM;
+import static org.eclipse.swt.SWT.*;
 
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
-
-import javax.swing.SwingUtilities;
-import javax.swing.text.MutableAttributeSet;
-
-import net.j7.commons.reflection.ReflectionHelper;
-import net.j7.commons.types.MutableLong;
 
 import org.delafer.xanderView.gui.config.ApplConfiguration;
 import org.delafer.xanderView.interfaces.CommonContainer;
@@ -25,20 +11,11 @@ import org.delafer.xanderView.interfaces.CopyService;
 import org.delafer.xanderView.orientation.OrientationCommons.Action;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.internal.win32.OS;
 import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Decorations;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.MenuItem;
-import org.eclipse.swt.widgets.Monitor;
-import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.*;
 
 public final class MainWindow extends ToRefactor{
 
@@ -233,9 +210,22 @@ public final class MainWindow extends ToRefactor{
 		shell.setModified(true);
 		shell.active().redraw();
 		shell.active().layout(true);
-		shell.active().notifyListeners(SWT.Resize, new Event());
+		panel.preRenderImage();
+    	panel.showImage();
+//		shell.active().notifyListeners(SWT.Resize, getResizeEvent());
 
 	}
+
+//	private Event getResizeEvent() {
+//		Event event = new Event();
+//		event.type = SWT.Resize;
+//		event.doit = true;
+//		event.display = Display.getCurrent();
+//		event.time = OS.GetMessageTime();
+//		event.widget = shell.active();
+//		event.item = event.widget;
+//		return event;
+//	}
 
 	Menu createMenuBar() {
 		// Menu bar.
