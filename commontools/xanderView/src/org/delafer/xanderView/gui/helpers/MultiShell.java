@@ -8,6 +8,7 @@ import java.util.List;
 import net.j7.commons.types.DoubleValue;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
@@ -20,7 +21,7 @@ public class MultiShell  {
 
 
 	Shell fsShell;
-	boolean fullscreen;
+	boolean fullscreen = false;
 
 
 	private List<DoubleValue<Integer, Listener>> listeners;
@@ -31,8 +32,18 @@ public class MultiShell  {
 
 	public MultiShell(Display display, int style) {
 		listeners = new ArrayList<DoubleValue<Integer,Listener>>();
-		wndShell = new Shell(display,  ON_TOP | NO_REDRAW_RESIZE | NO_BACKGROUND | APPLICATION_MODAL | NO_SCROLL | DOUBLE_BUFFERED  | SWT.SHELL_TRIM  );
-		fsShell = new Shell(display,  ON_TOP | NO_REDRAW_RESIZE | NO_BACKGROUND | APPLICATION_MODAL | NO_SCROLL | DOUBLE_BUFFERED  | SWT.NO_TRIM  );
+		wndShell = new Shell(display,  NO_REDRAW_RESIZE | NO_BACKGROUND | APPLICATION_MODAL | NO_SCROLL | DOUBLE_BUFFERED  | SWT.SHELL_TRIM  );
+		fsShell = new Shell(wndShell,  ON_TOP | NO_REDRAW_RESIZE | NO_BACKGROUND | APPLICATION_MODAL | NO_SCROLL | DOUBLE_BUFFERED  | SWT.NO_TRIM);
+//		fsShell.setParent(wndShell);
+
+		addIcons();
+
+	}
+
+	public void addIcons() {
+		Image img32 = ImageRepository.getImage("large_icon");
+//		Image img16 = ImageRepository.getImage("small_icon");
+		wndShell.setImages(new Image[] { img32});
 	}
 
 	public void setLayout(FillLayout layout) {
@@ -102,7 +113,7 @@ public class MultiShell  {
 		fullscreen = isFullScreen;
 
 		fsShell.setVisible(isFullScreen);
-		wndShell.setVisible(!isFullScreen);
+		//wndShell.setVisible(!isFullScreen);
 
 		for (DoubleValue<Integer, Listener> lst : listeners) {
 			active().addListener(lst.getOne(), lst.getTwo());
@@ -111,6 +122,7 @@ public class MultiShell  {
 		active().setLocation(loc);
 		active().setActive();
 		active().setFocus();
+
 
 	}
 
@@ -126,6 +138,7 @@ public class MultiShell  {
 	public Point getLocation() {
 		return active().getLocation();
 	}
+
 
 
 }

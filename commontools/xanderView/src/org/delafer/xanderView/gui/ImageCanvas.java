@@ -17,6 +17,7 @@ import org.delafer.xanderView.orientation.OrientationCommons.Orientation;
 import org.delafer.xanderView.scale.ScaleFactory;
 
 public class ImageCanvas extends JPanel {
+
 	private static final long serialVersionUID = 9162619010168531038L;
 	BufferedImage imageSource;
 	BufferedImage drawImage;
@@ -32,8 +33,6 @@ public class ImageCanvas extends JPanel {
         this.setIgnoreRepaint(true);
         this.setOpaque(true);
     }
-
-
 
     public void setImage(BufferedImage image, String text, Orientation direction) {
    	 	this.imageSource = image;
@@ -71,9 +70,7 @@ public class ImageCanvas extends JPanel {
     }
 
     private ImageSize getCanvasImageSize() {
-
     	return new ImageSize(getWidth(), getHeight());
-//    	return new ImageSize((int)getSize().getWidth(), (int)getSize().getHeight());
     }
 
     private ImageSize getImageSize(boolean swapXY) {
@@ -89,7 +86,6 @@ public class ImageCanvas extends JPanel {
     	ImageSize imgSize = getImageSize(swapXY);
     	ImageSize cnvSize = getCanvasImageSize();
     	if (!imgSize.equals(cnvSize)) {
-//    		System.out.println("resising"+cnvSize+" "+imgSize);
     		ImageSize size = OrientationCommons.getNewSize(imgSize.width(), imgSize.height(), cnvSize.width(), cnvSize.height());
     		drawImage = ScaleFactory.instance(imgSize).resize(imageSource, !swapXY ? size.width() : size.height(), !swapXY ? size.height() : size.width());
     	} else {
@@ -110,69 +106,11 @@ public class ImageCanvas extends JPanel {
     }
 
 
-
-//    @Override
-//    public void repaint() {
-//    	System.out.println("repaint");
-//    	super.repaint();
-//    }
-//
-//    @Override
-//	public void updateUI() {
-//    	System.out.println("updateUI");
-//		super.updateUI();
-//	}
-//
-//
-//
-//	@Override
-//	public void update(Graphics g) {
-//		System.out.println("update(Graphics g)");
-//		super.update(g);
-//	}
-//
-//
-//
-//	@Override
-//	public void paint(Graphics g) {
-//		System.out.println("paint(Graphics g)");
-//		super.paint(g);
-//	}
-//
-//
-//
-//	@Override
-//	public void paintImmediately(Rectangle r) {
-//		System.out.println("paintImmediately(Rectangle r)");
-//		super.paintImmediately(r);
-//	}
-//
-//
-//
-//	@Override
-//	public void paintComponents(Graphics g) {
-//		System.out.println("paintComponents(Graphics g)");
-//		super.paintComponents(g);
-//	}
-//
-//
-//
-//	@Override
-//	public void paintAll(Graphics g) {
-//		System.out.println("paintAll(Graphics g)");
-//		super.paintAll(g);
-//	}
-
-
-
 	public void paintComponent(Graphics g) {
-//		System.out.println("paintComponent(Graphics g)");
         super.paintComponent(g);  // Paint background
         paintCanvas(this, g);
 
     }
-
-
 
 	public static void paintCanvas(ImageCanvas panel, Graphics g) {
 
@@ -198,75 +136,6 @@ public class ImageCanvas extends JPanel {
         }
 	}
 
-
-//	private static class LazyUpdater extends Thread {
-//
-//		volatile long start;
-//		final static long interval = 800;
-//		private transient ImagePanel panel;
-//		private transient Graphics g;
-//
-//
-//		/**
-//		 *
-//		 */
-//		public LazyUpdater(ImagePanel panel, Graphics gr) {
-//			super("");
-//			this.panel = panel;
-//			this.g = gr;
-//			this.setDaemon(true);
-//			this.setPriority((Thread.MIN_PRIORITY + Thread.NORM_PRIORITY)>>1);
-//		}
-//
-//		public synchronized void update(Graphics g) {
-//
-//			if (!this.isAlive()) this.start();
-//
-//			this.start = System.currentTimeMillis();
-//
-//			this.g = g;
-//		}
-//
-//
-//
-//		/* (non-Javadoc)
-//		 * @see java.lang.Thread#run()
-//		 */
-//		public void run() {
-//			while (System.currentTimeMillis() - start < interval) {
-//				try {
-//					Thread.sleep(5);
-//				} catch (InterruptedException e) {}
-//			}
-//			drawIt();
-//		}
-//
-//		/**
-//		 *
-//		 */
-//		private final void drawIt() {
-//
-//	        if (panel.drawImage!=null) {
-//	        	Rectangle dim = g.getClipBounds();
-//	        	int x = (dim.width - panel.drawImage.getWidth(null)) / 2;
-//	        	int y  = (dim.height - panel.drawImage.getHeight(null)) / 2;
-//	        	g.drawImage(panel.drawImage, x, y, null);
-//	        }
-//
-//	        if (!StringUtils.isEmpty(panel.text)) {
-//
-//	        	AttributedString as = new AttributedString(panel.text);
-//
-//	            as.addAttribute(TextAttribute.FONT,font);
-//	            as.addAttribute(TextAttribute.FOREGROUND, Color.GREEN);
-//
-////	            g.setFont(font);
-//	            g.drawString(as.getIterator(), 12, g.getClipBounds().height - 15);
-//	        }
-//	        System.out.println("done");
-//		}
-//
-//	}
 
 }
 

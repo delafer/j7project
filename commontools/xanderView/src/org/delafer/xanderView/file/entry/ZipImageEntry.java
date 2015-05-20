@@ -22,6 +22,7 @@ public class ZipImageEntry extends ImageEntry<Integer> {
 		this.name = name;
 		this.size = size;
 		this.identifier = id;
+		this.imageType = getType(name);
 	}
 
 	@Override

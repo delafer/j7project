@@ -9,6 +9,7 @@ import java.util.List;
 import org.delafer.xanderView.file.ContentChangeWatcher;
 import org.delafer.xanderView.file.entry.ImageEntry;
 import org.delafer.xanderView.file.entry.ZipImageEntry;
+import org.delafer.xanderView.file.entry.ImageEntry.ImageType;
 import org.delafer.xanderView.interfaces.IAbstractReader;
 
 import net.j7.commons.io.FileUtils;
@@ -42,7 +43,8 @@ public class SevenZipReader implements IAbstractReader {
 
 			for (int i = 0; i < numberOfItems; i++) {
 				ZipImageEntry entry = getEntryByIdentifier(i);
-				entries.add(entry);
+
+				if (entry != null) entries.add(entry);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -75,6 +77,10 @@ public class SevenZipReader implements IAbstractReader {
 		int i = ((Number)id).intValue();
 		String pathName = (String)archive.getProperty(i, PropID.PATH);
 		Long size = (Long)archive.getProperty(i, PropID.SIZE);
+
+		ImageType imageType = ImageEntry.getType(pathName);
+		if (imageType.equals(ImageType.UNKNOWN)) return null;
+
 		return new ZipImageEntry(archive, i, pathName, size);
 	}
 

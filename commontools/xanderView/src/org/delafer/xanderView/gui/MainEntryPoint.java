@@ -4,6 +4,8 @@ import net.j7.commons.strings.StringUtils;
 import net.j7.commons.utils.Metrics;
 
 import org.delafer.xanderView.general.Shutdown;
+import org.delafer.xanderView.gui.helpers.ImageRepository;
+import org.eclipse.swt.widgets.Display;
 
 public class MainEntryPoint {
 
@@ -15,6 +17,8 @@ public class MainEntryPoint {
 			System.exit(0);
 		}
 		Metrics.enable(false);
+
+		ImageRepository.loadImages();
 		MainWindow gui = new MainWindow();
 		Shutdown.addHook();
 		gui.open(args[0]);

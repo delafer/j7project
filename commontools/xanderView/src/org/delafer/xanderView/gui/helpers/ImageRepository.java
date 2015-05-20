@@ -51,8 +51,8 @@ public class ImageRepository {
 	private static final boolean doNotUseAWTIcon = false; //Constants.isOSX;
 
 	static {
-		images = new HashMap<String, Image>(150);
-		imagesToPath = new HashMap<String, String>(150);
+		images = new HashMap<String, Image>();
+		imagesToPath = new HashMap<String, String>();
 		registry = new HashMap<String, Image>();
 	}
 
@@ -65,33 +65,15 @@ public class ImageRepository {
 //		addPath("org/gudy/azureus2/ui/splash/azureus.jpg", "azureus_splash");
 	}
 
-	public static void loadImages(Display display) {
+	public static void loadImages() {
 
-		addPath("org/delafer/benchmark/ui/res/icons/main_icon.gif", "main_icon");
+		addPath("resources/large_ico.png", "large_icon");
+		addPath("resources/small_ico.png", "small_icon");
 
-		addPathOnOff("org/delafer/benchmark/ui/res/icons/toolbar/go.png", "start");
-		addPathOnOff("org/delafer/benchmark/ui/res/icons/toolbar/stop.png", "stop");
-		addPathOnOff("org/delafer/benchmark/ui/res/icons/toolbar/connect.png", "connect");
-		addPathOnOff("org/delafer/benchmark/ui/res/icons/toolbar/settings.png", "settings");
-		addPathOnOff("org/delafer/benchmark/ui/res/icons/toolbar/language.png", "language");
-		addPathOnOff("org/delafer/benchmark/ui/res/icons/toolbar/information.png", "information");
-		addPathOnOff("org/delafer/benchmark/ui/res/icons/toolbar/exit.png", "exit");
-		addPathOnOff("org/delafer/benchmark/ui/res/icons/toolbar/donate.png", "donate");
-
-
-		addPath("org/delafer/benchmark/ui/res/icons/itembar/cpu.png", "type_cpu");
-		addPath("org/delafer/benchmark/ui/res/icons/itembar/memory.png", "type_mem");
-		addPath("org/delafer/benchmark/ui/res/icons/itembar/java.png", "type_java");
-
-		addPath("org/delafer/benchmark/ui/res/icons/toolbar/btn_src.png", "btn_src");
-		addPath("org/delafer/benchmark/ui/res/icons/toolbar/btn_home.png", "btn_home");
-		addPath("org/delafer/benchmark/ui/res/icons/toolbar/btn_options.png", "btn_options");
-		addPath("org/delafer/benchmark/ui/res/icons/toolbar/btn_stuff.png", "btn_stuff");
-
-		addPath("org/delafer/benchmark/ui/res/icons/16pix/plugin_ico.png", "plugin_ico");
 
 	}
 
+	@SuppressWarnings("unused")
 	private static void addPathOnOff(String path, String id) {
 		imagesToPath.put(id, path);
 
@@ -260,6 +242,7 @@ public class ImageRepository {
 	 *            Absolute path to the file or directory
 	 * @return The image
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static Image getPathIcon(final String path) {
 		if (path == null)
 			return null;

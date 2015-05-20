@@ -24,6 +24,7 @@ public class FileImageEntry extends ImageEntry<String> {
 		this.name = name;
 		this.size = size;
 		this.identifier = fullPath;
+		this.imageType = getType(name);
 	}
 
 	@Override

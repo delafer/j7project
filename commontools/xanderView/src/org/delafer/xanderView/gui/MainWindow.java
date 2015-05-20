@@ -41,14 +41,13 @@ public final class MainWindow extends ImageLoader{
 	}
 
 	private void initPath(String path) {
-//		String path = "D:\\test3.zip";
 		pointer = new CommonContainer(path);
 
 	}
 
 	protected void show () {
 
-		shell = new MultiShell(display,  ON_TOP | NO_REDRAW_RESIZE | NO_BACKGROUND | APPLICATION_MODAL | NO_SCROLL | DOUBLE_BUFFERED  | SWT.SHELL_TRIM  );
+		shell = new MultiShell(display,  0  );
 		shell.setLayout(new FillLayout(HORIZONTAL));
 		shell.setSize( SHELL_SIZE );
 
@@ -165,7 +164,6 @@ public final class MainWindow extends ImageLoader{
 		case 16777233://F8
 		case 16777232://F7
 			State res = CopyService.instance().copy(pointer.getCurrent());
-
 			SplashWindow splash = new SplashWindow(shell.active(), res);
 			break;
 		case 108:

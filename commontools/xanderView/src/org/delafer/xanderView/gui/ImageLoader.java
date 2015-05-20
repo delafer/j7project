@@ -2,6 +2,10 @@ package org.delafer.xanderView.gui;
 
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 import net.j7.commons.strings.Args;
 import net.j7.commons.utils.Metrics;
@@ -20,27 +24,32 @@ public abstract class ImageLoader {
 		try {
 			if (entry == null) return ;
 			Metrics m = Metrics.start();
+			System.out.println(entry.getImageType());
 			byte[] bytes = entry.content();
 			String info = Args.fill("%1 [%2/%3]", entry.name(),""+container.currentIndex(),""+container.size());
-			loadImage(bytes, info, panel);
+			loadImage(entry, info, panel);
 			m.measure("IO Read ");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-
-
-	protected void loadImage(byte[] bytes, String text, ImageCanvas panel) {
+	protected void loadImage(ImageEntry<?> entry, String text, ImageCanvas panel) {
 		try {
 			Metrics m = Metrics.start();
+			BufferedImage img = null;
+			switch (entry.getImageType()) {
+			case JPEG:
+				img = loadJpegImage(entry.content());
+				break;
+			case BMP:
+			case PNG:
+			default:
+				img = loadCommonImage(entry.content());
+				break;
+			}
 
-			TJScalingFactor sf =  new TJScalingFactor(1, 1);
-			TJDecompressor tjd = new TJDecompressor(bytes);
-			int width = sf.getScaled(tjd.getWidth());
-			int height = sf.getScaled(tjd.getHeight());
-			BufferedImage img = tjd.decompress(width, height, BufferedImage.TYPE_INT_RGB, 0);
-			m.measure("JPEGDecode ");
+			m.measure("ImageDecode ");
 
 			panel.setImage(img, text, null);
 			panel.showImage();
@@ -49,6 +58,23 @@ public abstract class ImageLoader {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+
+	private BufferedImage loadCommonImage(byte[] content) throws IOException {
+		return ImageIO.read(new ByteArrayInputStream(content));
+	}
+
+
+	protected BufferedImage loadJpegImage(byte[] bytes) throws Exception {
+
+
+			TJScalingFactor sf =  new TJScalingFactor(1, 1);
+			TJDecompressor tjd = new TJDecompressor(bytes);
+			int width = sf.getScaled(tjd.getWidth());
+			int height = sf.getScaled(tjd.getHeight());
+			BufferedImage img = tjd.decompress(width, height, BufferedImage.TYPE_INT_RGB, 0);
+			return img;
 	}
 
 }

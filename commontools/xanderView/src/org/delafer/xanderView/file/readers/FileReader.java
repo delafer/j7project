@@ -20,8 +20,8 @@ import org.delafer.xanderView.comparator.BasicFileComparator;
 import org.delafer.xanderView.file.ContentChangeWatcher;
 import org.delafer.xanderView.file.entry.FileImageEntry;
 import org.delafer.xanderView.file.entry.ImageEntry;
+import org.delafer.xanderView.file.entry.ImageEntry.ImageType;
 import org.delafer.xanderView.interfaces.IAbstractReader;
-import org.delafer.xanderView.interfaces.IAbstractReader.FileEvent;
 
 import com.sun.nio.file.ExtendedWatchEventModifier;
 
@@ -46,8 +46,8 @@ public class FileReader implements IAbstractReader {
 
 				@Override
 				public boolean accept(File entry, FileInfo fileData) {
-					String name = fileData.getNameWithPath().trim().toLowerCase();
-					return name.endsWith(".jpg") || name.endsWith(".jpeg") || name.endsWith(".jpe") || name.endsWith(".jfif") || name.endsWith(".jif");
+					ImageType imageType = ImageEntry.getType(fileData.getNameWithPath());
+					return !imageType.equals(ImageType.UNKNOWN);
 				}
 
 				@Override
