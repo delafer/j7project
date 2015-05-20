@@ -34,12 +34,12 @@ public class SimpleNameIncrementer {
 
 
 	public String build() {
-		if (j == 0) return original;
+		if (j == 0) return original.trim();
 		StringBuilder sb = new StringBuilder(value);
 		for (DoubleValue<Character, Integer> next : skipped) {
 			sb.insert(next.getTwo().intValue(), next.getOne());
 		}
-		return sb.toString();
+		return sb.toString().trim();
 	}
 
 

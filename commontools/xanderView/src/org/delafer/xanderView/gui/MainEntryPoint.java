@@ -11,7 +11,7 @@ public class MainEntryPoint {
 		Metrics.enable(false);
 		MainWindow gui = new MainWindow();
 		Shutdown.addHook();
-		gui.open();
+		gui.open(args[0]);
 
 
 	}

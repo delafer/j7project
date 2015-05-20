@@ -33,16 +33,15 @@ public final class MainWindow extends ToRefactor{
 	public MainWindow() {
 	}
 
-	public void open() {
-		testInit();
+	public void open(String path) {
+		initPath(path);
 		intitialize();
 		show();
 		runGlobalEventLoop();
 	}
 
-	private void testInit() {
+	private void initPath(String path) {
 //		String path = "D:\\test3.zip";
-		String path = "D:\\test\\";
 		pointer = new CommonContainer(path);
 
 	}
