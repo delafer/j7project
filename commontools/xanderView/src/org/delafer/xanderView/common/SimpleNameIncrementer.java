@@ -1,84 +1,66 @@
-package org.delafer.xanderView.interfaces;
+package org.delafer.xanderView.common;
 
 import java.util.*;
 
+import net.j7.commons.strings.StringUtils;
 import net.j7.commons.types.DoubleValue;
 
-public class NameIncrementer {
+public class SimpleNameIncrementer {
 
 
 	private String value;
-	private int radix;
 	private List<DoubleValue<Character, Integer>> skipped;
+	int j = 0;
+	String original;
 
-    final static char[] digits = {
-        '0' , '1' , '2' , '3' , '4' , '5' ,
-        '6' , '7' , '8' , '9' , 'a' , 'b' ,
-        'c' , 'd' , 'e' , 'f' , 'g' , 'h' ,
-        'i' , 'j' , 'k' , 'l' , 'm' , 'n' ,
-        'o' , 'p' , 'q' , 'r' , 's' , 't' ,
-        'u' , 'v' , 'w' , 'x' , 'y' , 'z'
-    };
-
-    private static Map<Character, Integer> radixMap;
-
-    static {
-    	radixMap = new HashMap<Character, Integer>(digits.length);
-    	for (int i = 0; i < digits.length; i++) {
-			radixMap.put(Character.valueOf(digits[i]), Integer.valueOf(i+1));
-		}
-    }
-
-	public NameIncrementer(String name, int radix, List<DoubleValue<Character, Integer>> skipped) {
+	public SimpleNameIncrementer(String original, String name, List<DoubleValue<Character, Integer>> skipped) {
 		this.value = name;
-		this.radix = radix;
 		this.skipped = skipped;
+		this.original = original;
 	}
 
 	public String raw() {
-		return String.format("%s (%s;%s)", value, radix, skipped.size());
+		return String.format("%s (%s;%s)", value, 10, skipped.size());
 	}
 
 
-	public NameIncrementer increment() {
-		long x = Long.parseLong(value, radix);
+	public SimpleNameIncrementer increment() {
+		long x = Long.parseLong(value);
 		x++;
-		this.value  = Long.toString(x, radix);
+		j++;
+		this.value  = StringUtils.fillString(Long.toString(x), value.length(), '0');
 		return this;
 	}
 
 
 	public String build() {
+		if (j == 0) return original.trim();
 		StringBuilder sb = new StringBuilder(value);
 		for (DoubleValue<Character, Integer> next : skipped) {
 			sb.insert(next.getTwo().intValue(), next.getOne());
 		}
-		return sb.toString();
+		return sb.toString().trim();
 	}
 
 
-	public static NameIncrementer instance(String name) {
+	public static SimpleNameIncrementer instance(String name) {
 
 		StringBuilder sb = new StringBuilder(name.length());
 		List<DoubleValue<Character, Integer>> skipped = new LinkedList<DoubleValue<Character, Integer>>();
 		char ch, lch;
-		int max = 10;
 		for (int i = name.length()-1; i >= 0; i--) {
 			ch = name.charAt(i);
 			lch = Character.toLowerCase(ch);
 			if (isNumeric(lch)&&(sb.length()<6)) {
 				sb.insert(0, lch);
-				Integer radix = radixMap.get(Character.valueOf(lch));
-				if (radix.intValue() > max) max = radix.intValue();
 			} else {
 				skipped.add(0, new DoubleValue<Character, Integer>(ch, i));
 			}
 		}
 
-		if (sb.length()==0) sb.append('0');
-		System.out.println("x:"+max);
+		if (sb.length()==0) sb.append('1');
 
-		return new NameIncrementer(sb.toString(), max, skipped);
+		return new SimpleNameIncrementer(name, sb.toString(),  skipped);
 	}
 
 
@@ -107,7 +89,7 @@ public class NameIncrementer {
 //			}
 //		}
 
-		NameIncrementer n = NameIncrementer.instance("alex");
+		SimpleNameIncrementer n = SimpleNameIncrementer.instance("9alex");
 		System.out.println(n.build());
 		for (int i = 0; i < 5 ; i++) {
 			n.increment();

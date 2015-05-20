@@ -1,10 +1,15 @@
-package org.delafer.xanderView.interfaces;
+package org.delafer.xanderView.file.readers;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.Comparator;
 import java.util.List;
+
+import org.delafer.xanderView.file.ContentChangeWatcher;
+import org.delafer.xanderView.file.entry.ImageEntry;
+import org.delafer.xanderView.file.entry.ZipImageEntry;
+import org.delafer.xanderView.interfaces.IAbstractReader;
 
 import net.j7.commons.io.FileUtils;
 import net.sf.sevenzipjbinding.*;

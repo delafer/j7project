@@ -1,15 +1,17 @@
-package org.delafer.xanderView.gui;
+package org.delafer.xanderView.gui.helpers;
 
-class LazyUpdater extends Thread {
+import org.delafer.xanderView.gui.ImageCanvas;
+
+public class LazyUpdater extends Thread {
 
 	volatile long start;
 	final static long interval = 400;
-	private ImagePanel panel;
+	private ImageCanvas panel;
 
 	/**
 	 *
 	 */
-	public LazyUpdater(ImagePanel panel) {
+	public LazyUpdater(ImageCanvas panel) {
 		super("");
 		this.panel = panel;
 		this.setDaemon(true);

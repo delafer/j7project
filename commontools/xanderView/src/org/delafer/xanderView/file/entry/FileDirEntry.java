@@ -1,4 +1,4 @@
-package org.delafer.xanderView.interfaces;
+package org.delafer.xanderView.file.entry;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -11,7 +11,7 @@ public class FileDirEntry extends ImageEntry<String> {
 
 
 	IInArchive archive;
-	String identifier;
+	public String identifier;
 
 	public static FileDirEntry as(FileImageEntry entry) {
 		return new FileDirEntry(entry.identifier, entry.name, entry.size);
@@ -48,7 +48,7 @@ public class FileDirEntry extends ImageEntry<String> {
 	}
 
 	private void calcCRC(byte[] ret) {
-		System.out.println("hash with size:"+this.size);
+//		System.out.println("hash with size:"+this.size);
 		this.crc = Hasher.hash().calc(ret, this.size);
 	}
 
@@ -62,7 +62,7 @@ public class FileDirEntry extends ImageEntry<String> {
 		RandomAccessFile raf = new RandomAccessFile(fileName, "r");
 
 		this.size = raf.length();
-		System.out.println("size:"+size+" fileName"+fileName);
+//		System.out.println("size:"+size+" fileName"+fileName);
 
 		byte[] buf = new byte[min(size, Hasher.SIZE)];
 		raf.read(buf);

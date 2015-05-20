@@ -1,4 +1,4 @@
-package org.delafer.xanderView.interfaces;
+package org.delafer.xanderView.file.readers;
 
 import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
@@ -17,6 +17,11 @@ import net.j7.commons.io.AbstractFileProcessor.FileInfo;
 import net.j7.commons.io.FileUtils;
 
 import org.delafer.xanderView.comparator.BasicFileComparator;
+import org.delafer.xanderView.file.ContentChangeWatcher;
+import org.delafer.xanderView.file.entry.FileImageEntry;
+import org.delafer.xanderView.file.entry.ImageEntry;
+import org.delafer.xanderView.interfaces.IAbstractReader;
+import org.delafer.xanderView.interfaces.IAbstractReader.FileEvent;
 
 import com.sun.nio.file.ExtendedWatchEventModifier;
 

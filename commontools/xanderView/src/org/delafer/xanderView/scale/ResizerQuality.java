@@ -10,7 +10,7 @@ public class ResizerQuality implements IResizer{
 
 
 	public BufferedImage resize(BufferedImage image, int width, int height) {
-		System.out.println("RESIZER "+this.getClass().getSimpleName());
+//		System.out.println("RESIZER "+this.getClass().getSimpleName());
 		ResampleOp  resampleOp = new ResampleOp (width,height);
 		resampleOp.setFilter(ResampleFilters.getLanczos3Filter());
 		resampleOp.setUnsharpenMask(AdvancedResizeOp.UnsharpenMask.None);

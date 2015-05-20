@@ -1,4 +1,4 @@
-package org.delafer.xanderView.gui;
+package org.delafer.xanderView.gui.helpers;
 
 import static org.eclipse.swt.SWT.*;
 

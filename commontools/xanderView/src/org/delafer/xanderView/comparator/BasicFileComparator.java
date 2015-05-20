@@ -7,7 +7,7 @@ import java.util.Comparator;
 
 import net.j7.commons.strings.StringUtils;
 
-import org.delafer.xanderView.interfaces.ImageEntry;
+import org.delafer.xanderView.file.entry.ImageEntry;
 
 /**
  * @author tavrovsa

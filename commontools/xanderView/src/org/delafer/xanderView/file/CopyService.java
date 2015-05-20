@@ -1,4 +1,4 @@
-package org.delafer.xanderView.interfaces;
+package org.delafer.xanderView.file;
 
 import java.io.*;
 import java.nio.ByteBuffer;
@@ -9,8 +9,14 @@ import net.j7.commons.base.Equals;
 import net.j7.commons.io.FilePath;
 import net.j7.commons.io.FileUtils;
 
+import org.delafer.xanderView.common.SimpleNameIncrementer;
+import org.delafer.xanderView.file.entry.FileDirEntry;
+import org.delafer.xanderView.file.entry.FileImageEntry;
+import org.delafer.xanderView.file.entry.ImageEntry;
+import org.delafer.xanderView.file.readers.FileReader;
 import org.delafer.xanderView.general.State;
 import org.delafer.xanderView.gui.config.ApplConfiguration;
+import org.delafer.xanderView.interfaces.*;
 import org.delafer.xanderView.interfaces.IAbstractReader.FileEvent;
 
 public class CopyService {
@@ -167,19 +173,15 @@ public class CopyService {
 
 				@Override
 				public void onEvent(FileEvent type, Object id)throws IOException {
-					System.out.println("event!!!");
 					switch (type) {
 					case Create:
 						FileImageEntry entryNew = reader.getEntryByIdentifier(id);
-						System.out.println("added");
 						addImage(FileDirEntry.as(entryNew));
 						break;
 					case Delete:
 						FileImageEntry entryDel = reader.getEntryByIdentifier(id);
 						FileDirEntry fde = CopyService.this.findByName(entryDel.getIdentifier());
-						System.out.println("removed was:"+images.size() );
 						images.remove(fde);
-						System.out.println("removed new:"+images.size() );
 						break;
 					default:
 						System.out.println("Other type");

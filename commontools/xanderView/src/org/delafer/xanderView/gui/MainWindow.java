@@ -5,11 +5,11 @@ import static org.eclipse.swt.SWT.*;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 
-import org.delafer.xanderView.SplashWindow;
+import org.delafer.xanderView.file.CommonContainer;
+import org.delafer.xanderView.file.CopyService;
 import org.delafer.xanderView.general.State;
 import org.delafer.xanderView.gui.config.ApplConfiguration;
-import org.delafer.xanderView.interfaces.CommonContainer;
-import org.delafer.xanderView.interfaces.CopyService;
+import org.delafer.xanderView.gui.helpers.*;
 import org.delafer.xanderView.orientation.OrientationCommons.Action;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
@@ -19,12 +19,12 @@ import org.eclipse.swt.internal.win32.OS;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.*;
 
-public final class MainWindow extends ToRefactor{
+public final class MainWindow extends ImageLoader{
 
 	private MultiShell shell;
 	private Display display;
 	private Composite cmpEmbedded;
-	private ImagePanel panel;
+	private ImageCanvas panel;
 	private static CommonContainer pointer;
 	LazyUpdater updater = null;
 	private static final Point SHELL_SIZE = new Point(940, 720);
@@ -91,7 +91,7 @@ public final class MainWindow extends ToRefactor{
 	}
 
 	private void createImageCanvas() {
-		panel = new ImagePanel ();
+		panel = new ImageCanvas ();
 
 
 		cmpEmbedded = new Composite(shell.active(),  EMBEDDED | NO_REDRAW_RESIZE  | NO_BACKGROUND  | NO_SCROLL | DOUBLE_BUFFERED );
@@ -100,12 +100,12 @@ public final class MainWindow extends ToRefactor{
 
 
 		cmpEmbedded.setLayout(null);
-		cmpEmbedded.addListener (SWT.Resize,  new Listener () {
-		    public void handleEvent (Event e) {
-		        Rectangle rect = shell.getClientArea ();
-		        System.out.println(rect);
-		      }
-		    });
+//		cmpEmbedded.addListener (SWT.Resize,  new Listener () {
+//		    public void handleEvent (Event e) {
+//		        Rectangle rect = shell.getClientArea ();
+//		        System.out.println(rect);
+//		      }
+//		    });
 		java.awt.Frame awtFrame = SWT_AWT.new_Frame( cmpEmbedded );
 //		awtFrame.setUndecorated(true);
 		awtFrame.setResizable(false);

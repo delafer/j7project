@@ -26,7 +26,6 @@ public class RotatorCPU extends CommonRotator {
 
 	@Override
 	public BufferedImage rotateRight(final BufferedImage inputImage) {
-		System.out.println("da");
 		int width = inputImage.getWidth();
 		int height = inputImage.getHeight();
 		final BufferedImage returnImage = new BufferedImage(height--, width--, inputImage.getType());

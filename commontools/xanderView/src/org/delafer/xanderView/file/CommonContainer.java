@@ -1,4 +1,4 @@
-package org.delafer.xanderView.interfaces;
+package org.delafer.xanderView.file;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,7 +8,11 @@ import java.util.ListIterator;
 import net.j7.commons.base.Equals;
 import net.j7.commons.collections.SortedLinkedList;
 
+import org.delafer.xanderView.file.entry.ImageEntry;
+import org.delafer.xanderView.file.readers.FileReader;
+import org.delafer.xanderView.file.readers.SevenZipReader;
 import org.delafer.xanderView.gui.config.ApplConfiguration;
+import org.delafer.xanderView.interfaces.IAbstractReader;
 import org.delafer.xanderView.interfaces.IAbstractReader.FileEvent;
 import org.delafer.xanderView.sound.SoundBeep;
 

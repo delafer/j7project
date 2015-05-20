@@ -1,9 +1,6 @@
 package org.delafer.xanderView.gui;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Rectangle;
+import java.awt.*;
 import java.awt.font.TextAttribute;
 import java.awt.image.BufferedImage;
 import java.text.AttributedString;
@@ -13,14 +10,13 @@ import javax.swing.JPanel;
 import net.j7.commons.strings.StringUtils;
 
 import org.delafer.xanderView.common.ImageSize;
-import org.delafer.xanderView.orientation.CommonRotator;
-import org.delafer.xanderView.orientation.OrientationCommons;
+import org.delafer.xanderView.gui.helpers.LazyUpdater;
+import org.delafer.xanderView.orientation.*;
 import org.delafer.xanderView.orientation.OrientationCommons.Action;
 import org.delafer.xanderView.orientation.OrientationCommons.Orientation;
-import org.delafer.xanderView.orientation.RotatorCPU;
 import org.delafer.xanderView.scale.ScaleFactory;
 
-public class ImagePanel extends JPanel {
+public class ImageCanvas extends JPanel {
 	private static final long serialVersionUID = 9162619010168531038L;
 	BufferedImage imageSource;
 	BufferedImage drawImage;
@@ -29,7 +25,7 @@ public class ImagePanel extends JPanel {
 	LazyUpdater updater;
 	private final static transient Font font = new Font("MS Reference Sans Serif", Font.BOLD, 20);
 
-    public ImagePanel() {
+    public ImageCanvas() {
         this.setBackground(Color.BLACK);
         this.setForeground(Color.BLACK);
         this.setDoubleBuffered(true);
@@ -93,7 +89,7 @@ public class ImagePanel extends JPanel {
     	ImageSize imgSize = getImageSize(swapXY);
     	ImageSize cnvSize = getCanvasImageSize();
     	if (!imgSize.equals(cnvSize)) {
-    		System.out.println("resising"+cnvSize+" "+imgSize);
+//    		System.out.println("resising"+cnvSize+" "+imgSize);
     		ImageSize size = OrientationCommons.getNewSize(imgSize.width(), imgSize.height(), cnvSize.width(), cnvSize.height());
     		drawImage = ScaleFactory.instance(imgSize).resize(imageSource, !swapXY ? size.width() : size.height(), !swapXY ? size.height() : size.width());
     	} else {
@@ -101,7 +97,7 @@ public class ImagePanel extends JPanel {
     	}
 
     	if (!Orientation.Original.equals(ccwNew)) {
-    		CommonRotator ir = new RotatorCPU();
+    		CommonRotator ir = new Rotator2D();
         	drawImage = ir.rotate(drawImage, ccwNew);
     	}
 
@@ -178,7 +174,7 @@ public class ImagePanel extends JPanel {
 
 
 
-	public static void paintCanvas(ImagePanel panel, Graphics g) {
+	public static void paintCanvas(ImageCanvas panel, Graphics g) {
 
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, g.getClipBounds().width, g.getClipBounds().height);

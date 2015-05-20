@@ -27,7 +27,7 @@ public class ScaleFactory  {
 	private ScaleFactory() {
 		ApplConfiguration cfg = ApplConfiguration.instance();
 		scaler = new ScalerHelper(cfg.get(ApplConfiguration.SCALER));
-		System.out.println("Used scaler: "+scaler);
+//		System.out.println("Used scaler: "+scaler);
 	}
 
 

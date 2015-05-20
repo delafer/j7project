@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
 
+import org.delafer.xanderView.file.ContentChangeWatcher;
+import org.delafer.xanderView.file.entry.ImageEntry;
+
 public interface IAbstractReader {
 
 

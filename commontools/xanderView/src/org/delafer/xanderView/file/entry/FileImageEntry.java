@@ -1,4 +1,4 @@
-package org.delafer.xanderView.interfaces;
+package org.delafer.xanderView.file.entry;
 
 import java.io.FileInputStream;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package org.delafer.xanderView.gui;
+package org.delafer.xanderView.gui.helpers;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;

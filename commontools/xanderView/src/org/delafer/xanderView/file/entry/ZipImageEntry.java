@@ -1,4 +1,4 @@
-package org.delafer.xanderView.interfaces;
+package org.delafer.xanderView.file.entry;
 
 import org.delafer.xanderView.hash.Hasher;
 

@@ -1,15 +1,16 @@
-package org.delafer.xanderView.interfaces;
+package org.delafer.xanderView.file.entry;
 
 import net.j7.commons.base.Equals;
 
 import org.delafer.xanderView.common.ImageSize;
+import org.delafer.xanderView.interfaces.IImageEntry;
 
 public abstract class ImageEntry<E> implements IImageEntry<E> {
 
 
-	protected String name;
-	protected long size;
-	protected ImageSize imageSize;
+	public String name;
+	public long size;
+	public ImageSize imageSize;
 	public long crc;
 
 	public ImageEntry() {

@@ -1,4 +1,4 @@
-package org.delafer.xanderView;
+package org.delafer.xanderView.gui;
 
 
 import org.delafer.xanderView.general.State;

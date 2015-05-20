@@ -7,7 +7,7 @@ import net.j7.commons.utils.ByteUtils;
 import net.j7.commons.utils.Metrics;
 import net.jpountz.xxhash.XXHashFactory;
 
-import org.delafer.xanderView.interfaces.CopyService;
+import org.delafer.xanderView.file.CopyService;
 
 public class Test {
 	int ab;
