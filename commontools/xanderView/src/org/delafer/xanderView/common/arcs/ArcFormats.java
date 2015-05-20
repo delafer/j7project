@@ -16,6 +16,9 @@ http://code.google.com/p/java-unrar/downloads/list
 https://github.com/edmund-wagner/junrar
 https://github.com/jukka/java-unrar
 http://www.catacombae.org/rartools/rarlib_snapshot070313.zip
+
+
+java -Djava.library.path=c:/daten/libs -jar imageViewer2.jar d:\test
   *
   */
 }
