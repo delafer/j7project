@@ -21,4 +21,8 @@ public class ResizerAdvQuality implements IResizer{
 
 	}
 
+	public String name() {
+		return this.getClass().getSimpleName();
+	}
+
 }

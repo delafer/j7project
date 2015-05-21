@@ -30,7 +30,7 @@ public class ScaleFactory  {
 
 
 	private IResizer getInstanceByType(int type) {
-		if (true) return new ResizeJavaScaledInstance();
+		if (true) return new BresenhamResizer();
 		switch (type) {
 		case SCALER_QUALITY:
 			//return new ResizerAdvQuality();

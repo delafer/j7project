@@ -47,4 +47,8 @@ public class ResizeJavaScaledInstance implements IResizer {
 
 	}
 
+	public String name() {
+		return this.getClass().getSimpleName();
+	}
+
 }

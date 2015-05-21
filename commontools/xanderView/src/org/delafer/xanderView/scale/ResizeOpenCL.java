@@ -131,4 +131,8 @@ public class ResizeOpenCL implements IResizer{
         clReleaseCommandQueue(commandQueue);
         clReleaseContext(context);
     }
+
+    public String name() {
+		return this.getClass().getSimpleName();
+	}
 }

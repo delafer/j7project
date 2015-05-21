@@ -11,4 +11,8 @@ public class ResizerFastAwt2D implements IResizer{
 				width, height, Scalr.OP_ANTIALIAS);
 	}
 
+	public String name() {
+		return this.getClass().getSimpleName();
+	}
+
 }

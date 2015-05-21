@@ -21,4 +21,8 @@ public class ResizerAdvSpeed implements IResizer{
 
 	}
 
+	public String name() {
+		return this.getClass().getSimpleName();
+	}
+
 }

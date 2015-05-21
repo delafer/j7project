@@ -27,4 +27,8 @@ public class ResizeJavaHQ implements IResizer {
 		return result;
 	}
 
+	public String name() {
+		return this.getClass().getSimpleName();
+	}
+
 }
