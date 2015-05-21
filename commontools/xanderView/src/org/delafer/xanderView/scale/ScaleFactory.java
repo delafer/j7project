@@ -1,7 +1,5 @@
 package org.delafer.xanderView.scale;
 
-import no.nixx.opencl.ImageResizer;
-
 import org.delafer.xanderView.common.ImageSize;
 import org.delafer.xanderView.gui.config.ApplConfiguration;
 
@@ -32,14 +30,16 @@ public class ScaleFactory  {
 
 
 	private IResizer getInstanceByType(int type) {
+		if (true) return new ResizeJavaScaledInstance();
 		switch (type) {
 		case SCALER_QUALITY:
-			return new ResizerQuality();
+			//return new ResizerAdvQuality();
 		case SCALER_OPENCL:
-			return new ImageResizer();
+			return ResizeOpenCL.instance();
 		case SCALER_AWT_2D_FAST:
 		default:
-			return new ResizerFastAwt2D();
+//			return new ResizerFastAwt2D();
+			return ResizeOpenCL.instance();
 		}
 	}
 
@@ -51,7 +51,9 @@ public class ScaleFactory  {
 	public static IResizer instance(ImageSize size) {
 		ScaleFactory factory = ScaleFactory.instance();
 
-		return factory.getInstanceBySize(size);
+		IResizer r =  factory.getInstanceBySize(size);
+		System.out.println("Resizer used: "+r.getClass().getSimpleName());
+		return r;
 	}
 
 

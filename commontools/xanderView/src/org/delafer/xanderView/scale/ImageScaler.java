@@ -11,7 +11,7 @@ public class ImageScaler {
 	//info http://stackoverflow.com/questions/26534380/fast-java2d-hardware-scaling-of-images
 	//https://code.google.com/p/thumbnailator/wiki/Comparison
 	//https://code.google.com/p/javacl/wiki/UsingImages
-	//https://github.com/oddbjornkvalsund/opencl-img/blob/master/src/main/java/no/nixx/opencl/ImageResizer.java
+	//https://github.com/oddbjornkvalsund/opencl-img/blob/master/src/main/java/no/nixx/opencl/ResizeOpenCL.java
 	//https://github.com/oddbjornkvalsund/opencl-img
 	//http://blog.nobel-joergensen.com/2008/12/20/downscaling-images-in-java/
 	//http://code.google.com/p/java-image-scaling/

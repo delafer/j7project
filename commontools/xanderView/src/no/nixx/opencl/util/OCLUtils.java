@@ -89,7 +89,8 @@ public class OCLUtils {
         properties |= CL_QUEUE_PROFILING_ENABLE;
         properties |= CL_QUEUE_OUT_OF_ORDER_EXEC_MODE_ENABLE;
 
-        return clCreateCommandQueue(context, deviceId, properties, null);
+        cl_command_queue queue = clCreateCommandQueue(context, deviceId, properties, null);
+        return queue;
     }
 
     public static cl_program createProgramFromSource(cl_context context, String source) {

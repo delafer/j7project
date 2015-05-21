@@ -1,4 +1,4 @@
-package no.nixx.opencl;
+package org.delafer.xanderView.scale;
 
 import static no.nixx.opencl.util.BufferedImageUtils.getDataBufferInt;
 import static no.nixx.opencl.util.OCLUtils.createProgramFromSource;
@@ -21,7 +21,6 @@ import java.awt.image.BufferedImage;
 import no.nixx.opencl.util.ClasspathUtils;
 import no.nixx.opencl.util.JOCLFindFastestDevice;
 
-import org.delafer.xanderView.scale.IResizer;
 import org.jocl.Pointer;
 import org.jocl.Sizeof;
 import org.jocl.cl_command_queue;
@@ -35,7 +34,7 @@ import org.jocl.cl_program;
 /**
  * Oddbjørn Kvalsund
  */
-public class ImageResizer implements IResizer{
+public class ResizeOpenCL implements IResizer{
 
     private final cl_platform_id platformId;
     private final cl_device_id deviceId;
@@ -43,7 +42,21 @@ public class ImageResizer implements IResizer{
     private final cl_command_queue commandQueue;
     private final cl_program program;
 
-    public ImageResizer() {
+	private static final class Holder {
+		/** The Constant INSTANCE. */
+		private final static transient ResizeOpenCL INSTANCE = new ResizeOpenCL();
+	}
+
+	/**
+	 * Gets the single instance of ResourcesDR.
+	 *
+	 * @return single instance of ResourcesDR
+	 */
+	public static final ResizeOpenCL instance() {
+		return Holder.INSTANCE;
+	}
+
+    private ResizeOpenCL() {
 //        platformId = getFirstPlatformId();
 //        deviceId = getFirstDeviceIdForPlatformId(platformId);
 
@@ -56,7 +69,7 @@ public class ImageResizer implements IResizer{
     }
 
     @SuppressWarnings("unused")
-    public ImageResizer(cl_platform_id platformId, cl_device_id deviceId, cl_context context, cl_command_queue commandQueue, cl_program program) {
+    public ResizeOpenCL(cl_platform_id platformId, cl_device_id deviceId, cl_context context, cl_command_queue commandQueue, cl_program program) {
         this.platformId = platformId;
         this.deviceId = deviceId;
         this.context = context;
