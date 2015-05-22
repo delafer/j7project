@@ -1,7 +1,9 @@
-package org.delafer.xanderView.scale;
+package org.delafer.xanderView.scale.deprecated;
 
 import java.awt.Point;
 import java.awt.image.*;
+
+import org.delafer.xanderView.scale.IResizer;
 
 public class BresenhamResizer implements IResizer {
 

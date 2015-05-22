@@ -2,6 +2,8 @@ package org.delafer.xanderView.scale;
 
 import org.delafer.xanderView.common.ImageSize;
 import org.delafer.xanderView.gui.config.ApplConfiguration;
+import org.delafer.xanderView.scale.deprecated.BresenhamResizer;
+import org.delafer.xanderView.scale.deprecated.ResizeOpenCL;
 
 
 public class ScaleFactory  {

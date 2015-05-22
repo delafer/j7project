@@ -1,8 +1,10 @@
-package org.delafer.xanderView.scale;
+package org.delafer.xanderView.scale.deprecated;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+
+import org.delafer.xanderView.scale.IResizer;
 
 public class ResizeJavaScaledInstance implements IResizer {
 

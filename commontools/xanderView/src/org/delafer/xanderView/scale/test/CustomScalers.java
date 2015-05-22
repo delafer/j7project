@@ -8,9 +8,9 @@ import java.util.Map;
 
 import net.coobird.thumbnailator.Thumbnails;
 
-import org.delafer.xanderView.scale.BresenhamResizer;
-import org.delafer.xanderView.scale.ImageScaler;
-import org.delafer.xanderView.scale.ResizeOpenCL;
+import org.delafer.xanderView.scale.deprecated.BresenhamResizer;
+import org.delafer.xanderView.scale.deprecated.ImageScaler;
+import org.delafer.xanderView.scale.deprecated.ResizeOpenCL;
 
 import com.mortennobel.imagescaling.MultiStepRescaleOp;
 
@@ -18,11 +18,11 @@ public class CustomScalers extends ResizerBase {
 
 	public static final ResizerBase instance = new CustomScalers(-1);
 
-	public final static int FILTER_CAMBELL_SCALER = 0;
+	public final static int FILTER_CAMBELL_SCALER = 4;
 	public final static int FILTER_NOBEL_MULTISTEPRESCALER  = 1;
 	public final static int FILTER_NOBEL_MULTISTEPRESCALER_HQ  = 2;
 	public final static int FILTER_BRESENHAM = 3;
-	public final static int FILTER_GPU = 4;
+	public final static int FILTER_GPU = 0;
 	public final static int FILTER_THUMBNAILATOR = 5;
 
 	int filter;
@@ -52,8 +52,8 @@ public class CustomScalers extends ResizerBase {
 	public BufferedImage resize(BufferedImage src, int w, int h) {
 		switch (filter) {
 		case FILTER_GPU:
-			//return ResizeOpenCL.instance().resize(src, w, h);
-			return src;
+			return ResizeOpenCL.instance().resize(src, w, h);
+//			return src;
 		case FILTER_CAMBELL_SCALER:
 			ImageScaler sc = new ImageScaler();
 			return sc.scaleImage(src, new java.awt.Dimension(w,h));

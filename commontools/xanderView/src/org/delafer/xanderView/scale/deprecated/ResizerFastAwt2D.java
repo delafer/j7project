@@ -1,6 +1,8 @@
-package org.delafer.xanderView.scale;
+package org.delafer.xanderView.scale.deprecated;
 
 import java.awt.image.BufferedImage;
+
+import org.delafer.xanderView.scale.IResizer;
 
 public class ResizerFastAwt2D implements IResizer{
 

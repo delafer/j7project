@@ -1,4 +1,4 @@
-package org.delafer.xanderView.scale;
+package org.delafer.xanderView.scale.deprecated;
 
 import static no.nixx.opencl.util.BufferedImageUtils.getDataBufferInt;
 import static no.nixx.opencl.util.OCLUtils.createProgramFromSource;
@@ -21,6 +21,7 @@ import java.awt.image.BufferedImage;
 import no.nixx.opencl.util.ClasspathUtils;
 import no.nixx.opencl.util.JOCLFindFastestDevice;
 
+import org.delafer.xanderView.scale.IResizer;
 import org.jocl.Pointer;
 import org.jocl.Sizeof;
 import org.jocl.cl_command_queue;

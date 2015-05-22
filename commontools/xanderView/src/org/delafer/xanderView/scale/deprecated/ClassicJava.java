@@ -1,4 +1,4 @@
-package org.delafer.xanderView.scale;
+package org.delafer.xanderView.scale.deprecated;
 
 import java.awt.Image;
 import java.awt.image.BufferedImage;

@@ -25,7 +25,6 @@ public abstract class ImageLoader {
 			if (entry == null) return ;
 			Metrics m = Metrics.start();
 			System.out.println(entry.getImageType());
-			byte[] bytes = entry.content();
 			String info = Args.fill("%1 [%2/%3]", entry.name(),""+container.currentIndex(),""+container.size());
 			loadImage(entry, info, panel);
 			m.measure("IO Read ");

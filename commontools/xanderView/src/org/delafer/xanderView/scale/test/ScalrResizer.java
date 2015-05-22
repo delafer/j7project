@@ -5,8 +5,8 @@ import java.awt.image.BufferedImageOp;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.delafer.xanderView.scale.Scalr;
-import org.delafer.xanderView.scale.Scalr.Method;
+import org.delafer.xanderView.scale.deprecated.Scalr;
+import org.delafer.xanderView.scale.deprecated.Scalr.Method;
 
 public class ScalrResizer extends ResizerBase {
 

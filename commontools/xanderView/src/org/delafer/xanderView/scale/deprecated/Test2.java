@@ -1,4 +1,4 @@
-package org.delafer.xanderView.scale;
+package org.delafer.xanderView.scale.deprecated;
 
 public class Test2 {
 
