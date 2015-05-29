@@ -5,6 +5,7 @@ import static org.eclipse.swt.SWT.*;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 
+import org.delafer.xanderView.common.ImageSize;
 import org.delafer.xanderView.file.CommonContainer;
 import org.delafer.xanderView.file.CopyService;
 import org.delafer.xanderView.general.State;
@@ -28,7 +29,7 @@ public final class MainWindow extends ImageLoader{
 	private static CommonContainer pointer;
 	LazyUpdater updater = null;
 	private static final Point SHELL_SIZE = new Point(940, 720);
-
+	private ImageSize displaySize;
 
 	public MainWindow() {
 	}
@@ -142,6 +143,8 @@ public final class MainWindow extends ImageLoader{
 
 	private void intitialize() {
 		display = new Display ();
+		Rectangle rect = display.getPrimaryMonitor().getClientArea();
+		displaySize = new ImageSize(rect.width, rect.height);
 		display.setWarnings(false);
 		display.addFilter(SWT.KeyDown, new Listener() {
 			public void handleEvent(Event e) { bindKeyEvent(e); }
@@ -300,7 +303,9 @@ public final class MainWindow extends ImageLoader{
 		return panel.getSize();
 	}
 
-
+	public ImageSize displaySize() {
+		return displaySize;
+	}
 
 
 
