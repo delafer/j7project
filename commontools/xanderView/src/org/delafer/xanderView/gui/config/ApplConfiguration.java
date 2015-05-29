@@ -18,6 +18,18 @@ import net.j7.commons.io.FilePath.PathType;
 public class ApplConfiguration {
 
 
+//	Map<Long,Long>
+//	5 mln. entries
+//	2 x 5 000 000 x 8 (64bit)
+//
+//	Ideal(raw)    80 000 000
+//	Hppc:	     134 210 568
+//	Kolobok:     134 232 880
+//	Trove Mem:   223 680 080
+//	GS: Mem:     268 437 960
+//	Colt:        269 138 448
+//	Java HashMap 432 998 640
+
 	public static final String CFG_POS_X = "PosX";
 	public static final String CFG_POS_Y = "PosY";
 	public static final String CFG_WIDTH = "Width";

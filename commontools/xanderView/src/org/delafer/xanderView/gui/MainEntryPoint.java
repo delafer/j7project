@@ -16,7 +16,7 @@ public class MainEntryPoint {
 			System.out.println("Please specify an image name or directory to start jpeg viewer");
 			System.exit(0);
 		}
-		Metrics.enable(false);
+		Metrics.enable(true);
 
 		ImageRepository.loadImages();
 		MainWindow gui = new MainWindow();

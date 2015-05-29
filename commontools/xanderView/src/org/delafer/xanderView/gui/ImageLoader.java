@@ -67,12 +67,15 @@ public abstract class ImageLoader {
 
 	protected BufferedImage loadJpegImage(byte[] bytes) throws Exception {
 
-
+			Metrics m = Metrics.start();
 			TJScalingFactor sf =  new TJScalingFactor(1, 1);
 			TJDecompressor tjd = new TJDecompressor(bytes);
 			int width = sf.getScaled(tjd.getWidth());
 			int height = sf.getScaled(tjd.getHeight());
-			BufferedImage img = tjd.decompress(width, height, BufferedImage.TYPE_INT_RGB, 0);
+
+			BufferedImage img = tjd.decompress(width, height, BufferedImage.TYPE_3BYTE_BGR, 0);
+//			BufferedImage img = tjd.decompress(width, height, BufferedImage.TYPE_INT_RGB, 0);
+			m.measure(">>>decoding time jpeg");
 			return img;
 	}
 
