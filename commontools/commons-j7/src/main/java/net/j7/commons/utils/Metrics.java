@@ -1,6 +1,7 @@
 package net.j7.commons.utils;
 
 import java.io.PrintStream;
+import java.util.HashMap;
 
 public final class Metrics {
 
@@ -12,7 +13,7 @@ public final class Metrics {
 
 	private static transient boolean disabled = false;
 	private static transient PrintStream  stream = System.out;
-
+	private static transient HashMap<Object, Long> times = new HashMap<Object, Long>();
 	private Metrics() {
 		restart();
 	}
@@ -39,7 +40,7 @@ public final class Metrics {
 
 		StringBuilder sb = new StringBuilder();
 		sb.append(counter).append(") ");
-		sb.append(text).append((start - startPrev));
+		sb.append(text).append(": ").append((start - startPrev)).append(" ms");
 		stream.println(sb);
 
 	}
@@ -50,6 +51,30 @@ public final class Metrics {
 
 	public final static void usePrintStream(PrintStream  prnStream) {
 		Metrics.stream = prnStream;
+	}
+
+
+
+	public static void measureStart(Object id) {
+		times.put(id, System.currentTimeMillis());
+	}
+
+	public static void measureStop(Object id) {
+		measureStop(id, null);
+	}
+
+	public static void measureStop(Object id, String label) {
+		Long startTime = times.remove(id);
+		if (null != startTime) {
+			StringBuilder sb = new StringBuilder();
+			if (label != null)
+				sb.append(label);
+			else {
+				sb.append("Measured [").append(id.toString()).append("] = ");
+			}
+			sb.append((System.currentTimeMillis() - startTime)).append(" ms");
+			stream.println(sb);
+		}
 	}
 
 }

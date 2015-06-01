@@ -5,6 +5,8 @@ import static org.eclipse.swt.SWT.*;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 
+import net.j7.commons.utils.Metrics;
+
 import org.delafer.xanderView.common.ImageSize;
 import org.delafer.xanderView.file.CommonContainer;
 import org.delafer.xanderView.file.CopyService;
@@ -19,6 +21,7 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.internal.win32.OS;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.*;
+
 
 public final class MainWindow extends ImageLoader{
 
@@ -35,10 +38,13 @@ public final class MainWindow extends ImageLoader{
 	}
 
 	public void open(String path) {
+		Metrics.measureStart(1);
 		initPath(path);
 		intitialize();
 		show();
+		Metrics.measureStop(1);
 		runGlobalEventLoop();
+
 	}
 
 	private void initPath(String path) {
