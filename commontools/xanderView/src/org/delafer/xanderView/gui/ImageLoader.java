@@ -13,6 +13,7 @@ import net.j7.commons.utils.Metrics;
 import org.delafer.xanderView.common.ImageSize;
 import org.delafer.xanderView.file.CommonContainer;
 import org.delafer.xanderView.file.entry.ImageEntry;
+import org.delafer.xanderView.gui.config.OrientationStore;
 import org.eclipse.swt.widgets.Display;
 import org.libjpegturbo.turbojpeg.TJDecompressor;
 import org.libjpegturbo.turbojpeg.TJScalingFactor;
@@ -20,6 +21,7 @@ import org.libjpegturbo.turbojpeg.TJScalingFactor;
 public abstract class ImageLoader {
 
 	public abstract Dimension getSize();
+	public OrientationStore orientator = OrientationStore.instance();
 
 	protected void loadImage(CommonContainer container, ImageEntry<?> entry, ImageCanvas panel) {
 		try {
@@ -51,7 +53,7 @@ public abstract class ImageLoader {
 
 			m.measure("ImageDecode ");
 
-			panel.setImage(img, text, null);
+			panel.setImage(img, text, orientator.getOrientation(entry.CRC()));
 			panel.showImage();
 			m.measure("Draw ");
 

@@ -30,6 +30,7 @@ public class ApplConfiguration {
 //	Colt:        269 138 448
 //	Java HashMap 432 998 640
 
+	public static final String XANDER_VIEW = "xanderView";
 	public static final String CFG_POS_X = "PosX";
 	public static final String CFG_POS_Y = "PosY";
 	public static final String CFG_WIDTH = "Width";
@@ -76,7 +77,7 @@ public class ApplConfiguration {
 	}
 
 	private void initialize() {
-		config = FilePath.as().dir(PathType.ApplicationData).dir("xanderView").file("xander.properties").forceExists().build();
+		config = FilePath.as().dir(PathType.ApplicationData).dir(XANDER_VIEW).file("xander.properties").forceExists().build();
 		properties = new Properties(defaults());
 		try {
 		  properties.load(new FileInputStream(config));

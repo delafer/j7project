@@ -1,6 +1,9 @@
 package org.delafer.xanderView.general;
 
+import java.io.IOException;
+
 import org.delafer.xanderView.gui.config.ApplConfiguration;
+import org.delafer.xanderView.gui.config.OrientationStore;
 
 
 public class Shutdown {
@@ -10,6 +13,11 @@ public class Shutdown {
 			public void run() {
 				System.out.println("Terminating application...");
 				ApplConfiguration.instance().save();
+				try {
+					OrientationStore.instance().save();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 		});
 	}

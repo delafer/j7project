@@ -64,9 +64,10 @@ public class ImageCanvas extends JPanel {
 
 
 
-	public void rotate(Action action) {
+	public Orientation rotate(Action action) {
     	ccwNew = ccwNew.newState(action);
     	preRenderImage();
+    	return ccwNew;
     }
 
     private ImageSize getCanvasImageSize() {
@@ -134,6 +135,10 @@ public class ImageCanvas extends JPanel {
             g.setFont(font);
             g.drawString(as.getIterator(), 12, g.getClipBounds().height - 15);
         }
+	}
+
+	public Orientation getOrientation() {
+		return ccwNew;
 	}
 
 

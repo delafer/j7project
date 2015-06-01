@@ -10,8 +10,10 @@ import net.j7.commons.utils.Metrics;
 import org.delafer.xanderView.common.ImageSize;
 import org.delafer.xanderView.file.CommonContainer;
 import org.delafer.xanderView.file.CopyService;
+import org.delafer.xanderView.file.entry.ImageEntry;
 import org.delafer.xanderView.general.State;
 import org.delafer.xanderView.gui.config.ApplConfiguration;
+import org.delafer.xanderView.gui.config.OrientationStore;
 import org.delafer.xanderView.gui.helpers.*;
 import org.delafer.xanderView.orientation.OrientationCommons.Action;
 import org.eclipse.swt.SWT;
@@ -169,7 +171,14 @@ public final class MainWindow extends ImageLoader{
 		case SWT.PAGE_UP:
 			loadImage(pointer, pointer.getPrevious(), panel);
 			break;
+		case 115:
+			//S -> save
+			ImageEntry current = pointer.getCurrent();
+			if (current != null) {
+				OrientationStore.instance().setOrientation(current.CRC(), panel.getOrientation());
+			}
 
+			break;
 		case 16777233://F8
 		case 16777232://F7
 			State res = CopyService.instance().copy(pointer.getCurrent());

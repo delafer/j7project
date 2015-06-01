@@ -4,6 +4,7 @@ import net.j7.commons.strings.StringUtils;
 import net.j7.commons.utils.Metrics;
 
 import org.delafer.xanderView.general.Shutdown;
+import org.delafer.xanderView.gui.config.OrientationStore;
 import org.delafer.xanderView.gui.helpers.ImageRepository;
 import org.eclipse.swt.widgets.Display;
 
@@ -18,12 +19,24 @@ public class MainEntryPoint {
 		}
 		Metrics.enable(true);
 
-		ImageRepository.loadImages();
+		initializeApp();
+
+
 		MainWindow gui = new MainWindow();
 		Shutdown.addHook();
 		gui.open(args[0]);
 
 
+	}
+
+	private static void initializeApp() {
+		ImageRepository.loadImages();
+
+		try {
+			OrientationStore.instance().load();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }
