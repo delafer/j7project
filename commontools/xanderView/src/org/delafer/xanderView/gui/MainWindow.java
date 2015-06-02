@@ -8,7 +8,7 @@ import java.awt.event.MouseAdapter;
 import net.j7.commons.utils.Metrics;
 
 import org.delafer.xanderView.common.ImageSize;
-import org.delafer.xanderView.file.CommonContainer;
+import org.delafer.xanderView.file.CommonContainerExt;
 import org.delafer.xanderView.file.CopyService;
 import org.delafer.xanderView.file.entry.ImageEntry;
 import org.delafer.xanderView.general.State;
@@ -31,7 +31,7 @@ public final class MainWindow extends ImageLoader{
 	private Display display;
 	private Composite cmpEmbedded;
 	private ImageCanvas panel;
-	private static CommonContainer pointer;
+	private static CommonContainerExt pointer;
 	LazyUpdater updater = null;
 	private static final Point SHELL_SIZE = new Point(940, 720);
 	private ImageSize displaySize;
@@ -49,8 +49,15 @@ public final class MainWindow extends ImageLoader{
 
 	}
 
+	public void openFile(String path) {
+		initPath(path);
+		if (pointer.getCurrent() != null ){
+			loadImage(pointer, pointer.getCurrent(), panel);
+		}
+	}
+
 	private void initPath(String path) {
-		pointer = new CommonContainer(path);
+		pointer = new CommonContainerExt(path);
 
 	}
 
@@ -171,13 +178,18 @@ public final class MainWindow extends ImageLoader{
 		case SWT.PAGE_UP:
 			loadImage(pointer, pointer.getPrevious(), panel);
 			break;
+		case 112:
+			//random access
+			pointer.switchRandomAccess();
+			new SplashWindow(shell.active(), pointer.isRandomMode() ? State.Special1 : State.Success);
+			break;
 		case 115:
 			//S -> save
 			ImageEntry current = pointer.getCurrent();
 			if (current != null) {
 				OrientationStore.instance().setOrientation(current.CRC(), panel.getOrientation());
 			}
-
+			new SplashWindow(shell.active(), State.Special1);
 			break;
 		case 16777233://F8
 		case 16777232://F7
@@ -258,8 +270,18 @@ public final class MainWindow extends ImageLoader{
 		fileItem.setText ("&Menu");
 		Menu submenu = new Menu (shell.getWndShell(), SWT.DROP_DOWN);
 		fileItem.setMenu (submenu);
+		UIHelpers.addMenuItem(submenu, "Select &Templates to read\tCtrl+T", SWT.MOD1 + 'T', new Listener() {
+			public void handleEvent(Event event) {
+				 FileDialog dialog = new FileDialog(MainWindow.this.shell.getWndShell(), SWT.OPEN);
+				   dialog.setFilterExtensions(new String [] {"*.jpg;*.jpeg;*.jpe;*.jfif;*.jif;*.jfi;*.bmp;*.rle;*.dib;*.png,*.gif;*."});
+				   dialog.setFilterPath(pointer.getLocation());
+				   String result = dialog.open();
+					MainWindow.this.openFile(result);
 
-		UIHelpers.addMenuItem(submenu, "Select &Templates to read\tCtrl+T", SWT.MOD1 + 'T', null);
+
+
+			}
+		} );
 		UIHelpers.addMenuItem(submenu, "Exit", 0, null);
 
 	}

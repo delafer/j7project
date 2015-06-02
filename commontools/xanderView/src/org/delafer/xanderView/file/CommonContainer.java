@@ -7,6 +7,7 @@ import java.util.ListIterator;
 
 import net.j7.commons.base.Equals;
 import net.j7.commons.collections.SortedLinkedList;
+import net.j7.commons.io.FileUtils;
 
 import org.delafer.xanderView.file.entry.ImageEntry;
 import org.delafer.xanderView.file.readers.FileReader;
@@ -203,6 +204,11 @@ public class CommonContainer {
 
 	public ImageEntry<?> getCurrent() {
 		return current;
+	}
+
+	public String getLocation() {
+
+		return pathFile != null ? pathFile.getParent() : ".";
 	}
 
 }
