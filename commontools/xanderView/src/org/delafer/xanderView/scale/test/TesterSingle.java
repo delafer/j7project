@@ -82,13 +82,15 @@ public class TesterSingle {
 			   System.out.println("rewarning");
 
 				Metrics m = Metrics.start();
+				System.gc();System.gc();System.gc();Thread.currentThread().sleep(2000);
 				BufferedImage ress = null;
-				for (int i = 0; i < 7; i++) {
+				for (int i = 0; i < 70; i++) {
 					ress = resize(bi, wn, hn);
 				}
 				m.measure("slow");
+				System.gc();System.gc();System.gc();Thread.currentThread().sleep(2000);
 				BufferedImage resf = null;
-				for (int i = 0; i < 7; i++) {
+				for (int i = 0; i < 70; i++) {
 					resf = resizeFaster(bi, wn, hn);
 				}
 				m.measure("fast");
