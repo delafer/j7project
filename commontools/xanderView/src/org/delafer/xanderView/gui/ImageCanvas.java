@@ -7,6 +7,7 @@ import java.text.AttributedString;
 
 import javax.swing.JPanel;
 
+import net.j7.commons.base.CommonUtils;
 import net.j7.commons.strings.StringUtils;
 
 import org.delafer.xanderView.common.ImageSize;
@@ -22,7 +23,10 @@ public class ImageCanvas extends JPanel {
 	BufferedImage imageSource;
 	BufferedImage drawImage;
 	String text;
-	Orientation ccwNew;
+
+	Orientation orientation;
+	Orientation orientationDefault;
+
 	LazyUpdater updater;
 	private final static transient Font font = new Font("MS Reference Sans Serif", Font.BOLD, 20);
 
@@ -37,12 +41,12 @@ public class ImageCanvas extends JPanel {
     public void setImage(BufferedImage image, String text, Orientation direction) {
    	 	this.imageSource = image;
    	 	this.text = text;
-   	 	this.ccwNew = getDirection(direction);
+   	 	this.orientationDefault = getDirectionDefault();
+   	 	this.orientation = CommonUtils.nvl(direction, orientationDefault);
    	 	preRenderImage();
     }
 
-    private Orientation getDirection(Orientation direction) {
-		if (direction != null) return direction;
+    private Orientation getDirectionDefault() {
     	ImageSize imgSize = getImageSize(false);
     	ImageSize cnvSize = getCanvasImageSize();
 
@@ -65,9 +69,9 @@ public class ImageCanvas extends JPanel {
 
 
 	public Orientation rotate(Action action) {
-    	ccwNew = ccwNew.newState(action);
+    	orientation = orientation.newState(action);
     	preRenderImage();
-    	return ccwNew;
+    	return orientation;
     }
 
     private ImageSize getCanvasImageSize() {
@@ -83,7 +87,7 @@ public class ImageCanvas extends JPanel {
 
     public void preRenderImage() {
     	if (null == imageSource) return ;
-    	boolean swapXY = Orientation.Original != ccwNew && ccwNew.swapXY();
+    	boolean swapXY = Orientation.Original != orientation && orientation.swapXY();
     	ImageSize imgSize = getImageSize(swapXY);
     	ImageSize cnvSize = getCanvasImageSize();
     	if (!imgSize.equals(cnvSize)) {
@@ -93,9 +97,9 @@ public class ImageCanvas extends JPanel {
     		drawImage = imageSource;
     	}
 
-    	if (!Orientation.Original.equals(ccwNew)) {
+    	if (!Orientation.Original.equals(orientation)) {
     		CommonRotator ir = new Rotator2D();
-        	drawImage = ir.rotate(drawImage, ccwNew);
+        	drawImage = ir.rotate(drawImage, orientation);
     	}
 
     }
@@ -138,7 +142,7 @@ public class ImageCanvas extends JPanel {
 	}
 
 	public Orientation getOrientation() {
-		return ccwNew;
+		return orientation != orientationDefault ? orientation : null;
 	}
 
 

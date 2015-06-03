@@ -19,6 +19,8 @@ public class OrientationStore {
 
 	private String fileName;
 	private LongLongHashMap map;
+	private boolean dirty;
+	private final static Range rangeOrient = Range.range(0, 4); // 0 - 15
 	/**
 	 * Lazy-loaded Singleton, by Bill Pugh *.
 	 */
@@ -38,6 +40,7 @@ public class OrientationStore {
 
 	private OrientationStore() {
 		map  = new LongLongHashMap();
+		dirty =false;
 		init();
 	}
 
@@ -69,9 +72,16 @@ public class OrientationStore {
 
 	public void save() throws IOException {
 
+		if (!dirty) return ;
+
+		dirty = false;
+
 		FileOutputStream fos = new FileOutputStream(new File(fileName));
 		final DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(fos));
 
+		if (map.size()==0) {
+			System.out.println("empty map");
+		}
 
 		map.forEach(new LongLongProcedure() {
 
@@ -93,20 +103,31 @@ public class OrientationStore {
 
 	}
 
+	private int enumOrderNum(Enum<?> enumVal) {
+		return enumVal != null ? enumVal.ordinal()+1 : 0;
+	}
 
-	private final static Range rangeOrient = Range.range(0, 3);
-
+	private Orientation enumByNum(int num) {
+		if (num == 0) return null;
+		return Orientation.values()[--num];
+	}
 
 	public void setOrientation(long crc, Orientation orient) {
-		long value = map.get(crc);
-		value = BitNumberRange.set(value, rangeOrient,  orient.ordinal());
-		map.put(crc, value);
+		long valueOld = map.get(crc);
+		long valueNew = BitNumberRange.set(valueOld, rangeOrient,  enumOrderNum(orient));
+		if (valueOld == valueNew) return ;
+		if (valueNew != 0l) {
+			map.put(crc, valueNew);
+		} else {
+			map.remove(crc);
+		}
+		dirty =true;
 	}
 
 	public Orientation getOrientation(long crc) {
 		long value = map.get(crc);
 		value = BitNumberRange.value(value, rangeOrient);
-		Orientation orient = Orientation.values()[((int)value)];
+		Orientation orient = enumByNum((int)value);
 		return orient;
 	}
 

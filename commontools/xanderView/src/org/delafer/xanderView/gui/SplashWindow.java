@@ -84,6 +84,10 @@ public class SplashWindow {
 	    	   return SWT.COLOR_GREEN;
 	       case Error:
 	    	   return SWT.COLOR_RED;
+	       case Special1:
+	    	   return SWT.COLOR_YELLOW;
+	       case Special2:
+	    	   return SWT.COLOR_GRAY;
 	       case Ignore:
 	       default:
 	    	   return SWT.COLOR_BLUE;
