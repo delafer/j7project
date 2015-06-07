@@ -79,7 +79,6 @@ public class ImageRepository {
 
 		int idx = path.lastIndexOf(".");
 		String pathOff = path.substring(0, idx) + "_off"+path.substring(idx);
-		System.out.println(">"+pathOff);
 		imagesToPath.put(id+".off", pathOff);
 		// 2x longer
 		// loadImage(display, path, id);
@@ -128,8 +127,7 @@ public class ImageRepository {
 					return null;
 				}
 			else {
-				System.out.println("ImageRepository:loadImage:: Resource not found: "
-								+ res);
+				System.out.println("ImageRepository:loadImage:: Resource not found: "+ res);
 
 				im = new Image(display, 1, 1);
 

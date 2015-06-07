@@ -14,7 +14,7 @@ import org.delafer.xanderView.common.ImageSize;
 import org.delafer.xanderView.file.CommonContainer;
 import org.delafer.xanderView.file.entry.ImageEntry;
 import org.delafer.xanderView.gui.config.OrientationStore;
-import org.eclipse.swt.widgets.Display;
+import org.libjpegturbo.turbojpeg.TJ;
 import org.libjpegturbo.turbojpeg.TJDecompressor;
 import org.libjpegturbo.turbojpeg.TJScalingFactor;
 
@@ -26,11 +26,8 @@ public abstract class ImageLoader {
 	protected void loadImage(CommonContainer container, ImageEntry<?> entry, ImageCanvas panel) {
 		try {
 			if (entry == null) return ;
-			Metrics m = Metrics.start();
-			System.out.println(entry.getImageType());
 			String info = Args.fill("%1 [%2/%3]", entry.name(),""+container.currentIndex(),""+container.size());
 			loadImage(entry, info, panel);
-			m.measure("IO Read ");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -38,7 +35,6 @@ public abstract class ImageLoader {
 
 	protected void loadImage(ImageEntry<?> entry, String text, ImageCanvas panel) {
 		try {
-			Metrics m = Metrics.start();
 			BufferedImage img = null;
 			switch (entry.getImageType()) {
 			case JPEG:
@@ -50,12 +46,9 @@ public abstract class ImageLoader {
 				img = loadCommonImage(entry.content());
 				break;
 			}
-
-			m.measure("ImageDecode ");
-
+			if (img == null) return ;
 			panel.setImage(img, text, orientator.getOrientation(entry.CRC()));
 			panel.showImage();
-			m.measure("Draw ");
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -88,20 +81,20 @@ public abstract class ImageLoader {
 
 
 	protected BufferedImage loadJpegImage(byte[] bytes) throws Exception {
+		TJDecompressor tjd = null;
+			try {
+				tjd = new TJDecompressor(bytes);
+			} catch (Exception e) {
+				return loadCommonImage(bytes);
+			}
 
-			Metrics m = Metrics.start();
-
-			TJDecompressor tjd = new TJDecompressor(bytes);
 			ImageSize size = new ImageSize(tjd.getWidth(), tjd.getHeight());
-			int demo = getDenom(size);
-			System.out.println("&&&&"+demo);
 			TJScalingFactor sf =  new TJScalingFactor(1, getDenom(size));
 			int width = sf.getScaled(size.width);
 			int height = sf.getScaled(size.height);
-
-			BufferedImage img = tjd.decompress(width, height, BufferedImage.TYPE_3BYTE_BGR, 0);
+			int flags = bytes.length >= 1750000 ? TJ.FLAG_FASTUPSAMPLE | TJ.FLAG_FASTDCT  : 0;
+			BufferedImage img = tjd.decompress(width, height, BufferedImage.TYPE_3BYTE_BGR, flags);
 //			BufferedImage img = tjd.decompress(width, height, BufferedImage.TYPE_INT_RGB, 0);
-			m.measure(">>>decoding time jpeg");
 			return img;
 	}
 

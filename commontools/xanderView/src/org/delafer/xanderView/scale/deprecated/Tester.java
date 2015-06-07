@@ -7,14 +7,11 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
-import org.delafer.xanderView.scale.ResizeJavaHQ;
-
 import net.j7.commons.strings.Args;
 import net.j7.commons.strings.StringUtils;
 
 import com.mortennobel.imagescaling.AdvancedResizeOp;
 import com.mortennobel.imagescaling.ResampleFilter;
-import com.mortennobel.imagescaling.ResampleFilters;
 import com.mortennobel.imagescaling.ResampleOp;
 
 public class Tester {

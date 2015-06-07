@@ -81,9 +81,9 @@ public class OrientationCommons {
 		return new ImageSize(targetWidth, targetHeight);
 	}
 
-	public static void main(String[] args) {
-		System.out.println(Orientation.TurnedAbout.newState(Action.FlipHorizontal));
-	}
+//	public static void main(String[] args) {
+//		System.out.println(Orientation.TurnedAbout.newState(Action.FlipHorizontal));
+//	}
 
 	//left vert = right horiz = vert right = horiz left
 	//vert left = horiz right = left hori = right vert

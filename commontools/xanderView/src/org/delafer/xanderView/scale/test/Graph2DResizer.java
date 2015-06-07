@@ -5,6 +5,8 @@ import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.util.*;
 
+import org.delafer.xanderView.scale.ResizerBase;
+
 public class Graph2DResizer extends ResizerBase {
 
 	public static final ResizerBase instance = new Graph2DResizer(-1);
@@ -40,12 +42,13 @@ public class Graph2DResizer extends ResizerBase {
 			}
 
 		}
-		System.out.println(filters.size());
+//		System.out.println(filters.size());
 	}
 
 
 
 	private Object[] filterCfg;
+	private int filterIdx;
 
 	public Graph2DResizer as(int filterI) {
 		return new Graph2DResizer(filterI);
@@ -54,6 +57,7 @@ public class Graph2DResizer extends ResizerBase {
 	public Graph2DResizer(int filterI) {
 		if (filterI < 0) return ;
 		//1-24
+		this.filterIdx = filterI;
 		this.filterCfg = filters.get(filterI);
 	}
 
@@ -85,6 +89,11 @@ public class Graph2DResizer extends ResizerBase {
 			sb.append(names.get(object));
 		}
 		return "java2D"+sb.toString();
+	}
+
+	@Override
+	public int current() {
+		return filterIdx;
 	}
 
 

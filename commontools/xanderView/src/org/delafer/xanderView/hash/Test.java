@@ -17,7 +17,7 @@ public class Test {
 
 		CopyService cs = CopyService.instance();
 		cs.init();
-		cs.test();
+//		cs.test();
 		System.exit(0);
 
 		XXHashFactory hash = XXHashFactory.fastestInstance();

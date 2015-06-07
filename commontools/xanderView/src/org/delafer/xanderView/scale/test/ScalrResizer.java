@@ -5,6 +5,7 @@ import java.awt.image.BufferedImageOp;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.delafer.xanderView.scale.ResizerBase;
 import org.delafer.xanderView.scale.deprecated.Scalr;
 import org.delafer.xanderView.scale.deprecated.Scalr.Method;
 
@@ -31,6 +32,7 @@ public class ScalrResizer extends ResizerBase {
 
 
 	private Object[] filterCfg;
+	private int filterIdx;
 
 	public ScalrResizer as(int filterI) {
 		return new ScalrResizer(filterI);
@@ -39,6 +41,7 @@ public class ScalrResizer extends ResizerBase {
 	public ScalrResizer(int filterI) {
 		if (filterI < 0) return ;
 		//1-24
+		this.filterIdx = filterI;
 		this.filterCfg = filters.get(filterI);
 	}
 
@@ -62,5 +65,10 @@ public class ScalrResizer extends ResizerBase {
 		ResizerBase r = new ScalrResizer(6);
 		ResizerBase b = r;
 		System.out.println(r.name());
+	}
+
+	@Override
+	public int current() {
+		return filterIdx;
 	}
 }

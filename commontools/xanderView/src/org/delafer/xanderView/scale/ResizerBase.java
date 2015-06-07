@@ -1,6 +1,5 @@
-package org.delafer.xanderView.scale.test;
+package org.delafer.xanderView.scale;
 
-import org.delafer.xanderView.scale.IResizer;
 
 public abstract class ResizerBase implements IResizer {
 
@@ -10,6 +9,8 @@ public abstract class ResizerBase implements IResizer {
 	}
 
 	public abstract ResizerBase as(int filterI);
+
+	public abstract int current();
 
 
 }

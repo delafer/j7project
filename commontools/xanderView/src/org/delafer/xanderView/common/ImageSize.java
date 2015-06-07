@@ -50,6 +50,10 @@ public final class ImageSize {
 		return 31 * result + height;
 	}
 
+	public boolean empty() {
+		return this.height == 0 && this.width == 0;
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) return true;

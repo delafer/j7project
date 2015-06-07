@@ -14,12 +14,28 @@ public class CommonContainerExt extends CommonContainer{
 	}
 
 	@Override
+	public ImageEntry<?> getPrevious10() {
+		if (randomMode)
+			return this.getPrevious();
+		else
+			return super.getPrevious10();
+	}
+
+	@Override
+	public ImageEntry<?> getNext10() {
+		if (randomMode)
+			return this.getNext();
+		else
+			return super.getNext10();
+	}
+
+	@Override
 	public ImageEntry<?> getNext() {
 		if (!randomMode) {
 			return super.getNext();
 		}
 		int skip = RandomUtil.getRandomInt(1, size()-1);
-		System.out.println(skip);
+//		System.out.println(skip);
 		ImageEntry<?> ret = null;
 		for (int j = skip; j > 0; j--) {
 			ret = super.getNext();

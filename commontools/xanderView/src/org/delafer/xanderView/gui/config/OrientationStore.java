@@ -79,10 +79,6 @@ public class OrientationStore {
 		FileOutputStream fos = new FileOutputStream(new File(fileName));
 		final DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(fos));
 
-		if (map.size()==0) {
-			System.out.println("empty map");
-		}
-
 		map.forEach(new LongLongProcedure() {
 
 			@Override
@@ -132,41 +128,41 @@ public class OrientationStore {
 	}
 
 
-	public static void main(String[] args) {
-		OrientationStore os = OrientationStore.instance();
-
-
-//		for (int i = 0; i < 30000; i++) {
-//	          long crc = RandomUtil.getRandom().nextLong();
-//	          int orient = RandomUtil.getRandomInt(0, 7);
-//			os.setOrientation(crc, Orientation.values()[orient]);
+//	public static void main(String[] args) {
+//		OrientationStore os = OrientationStore.instance();
+//
+//
+////		for (int i = 0; i < 30000; i++) {
+////	          long crc = RandomUtil.getRandom().nextLong();
+////	          int orient = RandomUtil.getRandomInt(0, 7);
+////			os.setOrientation(crc, Orientation.values()[orient]);
+////		}
+//
+//		try {
+//			os.load();
+//
+//			OrientationStore.instance().map.forEach(new LongLongProcedure() {
+//
+//				@Override
+//				public void apply(long key, long value)  {
+//					try {
+//						System.out.println(key+" : "+value);
+//					} catch (Exception e) {
+//						e.printStackTrace();
+//					}
+//
+//
+//				}
+//			});
+//			System.out.println("done");
+//			System.out.println(OrientationStore.instance().map.size());
+//			System.out.println(OrientationStore.instance().getOrientation(1062222676426126259l));
+//			System.out.println(OrientationStore.instance().getOrientation(2313283709819813184l));
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
 //		}
-
-		try {
-			os.load();
-
-			OrientationStore.instance().map.forEach(new LongLongProcedure() {
-
-				@Override
-				public void apply(long key, long value)  {
-					try {
-						System.out.println(key+" : "+value);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-
-
-				}
-			});
-			System.out.println("done");
-			System.out.println(OrientationStore.instance().map.size());
-			System.out.println(OrientationStore.instance().getOrientation(1062222676426126259l));
-			System.out.println(OrientationStore.instance().getOrientation(2313283709819813184l));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
+//
+//	}
 
 }

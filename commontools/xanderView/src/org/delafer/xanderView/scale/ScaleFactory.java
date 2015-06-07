@@ -2,16 +2,25 @@ package org.delafer.xanderView.scale;
 
 import org.delafer.xanderView.common.ImageSize;
 import org.delafer.xanderView.gui.config.ApplConfiguration;
-import org.delafer.xanderView.scale.deprecated.BresenhamResizer;
 import org.delafer.xanderView.scale.deprecated.ResizeOpenCL;
 
 
 public class ScaleFactory  {
 
 
-	public static final int SCALER_AWT_2D_FAST = 1;
-	public static final int SCALER_OPENCL = 2;
-	public static final int SCALER_QUALITY = 3;
+	public static final int SCALER_AWT_2D_NEAREST 		= 1;
+	public static final int SCALER_AWT_2D_BILLINEAR 	= 2;
+	public static final int SCALER_AWT_2D_BICUBIC 		= 3; //skip
+	public static final int SCALER_CV_LINEAR 			= 4;
+	public static final int SCALER_CV_AREA 				= 5;
+	public static final int SCALER_CV_BICUBIC			= 6;
+	public static final int SCALER_CV_LANCZOS4			= 7;
+	public static final int SCALER_NOBEL_HERMITE		= 8;
+	public static final int SCALER_NOBEL_MITCHEL		= 9;
+	public static final int SCALER_NOBEL_BICUBIC_HF		= 10;
+	public static final int SCALER_NOBEL_LANCZOS3		= 11;
+
+
 
 
 	private ScalerHelper scaler;
@@ -32,31 +41,42 @@ public class ScaleFactory  {
 
 
 	private IResizer getInstanceByType(int type) {
-		//if (true) return ResizerJavaCV.instance();
-		if (true) return new ResizerAdvSpeed();
 		switch (type) {
-		case SCALER_QUALITY:
-			//return new ResizerAdvQuality();
-		case SCALER_OPENCL:
-			return ResizeOpenCL.instance();
-		case SCALER_AWT_2D_FAST:
+		case SCALER_CV_LINEAR:
+			return ResizerOpenCV.instance().as(2);
+		case SCALER_CV_AREA:
+			return ResizerOpenCV.instance().as(1);
+		case SCALER_CV_BICUBIC:
+			return ResizerOpenCV.instance().as(3);
+		case SCALER_CV_LANCZOS4:
+			return ResizerOpenCV.instance().as(4);
+		case SCALER_NOBEL_LANCZOS3:
+			return new ResizerNobel(0);
+		case SCALER_NOBEL_BICUBIC_HF:
+			return new ResizerNobel(1);
+		case SCALER_NOBEL_MITCHEL:
+			return new ResizerNobel(3);
+		case SCALER_NOBEL_HERMITE:
+			return new ResizerNobel(4);
+		case SCALER_AWT_2D_BICUBIC:
+			return new ResizerJava2D(2);
+		case SCALER_AWT_2D_BILLINEAR:
+			return new ResizerJava2D(1);
+		case SCALER_AWT_2D_NEAREST:
 		default:
-//			return new ResizerFastAwt2D();
-			return ResizeOpenCL.instance();
+			return new ResizerJava2D(0);
 		}
 	}
 
 	public IResizer getInstanceBySize(ImageSize size) {
-		return getInstanceByType(scaler.getTypeBySize(size));
+		IResizer r =  getInstanceByType(scaler.getTypeBySize(size));
+		return r;
 	}
 
 
 	public static IResizer instance(ImageSize size) {
 		ScaleFactory factory = ScaleFactory.instance();
-
-		IResizer r =  factory.getInstanceBySize(size);
-		System.out.println("Resizer used: "+r.getClass().getSimpleName());
-		return r;
+		return  factory.getInstanceBySize(size);
 	}
 
 

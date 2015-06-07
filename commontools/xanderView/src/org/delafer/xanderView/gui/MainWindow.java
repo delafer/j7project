@@ -1,11 +1,16 @@
 package org.delafer.xanderView.gui;
 
-import static org.eclipse.swt.SWT.*;
+import static org.eclipse.swt.SWT.DOUBLE_BUFFERED;
+import static org.eclipse.swt.SWT.EMBEDDED;
+import static org.eclipse.swt.SWT.HORIZONTAL;
+import static org.eclipse.swt.SWT.NO_BACKGROUND;
+import static org.eclipse.swt.SWT.NO_REDRAW_RESIZE;
+import static org.eclipse.swt.SWT.NO_SCROLL;
 
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 
-import net.j7.commons.utils.Metrics;
+import net.j7.commons.strings.StringUtils;
 
 import org.delafer.xanderView.common.ImageSize;
 import org.delafer.xanderView.file.CommonContainerExt;
@@ -14,15 +19,27 @@ import org.delafer.xanderView.file.entry.ImageEntry;
 import org.delafer.xanderView.general.State;
 import org.delafer.xanderView.gui.config.ApplConfiguration;
 import org.delafer.xanderView.gui.config.OrientationStore;
-import org.delafer.xanderView.gui.helpers.*;
+import org.delafer.xanderView.gui.helpers.Geometry;
+import org.delafer.xanderView.gui.helpers.LazyUpdater;
+import org.delafer.xanderView.gui.helpers.MultiShell;
+import org.delafer.xanderView.gui.helpers.UIHelpers;
 import org.delafer.xanderView.orientation.OrientationCommons.Action;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.internal.win32.OS;
 import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.widgets.*;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.DirectoryDialog;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.swt.widgets.Monitor;
+import org.eclipse.swt.widgets.Shell;
+
 
 
 public final class MainWindow extends ImageLoader{
@@ -40,11 +57,9 @@ public final class MainWindow extends ImageLoader{
 	}
 
 	public void open(String path) {
-		Metrics.measureStart(1);
 		initPath(path);
 		intitialize();
 		show();
-		Metrics.measureStop(1);
 		runGlobalEventLoop();
 
 	}
@@ -99,30 +114,27 @@ public final class MainWindow extends ImageLoader{
 		createToolBar();
 		createImageCanvas();
 		shell.open ();
+		shell.fullscreenMandatory();
+//		shell.uiUpdate(false);
 		if (pointer.getCurrent() != null ){
-			loadImage(pointer, pointer.getCurrent(), panel);
+			java.awt.EventQueue.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					loadImage(pointer, pointer.getCurrent(), panel);
+				}
+			});
 		}
+
 
 	}
 
 	private void createImageCanvas() {
-		panel = new ImageCanvas ();
-
+		panel = new ImageCanvas (shell);
 
 		cmpEmbedded = new Composite(shell.active(),  EMBEDDED | NO_REDRAW_RESIZE  | NO_BACKGROUND  | NO_SCROLL | DOUBLE_BUFFERED );
 
-//		cmpEmbedded.setParent(shell);
-
-
 		cmpEmbedded.setLayout(null);
-//		cmpEmbedded.addListener (SWT.Resize,  new Listener () {
-//		    public void handleEvent (Event e) {
-//		        Rectangle rect = shell.getClientArea ();
-//		        System.out.println(rect);
-//		      }
-//		    });
 		java.awt.Frame awtFrame = SWT_AWT.new_Frame( cmpEmbedded );
-//		awtFrame.setUndecorated(true);
 		awtFrame.setResizable(false);
 		awtFrame.setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
 		awtFrame.addMouseListener(new MouseAdapter() {
@@ -172,8 +184,10 @@ public final class MainWindow extends ImageLoader{
 			shell.close();
 			System.exit(0);
 			break;
+		case SWT.ARROW_DOWN:
+			loadImage(pointer, pointer.getPrevious10(), panel);
+			break;
 		case SWT.ARROW_LEFT:
-		case SWT.ARROW_UP:
 		case SWT.BS:
 		case SWT.PAGE_UP:
 			loadImage(pointer, pointer.getPrevious(), panel);
@@ -193,10 +207,13 @@ public final class MainWindow extends ImageLoader{
 			break;
 		case 16777233://F8
 		case 16777232://F7
+		case 16777234://F9
 			State res = CopyService.instance().copy(pointer.getCurrent());
 			SplashWindow splash = new SplashWindow(shell.active(), res);
 			break;
+		case 107:
 		case 108:
+		case 59:
 			panel.rotate(Action.RotateLeft);
 			panel.showImage();
 			break;
@@ -212,8 +229,10 @@ public final class MainWindow extends ImageLoader{
 			panel.rotate(Action.FlipHorizontal);
 			panel.showImage();
 			break;
+		case SWT.ARROW_UP:
+			loadImage(pointer, pointer.getNext10(), panel);
+			break;
 		case SWT.ARROW_RIGHT:
-		case SWT.ARROW_DOWN:
 		case SWT.SPACE:
 		case SWT.PAGE_DOWN:
 			loadImage(pointer, pointer.getNext(), panel);
@@ -231,35 +250,23 @@ public final class MainWindow extends ImageLoader{
 		boolean isFullScreen  = !shell.getFullScreen();
 
 		shell.setFullScreen(isFullScreen);
-		shell.setMaximized (isFullScreen);
 
 		cmpEmbedded.setParent(shell.active());
 
-		shell.setModified(true);
-		shell.active().redraw();
-		shell.active().layout(true);
+		shell.uiUpdate(false);
 
 		panel.preRenderImage();
 		panel.showImage();
 
-		shell.active().notifyListeners(SWT.Resize, getResizeEvent());
+		shell.sendResized();
 
 	}
 
-	private Event getResizeEvent() {
-		Event event = new Event();
-		event.type = SWT.Resize;
-		event.doit = true;
-		event.display = Display.getCurrent();
-		event.time = OS.GetMessageTime();
-		event.widget = shell.active();
-		event.item = event.widget;
-		return event;
-	}
+
 
 	Menu createMenuBar() {
 		// Menu bar.
-		Menu menuBar = new Menu(shell.getWndShell(), SWT.BAR);
+		Menu menuBar = new Menu(shell.wndShell(), SWT.BAR);
 		shell.setMenuBar(menuBar);
 		createFileMenu(menuBar);
 		return menuBar;
@@ -268,21 +275,38 @@ public final class MainWindow extends ImageLoader{
 	void createFileMenu(Menu bar) {
 		MenuItem fileItem = new MenuItem (bar, SWT.CASCADE);
 		fileItem.setText ("&Menu");
-		Menu submenu = new Menu (shell.getWndShell(), SWT.DROP_DOWN);
+		Menu submenu = new Menu (shell.wndShell(), SWT.DROP_DOWN);
 		fileItem.setMenu (submenu);
-		UIHelpers.addMenuItem(submenu, "Select &Templates to read\tCtrl+T", SWT.MOD1 + 'T', new Listener() {
+		UIHelpers.addMenuItem(submenu, "Select image to &Open\tCtrl+O", SWT.MOD1 + 'O', new Listener() {
 			public void handleEvent(Event event) {
-				 FileDialog dialog = new FileDialog(MainWindow.this.shell.getWndShell(), SWT.OPEN);
-				   dialog.setFilterExtensions(new String [] {"*.jpg;*.jpeg;*.jpe;*.jfif;*.jif;*.jfi;*.bmp;*.rle;*.dib;*.png,*.gif;*."});
+				 FileDialog dialog = new FileDialog(MainWindow.this.shell.wndShell(), SWT.OPEN);
+				   dialog.setFilterExtensions(new String [] {"*.jpg;*.jpeg;*.jpe;*.jfif;*.jif;*.jfi;*.bmp;*.rle;*.dib;*.png,*.gif;*.;*.zip;*.jzip"});
 				   dialog.setFilterPath(pointer.getLocation());
 				   String result = dialog.open();
-					MainWindow.this.openFile(result);
-
-
-
+				   if (StringUtils.isEmpty(result)) return ;
+				   MainWindow.this.openFile(result);
 			}
 		} );
-		UIHelpers.addMenuItem(submenu, "Exit", 0, null);
+
+		UIHelpers.addMenuItem(submenu, "Select target copy &Directory\tCtrl+D", SWT.MOD1 + 'D', new Listener() {
+			public void handleEvent(Event event) {
+				 DirectoryDialog dialog = new DirectoryDialog(MainWindow.this.shell.wndShell(), SWT.OPEN);
+				 dialog.setFilterPath(ApplConfiguration.instance().get(ApplConfiguration.CFG_COPY_DIR));
+   			     String result = dialog.open();
+   			     if (StringUtils.isEmpty(result)) return ;
+   			     ApplConfiguration.instance().set(ApplConfiguration.CFG_COPY_DIR, result);
+   			     MainWindow.this.shell.updateInfo();
+   			     CopyService.instance().init();
+			}
+		} );
+
+		UIHelpers.addMenuItem(submenu, "Exit", 0, new Listener() {
+			@Override
+			public void handleEvent(Event event) {
+				shell.close();
+				System.exit(0);
+			}
+		});
 
 	}
 

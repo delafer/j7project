@@ -22,9 +22,9 @@ import org.delafer.xanderView.scale.ResizerOpenCV;
 import org.libjpegturbo.turbojpeg.TJDecompressor;
 import org.libjpegturbo.turbojpeg.TJScalingFactor;
 
-public class Tester {
+public class TesterQuality {
 	// HQ_NAA_dither
-	public Tester() {
+	public TesterQuality() {
 		// TODO Auto-generated constructor stub
 	}
 
@@ -74,7 +74,7 @@ public class Tester {
 				}
 			}
 
-			String[] bases = new String[] { /*"0_5mp", "1_1mp", "1_5mp", "3mp", "6mp",*/ "10mp" };
+			String[] bases = new String[] { "qtest2" };
 			for (String base : bases) {
 
 				BufferedImage bi1 = getImage("e:\\" + base + ".jpg", BufferedImage.TYPE_3BYTE_BGR);// ImageIO.read(new
@@ -84,10 +84,10 @@ public class Tester {
 
 				ImageSize size = OrientationCommons.getNewSize(bi1.getWidth(), bi1.getHeight(), 1920, 1080);
 
-				int wn = size.width();
-				int hn = size.height();
-				double koeff = 1920d / (double) bi1.getWidth();
-				int iter = (int) Math.round(17d / (koeff * koeff));
+				float koef = 1.452739f;
+				int wn = (int) ((float)bi1.getWidth() * koef);
+				int hn = (int) ((float)bi1.getHeight() * koef);
+				int iter = 10;
 
 				int i = 0;
 				for (ResizerBase next : filters) {
@@ -102,19 +102,18 @@ public class Tester {
 					}
 
 					res = next.resize(bi, wn, hn);
-					res = next.resize(bi, wn, hn);
 					long t1 = System.currentTimeMillis();
 					for (int j = 0; j < iter; j++) {
 						res = next.resize(bi, wn, hn);
 					}
 					long t2 = System.currentTimeMillis();
 
-					for (int j = 0; j < 5; j++) {
+					for (int j = 0; j < 4; j++) {
 						System.gc();
 						System.runFinalization();
-						Thread.currentThread().sleep(50);
+						Thread.currentThread().sleep(40);
 						Runtime.getRuntime().gc();
-						Thread.currentThread().sleep(50);
+						Thread.currentThread().sleep(40);
 					}
 					Thread.currentThread().sleep(150);
 					System.out.println(i);
@@ -125,7 +124,7 @@ public class Tester {
 					ImageIO.write(
 							res,
 							ext,
-							new File(Args.fill("e:/out2/" + base + "/result_%1(%2)#.%3",
+							new File(Args.fill("e:/out2/" + base + "/result_%1(%2)$.%3",
 									StringUtils.fillString("" + (r1), 5, '0'), next.name(), ext)));
 
 				}

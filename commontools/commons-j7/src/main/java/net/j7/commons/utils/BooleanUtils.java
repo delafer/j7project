@@ -1,5 +1,7 @@
 package net.j7.commons.utils;
 
+import net.j7.commons.strings.StringUtils;
+
 /**
  *
  * Class to convert a String boolean representation to an Boolean
@@ -10,24 +12,13 @@ package net.j7.commons.utils;
  */
 public class BooleanUtils  {
 
-   /**
-    * BooleanUtils.toBoolean(null)    = false
-    * BooleanUtils.toBoolean("true")  = true
-    * BooleanUtils.toBoolean("TRUE")  = true
-    * BooleanUtils.toBoolean("tRUe")  = true
-    * BooleanUtils.toBoolean("on")    = true
-    * BooleanUtils.toBoolean("yes")   = true
-    * BooleanUtils.toBoolean("y")   = true
-    * BooleanUtils.toBoolean("j")   = true
-    * BooleanUtils.toBoolean("ja")   = true
-    * BooleanUtils.toBoolean("1")   = true
-    * BooleanUtils.toBoolean("0")   = false
-    * BooleanUtils.toBoolean("false") = false
-    * BooleanUtils.toBoolean("x gti") = false
-    * @param booleanString
-    * @return
-    */
-   public static boolean toBoolean(String booleanString) {
-      return "1".equals(booleanString) || "y".equalsIgnoreCase(booleanString) || "JA".equalsIgnoreCase(booleanString) || "j".equalsIgnoreCase(booleanString);
+
+   public static boolean toBoolean(String b) {
+
+	   if (null == b || StringUtils.isEmpty(b)) return false;
+	   if ("1".equals(b)) return true;
+	   b = b.toLowerCase();
+	   return "true".equals(b) || "yes".equals(b) || "y".equals(b) || "on".equals(b) || "j".equals(b) || "ja".equals(b);
+
    }
 }

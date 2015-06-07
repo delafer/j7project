@@ -97,7 +97,7 @@ public class TJDecompressor {
   public void setSourceImage(byte[] jpegImage, int imageSize)
     throws Exception {
     if (jpegImage == null || imageSize < 1)
-      throw new Exception("Invalid argument in setSourceImage()");
+      throw new TJException("Invalid argument in setSourceImage()");
     jpegBuf = jpegImage;
     jpegBufSize = imageSize;
     decompressHeader(jpegBuf, jpegBufSize);

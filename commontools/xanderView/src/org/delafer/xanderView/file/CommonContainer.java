@@ -9,7 +9,9 @@ import net.j7.commons.base.Equals;
 import net.j7.commons.collections.SortedLinkedList;
 import net.j7.commons.io.FileUtils;
 
+import org.delafer.xanderView.file.entry.FileDirEntry;
 import org.delafer.xanderView.file.entry.ImageEntry;
+import org.delafer.xanderView.file.entry.ImageEntry.ImageType;
 import org.delafer.xanderView.file.readers.FileReader;
 import org.delafer.xanderView.file.readers.SevenZipReader;
 import org.delafer.xanderView.gui.config.ApplConfiguration;
@@ -62,8 +64,12 @@ public class CommonContainer {
 	private IAbstractReader getReader(File aFile) {
 		boolean isFile = aFile.isFile();
 
-		if (isFile && aFile.getName().toLowerCase().endsWith(".zip")) {
-			return new SevenZipReader(aFile);
+		if (isFile) {
+			String name = aFile.getName().toLowerCase();
+			if (name.endsWith(".zip") || name.endsWith(".rar") || name.endsWith(".7z") || name.endsWith(".jzip")) {
+				return new SevenZipReader(aFile);
+			}
+
 		}
 
 		return new FileReader(aFile);
@@ -78,6 +84,13 @@ public class CommonContainer {
 				public void onEvent(FileEvent type, Object id)throws IOException {
 					switch (type) {
 					case Create:
+						String fileName = id.toString();
+						File aFile = new File(fileName);
+						if (aFile.isDirectory()) return ;
+
+						ImageType imgType = ImageEntry.getType(FileUtils.getExtension(fileName));
+						if (ImageType.UNKNOWN.equals(imgType)) return ;
+
 						ImageEntry<?> entryNew = reader.getEntryByIdentifier(id);
 						images.add(entryNew);
 						updateIterator();
@@ -161,6 +174,18 @@ public class CommonContainer {
 
 	public int getNextIndex() {
 		return iterator.nextIndex();
+	}
+
+	public ImageEntry<?> getPrevious10() {
+		if (size()>= 10) for (int i = 8; i >= 0; i--) getPrevious();
+
+		return getPrevious();
+	}
+
+	public ImageEntry<?> getNext10() {
+		if (size()>= 10) for (int i = 8; i >= 0; i--) getNext();
+
+		return getNext();
 	}
 
 	public ImageEntry<?> getPrevious() {

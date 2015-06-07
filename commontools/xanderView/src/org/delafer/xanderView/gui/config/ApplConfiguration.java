@@ -14,6 +14,7 @@ import org.delafer.xanderView.scale.ScaleFactory;
 
 import net.j7.commons.io.FilePath;
 import net.j7.commons.io.FilePath.PathType;
+import net.j7.commons.utils.BooleanUtils;
 
 public class ApplConfiguration {
 
@@ -35,6 +36,7 @@ public class ApplConfiguration {
 	public static final String CFG_POS_Y = "PosY";
 	public static final String CFG_WIDTH = "Width";
 	public static final String CFG_HEIGHT = "Height";
+	public static final String CFG_FULLSCREEN = "fullscreen";
 	public static final String SCALER = "Scaler";
 	public static final String LOOP_CURRENT_SOURCE = "loop.source";
 	public static final String CFG_COPY_DIR = "target.folder";
@@ -70,9 +72,10 @@ public class ApplConfiguration {
 		Properties pro = new Properties();
 		pro.setProperty(CFG_HEIGHT, String.valueOf(600));
 		pro.setProperty(CFG_WIDTH, String.valueOf(800));
-		pro.setProperty(SCALER, "1;3,1200x900");
+		pro.setProperty(SCALER, "1;11,500000;10,665000;6,1850000;5,2500000;6;6000000;4,8000000;2,13000000");
 		pro.setProperty(LOOP_CURRENT_SOURCE, String.valueOf(true));
 		pro.setProperty(CFG_COPY_DIR, "D:\\newtest");
+		pro.setProperty(CFG_FULLSCREEN, "1");
 		return pro;
 	}
 
@@ -133,7 +136,7 @@ public class ApplConfiguration {
 
 	public boolean getBoolean(String key) {
 		try {
-			return Boolean.parseBoolean(get(key));
+			return BooleanUtils.toBoolean(get(key));
 		} catch (Exception i) {
 			return false;
 		}

@@ -47,7 +47,7 @@ public class SplashWindow {
 //	       splash.pack();
 	       splash.layout(true);
 	       splash.open();
-	       SoundBeep.beep();
+	       if (State.Error.equals(state)) SoundBeep.beep();
        display.asyncExec(new Runnable()
        {
            public void run()

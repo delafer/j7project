@@ -7,10 +7,12 @@ import java.util.List;
 
 import net.j7.commons.types.DoubleValue;
 
+import org.delafer.xanderView.gui.config.ApplConfiguration;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.internal.win32.OS;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.*;
 
@@ -18,26 +20,36 @@ public class MultiShell  {
 
 
 	Shell wndShell;
+	Shell fullscrShell;
 
 
-	Shell fsShell;
+	public Shell fsShell() {
+		return fullscrShell;
+	}
+
 	boolean fullscreen = false;
 
 
 	private List<DoubleValue<Integer, Listener>> listeners;
 
-	public Shell getWndShell() {
+	public Shell wndShell() {
 		return wndShell;
 	}
 
 	public MultiShell(Display display, int style) {
+		fullscreen = ApplConfiguration.instance().getBoolean(ApplConfiguration.CFG_FULLSCREEN);
 		listeners = new ArrayList<DoubleValue<Integer,Listener>>();
 		wndShell = new Shell(display,  NO_REDRAW_RESIZE | NO_BACKGROUND | APPLICATION_MODAL | NO_SCROLL | DOUBLE_BUFFERED  | SWT.SHELL_TRIM  );
-		fsShell = new Shell(wndShell,  ON_TOP | NO_REDRAW_RESIZE | NO_BACKGROUND | APPLICATION_MODAL | NO_SCROLL | DOUBLE_BUFFERED  | SWT.NO_TRIM);
-//		fsShell.setParent(wndShell);
+		fullscrShell = new Shell(wndShell,  ON_TOP | NO_REDRAW_RESIZE | NO_BACKGROUND | APPLICATION_MODAL | NO_SCROLL | DOUBLE_BUFFERED  | SWT.NO_TRIM);
+		fullscrShell.setFullScreen(true);
 
 		addIcons();
+		updateInfo();
 
+	}
+
+	public void updateInfo() {
+		wndShell.setText("COPY DIR = "+ApplConfiguration.instance().get(ApplConfiguration.CFG_COPY_DIR));
 	}
 
 	public void addIcons() {
@@ -48,15 +60,15 @@ public class MultiShell  {
 
 	public void setLayout(FillLayout layout) {
 		wndShell.setLayout(layout);
-		fsShell.setLayout(layout);
+		fullscrShell.setLayout(layout);
 	}
 
 	public Shell active() {
-		return fullscreen ? fsShell : wndShell;
+		return fullscreen ? fullscrShell : wndShell;
 	}
 
 	public void setSize(Point shellSize) {
-		active().setSize(shellSize);
+		wndShell.setSize(shellSize);
 
 	}
 
@@ -66,6 +78,7 @@ public class MultiShell  {
 	}
 
 	public void open() {
+//		wndShell.open();
 		active().open();
 
 	}
@@ -88,6 +101,28 @@ public class MultiShell  {
 	}
 
 
+	public void uiUpdate(boolean sendEvent) {
+		active().setModified(true);
+		active().redraw();
+		active().layout(true);
+		if (sendEvent) sendResized();
+	}
+
+	public void sendResized() {
+		active().notifyListeners(SWT.Resize, getResizeEvent());
+	}
+
+	public Event getResizeEvent() {
+		Event event = new Event();
+		event.type = SWT.Resize;
+		event.doit = true;
+		event.display = Display.getCurrent();
+		event.time = OS.GetMessageTime();
+		event.widget = active();
+		event.item = event.widget;
+		return event;
+	}
+
 	public void setModified(boolean b) {
 		active().setModified(b);
 
@@ -104,7 +139,20 @@ public class MultiShell  {
 
 
 	public void setFullScreen(boolean isFullScreen) {
+		ApplConfiguration.instance().set(ApplConfiguration.CFG_FULLSCREEN, Boolean.toString(isFullScreen));
+		fullscreenConditional(isFullScreen);
+		fullscreenMandatory();
 
+	}
+
+	public void fullscreenMandatory() {
+		fullscrShell.setVisible(fullscreen);
+		active().setActive();
+		active().setFocus();
+		active().setMaximized (fullscreen);
+	}
+
+	private void fullscreenConditional(boolean isFullScreen) {
 		Point loc = active().getLocation();
 		for (DoubleValue<Integer, Listener> lst : listeners) {
 			active().removeListener(lst.getOne(), lst.getTwo());
@@ -112,18 +160,14 @@ public class MultiShell  {
 
 		fullscreen = isFullScreen;
 
-		fsShell.setVisible(isFullScreen);
-		//wndShell.setVisible(!isFullScreen);
+		fullscrShell.setVisible(isFullScreen);
+		wndShell.setVisible(!isFullScreen);
 
 		for (DoubleValue<Integer, Listener> lst : listeners) {
 			active().addListener(lst.getOne(), lst.getTwo());
 		}
 
 		active().setLocation(loc);
-		active().setActive();
-		active().setFocus();
-
-
 	}
 
 	public void setVisible(boolean b) {
@@ -131,7 +175,7 @@ public class MultiShell  {
 	}
 
 	public void setMenuBar(Menu menuBar) {
-		active().setMenuBar(menuBar);
+		wndShell.setMenuBar(menuBar);
 
 	}
 

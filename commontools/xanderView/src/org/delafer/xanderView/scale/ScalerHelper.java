@@ -24,13 +24,13 @@ public class ScalerHelper {
 		return elements.get(elements.size()-1).type;
 	}
 
-	public static void main(String[] args) {
-		String a = "1;2,10000;3,500x500;4,1000x1000";
-
-		ScalerHelper sc = new ScalerHelper(a);
-		ImageSize is = new ImageSize(500, 500);
-		System.out.println(sc.getTypeBySize(is));
-	}
+//	public static void main(String[] args) {
+//		String a = "1;2,10000;3,500x500;4,1000x1000";
+//
+//		ScalerHelper sc = new ScalerHelper(a);
+//		ImageSize is = new ImageSize(500, 500);
+//		System.out.println(sc.getTypeBySize(is));
+//	}
 
 	private static List<Element> parseStr(String str) {
 		String[] arr = str.split(";");

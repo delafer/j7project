@@ -8,6 +8,8 @@ import java.util.Map;
 
 import net.coobird.thumbnailator.Thumbnails;
 
+import org.delafer.xanderView.scale.ResizerBase;
+import org.delafer.xanderView.scale.ResizerJAI;
 import org.delafer.xanderView.scale.deprecated.BresenhamResizer;
 import org.delafer.xanderView.scale.deprecated.ImageScaler;
 import org.delafer.xanderView.scale.deprecated.ResizeOpenCL;
@@ -24,6 +26,8 @@ public class CustomScalers extends ResizerBase {
 	public final static int FILTER_BRESENHAM = 3;
 	public final static int FILTER_GPU = 0;
 	public final static int FILTER_THUMBNAILATOR = 5;
+	public final static int FILTER_JAI = 6;
+//	public final static int FILTER_OPENCV = 7;
 
 	int filter;
 
@@ -36,8 +40,24 @@ public class CustomScalers extends ResizerBase {
 		names.put(FILTER_BRESENHAM, "Bresenham");
 		names.put(FILTER_GPU, "OpenCl");
 		names.put(FILTER_THUMBNAILATOR, "thumbnailtr");
+		names.put(FILTER_JAI, "JAI");
+//		names.put(FILTER_OPENCV, "openCV");
 	}
 
+	@Override
+	public int hashCode() {
+		return this.getClass().getName().hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) return true;
+
+		if (!(obj instanceof CustomScalers)) return false;
+		CustomScalers other = (CustomScalers) obj;
+
+		return this.getClass().getName().equals(other.getClass().getName());
+	}
 
 	public CustomScalers as(int filterI) {
 		return new CustomScalers(filterI);
@@ -74,6 +94,11 @@ public class CustomScalers extends ResizerBase {
 				e.printStackTrace();
 			}
 			return null;
+		case FILTER_JAI:
+			ResizerJAI rjai = new ResizerJAI();
+			return rjai.resize(src, w, h);
+//		case FILTER_OPENCV:
+//			return ResizerJavaCV.instance().resize(src, w, h);
 		default:
 			break;
 		}
@@ -87,7 +112,12 @@ public class CustomScalers extends ResizerBase {
 
 	@Override
 	public int getMaxFilters() {
-		return 6;
+		return 7;
+	}
+
+	@Override
+	public int current() {
+		return filter;
 	}
 
 }

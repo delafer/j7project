@@ -1,9 +1,15 @@
 package org.delafer.xanderView.file;
 
-import java.io.*;
+import java.io.Closeable;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import net.j7.commons.base.Equals;
 import net.j7.commons.io.FilePath;
@@ -13,10 +19,10 @@ import org.delafer.xanderView.common.SimpleNameIncrementer;
 import org.delafer.xanderView.file.entry.FileDirEntry;
 import org.delafer.xanderView.file.entry.FileImageEntry;
 import org.delafer.xanderView.file.entry.ImageEntry;
+import org.delafer.xanderView.file.entry.ImageEntry.ImageType;
 import org.delafer.xanderView.file.readers.FileReader;
 import org.delafer.xanderView.general.State;
 import org.delafer.xanderView.gui.config.ApplConfiguration;
-import org.delafer.xanderView.interfaces.*;
 import org.delafer.xanderView.interfaces.IAbstractReader.FileEvent;
 
 public class CopyService {
@@ -87,10 +93,10 @@ public class CopyService {
 			fde.crc = entry.CRC();
 
 			if (images.contains(fde)) {
-				System.out.println("Already exists!!!");
-				for (FileDirEntry next : images) {
-					System.out.println(next.identifier+" "+next.name+" "+next.crc);
-				}
+//				System.out.println("Already exists!!!");
+//				for (FileDirEntry next : images) {
+//					System.out.println(next.identifier+" "+next.name+" "+next.crc);
+//				}
 				return State.Ignore;
 			}
 
@@ -175,6 +181,13 @@ public class CopyService {
 				public void onEvent(FileEvent type, Object id)throws IOException {
 					switch (type) {
 					case Create:
+						String fileName = id.toString();
+						File aFile = new File(fileName);
+						if (aFile.isDirectory()) return ;
+
+						ImageType imgType = ImageEntry.getType(FileUtils.getExtension(fileName));
+						if (ImageType.UNKNOWN.equals(imgType)) return ;
+
 						FileImageEntry entryNew = reader.getEntryByIdentifier(id);
 						addImage(FileDirEntry.as(entryNew));
 						break;
@@ -208,11 +221,11 @@ public class CopyService {
 		}
 	}
 
-	public void test() {
-		for (FileDirEntry fileDirEntry : images) {
-			System.out.println(fileDirEntry);
-		}
-	}
+//	public void test() {
+//		for (FileDirEntry fileDirEntry : images) {
+//			System.out.println(fileDirEntry);
+//		}
+//	}
 
 
 //	public void onContainerContentChange() {

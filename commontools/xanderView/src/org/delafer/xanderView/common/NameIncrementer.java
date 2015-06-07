@@ -76,7 +76,7 @@ public class NameIncrementer {
 		}
 
 		if (sb.length()==0) sb.append('0');
-		System.out.println("x:"+max);
+//		System.out.println("x:"+max);
 
 		return new NameIncrementer(sb.toString(), max, skipped);
 	}

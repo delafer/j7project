@@ -1,5 +1,6 @@
 package org.delafer.xanderView.sound;
 
+import java.io.BufferedInputStream;
 import java.io.InputStream;
 
 import javax.sound.sampled.AudioFormat;
@@ -29,7 +30,7 @@ public class SoundBeep {
 		InputStream is = null;
 		AudioInputStream stream= null;
 		try {
-			is = SoundBeep.class.getResourceAsStream("sound01.wav");
+			is = new BufferedInputStream(SoundBeep.class.getResourceAsStream("sound01.wav"));
 		    AudioFormat format;
 		    DataLine.Info info;
 		    Clip clip;

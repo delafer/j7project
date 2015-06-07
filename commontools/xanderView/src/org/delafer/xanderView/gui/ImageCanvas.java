@@ -1,7 +1,12 @@
 package org.delafer.xanderView.gui;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.font.TextAttribute;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.text.AttributedString;
 
@@ -12,9 +17,12 @@ import net.j7.commons.strings.StringUtils;
 
 import org.delafer.xanderView.common.ImageSize;
 import org.delafer.xanderView.gui.helpers.LazyUpdater;
-import org.delafer.xanderView.orientation.*;
+import org.delafer.xanderView.gui.helpers.MultiShell;
+import org.delafer.xanderView.orientation.CommonRotator;
+import org.delafer.xanderView.orientation.OrientationCommons;
 import org.delafer.xanderView.orientation.OrientationCommons.Action;
 import org.delafer.xanderView.orientation.OrientationCommons.Orientation;
+import org.delafer.xanderView.orientation.Rotator2D;
 import org.delafer.xanderView.scale.ScaleFactory;
 
 public class ImageCanvas extends JPanel {
@@ -28,9 +36,11 @@ public class ImageCanvas extends JPanel {
 	Orientation orientationDefault;
 
 	LazyUpdater updater;
+	MultiShell shell;
 	private final static transient Font font = new Font("MS Reference Sans Serif", Font.BOLD, 20);
 
-    public ImageCanvas() {
+    public ImageCanvas(MultiShell shell) {
+    	this.shell = shell;
         this.setBackground(Color.BLACK);
         this.setForeground(Color.BLACK);
         this.setDoubleBuffered(true);
@@ -90,8 +100,10 @@ public class ImageCanvas extends JPanel {
     	boolean swapXY = Orientation.Original != orientation && orientation.swapXY();
     	ImageSize imgSize = getImageSize(swapXY);
     	ImageSize cnvSize = getCanvasImageSize();
+
     	if (!imgSize.equals(cnvSize)) {
     		ImageSize size = OrientationCommons.getNewSize(imgSize.width(), imgSize.height(), cnvSize.width(), cnvSize.height());
+    		if (size.empty()) return ;
     		drawImage = ScaleFactory.instance(imgSize).resize(imageSource, !swapXY ? size.width() : size.height(), !swapXY ? size.height() : size.width());
     	} else {
     		drawImage = imageSource;
@@ -106,8 +118,9 @@ public class ImageCanvas extends JPanel {
 
 
     public void showImage() {
-    	Graphics g = getGraphics();
-    	paint(g);
+//    	Graphics g = getGraphics();
+//    	paint(g);
+    	this.getParent().repaint();
     }
 
 
@@ -117,8 +130,7 @@ public class ImageCanvas extends JPanel {
 
     }
 
-	public static void paintCanvas(ImageCanvas panel, Graphics g) {
-
+	public void paintCanvas(ImageCanvas panel, Graphics g) {
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, g.getClipBounds().width, g.getClipBounds().height);
         if (panel.drawImage!=null) {
@@ -135,10 +147,23 @@ public class ImageCanvas extends JPanel {
 
             as.addAttribute(TextAttribute.FONT,font);
             as.addAttribute(TextAttribute.FOREGROUND, Color.GREEN);
-
             g.setFont(font);
-            g.drawString(as.getIterator(), 12, g.getClipBounds().height - 15);
+
+            drawText(g, as);
         }
+	}
+
+	private void drawText(Graphics g, AttributedString as) {
+		int y = g.getClipBounds().height - 15;
+		int x =  (shell.getFullScreen()) ? 25 : 15;
+
+		if (shell.getFullScreen()) {
+		AffineTransform at = new AffineTransform();
+		at.setToQuadrantRotation(3, x,y);
+		((Graphics2D)g).setTransform(at);
+		}
+
+		g.drawString(as.getIterator(), x, y);
 	}
 
 	public Orientation getOrientation() {

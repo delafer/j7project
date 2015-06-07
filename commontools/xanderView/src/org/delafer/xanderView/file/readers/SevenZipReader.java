@@ -37,8 +37,7 @@ public class SevenZipReader implements IAbstractReader {
 			boolean neu = true;
 			randomAccessFile = new RandomAccessFile(fileName, "r");
 			IInStream stream = !neu ? new RandomAccessFileInStream(randomAccessFile) : new RandomAccessNioStream(fileName);
-
-			archive = SevenZip.openInArchive(ArchiveFormat.ZIP, stream);
+			archive = SevenZip.openInArchive(null, stream);
 			int numberOfItems = archive.getNumberOfItems();
 
 			for (int i = 0; i < numberOfItems; i++) {
