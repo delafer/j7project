@@ -2,6 +2,7 @@ package org.delafer.xanderView.file.entry;
 
 import org.delafer.xanderView.hash.Hasher;
 
+import net.j7.commons.io.FileUtils;
 import net.sf.sevenzipjbinding.ExtractAskMode;
 import net.sf.sevenzipjbinding.ExtractOperationResult;
 import net.sf.sevenzipjbinding.IArchiveExtractCallback;
@@ -43,6 +44,11 @@ public class ZipImageEntry extends ImageEntry<Integer> {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	@Override
+	public String shortName() {
+		return shorten(FileUtils.getFileName(this.name()));
 	}
 
 	private void calcCRC(byte[] ret) {

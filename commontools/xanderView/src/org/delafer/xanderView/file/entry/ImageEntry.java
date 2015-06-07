@@ -61,6 +61,24 @@ public abstract class ImageEntry<E> implements IImageEntry<E> {
 		return name;
 	}
 
+	protected static String shorten(String name) {
+		if (StringUtils.isEmpty(name)) return name;
+		if (name.length() <= 50) return name;
+		StringBuilder sb = new StringBuilder();
+		sb.append(name.subSequence(0, 24));
+		sb.append("~");
+		sb.append(name.subSequence(name.length()-24, name.length()));
+		return sb.toString();
+	}
+
+//	public static void main(String[] args) {
+//		System.out.println(ImageEntry.shorten("1234567890ab"));
+//	}
+
+	public String shortName() {
+		return shorten(name());
+	}
+
 	public long size() {
 		return size;
 	}

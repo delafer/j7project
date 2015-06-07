@@ -26,7 +26,7 @@ public abstract class ImageLoader {
 	protected void loadImage(CommonContainer container, ImageEntry<?> entry, ImageCanvas panel) {
 		try {
 			if (entry == null) return ;
-			String info = Args.fill("%1 [%2/%3]", entry.name(),""+container.currentIndex(),""+container.size());
+			String info = Args.fill("%1 [%2/%3]", entry.shortName(),""+container.currentIndex(),""+container.size());
 			loadImage(entry, info, panel);
 		} catch (Exception e) {
 			e.printStackTrace();
