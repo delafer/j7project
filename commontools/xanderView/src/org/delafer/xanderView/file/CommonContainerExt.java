@@ -3,14 +3,18 @@ package org.delafer.xanderView.file;
 import net.j7.commons.utils.RandomUtil;
 
 import org.delafer.xanderView.file.entry.ImageEntry;
+import org.delafer.xanderView.gui.SplashWindow;
+import org.delafer.xanderView.sound.SoundBeep;
 
 public class CommonContainerExt extends CommonContainer{
 
 	private boolean randomMode;
+	int startAt;
 
 	public CommonContainerExt(String locationArg) {
 		super(locationArg);
 		randomMode = false;
+		startAt = this.currentIndex();
 	}
 
 	@Override
@@ -32,7 +36,9 @@ public class CommonContainerExt extends CommonContainer{
 	@Override
 	public ImageEntry<?> getNext() {
 		if (!randomMode) {
-			return super.getNext();
+			ImageEntry<?> next =  super.getNext();
+			checkStartReached();
+			return next;
 		}
 		int skip = RandomUtil.getRandomInt(1, size()-1);
 //		System.out.println(skip);
@@ -47,7 +53,9 @@ public class CommonContainerExt extends CommonContainer{
 	@Override
 	public ImageEntry<?> getPrevious() {
 		if (!randomMode) {
-			return super.getPrevious();
+			ImageEntry<?> prev =  super.getPrevious();
+			checkStartReached();
+			return prev;
 		}
 		int skip = RandomUtil.getRandomInt(1, size()-1);
 		ImageEntry<?> ret = null;
@@ -55,6 +63,12 @@ public class CommonContainerExt extends CommonContainer{
 			ret = super.getPrevious();
 		}
 		return ret;
+	}
+
+	private void checkStartReached() {
+		if (startAt == currentIndex()) {
+			SoundBeep.beep();
+		}
 	}
 
 	public void switchRandomAccess() {

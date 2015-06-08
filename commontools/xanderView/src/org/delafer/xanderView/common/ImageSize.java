@@ -54,6 +54,11 @@ public final class ImageSize {
 		return this.height == 0 && this.width == 0;
 	}
 
+	public void scale(float factor) {
+		width = Math.round(factor  * width);
+		height = Math.round(factor  * height);
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) return true;

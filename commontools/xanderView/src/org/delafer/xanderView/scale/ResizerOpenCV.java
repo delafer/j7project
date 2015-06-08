@@ -94,7 +94,11 @@ public class ResizerOpenCV extends ResizerBase {
 	public BufferedImage resize(BufferedImage input, int width, int height) {
 		Mat resize = new Mat();
 		Size size = new Size(width, height);
-		Mat mt = matify(input);
+		Mat mt = null;
+		try {
+			mt = matify(input);
+		} catch (java.lang.UnsupportedOperationException u) {}
+
 
 		if (mt == null) {
 			//workaround

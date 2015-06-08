@@ -42,7 +42,7 @@ public class SevenZipReader implements IAbstractReader {
 
 			for (int i = 0; i < numberOfItems; i++) {
 				ZipImageEntry entry = getEntryByIdentifier(i);
-
+//				System.out.println(entry);
 				if (entry != null) entries.add(entry);
 			}
 		} catch (IOException e) {

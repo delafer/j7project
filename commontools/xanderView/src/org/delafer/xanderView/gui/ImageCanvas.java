@@ -1,10 +1,6 @@
 package org.delafer.xanderView.gui;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
+import java.awt.*;
 import java.awt.font.TextAttribute;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
@@ -18,15 +14,17 @@ import net.j7.commons.strings.StringUtils;
 import org.delafer.xanderView.common.ImageSize;
 import org.delafer.xanderView.gui.helpers.LazyUpdater;
 import org.delafer.xanderView.gui.helpers.MultiShell;
-import org.delafer.xanderView.orientation.CommonRotator;
-import org.delafer.xanderView.orientation.OrientationCommons;
+import org.delafer.xanderView.orientation.*;
 import org.delafer.xanderView.orientation.OrientationCommons.Action;
 import org.delafer.xanderView.orientation.OrientationCommons.Orientation;
-import org.delafer.xanderView.orientation.Rotator2D;
 import org.delafer.xanderView.scale.ScaleFactory;
+
+import com.jhlabs.image.EdgeFilter;
+import com.jhlabs.image.GammaFilter;
 
 public class ImageCanvas extends JPanel {
 
+	private static final float scaleFactor = 1.05f;
 	private static final long serialVersionUID = 9162619010168531038L;
 	BufferedImage imageSource;
 	BufferedImage drawImage;
@@ -34,6 +32,7 @@ public class ImageCanvas extends JPanel {
 
 	Orientation orientation;
 	Orientation orientationDefault;
+	float scale;
 
 	LazyUpdater updater;
 	MultiShell shell;
@@ -53,6 +52,7 @@ public class ImageCanvas extends JPanel {
    	 	this.text = text;
    	 	this.orientationDefault = getDirectionDefault();
    	 	this.orientation = CommonUtils.nvl(direction, orientationDefault);
+   	 	this.scale = 1f;
    	 	preRenderImage();
     }
 
@@ -61,7 +61,7 @@ public class ImageCanvas extends JPanel {
     	ImageSize cnvSize = getCanvasImageSize();
 
     	boolean rotate = (imgSize.width() > imgSize.height()) != (cnvSize.width() > cnvSize.height());
-    	rotate = rotate && (max(imgSize.width(), imgSize.height()) / min(imgSize.width(), imgSize.height()) >= 1.1f);
+    	rotate = rotate && (max(imgSize.width(), imgSize.height()) / min(imgSize.width(), imgSize.height()) >= ImageCanvas.scaleFactor);
 
     	return !rotate ? Orientation.Original : Orientation.RotatedLeft;
 	}
@@ -76,6 +76,21 @@ public class ImageCanvas extends JPanel {
 		return (float)(arg1 < arg2 ? arg1 : arg2);
 	}
 
+
+	public void scaleReset() {
+		this.scale = 1f;
+		preRenderImage();
+	}
+
+	public void scaleUp() {
+		scale *= ImageCanvas.scaleFactor;
+		preRenderImage();
+	}
+
+	public void scaleDown() {
+		scale /= ImageCanvas.scaleFactor;
+		preRenderImage();
+	}
 
 
 	public Orientation rotate(Action action) {
@@ -104,6 +119,7 @@ public class ImageCanvas extends JPanel {
     	if (!imgSize.equals(cnvSize)) {
     		ImageSize size = OrientationCommons.getNewSize(imgSize.width(), imgSize.height(), cnvSize.width(), cnvSize.height());
     		if (size.empty()) return ;
+    		size.scale(scale);
     		drawImage = ScaleFactory.instance(imgSize).resize(imageSource, !swapXY ? size.width() : size.height(), !swapXY ? size.height() : size.width());
     	} else {
     		drawImage = imageSource;
@@ -113,6 +129,10 @@ public class ImageCanvas extends JPanel {
     		CommonRotator ir = new Rotator2D();
         	drawImage = ir.rotate(drawImage, orientation);
     	}
+//    	EdgeFilter filter = new EdgeFilter();
+
+//		GammaFilter filter = new GammaFilter(1.5f);
+//		drawImage = filter.filter(drawImage, null);
 
     }
 
@@ -131,8 +151,8 @@ public class ImageCanvas extends JPanel {
     }
 
 	public void paintCanvas(ImageCanvas panel, Graphics g) {
-		g.setColor(Color.BLACK);
-		g.fillRect(0, 0, g.getClipBounds().width, g.getClipBounds().height);
+//		g.setColor(Color.BLACK);
+//		g.fillRect(0, 0, g.getClipBounds().width, g.getClipBounds().height);
         if (panel.drawImage!=null) {
         	Rectangle dim = g.getClipBounds();
         	int x = (dim.width - panel.drawImage.getWidth(null)) / 2;
@@ -169,6 +189,7 @@ public class ImageCanvas extends JPanel {
 	public Orientation getOrientation() {
 		return orientation != orientationDefault ? orientation : null;
 	}
+
 
 
 }

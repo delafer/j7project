@@ -18,6 +18,9 @@ import org.libjpegturbo.turbojpeg.TJ;
 import org.libjpegturbo.turbojpeg.TJDecompressor;
 import org.libjpegturbo.turbojpeg.TJScalingFactor;
 
+import com.jhlabs.image.ContrastFilter;
+import com.jhlabs.image.GammaFilter;
+
 public abstract class ImageLoader {
 
 	public abstract Dimension getSize();
@@ -47,6 +50,8 @@ public abstract class ImageLoader {
 				break;
 			}
 			if (img == null) return ;
+//			GammaFilter filter = new GammaFilter(0.4f);
+//			img = filter.filter(img, null);
 			panel.setImage(img, text, orientator.getOrientation(entry.CRC()));
 			panel.showImage();
 

@@ -100,4 +100,9 @@ public class ZipImageEntry extends ImageEntry<Integer> {
 
 	}
 
+	@Override
+	public String toString() {
+		return String.format("ZipImageEntry [identifier=%s, name=%s, size=%s, crc=%s, imageType=%s]", identifier, name, size, crc, imageType);
+	}
+
 }

@@ -73,7 +73,6 @@ public final class MainWindow extends ImageLoader{
 
 	private void initPath(String path) {
 		pointer = new CommonContainerExt(path);
-
 	}
 
 	protected void show () {
@@ -204,6 +203,18 @@ public final class MainWindow extends ImageLoader{
 				OrientationStore.instance().setOrientation(current.CRC(), panel.getOrientation());
 			}
 			new SplashWindow(shell.active(), State.Special1);
+			break;
+		case 16777258:
+			panel.scaleReset();
+			panel.showImage();
+			break;
+		case 16777259:
+			panel.scaleUp();
+			panel.showImage();
+			break;
+		case 16777261:
+			panel.scaleDown();
+			panel.showImage();
 			break;
 		case 16777233://F8
 		case 16777232://F7

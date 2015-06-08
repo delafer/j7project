@@ -32,7 +32,7 @@ public abstract class ImageEntry<E> implements IImageEntry<E> {
 		types.put("jfif", ImageType.JPEG);
 		types.put("jif", ImageType.JPEG);
 		types.put("jfi", ImageType.JPEG);
-		types.put("", ImageType.JPEG);
+//		types.put("", ImageType.JPEG);
 		types.put("bmp", ImageType.BMP);
 		types.put("rle", ImageType.BMP);
 		types.put("dib", ImageType.BMP);
@@ -42,7 +42,7 @@ public abstract class ImageEntry<E> implements IImageEntry<E> {
 
 	public static ImageType getType(String name) {
 		String ext = FileUtils.getExtension(name);
-		if (StringUtils.empty(ext)) ext = "jpg";
+//		if (StringUtils.empty(ext)) ext = "jpg";
 		ext = ext.trim().toLowerCase();
 		ImageType tmp = types.get(ext);
 
