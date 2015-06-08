@@ -198,9 +198,10 @@ public final class MainWindow extends ImageLoader{
 			break;
 		case 115:
 			//S -> save
-			ImageEntry current = pointer.getCurrent();
+			ImageEntry<?> current = pointer.getCurrent();
 			if (current != null) {
 				OrientationStore.instance().setOrientation(current.CRC(), panel.getOrientation());
+				OrientationStore.instance().setScaleConst(current.CRC(), panel.getScaleFactor());
 			}
 			new SplashWindow(shell.active(), State.Special1);
 			break;

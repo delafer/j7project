@@ -12,6 +12,7 @@ import net.j7.commons.base.CommonUtils;
 import net.j7.commons.strings.StringUtils;
 
 import org.delafer.xanderView.common.ImageSize;
+import org.delafer.xanderView.gui.config.OrientationStore.ImageData;
 import org.delafer.xanderView.gui.helpers.LazyUpdater;
 import org.delafer.xanderView.gui.helpers.MultiShell;
 import org.delafer.xanderView.orientation.*;
@@ -19,8 +20,7 @@ import org.delafer.xanderView.orientation.OrientationCommons.Action;
 import org.delafer.xanderView.orientation.OrientationCommons.Orientation;
 import org.delafer.xanderView.scale.ScaleFactory;
 
-import com.jhlabs.image.EdgeFilter;
-import com.jhlabs.image.GammaFilter;
+import com.carrotsearch.hppc.IntFloatHashMap;
 
 public class ImageCanvas extends JPanel {
 
@@ -32,7 +32,19 @@ public class ImageCanvas extends JPanel {
 
 	Orientation orientation;
 	Orientation orientationDefault;
-	float scale;
+	int scaleIdx;
+
+	static IntFloatHashMap scaleData;
+	static {
+		scaleData = new IntFloatHashMap(63);
+		float s1 = 1f, s2 = s1;
+		for (int i = 1; i < 32; i++) {
+			s1 /= ImageCanvas.scaleFactor;
+			s2 *= ImageCanvas.scaleFactor;
+			scaleData.put(-i, s1);
+			scaleData.put(i, s2);
+		}
+	}
 
 	LazyUpdater updater;
 	MultiShell shell;
@@ -47,12 +59,12 @@ public class ImageCanvas extends JPanel {
         this.setOpaque(true);
     }
 
-    public void setImage(BufferedImage image, String text, Orientation direction) {
+    public void setImage(BufferedImage image, String text, ImageData imgData) {
    	 	this.imageSource = image;
    	 	this.text = text;
    	 	this.orientationDefault = getDirectionDefault();
-   	 	this.orientation = CommonUtils.nvl(direction, orientationDefault);
-   	 	this.scale = 1f;
+   	 	this.orientation = CommonUtils.nvl(imgData.getOrientation(), orientationDefault);
+   	 	this.scaleIdx = imgData.getScaleConst();
    	 	preRenderImage();
     }
 
@@ -78,17 +90,19 @@ public class ImageCanvas extends JPanel {
 
 
 	public void scaleReset() {
-		this.scale = 1f;
+		scaleIdx = 0;
 		preRenderImage();
 	}
 
 	public void scaleUp() {
-		scale *= ImageCanvas.scaleFactor;
+		if (scaleIdx<31) scaleIdx++;
+
 		preRenderImage();
 	}
 
 	public void scaleDown() {
-		scale /= ImageCanvas.scaleFactor;
+		if (scaleIdx>-31) scaleIdx--;
+
 		preRenderImage();
 	}
 
@@ -119,7 +133,8 @@ public class ImageCanvas extends JPanel {
     	if (!imgSize.equals(cnvSize)) {
     		ImageSize size = OrientationCommons.getNewSize(imgSize.width(), imgSize.height(), cnvSize.width(), cnvSize.height());
     		if (size.empty()) return ;
-    		size.scale(scale);
+
+    		if (scaleIdx != 0) size.scale(scaleData.get(scaleIdx));
     		drawImage = ScaleFactory.instance(imgSize).resize(imageSource, !swapXY ? size.width() : size.height(), !swapXY ? size.height() : size.width());
     	} else {
     		drawImage = imageSource;
@@ -190,6 +205,9 @@ public class ImageCanvas extends JPanel {
 		return orientation != orientationDefault ? orientation : null;
 	}
 
+	public int getScaleFactor() {
+		return this.scaleIdx;
+	}
 
 
 }

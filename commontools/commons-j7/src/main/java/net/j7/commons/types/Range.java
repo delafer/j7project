@@ -16,7 +16,6 @@ public class Range implements Comparable<Range>, Cloneable, Serializable {
 
 	private Integer rangeFrom;
 	private Integer rangeTo;
-
 	/**
 	 *
 	 */

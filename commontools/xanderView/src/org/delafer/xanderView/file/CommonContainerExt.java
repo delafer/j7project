@@ -3,7 +3,6 @@ package org.delafer.xanderView.file;
 import net.j7.commons.utils.RandomUtil;
 
 import org.delafer.xanderView.file.entry.ImageEntry;
-import org.delafer.xanderView.gui.SplashWindow;
 import org.delafer.xanderView.sound.SoundBeep;
 
 public class CommonContainerExt extends CommonContainer{
@@ -15,6 +14,8 @@ public class CommonContainerExt extends CommonContainer{
 		super(locationArg);
 		randomMode = false;
 		startAt = this.currentIndex();
+//		ImageEntry e = this.getCurrent();
+//		System.out.println(e);
 	}
 
 	@Override

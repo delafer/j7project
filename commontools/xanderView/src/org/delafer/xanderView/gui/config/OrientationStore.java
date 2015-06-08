@@ -20,7 +20,9 @@ public class OrientationStore {
 	private String fileName;
 	private LongLongHashMap map;
 	private boolean dirty;
+	//vsego 64
 	private final static Range rangeOrient = Range.range(0, 4); // 0 - 15
+	private final static Range scaleOrient = Range.range(4, 6); // 0 - 63
 	/**
 	 * Lazy-loaded Singleton, by Bill Pugh *.
 	 */
@@ -108,6 +110,10 @@ public class OrientationStore {
 		return Orientation.values()[--num];
 	}
 
+	public ImageData getImageData(long crc) {
+		return new ImageData(crc);
+	}
+
 	public void setOrientation(long crc, Orientation orient) {
 		long valueOld = map.get(crc);
 		long valueNew = BitNumberRange.set(valueOld, rangeOrient,  enumOrderNum(orient));
@@ -120,11 +126,33 @@ public class OrientationStore {
 		dirty =true;
 	}
 
-	public Orientation getOrientation(long crc) {
-		long value = map.get(crc);
-		value = BitNumberRange.value(value, rangeOrient);
-		Orientation orient = enumByNum((int)value);
-		return orient;
+	private static int toPBV(int v, int maxVal) {
+		if (v != 0) {
+			v -= maxVal;
+			if (v>=0) v++;
+		}
+		return v;
+	}
+
+	private static int fromPBV(int v, int maxVal) {
+		if (v != 0) {
+			if (v > 0) v--;
+			v += maxVal;
+		}
+		return v;
+	}
+
+	public void setScaleConst(long crc, int scale) {
+		long valueOld = map.get(crc);
+		long valueNew = BitNumberRange.set(valueOld, scaleOrient,  fromPBV(scale, 32));
+		if (valueOld == valueNew) return ;
+		if (valueNew != 0l) {
+			map.put(crc, valueNew);
+		} else {
+			map.remove(crc);
+		}
+		dirty =true;
+
 	}
 
 
@@ -164,5 +192,28 @@ public class OrientationStore {
 //		}
 //
 //	}
+
+	public class ImageData implements Serializable {
+
+		private static final long serialVersionUID = 123456L;
+
+		long bitmask;
+
+		public ImageData(long crc) {
+			this.bitmask = map.get(crc);
+		}
+
+		public Orientation getOrientation() {
+			long value = BitNumberRange.value(bitmask, rangeOrient);
+			Orientation orient = enumByNum((int)value);
+			return orient;
+		}
+
+		public int getScaleConst() {
+			long value = BitNumberRange.value(bitmask, scaleOrient);
+
+			return toPBV((int)value, 32);//32 = 64/2
+		}
+	}
 
 }
