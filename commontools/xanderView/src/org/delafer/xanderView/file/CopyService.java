@@ -92,7 +92,7 @@ public class CopyService {
 	}
 
 	public State copy(ImageEntry<?> entry) {
-			Thread worker = new Thread() {
+			Thread worker = new Thread("copyService") {
 
 				@Override
 				public void run(){
@@ -118,6 +118,7 @@ public class CopyService {
 
 			};
 			worker.setDaemon(true);
+			worker.setPriority(Thread.NORM_PRIORITY-2);
 			worker.start();
 
 			synchronized (queue) {
@@ -234,7 +235,7 @@ public class CopyService {
 						File aFile = new File(fileName);
 						if (aFile.isDirectory()) return ;
 
-						ImageType imgType = ImageEntry.getType(FileUtils.getExtension(fileName));
+						ImageType imgType = ImageEntry.getType(fileName);
 						if (ImageType.UNKNOWN.equals(imgType)) return ;
 
 						FileImageEntry entryNew = reader.getEntryByIdentifier(id);

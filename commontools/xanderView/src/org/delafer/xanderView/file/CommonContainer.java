@@ -88,7 +88,7 @@ public class CommonContainer {
 						File aFile = new File(fileName);
 						if (aFile.isDirectory()) return ;
 
-						ImageType imgType = ImageEntry.getType(FileUtils.getExtension(fileName));
+						ImageType imgType = ImageEntry.getType(fileName);
 						if (ImageType.UNKNOWN.equals(imgType)) return ;
 
 						ImageEntry<?> entryNew = reader.getEntryByIdentifier(id);
