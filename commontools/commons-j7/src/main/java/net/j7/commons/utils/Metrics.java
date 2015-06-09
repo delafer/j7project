@@ -1,6 +1,7 @@
 package net.j7.commons.utils;
 
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public final class Metrics {
@@ -63,8 +64,23 @@ public final class Metrics {
 		measureStop(id, null);
 	}
 
+	public static void measureContinue(Object id) {
+		measureContinue(id, null);
+	}
+
+	public static void measureContinue(Object id, String label) {
+		Long endTime = System.currentTimeMillis();
+		Long startTime = times.put(id, endTime);
+		measureInt(id, label, startTime, endTime);
+	}
+
 	public static void measureStop(Object id, String label) {
 		Long startTime = times.remove(id);
+		Long endTime = System.currentTimeMillis();
+		measureInt(id, label, startTime, endTime);
+	}
+
+	private static void measureInt(Object id, String label, Long startTime, Long endTime) {
 		if (null != startTime) {
 			StringBuilder sb = new StringBuilder();
 			if (label != null)
@@ -72,7 +88,7 @@ public final class Metrics {
 			else {
 				sb.append("Measured [").append(id.toString()).append("] = ");
 			}
-			sb.append((System.currentTimeMillis() - startTime)).append(" ms");
+			sb.append((endTime - startTime)).append(" ms");
 			stream.println(sb);
 		}
 	}
