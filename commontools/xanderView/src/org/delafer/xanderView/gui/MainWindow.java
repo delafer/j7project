@@ -270,7 +270,7 @@ public final class MainWindow extends ImageLoader{
 		panel.preRenderImage();
 		panel.showImage();
 //
-//		shell.sendResized();
+		shell.sendResized();
 
 	}
 

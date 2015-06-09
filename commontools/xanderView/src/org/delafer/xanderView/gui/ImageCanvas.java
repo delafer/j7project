@@ -8,8 +8,6 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.text.AttributedString;
 
-import javax.swing.JPanel;
-
 import net.j7.commons.base.CommonUtils;
 import net.j7.commons.strings.StringUtils;
 
@@ -23,6 +21,7 @@ import org.delafer.xanderView.orientation.OrientationCommons.Orientation;
 import org.delafer.xanderView.scale.ScaleFactory;
 
 import com.carrotsearch.hppc.IntFloatHashMap;
+import com.jhlabs.image.SwimFilter;
 
 public class ImageCanvas extends Canvas implements MouseListener  {
 
@@ -150,10 +149,21 @@ public class ImageCanvas extends Canvas implements MouseListener  {
     		CommonRotator ir = new Rotator2D();
         	drawImage = ir.rotate(drawImage, orientation);
     	}
-//    	EdgeFilter filter = new EdgeFilter();
 
-//		GammaFilter filter = new GammaFilter(1.5f);
-//		drawImage = filter.filter(drawImage, null);
+//    	new Thread() {
+//			public void run() {
+////		    	GammaFilter filter = new GammaFilter(0.5f);
+//				SwimFilter filter = new SwimFilter();
+//				filter.setTurbulence(0.4f);
+//				filter.setAmount(50f);
+//				filter.setStretch(10);
+//				filter.setTime(1f);
+//				drawImage = filter.filter(drawImage, null);
+//				ImageCanvas.this.showImage();
+//			}
+//
+//    	}.start();
+
 
     }
 
@@ -176,8 +186,8 @@ public class ImageCanvas extends Canvas implements MouseListener  {
 //		g.fillRect(0, 0, g.getClipBounds().width, g.getClipBounds().height);
         if (panel.drawImage!=null) {
         	Rectangle dim = this.getBounds();
-        	int x = (dim.width - panel.drawImage.getWidth(null)) / 2;
-        	int y  = (dim.height - panel.drawImage.getHeight(null)) / 2;
+        	int x = (dim.width - panel.drawImage.getWidth(null)) >> 1;
+        	int y  = (dim.height - panel.drawImage.getHeight(null)) >> 1;
 
         	g.drawImage(panel.drawImage, x, y, null);
         }
