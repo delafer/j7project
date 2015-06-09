@@ -1,6 +1,8 @@
 package org.delafer.xanderView.gui;
 
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.font.TextAttribute;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
@@ -22,7 +24,7 @@ import org.delafer.xanderView.scale.ScaleFactory;
 
 import com.carrotsearch.hppc.IntFloatHashMap;
 
-public class ImageCanvas extends JPanel {
+public class ImageCanvas extends Canvas implements MouseListener  {
 
 	private static final float scaleFactor = 1.05f;
 	private static final long serialVersionUID = 9162619010168531038L;
@@ -51,12 +53,16 @@ public class ImageCanvas extends JPanel {
 	private final static transient Font font = new Font("MS Reference Sans Serif", Font.BOLD, 20);
 
     public ImageCanvas(MultiShell shell) {
+    	super();
+    	this.createBufferStrategy(1);
     	this.shell = shell;
         this.setBackground(Color.BLACK);
         this.setForeground(Color.BLACK);
-        this.setDoubleBuffered(true);
+        //this.setDoubleBuffered(true);
         this.setIgnoreRepaint(true);
-        this.setOpaque(true);
+
+        addMouseListener(this);
+        //this.setOpaque(true);
     }
 
     public void setImage(BufferedImage image, String text, ImageData imgData) {
@@ -153,14 +159,14 @@ public class ImageCanvas extends JPanel {
 
 
     public void showImage() {
-//    	Graphics g = getGraphics();
-//    	paint(g);
-    	this.getParent().repaint();
+    	Graphics g = getGraphics();
+    	paint(g);
+//    	this.getParent().repaint();
     }
 
 
 	public void paintComponent(Graphics g) {
-        super.paintComponent(g);  // Paint background
+        //super.paintComponent(g);  // Paint background
         paintCanvas(this, g);
 
     }
@@ -169,7 +175,7 @@ public class ImageCanvas extends JPanel {
 //		g.setColor(Color.BLACK);
 //		g.fillRect(0, 0, g.getClipBounds().width, g.getClipBounds().height);
         if (panel.drawImage!=null) {
-        	Rectangle dim = g.getClipBounds();
+        	Rectangle dim = this.getBounds();
         	int x = (dim.width - panel.drawImage.getWidth(null)) / 2;
         	int y  = (dim.height - panel.drawImage.getHeight(null)) / 2;
 
@@ -189,7 +195,7 @@ public class ImageCanvas extends JPanel {
 	}
 
 	private void drawText(Graphics g, AttributedString as) {
-		int y = g.getClipBounds().height - 15;
+		int y =  this.getBounds().height - 15;
 		int x =  (shell.getFullScreen()) ? 25 : 15;
 
 		if (shell.getFullScreen()) {
@@ -208,6 +214,18 @@ public class ImageCanvas extends JPanel {
 	public int getScaleFactor() {
 		return this.scaleIdx;
 	}
+
+	@Override
+	public void paint(Graphics g) {
+		super.paint(g);
+		paintCanvas(this, g);
+	}
+
+	public void mouseClicked(MouseEvent e) {}
+	public void mousePressed(MouseEvent e) {}
+	public void mouseReleased(MouseEvent e) {}
+	public void mouseEntered(MouseEvent e) {}
+	public void mouseExited(MouseEvent e) {}
 
 
 }

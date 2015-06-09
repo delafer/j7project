@@ -5,7 +5,7 @@ import org.delafer.xanderView.gui.ImageCanvas;
 public class LazyUpdater extends Thread {
 
 	volatile long start;
-	final static long interval = 400;
+	final static long interval = 100;
 	private ImageCanvas panel;
 
 	/**
@@ -34,7 +34,7 @@ public class LazyUpdater extends Thread {
 	public void run() {
 		while (System.currentTimeMillis() - start < interval) {
 			try {
-				Thread.sleep(100);
+				Thread.sleep(150);
 			} catch (InterruptedException e) {}
 		}
 		drawIt();

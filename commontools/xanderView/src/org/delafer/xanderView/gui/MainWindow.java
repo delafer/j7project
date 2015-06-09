@@ -136,7 +136,7 @@ public final class MainWindow extends ImageLoader{
 		java.awt.Frame awtFrame = SWT_AWT.new_Frame( cmpEmbedded );
 		awtFrame.setResizable(false);
 		awtFrame.setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
-		awtFrame.addMouseListener(new MouseAdapter() {
+		panel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(java.awt.event.MouseEvent e) {
 				if(e.getClickCount()==2){
@@ -269,8 +269,8 @@ public final class MainWindow extends ImageLoader{
 
 		panel.preRenderImage();
 		panel.showImage();
-
-		shell.sendResized();
+//
+//		shell.sendResized();
 
 	}
 
