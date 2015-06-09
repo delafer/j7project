@@ -138,8 +138,6 @@ public class CopyService {
 	public State copySync(ImageEntry<?> entry) {
 		try {
 
-			System.out.println("copying "+entry);
-
 			FileDirEntry fde = new FileDirEntry(null,null,0);
 			fde.crc = entry.CRC();
 
@@ -267,21 +265,18 @@ public class CopyService {
 		Thread th = new Thread("idxDstDir") {
 
 			public void run() {
-				System.out.println("start reading...");
 				synchronized (lockObj) {
 
 				List<ImageEntry<?>> toAdd = new ArrayList<ImageEntry<?>>();
 				reader.read(toAdd);
 
 				for (ImageEntry<?> next : toAdd) {
-					System.out.println(next);
 					images.add(FileDirEntry.as((FileImageEntry)next));
 				}
 				reader.initialize();
 
 				initialized = Boolean.TRUE;
-				System.out.println("finish reading...");
-				lockObj.notifyAll();
+				lockObj.notify();
 				}
 			}
 
@@ -300,5 +295,16 @@ public class CopyService {
 
 //	public void onContainerContentChange() {
 //	}
+
+	public static void main(String[] args) {
+		Queue<String> a = new LinkedList<String>();
+		a.add("b");
+		a.add("x");
+		a.add("a");
+		System.out.println(a.remove());
+		System.out.println(a.remove());
+		System.out.println(a.remove());
+
+	}
 
 }
