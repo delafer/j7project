@@ -1,24 +1,16 @@
 package org.delafer.xanderView.file;
 
-import java.io.Closeable;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import net.j7.commons.base.Equals;
 import net.j7.commons.io.FilePath;
 import net.j7.commons.io.FileUtils;
 
 import org.delafer.xanderView.common.SimpleNameIncrementer;
-import org.delafer.xanderView.file.entry.FileDirEntry;
-import org.delafer.xanderView.file.entry.FileImageEntry;
-import org.delafer.xanderView.file.entry.ImageEntry;
+import org.delafer.xanderView.file.entry.*;
 import org.delafer.xanderView.file.entry.ImageEntry.ImageType;
 import org.delafer.xanderView.file.readers.FileReader;
 import org.delafer.xanderView.general.State;
@@ -51,13 +43,15 @@ public class CopyService {
 	}
 
 
+    private transient Object lockObj = new Object();
 
 	Set<FileDirEntry> images;
 //	ListIterator<FileImageEntry> iterator;
 	File pathFile;
 	String pathTxt;
 	FileReader reader;
-
+	Boolean initialized = null;
+	private Queue<Runnable> queue;
 
 	public int size() {
 		return images.size();
@@ -66,6 +60,7 @@ public class CopyService {
 	public void init() {
 		String locationArg = ApplConfiguration.instance().get(ApplConfiguration.CFG_COPY_DIR);
 		String location = FilePath.as().dir(locationArg).div(true).forceExists().build();
+		queue = new LinkedList<Runnable>();
 		initializeByPath(location);
 
 	}
@@ -87,8 +82,64 @@ public class CopyService {
 
 	}
 
-	public State copy(ImageEntry<?> entry) {
+
+	public void checkInitialized() {
 		try {
+			synchronized (lockObj) {
+				while (null == initialized) lockObj.wait();
+			}
+		} catch (InterruptedException e) {}
+	}
+
+	public State copy(ImageEntry<?> entry) {
+			Thread worker = new Thread() {
+
+				@Override
+				public void run(){
+					checkInitialized();
+			        while ( true ) {
+			            try {
+			                Runnable work = null;
+			                synchronized ( queue ) {
+			                    while ( queue.isEmpty() ) queue.wait();
+
+			                    // Get the next work item off of the queue
+			                    work = queue.remove();
+			                }
+
+			                // Process the work item
+			                work.run();
+			            }
+			            catch ( InterruptedException ie ) {
+			                break;  // Terminate
+			            }
+			        }
+			    }
+
+			};
+			worker.setDaemon(true);
+			worker.start();
+
+			synchronized (queue) {
+				queue.add(new Runnable() {
+
+					@Override
+					public void run() {
+						CopyService.this.copySync(entry);
+					}
+				});
+				 queue.notify();
+			}
+
+			return State.Ignore;
+	}
+
+
+	public State copySync(ImageEntry<?> entry) {
+		try {
+
+			System.out.println("copying "+entry);
+
 			FileDirEntry fde = new FileDirEntry(null,null,0);
 			fde.crc = entry.CRC();
 
@@ -204,7 +255,7 @@ public class CopyService {
 
 			});
 
-			reader.initialize();
+
 			readStructure();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -213,12 +264,31 @@ public class CopyService {
 	}
 
 	protected void readStructure() throws Exception {
-		List<ImageEntry<?>> toAdd = new ArrayList<ImageEntry<?>>();
-		reader.read(toAdd);
+		Thread th = new Thread("idxDstDir") {
 
-		for (ImageEntry<?> next : toAdd) {
-			images.add(FileDirEntry.as((FileImageEntry)next));
-		}
+			public void run() {
+				System.out.println("start reading...");
+				synchronized (lockObj) {
+
+				List<ImageEntry<?>> toAdd = new ArrayList<ImageEntry<?>>();
+				reader.read(toAdd);
+
+				for (ImageEntry<?> next : toAdd) {
+					System.out.println(next);
+					images.add(FileDirEntry.as((FileImageEntry)next));
+				}
+				reader.initialize();
+
+				initialized = Boolean.TRUE;
+				System.out.println("finish reading...");
+				lockObj.notifyAll();
+				}
+			}
+
+		};
+		th.setDaemon(true);
+		th.start();
+
 	}
 
 //	public void test() {

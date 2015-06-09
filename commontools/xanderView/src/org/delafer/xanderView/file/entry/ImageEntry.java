@@ -112,5 +112,10 @@ public abstract class ImageEntry<E> implements IImageEntry<E> {
 		return imageType;
 	}
 
+	@Override
+	public String toString() {
+		return String.format("ImageEntry [name=%s, imageType=%s, size=%s, crc=%s]", name, imageType, size, crc);
+	}
+
 
 }

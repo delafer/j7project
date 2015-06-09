@@ -3,6 +3,7 @@ package org.delafer.xanderView.gui;
 import net.j7.commons.strings.StringUtils;
 import net.j7.commons.utils.Metrics;
 
+import org.delafer.xanderView.file.CopyService;
 import org.delafer.xanderView.general.Shutdown;
 import org.delafer.xanderView.gui.config.OrientationStore;
 import org.delafer.xanderView.gui.helpers.ImageRepository;
@@ -37,6 +38,7 @@ public class MainEntryPoint {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		CopyService.instance();
 	}
 
 }
