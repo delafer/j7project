@@ -1,11 +1,6 @@
 package org.delafer.xanderView.gui;
 
-import static org.eclipse.swt.SWT.DOUBLE_BUFFERED;
-import static org.eclipse.swt.SWT.EMBEDDED;
-import static org.eclipse.swt.SWT.HORIZONTAL;
-import static org.eclipse.swt.SWT.NO_BACKGROUND;
-import static org.eclipse.swt.SWT.NO_REDRAW_RESIZE;
-import static org.eclipse.swt.SWT.NO_SCROLL;
+import static org.eclipse.swt.SWT.*;
 
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
@@ -15,30 +10,19 @@ import net.j7.commons.strings.StringUtils;
 import org.delafer.xanderView.common.ImageSize;
 import org.delafer.xanderView.file.CommonContainerExt;
 import org.delafer.xanderView.file.CopyService;
+import org.delafer.xanderView.file.CopyService.CopyObserver;
 import org.delafer.xanderView.file.entry.ImageEntry;
 import org.delafer.xanderView.general.State;
 import org.delafer.xanderView.gui.config.ApplConfiguration;
 import org.delafer.xanderView.gui.config.OrientationStore;
-import org.delafer.xanderView.gui.helpers.Geometry;
-import org.delafer.xanderView.gui.helpers.LazyUpdater;
-import org.delafer.xanderView.gui.helpers.MultiShell;
-import org.delafer.xanderView.gui.helpers.UIHelpers;
+import org.delafer.xanderView.gui.helpers.*;
 import org.delafer.xanderView.orientation.OrientationCommons.Action;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.DirectoryDialog;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.FileDialog;
-import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.MenuItem;
-import org.eclipse.swt.widgets.Monitor;
-import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.*;
 
 
 
@@ -220,8 +204,8 @@ public final class MainWindow extends ImageLoader{
 		case 16777233://F8
 		case 16777232://F7
 		case 16777234://F9
-			State res = CopyService.instance().copy(pointer.getCurrent());
-			SplashWindow splash = new SplashWindow(shell.active(), res);
+			CopyService.instance().copy(pointer.getCurrent(), new CopyObserver(shell));
+//			SplashWindow splash = new SplashWindow(shell.active(), res);
 			break;
 		case 107:
 		case 108:

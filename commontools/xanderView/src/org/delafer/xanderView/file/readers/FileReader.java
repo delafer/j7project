@@ -46,6 +46,7 @@ public class FileReader implements IAbstractReader {
 
 				@Override
 				public boolean accept(File entry, FileInfo fileData) {
+//					try {Thread.currentThread().sleep( 50 );}catch(Exception e){}
 					ImageType imageType = ImageEntry.getType(fileData.getNameWithPath());
 					return !imageType.equals(ImageType.UNKNOWN);
 				}

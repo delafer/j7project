@@ -14,8 +14,12 @@ import org.delafer.xanderView.file.entry.*;
 import org.delafer.xanderView.file.entry.ImageEntry.ImageType;
 import org.delafer.xanderView.file.readers.FileReader;
 import org.delafer.xanderView.general.State;
+import org.delafer.xanderView.gui.SplashWindow;
 import org.delafer.xanderView.gui.config.ApplConfiguration;
+import org.delafer.xanderView.gui.config.ApplInstance;
+import org.delafer.xanderView.gui.helpers.MultiShell;
 import org.delafer.xanderView.interfaces.IAbstractReader.FileEvent;
+import org.eclipse.swt.widgets.Display;
 
 public class CopyService {
 
@@ -91,7 +95,7 @@ public class CopyService {
 		} catch (InterruptedException e) {}
 	}
 
-	public State copy(ImageEntry<?> entry) {
+	public void copy(ImageEntry<?> entry, CopyObserver observer) {
 			Thread worker = new Thread("copyService") {
 
 				@Override
@@ -108,6 +112,7 @@ public class CopyService {
 			                }
 
 			                // Process the work item
+			                ApplInstance.openTasks.decrementAndGet();
 			                work.run();
 			            }
 			            catch ( InterruptedException ie ) {
@@ -126,13 +131,14 @@ public class CopyService {
 
 					@Override
 					public void run() {
-						CopyService.this.copySync(entry);
+						observer.done(CopyService.this.copySync(entry));
 					}
 				});
-				 queue.notify();
+				ApplInstance.openTasks.incrementAndGet();
+				queue.notify();
 			}
 
-			return State.Ignore;
+//			return State.Ignore;
 	}
 
 
@@ -305,6 +311,26 @@ public class CopyService {
 		System.out.println(a.remove());
 		System.out.println(a.remove());
 		System.out.println(a.remove());
+
+	}
+
+	public static class CopyObserver {
+
+		private MultiShell shell;
+
+		public CopyObserver(MultiShell shell) {
+			this.shell = shell;
+		}
+
+		public void done(final State state) {
+			Display.getDefault().asyncExec(new Runnable() {
+
+				public void run() {
+					new SplashWindow(shell.active(), state);
+				}
+
+			});
+		}
 
 	}
 

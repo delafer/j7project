@@ -3,6 +3,7 @@ package org.delafer.xanderView.general;
 import java.io.IOException;
 
 import org.delafer.xanderView.gui.config.ApplConfiguration;
+import org.delafer.xanderView.gui.config.ApplInstance;
 import org.delafer.xanderView.gui.config.OrientationStore;
 
 
@@ -17,6 +18,12 @@ public class Shutdown {
 					OrientationStore.instance().save();
 				} catch (IOException e) {
 					e.printStackTrace();
+				}
+
+				while (ApplInstance.openTasks.get() > 0) {
+					try {
+						sleep(250);yield();
+					} catch (InterruptedException e) {}
 				}
 			}
 		});
