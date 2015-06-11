@@ -1,0 +1,1 @@
+for 64 bit solaris JRE
