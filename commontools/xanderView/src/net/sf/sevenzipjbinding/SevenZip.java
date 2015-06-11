@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Random;
 
+import net.j7.commons.jni.LibraryLoader;
 import net.sf.sevenzipjbinding.impl.OutArchiveImpl;
 import net.sf.sevenzipjbinding.impl.RandomAccessFileInStream;
 import net.sf.sevenzipjbinding.impl.VolumedArchiveInStream;
@@ -656,6 +657,19 @@ public class SevenZip {
     }
 
     private static void ensureLibraryIsInitialized() {
+    	if (autoInitializationWillOccur) {
+    		LibraryLoader.loadLibrary("lib7-Zip-JBinding");
+    		LibraryLoader.loadLibrary("libgcc_s_seh-1");
+    		try {
+				initLoadedLibraries();
+			} catch (SevenZipNativeInitializationException e) {
+				e.printStackTrace();
+			}
+    		autoInitializationWillOccur = false;
+    	}
+    }
+
+    private static void ensureLibraryIsInitialized2() {
         if (autoInitializationWillOccur) {
             autoInitializationWillOccur = false;
             try {
