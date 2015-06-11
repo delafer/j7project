@@ -109,7 +109,7 @@ public class LibraryLoader {
 		if (OSFamily.Unix.equals(os.family())) {
 			if ("amd64".equals(val)) val = "x86_64";
 			else
-			if ("i386".equals(val)) val = "x86";
+			if ("i386".equals(val) || "i686".equals(val)) val = "x86";
 		}
 
 		if (OSFamily.Windows.equals(os.family())) {
@@ -117,6 +117,10 @@ public class LibraryLoader {
 			else
 			if ("i386".equals(val)) val = "x86";
 		}
+
+		if (val.equals ("IA64N")) val = "ia64_32"; //$NON-NLS-1$ $NON-NLS-2$
+		if (val.equals ("IA64W")) val = "ia64"; //$NON-NLS-1$ $NON-NLS-2$
+
 
 		ArchVM vm = dmod.get(val);
 		if (ArchVM.x64.equals(vm) && ArchVM.x32.equals(model)) {
@@ -167,6 +171,7 @@ public class LibraryLoader {
 				path.forceExists();
 				path.build();
 				copyLibrary(fLib, is);
+				chmod ("755", pathTxt);
 //				System.out.println(pathTxt);
 			} else {
 				load = false;
@@ -194,6 +199,14 @@ public class LibraryLoader {
 		Streams.close(out);
 		Streams.close(is);
 	}
+
+	void chmod(String permision, String path) {
+		if (!OSFamily.Unix.equals(this.os.family())) return; //$NON-NLS-1$
+		try {
+			Runtime.getRuntime ().exec (new String []{"chmod", permision, path}).waitFor(); //$NON-NLS-1$
+		} catch (Throwable e) {}
+	}
+
 
 
 	public static void loadLibrary(String name) {
