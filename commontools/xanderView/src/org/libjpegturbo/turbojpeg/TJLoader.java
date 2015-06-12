@@ -28,10 +28,12 @@
 
 package org.libjpegturbo.turbojpeg;
 
+import net.j7.commons.jni.LibraryLoader;
+
 final class TJLoader {
   static void load() {
-    System.loadLibrary("turbojpeg64");
-//    System.load("G:\\workspaces\\extras\\bench\\XanderView\\lib\\libtubrojpeg.dll");
-//	  Library.loadLibrary("turbojpeg");
+	  LibraryLoader.loadLibrary("turbojpeg");
+    //System.loadLibrary("turbojpeg64");
+	//Library.loadLibrary("turbojpeg");
   }
 };

@@ -9,7 +9,10 @@ import net.j7.commons.collections.Maps;
 import net.j7.commons.strings.StringUtils;
 
 /**
- * @author u tavrovsa
+ * The Class Walker.
+ *
+ * @author tavrovsa
+ *
  */
 @SuppressWarnings("unchecked")
 public final class Walker extends AbstractWalker {

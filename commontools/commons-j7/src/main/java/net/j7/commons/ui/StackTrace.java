@@ -36,7 +36,11 @@ public final class StackTrace {
 	}
 
 	public final static synchronized int print() {
-		final Throwable t = new Throwable();
+		return print(new Throwable());
+	}
+
+	public final static synchronized int print(Throwable t) {
+
 		PrintStream s = System.out;
 
 

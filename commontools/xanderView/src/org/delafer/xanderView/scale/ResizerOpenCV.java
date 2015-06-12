@@ -5,6 +5,8 @@ import java.awt.image.DataBuffer;
 import java.awt.image.DataBufferByte;
 import java.awt.image.DataBufferInt;
 
+import net.j7.commons.jni.LibraryLoader;
+
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
@@ -23,7 +25,7 @@ public class ResizerOpenCV extends ResizerBase {
 
 	private ResizerOpenCV() {
 		super();
-		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+		LibraryLoader.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 	}
 
 	private static final class Holder {
