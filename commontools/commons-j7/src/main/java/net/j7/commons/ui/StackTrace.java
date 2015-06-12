@@ -1,6 +1,7 @@
 package net.j7.commons.ui;
 
 import java.io.PrintStream;
+import java.lang.reflect.Array;
 import java.util.concurrent.ConcurrentHashMap;
 
 public final class StackTrace {
@@ -15,6 +16,8 @@ public final class StackTrace {
 	 private static final String YELLOW = "\033[33m";
 	 private static final String WHITE = "\033[37m";
 	 private static final String NORMAL = "\033[0m";
+
+	static PrintStream outputStream = System.out;
 
 	private static transient ConcurrentHashMap<String, StackMetadata> map = new ConcurrentHashMap<String, StackMetadata>();
 
@@ -36,17 +39,25 @@ public final class StackTrace {
 	}
 
 	public final static synchronized int print() {
-		return print(new Throwable());
+		return print0(new Throwable(), 1);
 	}
 
 	public final static synchronized int print(Throwable t) {
+		return print0(t, 0);
+	}
 
-		PrintStream s = System.out;
+	public final static synchronized int print0(Throwable t, int skip) {
 
-
-
+		PrintStream s = StackTrace.outputStream;
 
         StackTraceElement[] trace = t.getStackTrace();
+        if (skip > 0) {
+        	int len = max(trace.length-skip,0);
+        	StackTraceElement[] newTrace = new StackTraceElement[len];
+        	System.arraycopy(trace, skip, newTrace, 0, len);
+        	trace = newTrace;
+        }
+
         String key = getAsString(trace);
 
 
@@ -67,7 +78,7 @@ public final class StackTrace {
 
         for (int i=0; i < trace.length; i++) {
         	if (lCnt>maxLines) return data.getId();
-        	if (i==0 || skip(trace[i])) continue ;
+        	if (/*i==0 ||*/ skip(trace[i])) continue ;
             s.println(COLOR_TAT + trace[i]);
             lCnt++;
         }
@@ -79,7 +90,11 @@ public final class StackTrace {
         return data.getId();
 	}
 
-	   /**
+	   private static int max(int i, int j) {
+		return i > j ? i : j;
+	}
+
+	/**
      * Print our stack trace as a cause for the specified stack trace.
      */
     private static void printStackTraceAsCause(Throwable ourC, PrintStream s, StackTraceElement[] causedTrace, int lCnt)
@@ -148,5 +163,9 @@ public final class StackTrace {
 		}
 
     }
+
+	public static void setOutputStream(PrintStream outputStream) {
+		StackTrace.outputStream = outputStream;
+	}
 
 }
