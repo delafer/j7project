@@ -2,6 +2,8 @@ package net.j7.commons.io;
 
 import java.io.File;
 
+import net.j7.commons.io.SysInfo.OS;
+
 
 public class FilePath {
 
@@ -78,13 +80,14 @@ public class FilePath {
 		sb.setLength(0);
 		switch (type) {
 		case ApplicationData:
-			return dir(System.getenv("APPDATA"));
+			return dir(SysInfo.instance().getAppDataDir(""));
 		case UserHome:
 			return dir(System.getProperty("user.home"));
 		case Temp:
 			return dir(System.getProperty("java.io.tmpdir"));
 		case AppDataLocal:
-			return dir(System.getenv("LOCALAPPDATA"));
+			SysInfo si = SysInfo.instance();
+			return dir(OS.Windows.equals(si.getOS()) ? System.getenv("LOCALAPPDATA") : SysInfo.instance().getAppDataDir(""));
 		case UserDir:
 			return dir(System.getProperty("user.dir"));
 		default:
