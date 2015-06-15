@@ -1,6 +1,11 @@
 package org.delafer.xanderView.gui;
 
-import java.awt.*;
+import java.awt.Canvas;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.font.TextAttribute;
@@ -10,18 +15,19 @@ import java.text.AttributedString;
 
 import net.j7.commons.base.CommonUtils;
 import net.j7.commons.strings.StringUtils;
+import net.j7.commons.ui.StackTrace;
 
 import org.delafer.xanderView.common.ImageSize;
 import org.delafer.xanderView.gui.config.OrientationStore.ImageData;
-import org.delafer.xanderView.gui.helpers.LazyUpdater;
 import org.delafer.xanderView.gui.helpers.MultiShell;
-import org.delafer.xanderView.orientation.*;
+import org.delafer.xanderView.orientation.CommonRotator;
+import org.delafer.xanderView.orientation.OrientationCommons;
 import org.delafer.xanderView.orientation.OrientationCommons.Action;
 import org.delafer.xanderView.orientation.OrientationCommons.Orientation;
+import org.delafer.xanderView.orientation.Rotator2D;
 import org.delafer.xanderView.scale.ScaleFactory;
 
 import com.carrotsearch.hppc.IntFloatHashMap;
-import com.jhlabs.image.SwimFilter;
 
 public class ImageCanvas extends Canvas implements MouseListener  {
 
@@ -47,7 +53,7 @@ public class ImageCanvas extends Canvas implements MouseListener  {
 		}
 	}
 
-	LazyUpdater updater;
+//	LazyUpdater updater;
 	MultiShell shell;
 	private final static transient Font font = new Font("MS Reference Sans Serif", Font.BOLD, 20);
 
@@ -64,13 +70,13 @@ public class ImageCanvas extends Canvas implements MouseListener  {
         //this.setOpaque(true);
     }
 
-    public void setImage(BufferedImage image, String text, ImageData imgData) {
+    public boolean setImage(BufferedImage image, String text, ImageData imgData) {
    	 	this.imageSource = image;
    	 	this.text = text;
    	 	this.orientationDefault = getDirectionDefault();
    	 	this.orientation = CommonUtils.nvl(imgData.getOrientation(), orientationDefault);
    	 	this.scaleIdx = imgData.getScaleConst();
-   	 	preRenderImage();
+   	 	return preRenderImage();
     }
 
     private Orientation getDirectionDefault() {
@@ -129,15 +135,15 @@ public class ImageCanvas extends Canvas implements MouseListener  {
     }
 
 
-    public void preRenderImage() {
-    	if (null == imageSource) return ;
+    public boolean preRenderImage() {
+    	if (null == imageSource || orientation == null) return false;
     	boolean swapXY = Orientation.Original != orientation && orientation.swapXY();
     	ImageSize imgSize = getImageSize(swapXY);
     	ImageSize cnvSize = getCanvasImageSize();
 
     	if (!imgSize.equals(cnvSize)) {
     		ImageSize size = OrientationCommons.getNewSize(imgSize.width(), imgSize.height(), cnvSize.width(), cnvSize.height());
-    		if (size.empty()) return ;
+    		if (size.empty()) return false;
 
     		if (scaleIdx != 0) size.scale(scaleData.get(scaleIdx));
     		drawImage = ScaleFactory.instance(imgSize).resize(imageSource, !swapXY ? size.width() : size.height(), !swapXY ? size.height() : size.width());
@@ -164,13 +170,13 @@ public class ImageCanvas extends Canvas implements MouseListener  {
 //
 //    	}.start();
 
-
+    	return true;
     }
 
 
     public void showImage() {
     	Graphics g = getGraphics();
-    	paint(g);
+    	if (null != g) paint(g);
 //    	this.getParent().repaint();
     }
 

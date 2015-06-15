@@ -7,6 +7,7 @@ import org.delafer.xanderView.file.CopyService;
 import org.delafer.xanderView.general.Shutdown;
 import org.delafer.xanderView.gui.config.OrientationStore;
 import org.delafer.xanderView.gui.helpers.ImageRepository;
+import org.delafer.xanderView.scale.ResizerOpenCV;
 import org.eclipse.swt.widgets.Display;
 
 public class MainEntryPoint {
@@ -32,7 +33,7 @@ public class MainEntryPoint {
 
 	private static void initializeApp() {
 		ImageRepository.loadImages();
-
+//		ResizerOpenCV.instance();
 		try {
 			OrientationStore.instance().load();
 		} catch (Exception e) {

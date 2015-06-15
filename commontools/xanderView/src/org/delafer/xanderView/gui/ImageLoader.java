@@ -52,8 +52,10 @@ public abstract class ImageLoader {
 			if (img == null) return ;
 //			GammaFilter filter = new GammaFilter(0.4f);
 //			img = filter.filter(img, null);
-			panel.setImage(img, text, orientator.getImageData(entry.CRC()));
-			panel.showImage();
+			if (panel.setImage(img, text, orientator.getImageData(entry.CRC()))) {
+				panel.showImage();
+			}
+
 
 		} catch (Exception e) {
 			e.printStackTrace();

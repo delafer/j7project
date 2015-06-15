@@ -6,12 +6,14 @@ import java.awt.image.DataBufferByte;
 import java.awt.image.DataBufferInt;
 
 import net.j7.commons.jni.LibraryLoader;
+import net.j7.commons.utils.Metrics;
 
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
+
 
 
 
@@ -26,6 +28,8 @@ public class ResizerOpenCV extends ResizerBase {
 	private ResizerOpenCV() {
 		super();
 		LibraryLoader.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+		BufferedImage img = new BufferedImage(2, 2, BufferedImage.TYPE_INT_RGB);
+		img = this.resize(img, 3, 3);
 	}
 
 	private static final class Holder {
@@ -99,14 +103,14 @@ public class ResizerOpenCV extends ResizerBase {
 		Mat mt = null;
 		try {
 			mt = matify(input);
-		} catch (java.lang.UnsupportedOperationException u) {}
+		} catch (java.lang.UnsupportedOperationException u) {
+		}
 
 
 		if (mt == null) {
 			//workaround
 			return new ResizerNobel(4).resize(input, width, height);
 		}
-
 		Imgproc.resize(mt, resize, size, 0f, 0f, types[current]);
         BufferedImage resized = MatToBufferedImage(resize);
         return resized;
