@@ -1,11 +1,6 @@
 package org.delafer.xanderView.gui;
 
-import java.awt.Canvas;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.font.TextAttribute;
@@ -15,16 +10,14 @@ import java.text.AttributedString;
 
 import net.j7.commons.base.CommonUtils;
 import net.j7.commons.strings.StringUtils;
-import net.j7.commons.ui.StackTrace;
 
 import org.delafer.xanderView.common.ImageSize;
 import org.delafer.xanderView.gui.config.OrientationStore.ImageData;
 import org.delafer.xanderView.gui.helpers.MultiShell;
-import org.delafer.xanderView.orientation.CommonRotator;
-import org.delafer.xanderView.orientation.OrientationCommons;
+import org.delafer.xanderView.orientation.*;
 import org.delafer.xanderView.orientation.OrientationCommons.Action;
 import org.delafer.xanderView.orientation.OrientationCommons.Orientation;
-import org.delafer.xanderView.orientation.Rotator2D;
+import org.delafer.xanderView.process.GammaCorrection;
 import org.delafer.xanderView.scale.ScaleFactory;
 
 import com.carrotsearch.hppc.IntFloatHashMap;
@@ -32,6 +25,7 @@ import com.carrotsearch.hppc.IntFloatHashMap;
 public class ImageCanvas extends Canvas implements MouseListener  {
 
 	private static final float scaleFactor = 1.05f;
+	private static final float gammaFactor = 1.05f;
 	private static final long serialVersionUID = 9162619010168531038L;
 	BufferedImage imageSource;
 	BufferedImage drawImage;
@@ -40,8 +34,12 @@ public class ImageCanvas extends Canvas implements MouseListener  {
 	Orientation orientation;
 	Orientation orientationDefault;
 	int scaleIdx;
+	int offsetX;
+	int offsetY;
+	int gammaIdx;
 
 	static IntFloatHashMap scaleData;
+	static IntFloatHashMap gammaData;
 	static {
 		scaleData = new IntFloatHashMap(63);
 		float s1 = 1f, s2 = s1;
@@ -50,6 +48,15 @@ public class ImageCanvas extends Canvas implements MouseListener  {
 			s2 *= ImageCanvas.scaleFactor;
 			scaleData.put(-i, s1);
 			scaleData.put(i, s2);
+		}
+
+		gammaData = new IntFloatHashMap(63);
+		s1 = 1f; s2 = s1;
+		for (int i = 1; i < 32; i++) {
+			s1 /= ImageCanvas.gammaFactor;
+			s2 *= ImageCanvas.gammaFactor;
+			gammaData.put(-i, s1);
+			gammaData.put(i, s2);
 		}
 	}
 
@@ -76,6 +83,9 @@ public class ImageCanvas extends Canvas implements MouseListener  {
    	 	this.orientationDefault = getDirectionDefault();
    	 	this.orientation = CommonUtils.nvl(imgData.getOrientation(), orientationDefault);
    	 	this.scaleIdx = imgData.getScaleConst();
+   	 	this.offsetX = imgData.getHrOffset();
+   	 	this.offsetY = imgData.getVrOffset();
+   	 	this.gammaIdx = imgData.getGamma();
    	 	return preRenderImage();
     }
 
@@ -102,7 +112,26 @@ public class ImageCanvas extends Canvas implements MouseListener  {
 
 	public void scaleReset() {
 		scaleIdx = 0;
+		offsetX = 0;
+		offsetY = 0;
+		gammaIdx = 0;
 		preRenderImage();
+	}
+
+	public void moveHr(boolean leftToRight) {
+		if (leftToRight && offsetX < 31) offsetX++;
+		if (!leftToRight && offsetX > -31) offsetX--;
+	}
+
+	public void moveVr(boolean upstairs) {
+		if (!upstairs && offsetY < 31) offsetY++;
+		if (upstairs && offsetY > -31) offsetY--;
+	}
+
+	public void changeGamma(boolean increase) {
+		if (increase && gammaIdx < 31) gammaIdx++;
+		if (!increase && gammaIdx > -31) gammaIdx--;
+//		preRenderImage();
 	}
 
 	public void scaleUp() {
@@ -156,6 +185,12 @@ public class ImageCanvas extends Canvas implements MouseListener  {
         	drawImage = ir.rotate(drawImage, orientation);
     	}
 
+    	if (0 != gammaIdx) {
+    		float gamma = gammaData.get(gammaIdx);
+    		drawImage = GammaCorrection.gammaCorrection(drawImage, gamma);
+    	}
+
+
 //    	new Thread() {
 //			public void run() {
 ////		    	GammaFilter filter = new GammaFilter(0.5f);
@@ -195,7 +230,7 @@ public class ImageCanvas extends Canvas implements MouseListener  {
         	int x = (dim.width - panel.drawImage.getWidth(null)) >> 1;
         	int y  = (dim.height - panel.drawImage.getHeight(null)) >> 1;
 
-        	g.drawImage(panel.drawImage, x, y, null);
+        	g.drawImage(panel.drawImage, x + (offsetX << 4), y + (offsetY << 4), null);
         }
 
         if (!StringUtils.isEmpty(panel.text)) {

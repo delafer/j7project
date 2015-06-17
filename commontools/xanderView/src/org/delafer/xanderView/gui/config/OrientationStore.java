@@ -23,6 +23,11 @@ public class OrientationStore {
 	//vsego 64
 	private final static Range rangeOrient = Range.range(0, 4); // 0 - 15
 	private final static Range scaleOrient = Range.range(4, 6); // 0 - 63
+
+	private final static Range hrOffset = Range.range(10, 6); // 0 - 63
+	private final static Range vrOffset = Range.range(16, 6); // 0 - 63
+	private final static Range gammaRange = Range.range(22, 6); // 0 - 63
+
 	/**
 	 * Lazy-loaded Singleton, by Bill Pugh *.
 	 */
@@ -142,9 +147,9 @@ public class OrientationStore {
 		return v;
 	}
 
-	public void setScaleConst(long crc, int scale) {
+	private void setByType(long crc, int value, Range range, int maxVal) {
 		long valueOld = map.get(crc);
-		long valueNew = BitNumberRange.set(valueOld, scaleOrient,  fromPBV(scale, 32));
+		long valueNew = BitNumberRange.set(valueOld, range,  fromPBV(value, maxVal));
 		if (valueOld == valueNew) return ;
 		if (valueNew != 0l) {
 			map.put(crc, valueNew);
@@ -152,7 +157,22 @@ public class OrientationStore {
 			map.remove(crc);
 		}
 		dirty =true;
+	}
 
+	public void setScaleConst(long crc, int scale) {
+		setByType(crc, scale, scaleOrient, 32);
+	}
+
+	public void setGammaConst(long crc, int gamma) {
+		setByType(crc, gamma, gammaRange, 32);
+	}
+
+	public void setHrOffset(long crc, int offset) {
+		setByType(crc, offset, hrOffset, 32);
+	}
+
+	public void setVrOffset(long crc, int offset) {
+		setByType(crc, offset, vrOffset, 32);
 	}
 
 
@@ -212,6 +232,21 @@ public class OrientationStore {
 		public int getScaleConst() {
 			long value = BitNumberRange.value(bitmask, scaleOrient);
 
+			return toPBV((int)value, 32);//32 = 64/2
+		}
+
+		public int getHrOffset() {
+			long value = BitNumberRange.value(bitmask, hrOffset);
+			return toPBV((int)value, 32);//32 = 64/2
+		}
+
+		public int getVrOffset() {
+			long value = BitNumberRange.value(bitmask, vrOffset);
+			return toPBV((int)value, 32);//32 = 64/2
+		}
+
+		public int getGamma() {
+			long value = BitNumberRange.value(bitmask, gammaRange);
 			return toPBV((int)value, 32);//32 = 64/2
 		}
 	}

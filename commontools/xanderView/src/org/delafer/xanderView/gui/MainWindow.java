@@ -175,6 +175,28 @@ public final class MainWindow extends ImageLoader{
 		case SWT.PAGE_UP:
 			loadImage(pointer, pointer.getPrevious(), panel);
 			break;
+		case 50:
+			changeGamma(true);
+			break;
+		case 49:
+			changeGamma(false);
+			break;
+		case 16777272:
+			panel.moveVr(true);;
+			panel.showImage();
+			break;
+		case 16777266:
+			panel.moveVr(false);
+			panel.showImage();
+			break;
+		case 16777270:
+			panel.moveHr(true);;
+			panel.showImage();
+			break;
+		case 16777268:
+			panel.moveHr(false);;
+			panel.showImage();
+			break;
 		case 112:
 			//random access
 			pointer.switchRandomAccess();
@@ -186,6 +208,9 @@ public final class MainWindow extends ImageLoader{
 			if (current != null) {
 				OrientationStore.instance().setOrientation(current.CRC(), panel.getOrientation());
 				OrientationStore.instance().setScaleConst(current.CRC(), panel.getScaleFactor());
+				OrientationStore.instance().setHrOffset(current.CRC(), panel.offsetX);
+				OrientationStore.instance().setVrOffset(current.CRC(), panel.offsetY);
+				OrientationStore.instance().setGammaConst(current.CRC(), panel.gammaIdx);
 			}
 			new SplashWindow(shell.active(), State.Special1);
 			break;
@@ -240,6 +265,16 @@ public final class MainWindow extends ImageLoader{
 			System.out.println("code:"+e.keyCode);
 			break;
 		}
+	}
+
+	private void changeGamma(boolean direct) {
+		panel.changeGamma(direct);
+		LazyUpdaterAbstract.doTask(new Runnable() {
+			public void run() {
+				panel.preRenderImage();
+				panel.showImage();
+			}
+		});
 	}
 
 	private void toggleFullscreen() {
