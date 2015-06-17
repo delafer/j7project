@@ -17,7 +17,7 @@ final class LZ4HCJavaSafeCompressor extends LZ4Compressor
     static final /* synthetic */ boolean $assertionsDisabled = false;
 
     LZ4HCJavaSafeCompressor() {
-        this(9);
+        this(LZ4Constants.DEFAULT_COMPRESSION_LEVEL);
     }
 
     LZ4HCJavaSafeCompressor(final int compressionLevel) {
@@ -31,8 +31,8 @@ final class LZ4HCJavaSafeCompressor extends LZ4Compressor
         SafeUtils.checkRange(dest, destOff, maxDestLen);
         final int srcEnd = srcOff + srcLen;
         final int destEnd = destOff + maxDestLen;
-        final int mfLimit = srcEnd - 12;
-        final int matchLimit = srcEnd - 5;
+        final int mfLimit = srcEnd - LZ4Constants.MF_LIMIT;
+        final int matchLimit = srcEnd - LZ4Constants.LAST_LITERALS;
         int sOff = srcOff;
         int dOff = destOff;
         int anchor = sOff++;
@@ -60,13 +60,13 @@ final class LZ4HCJavaSafeCompressor extends LZ4Compressor
                     }
                     else {
                         while (true) {
-                            if (match2.start - match.start < 18) {
+                            if (match2.start - match.start < LZ4Constants.OPTIMAL_ML) {
                                 int newMatchLen = match.len;
-                                if (newMatchLen > 18) {
-                                    newMatchLen = 18;
+                                if (newMatchLen > LZ4Constants.OPTIMAL_ML) {
+                                    newMatchLen = LZ4Constants.OPTIMAL_ML;
                                 }
                                 if (match.start + newMatchLen > match2.end() - 4) {
-                                    newMatchLen = match2.start - match.start + match2.len - 4;
+                                    newMatchLen = match2.start - match.start + match2.len - LZ4Constants.MIN_MATCH;
                                 }
                                 final int correction = newMatchLen - (match2.start - match.start);
                                 if (correction > 0) {
@@ -88,7 +88,7 @@ final class LZ4HCJavaSafeCompressor extends LZ4Compressor
                                     if (match2.start < match.end()) {
                                         final int correction2 = match.end() - match2.start;
                                         match2.fix(correction2);
-                                        if (match2.len < 4) {
+                                        if (match2.len < LZ4Constants.MIN_MATCH) {
                                             LZ4Utils.copyTo(match3, match2);
                                         }
                                     }
@@ -102,12 +102,12 @@ final class LZ4HCJavaSafeCompressor extends LZ4Compressor
                             }
                             else {
                                 if (match2.start < match.end()) {
-                                    if (match2.start - match.start < 15) {
-                                        if (match.len > 18) {
-                                            match.len = 18;
+                                    if (match2.start - match.start < LZ4Constants.RUN_MASK) {
+                                        if (match.len > LZ4Constants.OPTIMAL_ML) {
+                                            match.len = LZ4Constants.OPTIMAL_ML;
                                         }
-                                        if (match.end() > match2.end() - 4) {
-                                            match.len = match2.end() - match.start - 4;
+                                        if (match.end() > match2.end() - LZ4Constants.MIN_MATCH) {
+                                            match.len = match2.end() - match.start - LZ4Constants.MIN_MATCH;
                                         }
                                         final int correction2 = match.end() - match2.start;
                                         match2.fix(correction2);
@@ -143,8 +143,8 @@ final class LZ4HCJavaSafeCompressor extends LZ4Compressor
         ByteBufferUtils.checkRange(dest, destOff, maxDestLen);
         final int srcEnd = srcOff + srcLen;
         final int destEnd = destOff + maxDestLen;
-        final int mfLimit = srcEnd - 12;
-        final int matchLimit = srcEnd - 5;
+        final int mfLimit = srcEnd - LZ4Constants.MF_LIMIT;
+        final int matchLimit = srcEnd - LZ4Constants.LAST_LITERALS;
         int sOff = srcOff;
         int dOff = destOff;
         int anchor = sOff++;
@@ -172,13 +172,13 @@ final class LZ4HCJavaSafeCompressor extends LZ4Compressor
                     }
                     else {
                         while (true) {
-                            if (match2.start - match.start < 18) {
+                            if (match2.start - match.start < LZ4Constants.OPTIMAL_ML) {
                                 int newMatchLen = match.len;
-                                if (newMatchLen > 18) {
-                                    newMatchLen = 18;
+                                if (newMatchLen > LZ4Constants.OPTIMAL_ML) {
+                                    newMatchLen = LZ4Constants.OPTIMAL_ML;
                                 }
-                                if (match.start + newMatchLen > match2.end() - 4) {
-                                    newMatchLen = match2.start - match.start + match2.len - 4;
+                                if (match.start + newMatchLen > match2.end() - LZ4Constants.MIN_MATCH) {
+                                    newMatchLen = match2.start - match.start + match2.len - LZ4Constants.MIN_MATCH;
                                 }
                                 final int correction = newMatchLen - (match2.start - match.start);
                                 if (correction > 0) {
@@ -214,12 +214,12 @@ final class LZ4HCJavaSafeCompressor extends LZ4Compressor
                             }
                             else {
                                 if (match2.start < match.end()) {
-                                    if (match2.start - match.start < 15) {
-                                        if (match.len > 18) {
-                                            match.len = 18;
+                                    if (match2.start - match.start < LZ4Constants.RUN_MASK) {
+                                        if (match.len > LZ4Constants.OPTIMAL_ML) {
+                                            match.len = LZ4Constants.OPTIMAL_ML;
                                         }
-                                        if (match.end() > match2.end() - 4) {
-                                            match.len = match2.end() - match.start - 4;
+                                        if (match.end() > match2.end() - LZ4Constants.MIN_MATCH) {
+                                            match.len = match2.end() - match.start - LZ4Constants.MIN_MATCH;
                                         }
                                         final int correction2 = match.end() - match2.start;
                                         match2.fix(correction2);
@@ -259,8 +259,8 @@ final class LZ4HCJavaSafeCompressor extends LZ4Compressor
         HashTable(final int base) {
             this.base = base;
             this.nextToUpdate = base;
-            Arrays.fill(this.hashTable = new int[32768], -1);
-            this.chainTable = new short[65536];
+            Arrays.fill(this.hashTable = new int[LZ4Constants.HASH_TABLE_SIZE_HC], -1);
+            this.chainTable = new short[LZ4Constants.MAX_DISTANCE];
         }
 
         private int hashPointer(final byte[] bytes, final int off) {
@@ -296,7 +296,7 @@ final class LZ4HCJavaSafeCompressor extends LZ4Compressor
             final int h = LZ4Utils.hashHC(v);
             int delta = off - this.hashTable[h];
             assert delta > 0 : delta;
-            if (delta >= 65536) {
+            if (delta >= LZ4Constants.MAX_DISTANCE) {
                 delta = 65535;
             }
             this.chainTable[off & 0xFFFF] = (short)delta;
@@ -334,7 +334,7 @@ final class LZ4HCJavaSafeCompressor extends LZ4Compressor
                 }
                 ref = this.next(ref);
             }
-            for (int i = 0; i < LZ4HCJavaSafeCompressor.this.maxAttempts && ref >= Math.max(this.base, off - 65536 + 1) && ref <= off; ref = this.next(ref), ++i) {
+            for (int i = 0; i < LZ4HCJavaSafeCompressor.this.maxAttempts && ref >= Math.max(this.base, off - LZ4Constants.MAX_DISTANCE + 1) && ref <= off; ref = this.next(ref), ++i) {
                 if (LZ4SafeUtils.readIntEquals(buf, ref, off)) {
                     final int matchLen = 4 + LZ4SafeUtils.commonBytes(buf, ref + 4, off + 4, matchLimit);
                     if (matchLen > match.len) {
@@ -362,7 +362,7 @@ final class LZ4HCJavaSafeCompressor extends LZ4Compressor
             match.len = minLen;
             this.insert(off, buf);
             final int delta = off - startLimit;
-            for (int ref = this.hashPointer(buf, off), i = 0; i < LZ4HCJavaSafeCompressor.this.maxAttempts && ref >= Math.max(this.base, off - 65536 + 1) && ref <= off; ref = this.next(ref), ++i) {
+            for (int ref = this.hashPointer(buf, off), i = 0; i < LZ4HCJavaSafeCompressor.this.maxAttempts && ref >= Math.max(this.base, off - LZ4Constants.MAX_DISTANCE + 1) && ref <= off; ref = this.next(ref), ++i) {
                 if (LZ4SafeUtils.readIntEquals(buf, ref, off)) {
                     final int matchLenForward = 4 + LZ4SafeUtils.commonBytes(buf, ref + 4, off + 4, matchLimit);
                     final int matchLenBackward = LZ4SafeUtils.commonBytesBackward(buf, ref, off, this.base, startLimit);
@@ -394,7 +394,7 @@ final class LZ4HCJavaSafeCompressor extends LZ4Compressor
                 }
                 ref = this.next(ref);
             }
-            for (int i = 0; i < LZ4HCJavaSafeCompressor.this.maxAttempts && ref >= Math.max(this.base, off - 65536 + 1) && ref <= off; ref = this.next(ref), ++i) {
+            for (int i = 0; i < LZ4HCJavaSafeCompressor.this.maxAttempts && ref >= Math.max(this.base, off - LZ4Constants.MAX_DISTANCE + 1) && ref <= off; ref = this.next(ref), ++i) {
                 if (LZ4ByteBufferUtils.readIntEquals(buf, ref, off)) {
                     final int matchLen = 4 + LZ4ByteBufferUtils.commonBytes(buf, ref + 4, off + 4, matchLimit);
                     if (matchLen > match.len) {
@@ -422,7 +422,7 @@ final class LZ4HCJavaSafeCompressor extends LZ4Compressor
             match.len = minLen;
             this.insert(off, buf);
             final int delta = off - startLimit;
-            for (int ref = this.hashPointer(buf, off), i = 0; i < LZ4HCJavaSafeCompressor.this.maxAttempts && ref >= Math.max(this.base, off - 65536 + 1) && ref <= off; ref = this.next(ref), ++i) {
+            for (int ref = this.hashPointer(buf, off), i = 0; i < LZ4HCJavaSafeCompressor.this.maxAttempts && ref >= Math.max(this.base, off - LZ4Constants.MAX_DISTANCE + 1) && ref <= off; ref = this.next(ref), ++i) {
                 if (LZ4ByteBufferUtils.readIntEquals(buf, ref, off)) {
                     final int matchLenForward = 4 + LZ4ByteBufferUtils.commonBytes(buf, ref + 4, off + 4, matchLimit);
                     final int matchLenBackward = LZ4ByteBufferUtils.commonBytesBackward(buf, ref, off, this.base, startLimit);

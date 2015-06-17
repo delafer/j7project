@@ -1,17 +1,19 @@
-// 
+//
 // Decompiled by Procyon v0.5.29
-// 
+//
 
 package net.jpountz.xxhash;
 
-import net.jpountz.util.ByteBufferUtils;
-import java.nio.ByteBuffer;
-import net.jpountz.util.SafeUtils;
+import static net.jpountz.xxhash.XXHashConstants.*;
 
+import java.nio.ByteBuffer;
+
+import net.jpountz.util.ByteBufferUtils;
+import net.jpountz.util.SafeUtils;
 final class XXHash64JavaSafe extends XXHash64
 {
     public static final XXHash64 INSTANCE;
-    
+
     @Override
     public long hash(final byte[] buf, int off, final int len, final long seed) {
         SafeUtils.checkRange(buf, off, len);
@@ -19,81 +21,81 @@ final class XXHash64JavaSafe extends XXHash64
         long h64;
         if (len >= 32) {
             final int limit = end - 32;
-            long v1 = seed - 7046029288634856825L - 4417276706812531889L;
-            long v2 = seed - 4417276706812531889L;
+            long v1 = seed + XXHashConstants.PRIME64_1 + XXHashConstants.PRIME64_2;
+            long v2 = seed + XXHashConstants.PRIME64_2;
             long v3 = seed + 0L;
-            long v4 = seed + 7046029288634856825L;
+            long v4 = seed - XXHashConstants.PRIME64_1;
             do {
-                v1 += SafeUtils.readLongLE(buf, off) * -4417276706812531889L;
+                v1 += SafeUtils.readLongLE(buf, off) * PRIME64_2;
                 v1 = Long.rotateLeft(v1, 31);
-                v1 *= -7046029288634856825L;
+                v1 *= PRIME64_1;
                 off += 8;
-                v2 += SafeUtils.readLongLE(buf, off) * -4417276706812531889L;
+                v2 += SafeUtils.readLongLE(buf, off) * PRIME64_2;
                 v2 = Long.rotateLeft(v2, 31);
-                v2 *= -7046029288634856825L;
+                v2 *= PRIME64_1;
                 off += 8;
-                v3 += SafeUtils.readLongLE(buf, off) * -4417276706812531889L;
+                v3 += SafeUtils.readLongLE(buf, off) * PRIME64_2;
                 v3 = Long.rotateLeft(v3, 31);
-                v3 *= -7046029288634856825L;
+                v3 *= PRIME64_1;
                 off += 8;
-                v4 += SafeUtils.readLongLE(buf, off) * -4417276706812531889L;
+                v4 += SafeUtils.readLongLE(buf, off) * PRIME64_2;
                 v4 = Long.rotateLeft(v4, 31);
-                v4 *= -7046029288634856825L;
+                v4 *= PRIME64_1;
                 off += 8;
             } while (off <= limit);
             h64 = Long.rotateLeft(v1, 1) + Long.rotateLeft(v2, 7) + Long.rotateLeft(v3, 12) + Long.rotateLeft(v4, 18);
-            v1 *= -4417276706812531889L;
+            v1 *= PRIME64_2;
             v1 = Long.rotateLeft(v1, 31);
-            v1 *= -7046029288634856825L;
+            v1 *= PRIME64_1;
             h64 ^= v1;
-            h64 = h64 * -7046029288634856825L - 8796714831421723037L;
-            v2 *= -4417276706812531889L;
+            h64 = h64 * PRIME64_1 + XXHashConstants.PRIME64_4;
+            v2 *= PRIME64_2;
             v2 = Long.rotateLeft(v2, 31);
-            v2 *= -7046029288634856825L;
+            v2 *= PRIME64_1;
             h64 ^= v2;
-            h64 = h64 * -7046029288634856825L - 8796714831421723037L;
-            v3 *= -4417276706812531889L;
+            h64 = h64 * PRIME64_1 + XXHashConstants.PRIME64_4;
+            v3 *= PRIME64_2;
             v3 = Long.rotateLeft(v3, 31);
-            v3 *= -7046029288634856825L;
+            v3 *= PRIME64_1;
             h64 ^= v3;
-            h64 = h64 * -7046029288634856825L - 8796714831421723037L;
-            v4 *= -4417276706812531889L;
+            h64 = h64 * PRIME64_1 + XXHashConstants.PRIME64_4;
+            v4 *= PRIME64_2;
             v4 = Long.rotateLeft(v4, 31);
-            v4 *= -7046029288634856825L;
+            v4 *= PRIME64_1;
             h64 ^= v4;
-            h64 = h64 * -7046029288634856825L - 8796714831421723037L;
+            h64 = h64 * PRIME64_1 + XXHashConstants.PRIME64_4;
         }
         else {
-            h64 = seed + 2870177450012600261L;
+            h64 = seed + PRIME64_5;
         }
         h64 += len;
         while (off <= end - 8) {
             long k1 = SafeUtils.readLongLE(buf, off);
-            k1 *= -4417276706812531889L;
+            k1 *= PRIME64_2;
             k1 = Long.rotateLeft(k1, 31);
-            k1 *= -7046029288634856825L;
+            k1 *= PRIME64_1;
             h64 ^= k1;
-            h64 = Long.rotateLeft(h64, 27) * -7046029288634856825L - 8796714831421723037L;
+            h64 = Long.rotateLeft(h64, 27) * PRIME64_1 + XXHashConstants.PRIME64_4;
             off += 8;
         }
         if (off <= end - 4) {
-            h64 ^= (SafeUtils.readIntLE(buf, off) & 0xFFFFFFFFL) * -7046029288634856825L;
-            h64 = Long.rotateLeft(h64, 23) * -4417276706812531889L + 1609587929392839161L;
+            h64 ^= (SafeUtils.readIntLE(buf, off) & 0xFFFFFFFFL) * PRIME64_1;
+            h64 = Long.rotateLeft(h64, 23) * PRIME64_2 + PRIME64_3;
             off += 4;
         }
         while (off < end) {
-            h64 ^= (SafeUtils.readByte(buf, off) & 0xFF) * 2870177450012600261L;
-            h64 = Long.rotateLeft(h64, 11) * -7046029288634856825L;
+            h64 ^= (SafeUtils.readByte(buf, off) & 0xFF) * PRIME64_5;
+            h64 = Long.rotateLeft(h64, 11) * PRIME64_1;
             ++off;
         }
         h64 ^= h64 >>> 33;
-        h64 *= -4417276706812531889L;
+        h64 *= PRIME64_2;
         h64 ^= h64 >>> 29;
-        h64 *= 1609587929392839161L;
+        h64 *= PRIME64_3;
         h64 ^= h64 >>> 32;
         return h64;
     }
-    
+
     @Override
     public long hash(ByteBuffer buf, int off, final int len, final long seed) {
         if (buf.hasArray()) {
@@ -105,81 +107,81 @@ final class XXHash64JavaSafe extends XXHash64
         long h64;
         if (len >= 32) {
             final int limit = end - 32;
-            long v1 = seed - 7046029288634856825L - 4417276706812531889L;
-            long v2 = seed - 4417276706812531889L;
+            long v1 = seed + XXHashConstants.PRIME64_1 + XXHashConstants.PRIME64_2;
+            long v2 = seed + XXHashConstants.PRIME64_2;
             long v3 = seed + 0L;
-            long v4 = seed + 7046029288634856825L;
+            long v4 = seed - XXHashConstants.PRIME64_1;
             do {
-                v1 += ByteBufferUtils.readLongLE(buf, off) * -4417276706812531889L;
+                v1 += ByteBufferUtils.readLongLE(buf, off) * PRIME64_2;
                 v1 = Long.rotateLeft(v1, 31);
-                v1 *= -7046029288634856825L;
+                v1 *= PRIME64_1;
                 off += 8;
-                v2 += ByteBufferUtils.readLongLE(buf, off) * -4417276706812531889L;
+                v2 += ByteBufferUtils.readLongLE(buf, off) * PRIME64_2;
                 v2 = Long.rotateLeft(v2, 31);
-                v2 *= -7046029288634856825L;
+                v2 *= PRIME64_1;
                 off += 8;
-                v3 += ByteBufferUtils.readLongLE(buf, off) * -4417276706812531889L;
+                v3 += ByteBufferUtils.readLongLE(buf, off) * PRIME64_2;
                 v3 = Long.rotateLeft(v3, 31);
-                v3 *= -7046029288634856825L;
+                v3 *= PRIME64_1;
                 off += 8;
-                v4 += ByteBufferUtils.readLongLE(buf, off) * -4417276706812531889L;
+                v4 += ByteBufferUtils.readLongLE(buf, off) * PRIME64_2;
                 v4 = Long.rotateLeft(v4, 31);
-                v4 *= -7046029288634856825L;
+                v4 *= PRIME64_1;
                 off += 8;
             } while (off <= limit);
             h64 = Long.rotateLeft(v1, 1) + Long.rotateLeft(v2, 7) + Long.rotateLeft(v3, 12) + Long.rotateLeft(v4, 18);
-            v1 *= -4417276706812531889L;
+            v1 *= PRIME64_2;
             v1 = Long.rotateLeft(v1, 31);
-            v1 *= -7046029288634856825L;
+            v1 *= PRIME64_1;
             h64 ^= v1;
-            h64 = h64 * -7046029288634856825L - 8796714831421723037L;
-            v2 *= -4417276706812531889L;
+            h64 = h64 * PRIME64_1 + XXHashConstants.PRIME64_4;
+            v2 *= PRIME64_2;
             v2 = Long.rotateLeft(v2, 31);
-            v2 *= -7046029288634856825L;
+            v2 *= PRIME64_1;
             h64 ^= v2;
-            h64 = h64 * -7046029288634856825L - 8796714831421723037L;
-            v3 *= -4417276706812531889L;
+            h64 = h64 * PRIME64_1 + XXHashConstants.PRIME64_4;
+            v3 *= PRIME64_2;
             v3 = Long.rotateLeft(v3, 31);
-            v3 *= -7046029288634856825L;
+            v3 *= PRIME64_1;
             h64 ^= v3;
-            h64 = h64 * -7046029288634856825L - 8796714831421723037L;
-            v4 *= -4417276706812531889L;
+            h64 = h64 * PRIME64_1 + XXHashConstants.PRIME64_4;
+            v4 *= PRIME64_2;
             v4 = Long.rotateLeft(v4, 31);
-            v4 *= -7046029288634856825L;
+            v4 *= PRIME64_1;
             h64 ^= v4;
-            h64 = h64 * -7046029288634856825L - 8796714831421723037L;
+            h64 = h64 * PRIME64_1 + XXHashConstants.PRIME64_4;
         }
         else {
-            h64 = seed + 2870177450012600261L;
+            h64 = seed + PRIME64_5;
         }
         h64 += len;
         while (off <= end - 8) {
             long k1 = ByteBufferUtils.readLongLE(buf, off);
-            k1 *= -4417276706812531889L;
+            k1 *= PRIME64_2;
             k1 = Long.rotateLeft(k1, 31);
-            k1 *= -7046029288634856825L;
+            k1 *= PRIME64_1;
             h64 ^= k1;
-            h64 = Long.rotateLeft(h64, 27) * -7046029288634856825L - 8796714831421723037L;
+            h64 = Long.rotateLeft(h64, 27) * PRIME64_1 + XXHashConstants.PRIME64_4;
             off += 8;
         }
         if (off <= end - 4) {
-            h64 ^= (ByteBufferUtils.readIntLE(buf, off) & 0xFFFFFFFFL) * -7046029288634856825L;
-            h64 = Long.rotateLeft(h64, 23) * -4417276706812531889L + 1609587929392839161L;
+            h64 ^= (ByteBufferUtils.readIntLE(buf, off) & 0xFFFFFFFFL) * PRIME64_1;
+            h64 = Long.rotateLeft(h64, 23) * PRIME64_2 + PRIME64_3;
             off += 4;
         }
         while (off < end) {
-            h64 ^= (ByteBufferUtils.readByte(buf, off) & 0xFF) * 2870177450012600261L;
-            h64 = Long.rotateLeft(h64, 11) * -7046029288634856825L;
+            h64 ^= (ByteBufferUtils.readByte(buf, off) & 0xFF) * PRIME64_5;
+            h64 = Long.rotateLeft(h64, 11) * PRIME64_1;
             ++off;
         }
         h64 ^= h64 >>> 33;
-        h64 *= -4417276706812531889L;
+        h64 *= PRIME64_2;
         h64 ^= h64 >>> 29;
-        h64 *= 1609587929392839161L;
+        h64 *= PRIME64_3;
         h64 ^= h64 >>> 32;
         return h64;
     }
-    
+
     static {
         INSTANCE = new XXHash64JavaSafe();
     }

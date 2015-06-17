@@ -31,7 +31,7 @@ final class LZ4JavaUnsafeSafeDecompressor extends LZ4SafeDecompressor
                 final int token = UnsafeUtils.readByte(src, sOff) & 0xFF;
                 ++sOff;
                 int literalLen = token >>> 4;
-                if (literalLen == 15) {
+                if (literalLen == LZ4Constants.RUN_MASK) {
                     byte len = -1;
                     while (sOff < srcEnd && (len = UnsafeUtils.readByte(src, sOff++)) == -1) {
                         literalLen += 255;
@@ -62,7 +62,7 @@ final class LZ4JavaUnsafeSafeDecompressor extends LZ4SafeDecompressor
                         throw new LZ4Exception("Malformed input at " + sOff);
                     }
                     int matchLen = token & 0xF;
-                    if (matchLen == 15) {
+                    if (matchLen == LZ4Constants.RUN_MASK) {
                         byte len2 = -1;
                         while (sOff < srcEnd && (len2 = UnsafeUtils.readByte(src, sOff++)) == -1) {
                             matchLen += 255;
@@ -110,7 +110,7 @@ final class LZ4JavaUnsafeSafeDecompressor extends LZ4SafeDecompressor
                 final int token = ByteBufferUtils.readByte(src, sOff) & 0xFF;
                 ++sOff;
                 int literalLen = token >>> 4;
-                if (literalLen == 15) {
+                if (literalLen == LZ4Constants.RUN_MASK) {
                     byte len = -1;
                     while (sOff < srcEnd && (len = ByteBufferUtils.readByte(src, sOff++)) == -1) {
                         literalLen += 255;
@@ -141,7 +141,7 @@ final class LZ4JavaUnsafeSafeDecompressor extends LZ4SafeDecompressor
                         throw new LZ4Exception("Malformed input at " + sOff);
                     }
                     int matchLen = token & 0xF;
-                    if (matchLen == 15) {
+                    if (matchLen == LZ4Constants.RUN_MASK) {
                         byte len2 = -1;
                         while (sOff < srcEnd && (len2 = ByteBufferUtils.readByte(src, sOff++)) == -1) {
                             matchLen += 255;

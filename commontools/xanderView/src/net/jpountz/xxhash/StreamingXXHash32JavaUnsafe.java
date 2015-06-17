@@ -20,23 +20,23 @@ final class StreamingXXHash32JavaUnsafe extends AbstractStreamingXXHash32Java
             h32 = Integer.rotateLeft(this.v1, 1) + Integer.rotateLeft(this.v2, 7) + Integer.rotateLeft(this.v3, 12) + Integer.rotateLeft(this.v4, 18);
         }
         else {
-            h32 = this.seed + 374761393;
+            h32 = this.seed + XXHashConstants.PRIME5;
         }
         h32 += (int)this.totalLen;
         int off;
         for (off = 0; off <= this.memSize - 4; off += 4) {
-            h32 += UnsafeUtils.readIntLE(this.memory, off) * -1028477379;
-            h32 = Integer.rotateLeft(h32, 17) * 668265263;
+            h32 += UnsafeUtils.readIntLE(this.memory, off) * XXHashConstants.PRIME3;
+            h32 = Integer.rotateLeft(h32, 17) * XXHashConstants.PRIME4;
         }
         while (off < this.memSize) {
-            h32 += (UnsafeUtils.readByte(this.memory, off) & 0xFF) * 374761393;
-            h32 = Integer.rotateLeft(h32, 11) * -1640531535;
+            h32 += (UnsafeUtils.readByte(this.memory, off) & 0xFF) * XXHashConstants.PRIME5;
+            h32 = Integer.rotateLeft(h32, 11) * XXHashConstants.PRIME1;
             ++off;
         }
         h32 ^= h32 >>> 15;
-        h32 *= -2048144777;
+        h32 *= XXHashConstants.PRIME2;
         h32 ^= h32 >>> 13;
-        h32 *= -1028477379;
+        h32 *= XXHashConstants.PRIME3;
         h32 ^= h32 >>> 16;
         return h32;
     }
@@ -53,18 +53,18 @@ final class StreamingXXHash32JavaUnsafe extends AbstractStreamingXXHash32Java
         final int end = off + len;
         if (this.memSize > 0) {
             System.arraycopy(buf, off, this.memory, this.memSize, 16 - this.memSize);
-            this.v1 += UnsafeUtils.readIntLE(this.memory, 0) * -2048144777;
+            this.v1 += UnsafeUtils.readIntLE(this.memory, 0) * XXHashConstants.PRIME2;
             this.v1 = Integer.rotateLeft(this.v1, 13);
-            this.v1 *= -1640531535;
-            this.v2 += UnsafeUtils.readIntLE(this.memory, 4) * -2048144777;
+            this.v1 *= XXHashConstants.PRIME1;
+            this.v2 += UnsafeUtils.readIntLE(this.memory, 4) * XXHashConstants.PRIME2;
             this.v2 = Integer.rotateLeft(this.v2, 13);
-            this.v2 *= -1640531535;
-            this.v3 += UnsafeUtils.readIntLE(this.memory, 8) * -2048144777;
+            this.v2 *= XXHashConstants.PRIME1;
+            this.v3 += UnsafeUtils.readIntLE(this.memory, 8) * XXHashConstants.PRIME2;
             this.v3 = Integer.rotateLeft(this.v3, 13);
-            this.v3 *= -1640531535;
-            this.v4 += UnsafeUtils.readIntLE(this.memory, 12) * -2048144777;
+            this.v3 *= XXHashConstants.PRIME1;
+            this.v4 += UnsafeUtils.readIntLE(this.memory, 12) * XXHashConstants.PRIME2;
             this.v4 = Integer.rotateLeft(this.v4, 13);
-            this.v4 *= -1640531535;
+            this.v4 *= XXHashConstants.PRIME1;
             off += 16 - this.memSize;
             this.memSize = 0;
         }
@@ -73,10 +73,10 @@ final class StreamingXXHash32JavaUnsafe extends AbstractStreamingXXHash32Java
         int v2;
         int v3;
         int v4;
-        for (v2 = this.v2, v3 = this.v3, v4 = this.v4; off <= limit; off += 4, v2 += UnsafeUtils.readIntLE(buf, off) * -2048144777, v2 = Integer.rotateLeft(v2, 13), v2 *= -1640531535, off += 4, v3 += UnsafeUtils.readIntLE(buf, off) * -2048144777, v3 = Integer.rotateLeft(v3, 13), v3 *= -1640531535, off += 4, v4 += UnsafeUtils.readIntLE(buf, off) * -2048144777, v4 = Integer.rotateLeft(v4, 13), v4 *= -1640531535, off += 4) {
-            v1 += UnsafeUtils.readIntLE(buf, off) * -2048144777;
+        for (v2 = this.v2, v3 = this.v3, v4 = this.v4; off <= limit; off += 4, v2 += UnsafeUtils.readIntLE(buf, off) * XXHashConstants.PRIME2, v2 = Integer.rotateLeft(v2, 13), v2 *= XXHashConstants.PRIME1, off += 4, v3 += UnsafeUtils.readIntLE(buf, off) * XXHashConstants.PRIME2, v3 = Integer.rotateLeft(v3, 13), v3 *= XXHashConstants.PRIME1, off += 4, v4 += UnsafeUtils.readIntLE(buf, off) * XXHashConstants.PRIME2, v4 = Integer.rotateLeft(v4, 13), v4 *= XXHashConstants.PRIME1, off += 4) {
+            v1 += UnsafeUtils.readIntLE(buf, off) * XXHashConstants.PRIME2;
             v1 = Integer.rotateLeft(v1, 13);
-            v1 *= -1640531535;
+            v1 *= XXHashConstants.PRIME1;
         }
         this.v1 = v1;
         this.v2 = v2;

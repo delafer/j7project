@@ -30,7 +30,7 @@ final class LZ4JavaSafeFastDecompressor extends LZ4FastDecompressor
                 final int token = SafeUtils.readByte(src, sOff) & 0xFF;
                 ++sOff;
                 int literalLen = token >>> 4;
-                if (literalLen == 15) {
+                if (literalLen == LZ4Constants.RUN_MASK) {
                     byte len = -1;
                     while ((len = SafeUtils.readByte(src, sOff++)) == -1) {
                         literalLen += 255;
@@ -58,7 +58,7 @@ final class LZ4JavaSafeFastDecompressor extends LZ4FastDecompressor
                         throw new LZ4Exception("Malformed input at " + sOff);
                     }
                     int matchLen = token & 0xF;
-                    if (matchLen == 15) {
+                    if (matchLen == LZ4Constants.RUN_MASK) {
                         byte len2 = -1;
                         while ((len2 = SafeUtils.readByte(src, sOff++)) == -1) {
                             matchLen += 255;
@@ -105,7 +105,7 @@ final class LZ4JavaSafeFastDecompressor extends LZ4FastDecompressor
                 final int token = ByteBufferUtils.readByte(src, sOff) & 0xFF;
                 ++sOff;
                 int literalLen = token >>> 4;
-                if (literalLen == 15) {
+                if (literalLen == LZ4Constants.RUN_MASK) {
                     byte len = -1;
                     while ((len = ByteBufferUtils.readByte(src, sOff++)) == -1) {
                         literalLen += 255;
@@ -133,7 +133,7 @@ final class LZ4JavaSafeFastDecompressor extends LZ4FastDecompressor
                         throw new LZ4Exception("Malformed input at " + sOff);
                     }
                     int matchLen = token & 0xF;
-                    if (matchLen == 15) {
+                    if (matchLen == LZ4Constants.RUN_MASK) {
                         byte len2 = -1;
                         while ((len2 = ByteBufferUtils.readByte(src, sOff++)) == -1) {
                             matchLen += 255;
