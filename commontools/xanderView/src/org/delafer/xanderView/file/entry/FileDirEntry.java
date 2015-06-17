@@ -82,8 +82,8 @@ public class FileDirEntry extends ImageEntry<String> {
 	public boolean equals(Object obj) {
 		if (this == obj) return true;
 
-		if (!(obj instanceof FileDirEntry))  return false;
-		final FileDirEntry o = (FileDirEntry) obj;
+		if (!(obj instanceof ImageEntry))  return false;
+		final ImageEntry<?> o = (ImageEntry<?>) obj;
 		return (crc == o.crc);
 	}
 

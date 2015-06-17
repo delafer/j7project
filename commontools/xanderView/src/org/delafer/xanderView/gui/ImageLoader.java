@@ -8,18 +8,15 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import net.j7.commons.strings.Args;
-import net.j7.commons.utils.Metrics;
 
 import org.delafer.xanderView.common.ImageSize;
 import org.delafer.xanderView.file.CommonContainer;
+import org.delafer.xanderView.file.CopyService;
 import org.delafer.xanderView.file.entry.ImageEntry;
 import org.delafer.xanderView.gui.config.OrientationStore;
 import org.libjpegturbo.turbojpeg.TJ;
 import org.libjpegturbo.turbojpeg.TJDecompressor;
 import org.libjpegturbo.turbojpeg.TJScalingFactor;
-
-import com.jhlabs.image.ContrastFilter;
-import com.jhlabs.image.GammaFilter;
 
 public abstract class ImageLoader {
 
@@ -29,7 +26,8 @@ public abstract class ImageLoader {
 	protected void loadImage(CommonContainer container, ImageEntry<?> entry, ImageCanvas panel) {
 		try {
 			if (entry == null) return ;
-			String info = Args.fill("%1 [%2/%3]", entry.shortName(),""+container.currentIndex(),""+container.size());
+			String info = Args.fill("%1 [%2/%3]", entry.shortName(),String.valueOf(container.currentIndex()),String.valueOf(container.size()));
+			if (CopyService.exists(entry)) info += "*";
 			loadImage(entry, info, panel);
 		} catch (Exception e) {
 			e.printStackTrace();

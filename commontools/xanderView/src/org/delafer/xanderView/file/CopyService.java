@@ -61,6 +61,12 @@ public class CopyService {
 		return images.size();
 	}
 
+	public static boolean exists(ImageEntry<?> img) {
+		FileDirEntry e = new FileDirEntry(null, img.name, img.size);
+		e.crc = img.crc;
+		return CopyService.instance().images.contains(e);
+	}
+
 	public void init() {
 		String locationArg = ApplConfiguration.instance().get(ApplConfiguration.CFG_COPY_DIR);
 		String location = FilePath.as().dir(locationArg).div(true).forceExists().build();

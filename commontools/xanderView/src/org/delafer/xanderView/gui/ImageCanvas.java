@@ -203,7 +203,7 @@ public class ImageCanvas extends Canvas implements MouseListener  {
         	AttributedString as = new AttributedString(panel.text);
 
             as.addAttribute(TextAttribute.FONT,font);
-            as.addAttribute(TextAttribute.FOREGROUND, Color.GREEN);
+            as.addAttribute(TextAttribute.FOREGROUND,  (panel.text.indexOf('*')<0 ? Color.GREEN : Color.RED));
             g.setFont(font);
 
             drawText(g, as);

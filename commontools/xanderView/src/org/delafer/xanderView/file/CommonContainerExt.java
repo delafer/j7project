@@ -3,7 +3,9 @@ package org.delafer.xanderView.file;
 import net.j7.commons.utils.RandomUtil;
 
 import org.delafer.xanderView.file.entry.ImageEntry;
-import org.delafer.xanderView.sound.SoundBeep;
+import org.delafer.xanderView.general.State;
+import org.delafer.xanderView.gui.SplashWindow;
+import org.delafer.xanderView.gui.helpers.MultiShell;
 
 public class CommonContainerExt extends CommonContainer{
 
@@ -68,7 +70,8 @@ public class CommonContainerExt extends CommonContainer{
 
 	private void checkStartReached() {
 		if (startAt == currentIndex()) {
-			SoundBeep.beep();
+//			SoundBeep.beep();
+			new SplashWindow(MultiShell.shell.active(), State.Special1);
 		}
 	}
 

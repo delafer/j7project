@@ -22,6 +22,8 @@ public class MultiShell  {
 	Shell wndShell;
 	Shell fullscrShell;
 
+	public static volatile MultiShell shell;
+
 
 	public Shell fsShell() {
 		return fullscrShell;
@@ -42,7 +44,7 @@ public class MultiShell  {
 		wndShell = new Shell(display,  NO_REDRAW_RESIZE | NO_BACKGROUND | APPLICATION_MODAL | NO_SCROLL | DOUBLE_BUFFERED  | SWT.SHELL_TRIM  );
 		fullscrShell = new Shell(wndShell,  ON_TOP | NO_REDRAW_RESIZE | NO_BACKGROUND | APPLICATION_MODAL | NO_SCROLL | DOUBLE_BUFFERED  | SWT.NO_TRIM);
 		fullscrShell.setFullScreen(true);
-
+		MultiShell.shell = this;
 		addIcons();
 		updateInfo();
 
