@@ -1,0 +1,1 @@
+mvn install:install-file -Dfile=opencv-300.jar -DgroupId=org.opencv -DartifactId=opencv -Dversion=3.0.0 -Dpackaging=jar
