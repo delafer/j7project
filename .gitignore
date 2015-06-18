@@ -107,3 +107,4 @@ workspace/Servers/*/web.xml
 frontend/client-gui/new  2.txt
 #*.dll
 *.properties
+commontools/xanderView/dependency-reduced-pom.xml
