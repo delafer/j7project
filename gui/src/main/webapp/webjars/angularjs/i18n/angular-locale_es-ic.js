@@ -16,6 +16,15 @@ $provide.value("$locale", {
       "viernes",
       "s\u00e1bado"
     ],
+    "ERANAMES": [
+      "antes de Cristo",
+      "anno D\u00f3mini"
+    ],
+    "ERAS": [
+      "a. C.",
+      "d. C."
+    ],
+    "FIRSTDAYOFWEEK": 0,
     "MONTH": [
       "enero",
       "febrero",
@@ -53,10 +62,14 @@ $provide.value("$locale", {
       "nov.",
       "dic."
     ],
+    "WEEKENDRANGE": [
+      5,
+      6
+    ],
     "fullDate": "EEEE, d 'de' MMMM 'de' y",
     "longDate": "d 'de' MMMM 'de' y",
-    "medium": "d/M/y H:mm:ss",
-    "mediumDate": "d/M/y",
+    "medium": "d 'de' MMM 'de' y H:mm:ss",
+    "mediumDate": "d 'de' MMM 'de' y",
     "mediumTime": "H:mm:ss",
     "short": "d/M/yy H:mm",
     "shortDate": "d/M/yy",
@@ -70,7 +83,6 @@ $provide.value("$locale", {
       {
         "gSize": 3,
         "lgSize": 3,
-        "macFrac": 0,
         "maxFrac": 3,
         "minFrac": 0,
         "minInt": 1,
@@ -82,7 +94,6 @@ $provide.value("$locale", {
       {
         "gSize": 3,
         "lgSize": 3,
-        "macFrac": 0,
         "maxFrac": 2,
         "minFrac": 2,
         "minInt": 1,
@@ -94,6 +105,6 @@ $provide.value("$locale", {
     ]
   },
   "id": "es-ic",
-  "pluralCat": function (n, opt_precision) {  if (n == 1) {    return PLURAL_CATEGORY.ONE;  }  return PLURAL_CATEGORY.OTHER;}
+  "pluralCat": function(n, opt_precision) {  if (n == 1) {    return PLURAL_CATEGORY.ONE;  }  return PLURAL_CATEGORY.OTHER;}
 });
 }]);

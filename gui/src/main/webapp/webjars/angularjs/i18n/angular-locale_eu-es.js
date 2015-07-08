@@ -16,6 +16,15 @@ $provide.value("$locale", {
       "ostirala",
       "larunbata"
     ],
+    "ERANAMES": [
+      "K.a.",
+      "K.o."
+    ],
+    "ERAS": [
+      "K.a.",
+      "K.o."
+    ],
+    "FIRSTDAYOFWEEK": 0,
     "MONTH": [
       "urtarrilak",
       "otsailak",
@@ -53,13 +62,17 @@ $provide.value("$locale", {
       "aza.",
       "abe."
     ],
+    "WEEKENDRANGE": [
+      5,
+      6
+    ],
     "fullDate": "y('e')'ko' MMMM d, EEEE",
     "longDate": "y('e')'ko' MMMM d",
     "medium": "y MMM d HH:mm:ss",
     "mediumDate": "y MMM d",
     "mediumTime": "HH:mm:ss",
-    "short": "y-MM-dd HH:mm",
-    "shortDate": "y-MM-dd",
+    "short": "y/MM/dd HH:mm",
+    "shortDate": "y/MM/dd",
     "shortTime": "HH:mm"
   },
   "NUMBER_FORMATS": {
@@ -70,7 +83,6 @@ $provide.value("$locale", {
       {
         "gSize": 3,
         "lgSize": 3,
-        "macFrac": 0,
         "maxFrac": 3,
         "minFrac": 0,
         "minInt": 1,
@@ -82,7 +94,6 @@ $provide.value("$locale", {
       {
         "gSize": 3,
         "lgSize": 3,
-        "macFrac": 0,
         "maxFrac": 2,
         "minFrac": 2,
         "minInt": 1,
@@ -94,6 +105,6 @@ $provide.value("$locale", {
     ]
   },
   "id": "eu-es",
-  "pluralCat": function (n, opt_precision) {  if (n == 1) {    return PLURAL_CATEGORY.ONE;  }  return PLURAL_CATEGORY.OTHER;}
+  "pluralCat": function(n, opt_precision) {  if (n == 1) {    return PLURAL_CATEGORY.ONE;  }  return PLURAL_CATEGORY.OTHER;}
 });
 }]);

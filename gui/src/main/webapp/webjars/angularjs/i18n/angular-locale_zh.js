@@ -16,6 +16,15 @@ $provide.value("$locale", {
       "\u661f\u671f\u4e94",
       "\u661f\u671f\u516d"
     ],
+    "ERANAMES": [
+      "\u516c\u5143\u524d",
+      "\u516c\u5143"
+    ],
+    "ERAS": [
+      "\u516c\u5143\u524d",
+      "\u516c\u5143"
+    ],
+    "FIRSTDAYOFWEEK": 6,
     "MONTH": [
       "\u4e00\u6708",
       "\u4e8c\u6708",
@@ -53,6 +62,10 @@ $provide.value("$locale", {
       "11\u6708",
       "12\u6708"
     ],
+    "WEEKENDRANGE": [
+      5,
+      6
+    ],
     "fullDate": "y\u5e74M\u6708d\u65e5EEEE",
     "longDate": "y\u5e74M\u6708d\u65e5",
     "medium": "y\u5e74M\u6708d\u65e5 ah:mm:ss",
@@ -70,7 +83,6 @@ $provide.value("$locale", {
       {
         "gSize": 3,
         "lgSize": 3,
-        "macFrac": 0,
         "maxFrac": 3,
         "minFrac": 0,
         "minInt": 1,
@@ -82,7 +94,6 @@ $provide.value("$locale", {
       {
         "gSize": 3,
         "lgSize": 3,
-        "macFrac": 0,
         "maxFrac": 2,
         "minFrac": 2,
         "minInt": 1,
@@ -94,6 +105,6 @@ $provide.value("$locale", {
     ]
   },
   "id": "zh",
-  "pluralCat": function (n, opt_precision) {  return PLURAL_CATEGORY.OTHER;}
+  "pluralCat": function(n, opt_precision) {  return PLURAL_CATEGORY.OTHER;}
 });
 }]);

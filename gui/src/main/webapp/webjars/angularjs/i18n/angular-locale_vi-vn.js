@@ -16,6 +16,15 @@ $provide.value("$locale", {
       "Th\u1ee9 S\u00e1u",
       "Th\u1ee9 B\u1ea3y"
     ],
+    "ERANAMES": [
+      "tr. CN",
+      "sau CN"
+    ],
+    "ERAS": [
+      "tr. CN",
+      "sau CN"
+    ],
+    "FIRSTDAYOFWEEK": 0,
     "MONTH": [
       "th\u00e1ng 1",
       "th\u00e1ng 2",
@@ -53,6 +62,10 @@ $provide.value("$locale", {
       "thg 11",
       "thg 12"
     ],
+    "WEEKENDRANGE": [
+      5,
+      6
+    ],
     "fullDate": "EEEE, 'ng\u00e0y' dd MMMM 'n\u0103m' y",
     "longDate": "'Ng\u00e0y' dd 'th\u00e1ng' MM 'n\u0103m' y",
     "medium": "dd-MM-y HH:mm:ss",
@@ -70,7 +83,6 @@ $provide.value("$locale", {
       {
         "gSize": 3,
         "lgSize": 3,
-        "macFrac": 0,
         "maxFrac": 3,
         "minFrac": 0,
         "minInt": 1,
@@ -82,7 +94,6 @@ $provide.value("$locale", {
       {
         "gSize": 3,
         "lgSize": 3,
-        "macFrac": 0,
         "maxFrac": 2,
         "minFrac": 2,
         "minInt": 1,
@@ -94,6 +105,6 @@ $provide.value("$locale", {
     ]
   },
   "id": "vi-vn",
-  "pluralCat": function (n, opt_precision) {  return PLURAL_CATEGORY.OTHER;}
+  "pluralCat": function(n, opt_precision) {  return PLURAL_CATEGORY.OTHER;}
 });
 }]);
