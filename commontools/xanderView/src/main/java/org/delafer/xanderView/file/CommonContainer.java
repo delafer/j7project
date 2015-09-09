@@ -6,15 +6,18 @@ import java.util.Comparator;
 import java.util.ListIterator;
 
 import net.j7.commons.base.Equals;
+import net.j7.commons.base.Numbers;
 import net.j7.commons.collections.SortedLinkedList;
-import net.j7.commons.io.FileUtils;
+import net.j7.commons.io.TextFileUtils;
+import net.j7.commons.io.TextFileUtils.TextReader;
+import net.j7.commons.strings.StringUtils;
 
-import org.delafer.xanderView.file.entry.FileDirEntry;
 import org.delafer.xanderView.file.entry.ImageEntry;
 import org.delafer.xanderView.file.entry.ImageEntry.ImageType;
 import org.delafer.xanderView.file.readers.FileReader;
 import org.delafer.xanderView.file.readers.SevenZipReader;
 import org.delafer.xanderView.gui.config.ApplConfiguration;
+import org.delafer.xanderView.gui.config.ApplInstance;
 import org.delafer.xanderView.interfaces.IAbstractReader;
 import org.delafer.xanderView.interfaces.IAbstractReader.FileEvent;
 import org.delafer.xanderView.sound.SoundBeep;
@@ -37,6 +40,23 @@ public class CommonContainer {
 
 	public CommonContainer(String locationArg) {
 		super();
+
+		Object entry = null;
+		if (StringUtils.isEmpty(locationArg)) {
+			File tryIt = new File(ApplInstance.LAST_ENTRY);
+			if (tryIt.exists()) {
+				try {
+					TextReader tr = TextFileUtils.createTextReader(tryIt);
+					String content = tr.readAll();
+					String[] cont = content.trim().split(ApplInstance.LAST_ENTRY_DIV);
+					locationArg = cont.length>0 ? cont[0] : null;
+					entry = cont.length>1 ? Numbers.getResultAsInteger(cont[1]) : null;
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
 		this.pathFile = new File(locationArg);
 		this.reader = getReader(pathFile);
 //		this.pathContainer = reader.getContainerPath();
@@ -45,7 +65,9 @@ public class CommonContainer {
 		loop = ApplConfiguration.instance().getBoolean(ApplConfiguration.LOOP_CURRENT_SOURCE);
 		initialize();
 
-		Object entry = reader.getSingleEntry();
+		if (null == entry)
+		entry = reader.getSingleEntry();
+
 		if (entry == null) {
 			if (images.size()>0) {
 				getNext();

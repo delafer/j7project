@@ -10,10 +10,10 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
-import org.delafer.xanderView.scale.ScaleFactory;
-
 import net.j7.commons.io.FilePath;
 import net.j7.commons.io.FilePath.PathType;
+import net.j7.commons.io.TextFileUtils;
+import net.j7.commons.io.TextFileUtils.TextWriter;
 import net.j7.commons.utils.BooleanUtils;
 
 public class ApplConfiguration {
@@ -168,6 +168,21 @@ public class ApplConfiguration {
 			FileOutputStream fos = new FileOutputStream(config);
 			properties.store(fos, null);
 			fos.close();
+
+
+			if (ApplInstance.lastEntry != null) {
+				try {
+					TextWriter tw = TextFileUtils.createTextWriter(ApplInstance.LAST_ENTRY, false);
+					tw.write(ApplInstance.lastEntry);
+					tw.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+			}
+
+
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

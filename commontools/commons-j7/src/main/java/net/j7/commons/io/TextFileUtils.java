@@ -1,8 +1,8 @@
 /*
  * @File: TextFileUtils.java
  *
- * 
- * 
+ *
+ *
  * All rights reserved.
  *
  * @Author:  tavrovsa
@@ -325,6 +325,20 @@ public class TextFileUtils {
          return sb;
       }
 
+
+      public String readAll() {
+    	 final char[] buf = new char[512];
+    	 StringBuilder sb = new StringBuilder();
+    	 try {
+			int r;
+    		 while ((r = reader.read(buf))>0) {
+    			 sb.append(buf, 0, r);
+    		 }
+		} catch (IOException e) {//ignore//
+		}
+    	 return sb.toString();
+      }
+
       /**
        * Mark.
        *
@@ -383,7 +397,7 @@ public class TextFileUtils {
        */
       @Override
       public int read(CharBuffer cb) throws IOException {
-         return this.reader.read();
+         return this.reader.read(cb);
       }
 
    }

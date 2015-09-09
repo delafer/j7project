@@ -1,7 +1,5 @@
 package org.delafer.xanderView.file.entry;
 
-import org.delafer.xanderView.hash.Hasher;
-
 import net.j7.commons.io.FileUtils;
 import net.sf.sevenzipjbinding.ExtractAskMode;
 import net.sf.sevenzipjbinding.ExtractOperationResult;
@@ -11,19 +9,23 @@ import net.sf.sevenzipjbinding.ISequentialOutStream;
 import net.sf.sevenzipjbinding.PropID;
 import net.sf.sevenzipjbinding.SevenZipException;
 
+import org.delafer.xanderView.gui.config.ApplInstance;
+import org.delafer.xanderView.hash.Hasher;
+import org.delafer.xanderView.interfaces.IAbstractReader;
+
 public class ZipImageEntry extends ImageEntry<Integer> {
 
 
 	IInArchive archive;
 	Integer identifier;
 
-
-	public ZipImageEntry(IInArchive archive, Integer id, String name, long size) {
+	public ZipImageEntry(IAbstractReader parent, IInArchive archive, Integer id, String name, long size) {
 		this.archive = archive;
 		this.name = name;
 		this.size = size;
 		this.identifier = id;
 		this.imageType = getType(name);
+		this.parent = parent;
 	}
 
 	@Override
@@ -33,7 +35,7 @@ public class ZipImageEntry extends ImageEntry<Integer> {
 
 	@Override
 	public byte[] content() {
-
+		ApplInstance.lastEntry = this.parent.getContainerPath()+ApplInstance.LAST_ENTRY_DIV+identifier;
 		try {
 			MyExtractCallback extract = new MyExtractCallback(archive, size);
 			archive.extract(new int[] {identifier}, false, extract);

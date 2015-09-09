@@ -8,6 +8,7 @@ import net.j7.commons.io.FileUtils;
 import net.j7.commons.strings.StringUtils;
 
 import org.delafer.xanderView.common.ImageSize;
+import org.delafer.xanderView.interfaces.IAbstractReader;
 import org.delafer.xanderView.interfaces.IImageEntry;
 
 public abstract class ImageEntry<E> implements IImageEntry<E> {
@@ -21,6 +22,8 @@ public abstract class ImageEntry<E> implements IImageEntry<E> {
 	public ImageSize imageSize;
 	public long crc;
 	public ImageType imageType;
+
+	protected IAbstractReader parent;
 
 	static Map<String, ImageType> types;
 

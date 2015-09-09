@@ -21,6 +21,7 @@ import org.delafer.xanderView.file.ContentChangeWatcher;
 import org.delafer.xanderView.file.entry.FileImageEntry;
 import org.delafer.xanderView.file.entry.ImageEntry;
 import org.delafer.xanderView.file.entry.ImageEntry.ImageType;
+import org.delafer.xanderView.gui.config.ApplInstance;
 import org.delafer.xanderView.interfaces.IAbstractReader;
 
 import com.sun.nio.file.ExtendedWatchEventModifier;
@@ -53,7 +54,7 @@ public class FileReader implements IAbstractReader {
 
 				@Override
 				public void processFile(File file, FileInfo fileInfo) throws Exception {
-					FileImageEntry entry = new FileImageEntry(fileInfo.getNameWithPath(), fileInfo.getFileName(), fileInfo.getFileSize());
+					FileImageEntry entry = new FileImageEntry(FileReader.this, fileInfo.getNameWithPath(), fileInfo.getFileName(), fileInfo.getFileSize());
 					entries.add(entry);
 
 
@@ -152,8 +153,12 @@ public class FileReader implements IAbstractReader {
 	@SuppressWarnings("unchecked")
 	public FileImageEntry getEntryByIdentifier(Object id) throws IOException {
 		String filePath = (String) id;
+
+
+
 		FileInfo fileInfo = new FileInfo(new File(filePath));
-		FileImageEntry entry = new FileImageEntry(fileInfo.getNameWithPath(), fileInfo.getFileName(), fileInfo.getFileSize());
+		FileImageEntry entry = new FileImageEntry(this, fileInfo.getNameWithPath(), fileInfo.getFileName(), fileInfo.getFileSize());
+
 		return entry;
 	}
 

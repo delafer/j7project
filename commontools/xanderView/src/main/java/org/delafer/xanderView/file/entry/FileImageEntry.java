@@ -8,10 +8,11 @@ import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileChannel.MapMode;
 
-import org.delafer.xanderView.hash.Hasher;
-
 import net.j7.commons.base.Equals;
-import net.sf.sevenzipjbinding.IInArchive;
+
+import org.delafer.xanderView.gui.config.ApplInstance;
+import org.delafer.xanderView.hash.Hasher;
+import org.delafer.xanderView.interfaces.IAbstractReader;
 
 public class FileImageEntry extends ImageEntry<String> {
 
@@ -20,7 +21,8 @@ public class FileImageEntry extends ImageEntry<String> {
 	String identifier;
 
 
-	public FileImageEntry(String fullPath, String name, long size) {
+	public FileImageEntry(IAbstractReader parent, String fullPath, String name, long size) {
+		this.parent = parent;
 		this.name = name;
 		this.size = size;
 		this.identifier = fullPath;
@@ -34,7 +36,7 @@ public class FileImageEntry extends ImageEntry<String> {
 
 	@Override
 	public byte[] content() {
-
+		ApplInstance.lastEntry = identifier;
 		try {
 			byte[] ret = readNIO(identifier);
 			calcCRC(ret);

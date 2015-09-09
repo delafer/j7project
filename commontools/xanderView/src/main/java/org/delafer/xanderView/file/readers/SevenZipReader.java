@@ -10,6 +10,7 @@ import org.delafer.xanderView.file.ContentChangeWatcher;
 import org.delafer.xanderView.file.entry.ImageEntry;
 import org.delafer.xanderView.file.entry.ZipImageEntry;
 import org.delafer.xanderView.file.entry.ImageEntry.ImageType;
+import org.delafer.xanderView.gui.config.ApplInstance;
 import org.delafer.xanderView.interfaces.IAbstractReader;
 
 import net.j7.commons.io.FileUtils;
@@ -28,6 +29,7 @@ public class SevenZipReader implements IAbstractReader {
 
 	public SevenZipReader(File sourceFile) {
 		super();
+
 		this.sourceFile = sourceFile;
 	}
 
@@ -80,7 +82,7 @@ public class SevenZipReader implements IAbstractReader {
 		ImageType imageType = ImageEntry.getType(pathName);
 		if (imageType.equals(ImageType.UNKNOWN)) return null;
 
-		return new ZipImageEntry(archive, i, pathName, size);
+		return new ZipImageEntry(this, archive, i, pathName, size);
 	}
 
 	@Override

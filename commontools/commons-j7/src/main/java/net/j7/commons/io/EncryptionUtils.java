@@ -1,8 +1,8 @@
 /*
  * @File: EncryptionUtils.java
  *
- * 
- * 
+ *
+ *
  * All rights reserved.
  *
  * @Author:  tavrovsa
@@ -15,7 +15,6 @@ package net.j7.commons.io;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
-import java.util.Base64;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
@@ -75,7 +74,8 @@ public final class EncryptionUtils {
 
          // Decode base64 to get bytes
 
-         byte[] dec = Base64.getDecoder().decode(getBytesUtf8(encryptedText));
+         //byte[] dec = Base64.getDecoder().decode(getBytesUtf8(encryptedText));
+         byte[] dec = new byte[0];
 
          // Decrypt
          byte[] utf8 = cipher.doFinal(dec);
@@ -126,7 +126,8 @@ public final class EncryptionUtils {
     * @throws UnsupportedEncodingException
     */
    private static String encodeBase64String(byte[] enc) throws UnsupportedEncodingException {
-      return new String((Base64.getEncoder().encode(enc)), CHARSET_UTF8);
+     // return new String((Base64.getEncoder().encode(enc)), CHARSET_UTF8);
+	   return null;
    }
 
    /**
