@@ -26,6 +26,9 @@ public class CompressionFactory {
 		compressors.put(SnappyJS.UID, new SnappyJS());
 
 		compressors.put(XerialSnappy.UID, new XerialSnappy());
+		compressors.put(IndeedSnappy.UID, new IndeedSnappy());
+
+		compressors.put(LZOCompressor.UID, new LZOCompressor());
 
 	}
 

@@ -3,19 +3,21 @@ package org.delafer.xmlbench.compressors;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import org.xerial.snappy.SnappyInputStream;
-import org.xerial.snappy.SnappyOutputStream;
+import org.anarres.lzo.LzoAlgorithm;
+import org.anarres.lzo.commons.LzoCompressorInputStream;
+import org.anarres.lzo.commons.LzoCompressorOutputStream;
 
-public class XerialSnappy implements ICompressor {
+public class LZOCompressor implements ICompressor {
 
-	public static final int UID = 15;
+	private static final LzoAlgorithm ALGORITM = LzoAlgorithm.LZO1X;
+	public static final int UID = 18;
 
 
 	/* (non-Javadoc)
 	 * @see org.delafer.xmlbench.compressors.ICompressor#getName()
 	 */
 	public String getName() {
-		return "Snappy Compressor (Xerial Java-Port)";
+		return "LZO Compressor (LZO1X)";
 	}
 
 	/* (non-Javadoc)
@@ -36,11 +38,8 @@ public class XerialSnappy implements ICompressor {
 	 * @see org.delafer.xmlbench.compressors.ICompressor#decompressData(java.io.InputStream)
 	 */
 	public InputStream decompressor(InputStream is) throws Exception{
-
-		InputStream a;
-
-		SnappyInputStream is2 = new SnappyInputStream(is);
-		return is2;
+		LzoCompressorInputStream iis = new LzoCompressorInputStream(is, ALGORITM);
+		return iis;
 	}
 
 	/* (non-Javadoc)
@@ -48,8 +47,8 @@ public class XerialSnappy implements ICompressor {
 	 */
 
 	public OutputStream compressor(OutputStream inData)throws Exception {
-		SnappyOutputStream deflaterStream = new SnappyOutputStream(inData);
-		return deflaterStream;
+		LzoCompressorOutputStream bcs = new LzoCompressorOutputStream(inData, ALGORITM);
+		return bcs;
 
 	}
 

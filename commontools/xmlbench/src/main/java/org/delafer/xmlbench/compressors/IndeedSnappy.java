@@ -3,19 +3,21 @@ package org.delafer.xmlbench.compressors;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import org.xerial.snappy.SnappyInputStream;
-import org.xerial.snappy.SnappyOutputStream;
+import com.indeed.util.compress.BlockCompressorStream;
+import com.indeed.util.compress.BlockDecompressorStream;
+import com.indeed.util.compress.snappy.SnappyCompressor;
+import com.indeed.util.compress.snappy.SnappyDecompressor;
 
-public class XerialSnappy implements ICompressor {
+public class IndeedSnappy implements ICompressor {
 
-	public static final int UID = 15;
+	public static final int UID = 16;
 
 
 	/* (non-Javadoc)
 	 * @see org.delafer.xmlbench.compressors.ICompressor#getName()
 	 */
 	public String getName() {
-		return "Snappy Compressor (Xerial Java-Port)";
+		return "Snappy (Indeed Java-Port)";
 	}
 
 	/* (non-Javadoc)
@@ -36,11 +38,8 @@ public class XerialSnappy implements ICompressor {
 	 * @see org.delafer.xmlbench.compressors.ICompressor#decompressData(java.io.InputStream)
 	 */
 	public InputStream decompressor(InputStream is) throws Exception{
-
-		InputStream a;
-
-		SnappyInputStream is2 = new SnappyInputStream(is);
-		return is2;
+		BlockDecompressorStream iis = new BlockDecompressorStream(is, new SnappyDecompressor());
+		return iis;
 	}
 
 	/* (non-Javadoc)
@@ -48,8 +47,8 @@ public class XerialSnappy implements ICompressor {
 	 */
 
 	public OutputStream compressor(OutputStream inData)throws Exception {
-		SnappyOutputStream deflaterStream = new SnappyOutputStream(inData);
-		return deflaterStream;
+		BlockCompressorStream bcs = new BlockCompressorStream(inData, new SnappyCompressor());
+		return bcs;
 
 	}
 
