@@ -3,19 +3,20 @@ package org.delafer.xmlbench.compressors;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import org.iq80.snappy.SnappyFramedInputStream;
-import org.iq80.snappy.SnappyFramedOutputStream;
+import net.jpountz.lz4.LZ4BlockInputStream;
+import net.jpountz.lz4.LZ4BlockOutputStream;
+import net.jpountz.lz4.LZ4Factory;
 
-public class SnappyIQ80 implements ICompressor {
+public class LZ4Compressor implements ICompressor {
 
-	public static final int UID = 10;
+	public static final int UID = 13;
 
 
 	/* (non-Javadoc)
 	 * @see org.delafer.xmlbench.compressors.ICompressor#getName()
 	 */
 	public String getName() {
-		return "Snappy (Zippy) by Google Inc. (IQ80 Java-Port)";
+		return "LZ4 Compressor (Java Safe)";
 	}
 
 	/* (non-Javadoc)
@@ -36,8 +37,7 @@ public class SnappyIQ80 implements ICompressor {
 	 * @see org.delafer.xmlbench.compressors.ICompressor#decompressData(java.io.InputStream)
 	 */
 	public InputStream decompressor(InputStream is) throws Exception{
-
-		SnappyFramedInputStream iis = new SnappyFramedInputStream(is, false);
+		LZ4BlockInputStream iis = new LZ4BlockInputStream(is, LZ4Factory.safeInstance().fastDecompressor());
 		return iis;
 	}
 
@@ -46,7 +46,7 @@ public class SnappyIQ80 implements ICompressor {
 	 */
 
 	public OutputStream compressor(OutputStream inData)throws Exception {
-		SnappyFramedOutputStream deflaterStream = new SnappyFramedOutputStream(inData);
+		LZ4BlockOutputStream deflaterStream = new LZ4BlockOutputStream(inData, ( 1 << 16),  LZ4Factory.safeInstance().fastCompressor());
 		return deflaterStream;
 
 	}

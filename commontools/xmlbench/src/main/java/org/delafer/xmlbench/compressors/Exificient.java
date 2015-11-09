@@ -8,26 +8,26 @@ import java.util.zip.Inflater;
 import java.util.zip.InflaterInputStream;
 
 public class Exificient implements ICompressor {
-	
-	public static final int UID = 3;
 
-	
+	public static final int UID = 4;
+
+
 	/* (non-Javadoc)
 	 * @see org.delafer.xmlbench.compressors.ICompressor#getName()
 	 */
 	public String getName() {
 		return "EXIficient / EXI Compressor 0.8 Copyright (C) 2007-2011 Siemens AG";
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.delafer.xmlbench.compressors.ICompressor#getDescription()
 	 */
 	public String getDescription() {
 		return getName();
 	}
-	
+
 	public static int BUFFER_SIZE = 2048;
-	
+
 	/* (non-Javadoc)
 	 * @see org.delafer.xmlbench.compressors.ICompressor#getURL()
 	 */
@@ -43,7 +43,7 @@ public class Exificient implements ICompressor {
 //		InflaterInputStream iis = new InflaterInputStream(is, new Inflater(), BUFFER_SIZE);
 //		return iis;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.delafer.xmlbench.compressors.ICompressor#compressData(java.io.OutputStream)
 	 */
@@ -54,5 +54,5 @@ public class Exificient implements ICompressor {
 //		return deflaterStream;
 
 	}
-	
+
 }

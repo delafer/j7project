@@ -7,11 +7,12 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import net.j7.commons.base.Equals;
 import net.j7.commons.strings.StringUtils;
 import net.j7.commons.types.MutableInteger;
-import de.creditreform.crefosystem.logging.Logger;
-import de.creditreform.crefosystem.logging.LoggerFactory;
 
 
 // TODO: Auto-generated Javadoc

@@ -3,19 +3,20 @@ package org.delafer.xmlbench.compressors;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import org.iq80.snappy.SnappyFramedInputStream;
-import org.iq80.snappy.SnappyFramedOutputStream;
+import org.tukaani.xz.LZMA2Options;
+import org.tukaani.xz.XZInputStream;
+import org.tukaani.xz.XZOutputStream;
 
-public class SnappyIQ80 implements ICompressor {
+public class XZCompressor implements ICompressor {
 
-	public static final int UID = 10;
+	public static final int UID = 14;
 
 
 	/* (non-Javadoc)
 	 * @see org.delafer.xmlbench.compressors.ICompressor#getName()
 	 */
 	public String getName() {
-		return "Snappy (Zippy) by Google Inc. (IQ80 Java-Port)";
+		return "XZ Compressor";
 	}
 
 	/* (non-Javadoc)
@@ -36,8 +37,7 @@ public class SnappyIQ80 implements ICompressor {
 	 * @see org.delafer.xmlbench.compressors.ICompressor#decompressData(java.io.InputStream)
 	 */
 	public InputStream decompressor(InputStream is) throws Exception{
-
-		SnappyFramedInputStream iis = new SnappyFramedInputStream(is, false);
+		XZInputStream iis = new XZInputStream(is);
 		return iis;
 	}
 
@@ -46,7 +46,7 @@ public class SnappyIQ80 implements ICompressor {
 	 */
 
 	public OutputStream compressor(OutputStream inData)throws Exception {
-		SnappyFramedOutputStream deflaterStream = new SnappyFramedOutputStream(inData);
+		XZOutputStream deflaterStream = new XZOutputStream(inData, new LZMA2Options(1));
 		return deflaterStream;
 
 	}
