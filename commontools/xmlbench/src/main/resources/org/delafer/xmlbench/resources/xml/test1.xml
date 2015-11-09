@@ -1,0 +1,1489 @@
+<?xml version="1.0" standalone="yes"?>
+<?xml-stylesheet href="file:///C|/Programme/PHP/PHPEdit/2.10.0/Modules/Workspaces/Actions_KeyboardMapping.xsl" type="text/xsl"?>
+<Actions>
+  <Action id="actClipboardHistoryPasteSelectedToEditor" addin="ClipboardHistory">
+    <Caption>Paste to editor</Caption>
+    <Hint>Paste selected clipboard history item to editor</Hint>
+    <Description></Description>
+    <Category>ClipboardHistory</Category>
+    <Script>ClipboardHistoryPasteSelectedToEditor
+</Script>
+    <Glyph>Extension:ClipboardHistory|Glyphs\Actions\ClipboardHistoryPasteSelectedToEditor.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actClipboardHistoryCopySelectedToClipboard" addin="ClipboardHistory">
+    <Caption>Copy to clipboard</Caption>
+    <Hint>Copy selected clipboard history item to clipboard</Hint>
+    <Description></Description>
+    <Category>ClipboardHistory</Category>
+    <Script>ClipboardHistoryCopySelectedToClipboard
+</Script>
+    <Glyph>Extension:ClipboardHistory|Glyphs\Actions\ClipboardHistoryCopySelectedToClipboard.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actClipboardHistoryEditSettings" addin="ClipboardHistory">
+    <Caption>Edit settings...</Caption>
+    <Hint>Edit clipboard history related settings</Hint>
+    <Description></Description>
+    <Category>ClipboardHistory</Category>
+    <Script>ClipboardHistoryEditSettings
+</Script>
+    <Glyph>Extension:ClipboardHistory|Glyphs\Actions\ClipboardHistoryEditSettings.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actClipboardHistoryDeleteSelected" addin="ClipboardHistory">
+    <Caption>Delete</Caption>
+    <Hint>Delete selected clipboard history item</Hint>
+    <Description></Description>
+    <Category>ClipboardHistory</Category>
+    <Script>ClipboardHistoryDeleteSelected
+</Script>
+    <Glyph>Extension:ClipboardHistory|Glyphs\Actions\ClipboardHistoryDeleteSelected.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actClipboardHistoryClear" addin="ClipboardHistory">
+    <Caption>Clear</Caption>
+    <Hint>Clear clipboard history</Hint>
+    <Description></Description>
+    <Category>ClipboardHistory</Category>
+    <Script>ClipboardHistoryClear
+</Script>
+    <Glyph>Extension:ClipboardHistory|Glyphs\Actions\ClipboardHistoryClear.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actCodeBrowserFoldSelectedItem" addin="CodeBrowser">
+    <Caption>Fold</Caption>
+    <Hint>Fold the selected item</Hint>
+    <Description></Description>
+    <Category>CodeBrowser</Category>
+    <Script>CodeBrowserFoldSelectedItem
+</Script>
+    <Glyph>Extension:CodeBrowser|Glyphs\Actions\CodeBrowserFoldSelectedItem.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actCodeBrowserUnFoldSelectedItem" addin="CodeBrowser">
+    <Caption>Unfold</Caption>
+    <Hint>Unfold the selected item</Hint>
+    <Description></Description>
+    <Category>CodeBrowser</Category>
+    <Script>CodeBrowserUnFoldSelectedItem
+</Script>
+    <Glyph>Extension:CodeBrowser|Glyphs\Actions\CodeBrowserUnFoldSelectedItem.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actCodeBrowserReparseSelectedItem" addin="CodeBrowser">
+    <Caption>Reparse</Caption>
+    <Hint>Reparse the selected document</Hint>
+    <Description></Description>
+    <Category>CodeBrowser</Category>
+    <Script>CodeBrowserReparseSelectedItem
+</Script>
+    <Glyph>Extension:CodeBrowser|Glyphs\Actions\CodeBrowserReparseSelectedItem.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actCodeBrowserSortByPosition" addin="CodeBrowser">
+    <Caption>Sort by position</Caption>
+    <Hint>Sort the items by their position in the code</Hint>
+    <Description></Description>
+    <Category>CodeBrowser</Category>
+    <Script>CodeBrowserSortByPosition
+</Script>
+    <Glyph>Extension:CodeBrowser|Glyphs\Actions\CodeBrowserSortByPosition.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actCodeBrowserSortByName" addin="CodeBrowser">
+    <Caption>Sort by name</Caption>
+    <Hint>Sort the items by name</Hint>
+    <Description></Description>
+    <Category>CodeBrowser</Category>
+    <Script>CodeBrowserSortByName
+</Script>
+    <Glyph>Extension:CodeBrowser|Glyphs\Actions\CodeBrowserSortByName.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actCodeBrowserGroupByType" addin="CodeBrowser">
+    <Caption>Group by type</Caption>
+    <Hint>Group the items by type (Classes, interfaces, functions...)</Hint>
+    <Description></Description>
+    <Category>CodeBrowser</Category>
+    <Script>CodeBrowserGroupByType
+</Script>
+    <Glyph>Extension:CodeBrowser|Glyphs\Actions\CodeBrowserGroupByType.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actCodeBrowserGroupByVisibility" addin="CodeBrowser">
+    <Caption>Group by visibility</Caption>
+    <Hint>Group the items by visibility (Public, private...)</Hint>
+    <Description></Description>
+    <Category>CodeBrowser</Category>
+    <Script>CodeBrowserGroupByVisibility
+</Script>
+    <Glyph>Extension:CodeBrowser|Glyphs\Actions\CodeBrowserGroupByVisibility.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="acteZpublishCacheClearAll" addin="eZpublish">
+    <Caption>Clear all cache</Caption>
+    <Hint>Clear the complete eZ publish cache</Hint>
+    <Description></Description>
+    <Category>eZpublish</Category>
+    <Script>eZpublishCacheClearAll
+</Script>
+    <Glyph>Extension:eZpublish|Glyphs\Actions\eZpublishCacheClearAll.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="acteZpublishCacheClearCurrent" addin="eZpublish">
+    <Caption>Clear current document cache</Caption>
+    <Hint>Clear the current document eZ publish cache</Hint>
+    <Description></Description>
+    <Category>eZpublish</Category>
+    <Script>eZpublishCacheClearCurrent
+</Script>
+    <Glyph>Extension:eZpublish|Glyphs\Actions\eZpublishCacheClearCurrent.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="acteZpublishCacheClearSelected" addin="eZpublish">
+    <Caption>Clear cache</Caption>
+    <Hint>Clear the document selected in the template explorer eZ publish cache</Hint>
+    <Description></Description>
+    <Category>eZpublish</Category>
+    <Script>eZpublishCacheClearSelected
+</Script>
+    <Glyph>Extension:eZpublish|Glyphs\Actions\eZpublishCacheClearSelected.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="acteZpublishOpenSelected" addin="eZpublish">
+    <Caption>Open...</Caption>
+    <Hint>Open the document selected in the template explorer</Hint>
+    <Description></Description>
+    <Category>eZpublish</Category>
+    <Script>eZpublishOpenSelected
+</Script>
+    <Glyph>Extension:eZpublish|Glyphs\Actions\eZpublishOpenSelected.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="acteZpublishSettingsDebugTemplateStatus" addin="eZpublish">
+    <Caption>Template debug mode</Caption>
+    <Hint>(De)Activate template debug mode</Hint>
+    <Description></Description>
+    <Category>eZpublish</Category>
+    <Script>eZpublishSettingsDebugTemplateStatus
+</Script>
+    <Glyph>Extension:eZpublish|Glyphs\Actions\eZpublishSettingsDebugTemplateStatus.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="acteZpublishSettingsDevelopmentModeStatus" addin="eZpublish">
+    <Caption>Development mode</Caption>
+    <Hint>(De)Activate development mode</Hint>
+    <Description></Description>
+    <Category>eZpublish</Category>
+    <Script>eZpublishSettingsDevelopmentModeStatus
+</Script>
+    <Glyph>Extension:eZpublish|Glyphs\Actions\eZpublishSettingsDevelopmentModeStatus.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="acteZPublishSettings" addin="eZpublish">
+    <Caption>Options</Caption>
+    <Hint>eZ publish options</Hint>
+    <Description></Description>
+    <Category>eZpublish</Category>
+    <Script>PreferenceDialogExecute("/Extensions/eZpublish")
+</Script>
+    <Glyph>Extension:eZpublish|Glyphs\Actions\eZPublishSettings.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actSolutionExplorerAddProject" addin="SolutionExplorer">
+    <Caption>Add an existing p&amp;roject</Caption>
+    <Hint>Add an existing project to the selected solution</Hint>
+    <Description></Description>
+    <Category>SolutionExplorer</Category>
+    <Script>SolutionExplorerAddProject
+</Script>
+    <Glyph>Extension:SolutionExplorer|Glyphs\Actions\SolutionExplorerAddProject.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actSolutionExplorerAddDirectory" addin="SolutionExplorer">
+    <Caption>Add an existing di&amp;rectory</Caption>
+    <Hint>Add an existing directory to the selected project or directory</Hint>
+    <Description></Description>
+    <Category>SolutionExplorer</Category>
+    <Script>SolutionExplorerAddDirectory
+</Script>
+    <Glyph>Extension:SolutionExplorer|Glyphs\Actions\SolutionExplorerAddDirectory.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actSolutionExplorerAddFile" addin="SolutionExplorer">
+    <Caption>Add existing f&amp;ile(s)</Caption>
+    <Hint>Add existing file(s) the the selected project or directory</Hint>
+    <Description></Description>
+    <Category>SolutionExplorer</Category>
+    <Script>SolutionExplorerAddFile
+</Script>
+    <Glyph>Extension:SolutionExplorer|Glyphs\Actions\SolutionExplorerAddFile.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actSolutionExplorerNewDirectory" addin="SolutionExplorer">
+    <Caption>New &amp;directory</Caption>
+    <Hint>Create an new directory in the selected project or directory</Hint>
+    <Description></Description>
+    <Category>SolutionExplorer</Category>
+    <Script>SolutionExplorerNewDirectory
+</Script>
+    <Glyph>Extension:SolutionExplorer|Glyphs\Actions\SolutionExplorerNewDirectory.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actSolutionExplorerNewFile" addin="SolutionExplorer">
+    <Caption>New &amp;file</Caption>
+    <Hint>Add a new file to the selected project or directory</Hint>
+    <Description></Description>
+    <Category>SolutionExplorer</Category>
+    <Script>SolutionExplorerNewFile
+</Script>
+    <Glyph>Extension:SolutionExplorer|Glyphs\Actions\SolutionExplorerNewFile.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="16462">Ctrl+N</ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actSolutionExplorerRenameItem" addin="SolutionExplorer">
+    <Caption>&amp;Rename</Caption>
+    <Hint>Rename the selected item</Hint>
+    <Description></Description>
+    <Category>SolutionExplorer</Category>
+    <Script>SolutionExplorerRenameItem
+</Script>
+    <Glyph>Extension:SolutionExplorer|Glyphs\Actions\SolutionExplorerRenameItem.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actSolutionExplorerEditItemSettings" addin="SolutionExplorer">
+    <Caption>S&amp;ettings</Caption>
+    <Hint>Edit the settings for the selected item</Hint>
+    <Description></Description>
+    <Category>SolutionExplorer</Category>
+    <Script>SolutionExplorerEditItemSettings
+</Script>
+    <Glyph>Extension:SolutionExplorer|Glyphs\Actions\SolutionExplorerEditItemSettings.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actSolutionExplorerRefreshDirectory" addin="SolutionExplorer">
+    <Caption>Refresh</Caption>
+    <Hint>Refresh the directory content</Hint>
+    <Description></Description>
+    <Category>SolutionExplorer</Category>
+    <Script>SolutionExplorerRefreshDirectory
+</Script>
+    <Glyph>Extension:SolutionExplorer|Glyphs\Actions\SolutionExplorerRefreshDirectory.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actSolutionExplorerLocateInExplorer" addin="SolutionExplorer">
+    <Caption>Locate in Explorer</Caption>
+    <Hint>Locate the selected item in explorer</Hint>
+    <Description></Description>
+    <Category>SolutionExplorer</Category>
+    <Script>SolutionExplorerExecuteCommand("explorer.exe", "/select,%s")
+</Script>
+    <Glyph>Extension:SolutionExplorer|Glyphs\Actions\SolutionExplorerLocateInExplorer.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actSolutionExplorerLocateProjectRootInExplorer" addin="SolutionExplorer">
+    <Caption>Locate root in Explorer</Caption>
+    <Hint>Locate the project's root directory in explorer</Hint>
+    <Description></Description>
+    <Category>SolutionExplorer</Category>
+    <Script>SolutionExplorerExecuteCommand("explorer.exe", "/select,%s", "False", "False", "True")
+</Script>
+    <Glyph>Extension:SolutionExplorer|Glyphs\Actions\SolutionExplorerLocateProjectRootInExplorer.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actSolutionExplorerOpenDirInExplorer" addin="SolutionExplorer">
+    <Caption>Open in Explorer</Caption>
+    <Hint>Open the current directory in explorer</Hint>
+    <Description></Description>
+    <Category>SolutionExplorer</Category>
+    <Script>SolutionExplorerExecuteCommand("explorer.exe", "%s", "False", "False", "True")
+</Script>
+    <Glyph>Extension:SolutionExplorer|Glyphs\Actions\SolutionExplorerOpenDirInExplorer.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actSolutionExplorerOpenTerminal" addin="SolutionExplorer">
+    <Caption>Open Command Prompt</Caption>
+    <Hint>Open a Command Prompt in the selected directory</Hint>
+    <Description></Description>
+    <Category>SolutionExplorer</Category>
+    <Script>SolutionExplorerExecuteCommand("cmd.exe")
+</Script>
+    <Glyph>Extension:SolutionExplorer|Glyphs\Actions\SolutionExplorerOpenTerminal.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actSolutionExplorerOpenTerminalWithProjectRoot" addin="SolutionExplorer">
+    <Caption>Open Command Prompt with root</Caption>
+    <Hint>Open a Command Prompt in the selected project's root</Hint>
+    <Description></Description>
+    <Category>SolutionExplorer</Category>
+    <Script>SolutionExplorerExecuteCommand("cmd.exe", "", "False", "False", "True")
+</Script>
+    <Glyph>Extension:SolutionExplorer|Glyphs\Actions\SolutionExplorerOpenTerminalWithProjectRoot.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actSolutionExplorerShellContextualMenu" addin="SolutionExplorer">
+    <Caption>Shell Menu</Caption>
+    <Hint>Display the item(s) shell contextual menu</Hint>
+    <Description></Description>
+    <Category>SolutionExplorer</Category>
+    <Script>SolutionExplorerShellContextualMenu
+</Script>
+    <Glyph>Extension:SolutionExplorer|Glyphs\Actions\SolutionExplorerShellContextualMenu.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actSolutionExplorerProjectRootShellContextualMenu" addin="SolutionExplorer">
+    <Caption>Root Shell Menu</Caption>
+    <Hint>Display the root shell contextual menu</Hint>
+    <Description></Description>
+    <Category>SolutionExplorer</Category>
+    <Script>SolutionExplorerShellContextualMenu("True")
+</Script>
+    <Glyph>Extension:SolutionExplorer|Glyphs\Actions\SolutionExplorerProjectRootShellContextualMenu.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actSolutionExplorerAddSolution" addin="SolutionExplorer">
+    <Caption>Add an existing s&amp;olution</Caption>
+    <Hint>Add en existing solution to the selected solution</Hint>
+    <Description></Description>
+    <Category>SolutionExplorer</Category>
+    <Script>SolutionExplorerAddSolution
+</Script>
+    <Glyph>Extension:SolutionExplorer|Glyphs\Actions\SolutionExplorerAddSolution.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actSolutionExplorerNewSolution" addin="SolutionExplorer">
+    <Caption>New &amp;solution</Caption>
+    <Hint>Create a new solution in the selected solution</Hint>
+    <Description></Description>
+    <Category>SolutionExplorer</Category>
+    <Script>SolutionExplorerNewSolution
+</Script>
+    <Glyph>Extension:SolutionExplorer|Glyphs\Actions\SolutionExplorerNewSolution.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actSolutionExplorerNewProject" addin="SolutionExplorer">
+    <Caption>New &amp;project</Caption>
+    <Hint>Create a new project in the selected solution</Hint>
+    <Description></Description>
+    <Category>SolutionExplorer</Category>
+    <Script>SolutionExplorerNewProject
+</Script>
+    <Glyph>Extension:SolutionExplorer|Glyphs\Actions\SolutionExplorerNewProject.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actSolutionExplorerSaveSolutionItem" addin="SolutionExplorer">
+    <Caption>&amp;Save</Caption>
+    <Hint>Save the selected project or solution</Hint>
+    <Description></Description>
+    <Category>SolutionExplorer</Category>
+    <Script>SolutionExplorerSaveSolutionItem
+</Script>
+    <Glyph>Extension:SolutionExplorer|Glyphs\Actions\SolutionExplorerSaveSolutionItem.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actSolutionExplorerSaveSolutionItemAs" addin="SolutionExplorer">
+    <Caption>Save &amp;as...</Caption>
+    <Hint>Save the selected project or solution to the specified filename</Hint>
+    <Description></Description>
+    <Category>SolutionExplorer</Category>
+    <Script>SolutionExplorerSaveSolutionItemAs
+</Script>
+    <Glyph>Extension:SolutionExplorer|Glyphs\Actions\SolutionExplorerSaveSolutionItemAs.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actSolutionExplorerSaveAll" addin="SolutionExplorer">
+    <Caption>Save All</Caption>
+    <Hint>Save all the solutions, projects and files</Hint>
+    <Description></Description>
+    <Category>SolutionExplorer</Category>
+    <Script>FileSaveAll("True")
+</Script>
+    <Glyph>Extension:SolutionExplorer|Glyphs\Actions\SolutionExplorerSaveAll.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actSolutionExplorerRemoveItem" addin="SolutionExplorer">
+    <Caption>Re&amp;move</Caption>
+    <Hint>Remove the selected item from its directory, project or solution</Hint>
+    <Description></Description>
+    <Category>SolutionExplorer</Category>
+    <Script>SolutionExplorerRemoveItem
+</Script>
+    <Glyph>Extension:SolutionExplorer|Glyphs\Actions\SolutionExplorerRemoveItem.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actSolutionExplorerCloseItem" addin="SolutionExplorer">
+    <Caption>&amp;Close</Caption>
+    <Hint>Close the selected project or solution</Hint>
+    <Description></Description>
+    <Category>SolutionExplorer</Category>
+    <Script>SolutionExplorerCloseItem
+</Script>
+    <Glyph>Extension:SolutionExplorer|Glyphs\Actions\SolutionExplorerCloseItem.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actSolutionExplorerOpenSolutionItem" addin="SolutionExplorer">
+    <Caption>&amp;Open project/solution...</Caption>
+    <Hint>Open an existing project or solution</Hint>
+    <Description></Description>
+    <Category>SolutionExplorer</Category>
+    <Script>SolutionExplorerOpenSolutionItem
+</Script>
+    <Glyph>Extension:SolutionExplorer|Glyphs\Actions\SolutionExplorerOpenSolutionItem.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actSolutionExplorerOpen" addin="SolutionExplorer">
+    <Caption>Open</Caption>
+    <Hint>Open the selected file(s) for edition</Hint>
+    <Description></Description>
+    <Category>SolutionExplorer</Category>
+    <Script>SolutionExplorerOpen
+</Script>
+    <Glyph>Extension:SolutionExplorer|Glyphs\Actions\SolutionExplorerOpen.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actSolutionExplorerSetAsActiveProject" addin="SolutionExplorer">
+    <Caption>Set As Active Project</Caption>
+    <Hint>Define the selected project as the active project</Hint>
+    <Description></Description>
+    <Category>SolutionExplorer</Category>
+    <Script>SolutionExplorerSetAsActiveProject
+</Script>
+    <Glyph>Extension:SolutionExplorer|Glyphs\Actions\SolutionExplorerSetAsActiveProject.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actSolutionExplorerFindInFiles" addin="SolutionExplorer">
+    <Caption>Find in files...</Caption>
+    <Hint>Display the find/replace dialog for the selected directory, project or solution</Hint>
+    <Description></Description>
+    <Category>SolutionExplorer</Category>
+    <Script>SolutionExplorerFindInFiles
+</Script>
+    <Glyph>Glyphs\FindReplaceInFiles.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actCvsAdd" addin="SourceCodeControllers">
+    <Caption>CVS &amp;Add</Caption>
+    <Hint></Hint>
+    <Description></Description>
+    <Category>SourceCodeControllers</Category>
+    <Script>CvsAdd
+</Script>
+    <Glyph>Extension:SourceCodeControllers|Glyphs\Svn\menuAdd.ico</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actCvsRemove" addin="SourceCodeControllers">
+    <Caption>&amp;Remove</Caption>
+    <Hint></Hint>
+    <Description></Description>
+    <Category>SourceCodeControllers</Category>
+    <Script>CvsRemove
+</Script>
+    <Glyph>Extension:SourceCodeControllers|Glyphs\Svn\menudelete.ico</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actCvsUpdate" addin="SourceCodeControllers">
+    <Caption>CVS &amp;Update</Caption>
+    <Hint></Hint>
+    <Description></Description>
+    <Category>SourceCodeControllers</Category>
+    <Script>CvsUpdate
+</Script>
+    <Glyph>Extension:SourceCodeControllers|Glyphs\Svn\menuUpdate.ico</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actCvsCommit" addin="SourceCodeControllers">
+    <Caption>CVS &amp;Commit</Caption>
+    <Hint></Hint>
+    <Description></Description>
+    <Category>SourceCodeControllers</Category>
+    <Script>CvsCommit
+</Script>
+    <Glyph>Extension:SourceCodeControllers|Glyphs\Svn\menuCommit.ico</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actCvsCheckout" addin="SourceCodeControllers">
+    <Caption>CVS C&amp;heckout</Caption>
+    <Hint></Hint>
+    <Description></Description>
+    <Category>SourceCodeControllers</Category>
+    <Script>CvsCheckout
+</Script>
+    <Glyph>Extension:SourceCodeControllers|Glyphs\Svn\menuCheckout.ico</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actCvsImport" addin="SourceCodeControllers">
+    <Caption>&amp;Import</Caption>
+    <Hint></Hint>
+    <Description></Description>
+    <Category>SourceCodeControllers</Category>
+    <Script>CvsImport
+</Script>
+    <Glyph>Extension:SourceCodeControllers|Glyphs\Svn\menuImport.ico</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actCvsUpdateToRevision" addin="SourceCodeControllers">
+    <Caption>Update to revision</Caption>
+    <Hint></Hint>
+    <Description></Description>
+    <Category>SourceCodeControllers</Category>
+    <Script>CvsUpdateToRevision
+</Script>
+    <Glyph>Extension:SourceCodeControllers|Glyphs\Svn\menuupdate.ico</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actCvsRefreshStatus" addin="SourceCodeControllers">
+    <Caption>Refresh status</Caption>
+    <Hint></Hint>
+    <Description></Description>
+    <Category>SourceCodeControllers</Category>
+    <Script>CvsRefreshStatus
+</Script>
+    <Glyph>Extension:SourceCodeControllers|Glyphs\Svn\menuRefreshStatus.ico</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actSvnAdd" addin="SourceCodeControllers">
+    <Caption>SVN &amp;Add</Caption>
+    <Hint></Hint>
+    <Description></Description>
+    <Category>SourceCodeControllers</Category>
+    <Script>SvnAdd
+</Script>
+    <Glyph>Extension:SourceCodeControllers|Glyphs\Svn\menuAdd.ico</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actSvnDelete" addin="SourceCodeControllers">
+    <Caption>&amp;Delete</Caption>
+    <Hint></Hint>
+    <Description></Description>
+    <Category>SourceCodeControllers</Category>
+    <Script>SvnDelete
+</Script>
+    <Glyph>Extension:SourceCodeControllers|Glyphs\Svn\menuDelete.ico</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actSvnUpdate" addin="SourceCodeControllers">
+    <Caption>SVN &amp;Update</Caption>
+    <Hint></Hint>
+    <Description></Description>
+    <Category>SourceCodeControllers</Category>
+    <Script>SvnUpdate
+</Script>
+    <Glyph>Extension:SourceCodeControllers|Glyphs\Svn\menuUpdate.ico</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actSvnCommit" addin="SourceCodeControllers">
+    <Caption>SVN &amp;Commit</Caption>
+    <Hint></Hint>
+    <Description></Description>
+    <Category>SourceCodeControllers</Category>
+    <Script>SvnCommit
+</Script>
+    <Glyph>Extension:SourceCodeControllers|Glyphs\Svn\menuCommit.ico</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actSvnUpdateToRevision" addin="SourceCodeControllers">
+    <Caption>Update to re&amp;vision...</Caption>
+    <Hint></Hint>
+    <Description></Description>
+    <Category>SourceCodeControllers</Category>
+    <Script>SvnUpdateToRevision
+</Script>
+    <Glyph>Extension:SourceCodeControllers|Glyphs\Svn\menuupdate.ico</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actSvnImport" addin="SourceCodeControllers">
+    <Caption>&amp;Import</Caption>
+    <Hint></Hint>
+    <Description></Description>
+    <Category>SourceCodeControllers</Category>
+    <Script>SvnImport
+</Script>
+    <Glyph>Extension:SourceCodeControllers|Glyphs\Svn\menuImport.ico</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actSvnRevert" addin="SourceCodeControllers">
+    <Caption>&amp;Revert</Caption>
+    <Hint></Hint>
+    <Description></Description>
+    <Category>SourceCodeControllers</Category>
+    <Script>SvnRevert
+</Script>
+    <Glyph>Extension:SourceCodeControllers|Glyphs\Svn\menuRevert.ico</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actSvnCheckout" addin="SourceCodeControllers">
+    <Caption>SVN C&amp;heckout</Caption>
+    <Hint></Hint>
+    <Description></Description>
+    <Category>SourceCodeControllers</Category>
+    <Script>SvnCheckout
+</Script>
+    <Glyph>Extension:SourceCodeControllers|Glyphs\Svn\menuCheckout.ico</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actSvnCleanup" addin="SourceCodeControllers">
+    <Caption>C&amp;leanup</Caption>
+    <Hint></Hint>
+    <Description></Description>
+    <Category>SourceCodeControllers</Category>
+    <Script>SvnCleanup
+</Script>
+    <Glyph>Extension:SourceCodeControllers|Glyphs\Svn\menuCleanup.ico</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actSvnDiff" addin="SourceCodeControllers">
+    <Caption>D&amp;iff</Caption>
+    <Hint></Hint>
+    <Description></Description>
+    <Category>SourceCodeControllers</Category>
+    <Script>SvnDiff
+</Script>
+    <Glyph>Extension:SourceCodeControllers|Glyphs\Svn\menuDiff.ico</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actSvnRefreshStatus" addin="SourceCodeControllers">
+    <Caption>Refresh status</Caption>
+    <Hint></Hint>
+    <Description></Description>
+    <Category>SourceCodeControllers</Category>
+    <Script>SvnRefreshStatus
+</Script>
+    <Glyph>Extension:SourceCodeControllers|Glyphs\Svn\menuRefreshStatus.ico</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actSvnLock" addin="SourceCodeControllers">
+    <Caption>Get Lock...</Caption>
+    <Hint></Hint>
+    <Description></Description>
+    <Category>SourceCodeControllers</Category>
+    <Script>SvnLock
+</Script>
+    <Glyph>Extension:SourceCodeControllers|Glyphs\Svn\menuLock.ico</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actSvnUnlock" addin="SourceCodeControllers">
+    <Caption>Release lock</Caption>
+    <Hint></Hint>
+    <Description></Description>
+    <Category>SourceCodeControllers</Category>
+    <Script>SvnUnlock
+</Script>
+    <Glyph>Extension:SourceCodeControllers|Glyphs\Svn\menuUnlock.ico</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actSvnResolved" addin="SourceCodeControllers">
+    <Caption>Resolve</Caption>
+    <Hint></Hint>
+    <Description></Description>
+    <Category>SourceCodeControllers</Category>
+    <Script>SvnResolved
+</Script>
+    <Glyph>Extension:SourceCodeControllers|Glyphs\Svn\menuresolve.ico</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actDBRunActiveDocumentInDesigner" addin="DBFrontEnd">
+    <Caption>Run in Query Designer</Caption>
+    <Hint>Executes the SQL code from the active document in a new Query Designer</Hint>
+    <Description></Description>
+    <Category>SQLLanguage</Category>
+    <Script>DBRunActiveDocument("True")
+</Script>
+    <Glyph>Extension:SQLLanguage|Glyphs\Actions\DBRunActiveDocumentInDesigner.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actDBRunActiveDocument" addin="DBFrontEnd">
+    <Caption>Run Query</Caption>
+    <Hint>Executes the SQL code from the active document</Hint>
+    <Description></Description>
+    <Category>SQLLanguage</Category>
+    <Script>DBRunActiveDocument
+</Script>
+    <Glyph>Extension:SQLLanguage|Glyphs\Actions\DBRunActiveDocument.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actDBRunActiveDocumentSelectionInDesigner" addin="DBFrontEnd">
+    <Caption>Run selection in Query Designer</Caption>
+    <Hint>Executes the SQL code from the active document's selection in a new Query Designer</Hint>
+    <Description></Description>
+    <Category>SQLLanguage</Category>
+    <Script>DBRunActiveDocumentSelection("True")
+</Script>
+    <Glyph>Extension:SQLLanguage|Glyphs\Actions\DBRunActiveDocumentSelectionInDesigner.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actDBRunActiveDocumentSelection" addin="DBFrontEnd">
+    <Caption>Run selected Query</Caption>
+    <Hint>Executes the SQL code from the active document's selection</Hint>
+    <Description></Description>
+    <Category>SQLLanguage</Category>
+    <Script>DBRunActiveDocumentSelection
+</Script>
+    <Glyph>Extension:SQLLanguage|Glyphs\Actions\DBRunActiveDocumentSelection.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actXdebugProxyRegister" addin="Xdebug">
+    <Caption>Register to Xdebug proxy</Caption>
+    <Hint>Register to the Xdebug DBGp proxy</Hint>
+    <Description></Description>
+    <Category>Xdebug</Category>
+    <Script>XdebugProxyRegister
+</Script>
+    <Glyph>Extension:Xdebug|Glyphs\Actions\XdebugProxyRegister.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actXdebugProxyUnRegister" addin="Xdebug">
+    <Caption>Unregister from Xdebug proxy</Caption>
+    <Hint>Unregister from the Xdebug DBGp proxy</Hint>
+    <Description></Description>
+    <Category>Xdebug</Category>
+    <Script>XdebugProxyUnRegister
+</Script>
+    <Glyph>Extension:Xdebug|Glyphs\Actions\XdebugProxyUnRegister.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actXdebugStartListener" addin="Xdebug">
+    <Caption>Start Xdebug listener</Caption>
+    <Hint>Start listening for debug sessions from Xdebug</Hint>
+    <Description></Description>
+    <Category>Xdebug</Category>
+    <Script>XdebugStartListener
+</Script>
+    <Glyph>Extension:Xdebug|Glyphs\Actions\XdebugStartListener.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actXdebugStopListener" addin="Xdebug">
+    <Caption>Stop Xdebug listener</Caption>
+    <Hint>Stop listening for debug sessions from Xdebug</Hint>
+    <Description></Description>
+    <Category>Xdebug</Category>
+    <Script>XdebugStopListener
+</Script>
+    <Glyph>Extension:Xdebug|Glyphs\Actions\XdebugStopListener.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actDBExplorerEditConnections" addin="DBFrontEnd">
+    <Caption>Edit connections...</Caption>
+    <Hint>Show the preferences dialog to add, remove or edit the db connections</Hint>
+    <Description></Description>
+    <Category>DB</Category>
+    <Script>DBExplorerEditConnections
+</Script>
+    <Glyph>Extension:DBFrontEnd|Glyphs\Actions\DBExplorerEditConnections.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actDBExplorerShowLogWindow" addin="DBFrontEnd">
+    <Caption>Show log window...</Caption>
+    <Hint>Show global the log window</Hint>
+    <Description></Description>
+    <Category>DB</Category>
+    <Script>DBExplorerShowLogWindow
+</Script>
+    <Glyph>Extension:DBFrontEnd|Glyphs\Actions\DBExplorerShowLogWindow.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actDBExplorerQuery" addin="DBFrontEnd">
+    <Caption>Query</Caption>
+    <Hint>Query the selected connection using the internal query designer</Hint>
+    <Description></Description>
+    <Category>DB</Category>
+    <Script>DBExplorerQuery
+</Script>
+    <Glyph>Extension:DBFrontEnd|Glyphs\Actions\DBExplorerQuery.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actDBExplorerShowTableData" addin="DBFrontEnd">
+    <Caption>Show Data</Caption>
+    <Hint>Show the selected table or view's data using the internal query designer</Hint>
+    <Description></Description>
+    <Category>DB</Category>
+    <Script>DBExplorerShowTableData
+</Script>
+    <Glyph>Extension:DBFrontEnd|Glyphs\Actions\DBExplorerShowTableData.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actDBExplorerRefresh" addin="DBFrontEnd">
+    <Caption>Refresh</Caption>
+    <Hint>Refresh the database contents</Hint>
+    <Description></Description>
+    <Category>DB</Category>
+    <Script>DBExplorerRefresh
+</Script>
+    <Glyph>Extension:DBFrontEnd|Glyphs\Actions\DBExplorerRefresh.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actFTPCheckout" addin="FTP">
+    <Caption>FTP Checkout...</Caption>
+    <Hint>Checkout a FTP folder into the selected directory</Hint>
+    <Description></Description>
+    <Category>FTP</Category>
+    <Script>FTPCheckout
+</Script>
+    <Glyph>Extension:FTP|Glyphs\Actions\FTPCheckout.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actFTPPublish" addin="FTP">
+    <Caption>FTP Publish...</Caption>
+    <Hint>Publish the seleted item(s) to the specified FTP server</Hint>
+    <Description></Description>
+    <Category>FTP</Category>
+    <Script>FTPPublish
+</Script>
+    <Glyph>Extension:FTP|Glyphs\Actions\FTPPublish.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actFTPExplorerRename" addin="FTP">
+    <Caption>Rename</Caption>
+    <Hint>Rename the selected file or directory</Hint>
+    <Description></Description>
+    <Category>FTP</Category>
+    <Script>FTPExplorerRename
+</Script>
+    <Glyph>Extension:FTP|Glyphs\Actions\FTPExplorerRename.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actFTPExplorerChangeDirUp" addin="FTP">
+    <Caption>Change dir up</Caption>
+    <Hint>Browse to the parent directory</Hint>
+    <Description></Description>
+    <Category>FTP</Category>
+    <Script>FTPExplorerChangeDirUp
+</Script>
+    <Glyph>Extension:FTP|Glyphs\Actions\FTPExplorerChangeDirUp.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actFTPExplorerNewFolder" addin="FTP">
+    <Caption>New Folder</Caption>
+    <Hint>Create a new directory in the selected directory</Hint>
+    <Description></Description>
+    <Category>FTP</Category>
+    <Script>FTPExplorerNewFolder
+</Script>
+    <Glyph>Extension:FTP|Glyphs\Actions\FTPExplorerNewFolder.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actFTPExplorerDelete" addin="FTP">
+    <Caption>Delete</Caption>
+    <Hint>Delete the selected item(s)</Hint>
+    <Description></Description>
+    <Category>FTP</Category>
+    <Script>FTPExplorerDelete
+</Script>
+    <Glyph>Extension:FTP|Glyphs\Actions\FTPExplorerDelete.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actFTPExplorerChmod" addin="FTP">
+    <Caption>Chmod</Caption>
+    <Hint>Change the selected items attributes</Hint>
+    <Description></Description>
+    <Category>FTP</Category>
+    <Script>FTPExplorerChmod
+</Script>
+    <Glyph>Extension:FTP|Glyphs\Actions\FTPExplorerChmod.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actFTPExplorerRefresh" addin="FTP">
+    <Caption>Refresh</Caption>
+    <Hint>Refresh the directory listing</Hint>
+    <Description></Description>
+    <Category>FTP</Category>
+    <Script>FTPExplorerRefresh
+</Script>
+    <Glyph>Extension:FTP|Glyphs\Actions\FTPExplorerRefresh.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actFTPExplorerConnect" addin="FTP">
+    <Caption>Connect</Caption>
+    <Hint>Connect to the server</Hint>
+    <Description></Description>
+    <Category>FTP</Category>
+    <Script>FTPExplorerConnect
+</Script>
+    <Glyph>Extension:FTP|Glyphs\Actions\FTPExplorerConnect.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actFTPExplorerDisconnect" addin="FTP">
+    <Caption>Disconnect</Caption>
+    <Hint>Close the connection to the server</Hint>
+    <Description></Description>
+    <Category>FTP</Category>
+    <Script>FTPExplorerDisconnect
+</Script>
+    <Glyph>Extension:FTP|Glyphs\Actions\FTPExplorerDisconnect.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actFTPExplorerReconnect" addin="FTP">
+    <Caption>Reconnect</Caption>
+    <Hint>Reconnect to the server</Hint>
+    <Description></Description>
+    <Category>FTP</Category>
+    <Script>FTPExplorerReconnect
+</Script>
+    <Glyph>Extension:FTP|Glyphs\Actions\FTPExplorerReconnect.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actFTPExplorerEditServers" addin="FTP">
+    <Caption>Edit servers...</Caption>
+    <Hint>Show the preferences dialog to add, remove or edit the ftp servers</Hint>
+    <Description></Description>
+    <Category>FTP</Category>
+    <Script>FTPExplorerEditServers
+</Script>
+    <Glyph>Extension:FTP|Glyphs\Actions\FTPExplorerEditServers.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actFTPExplorerOpen" addin="FTP">
+    <Caption>Open in PHPEdit</Caption>
+    <Hint>Open the selected files in PHPEdit</Hint>
+    <Description></Description>
+    <Category>FTP</Category>
+    <Script>FTPExplorerOpen
+</Script>
+    <Glyph>Extension:FTP|Glyphs\Actions\FTPExplorerOpen.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actFTPExplorerShowLogWindow" addin="FTP">
+    <Caption>Show log window...</Caption>
+    <Hint>Show the current session's log window for this server</Hint>
+    <Description></Description>
+    <Category>FTP</Category>
+    <Script>FTPExplorerShowLogWindow
+</Script>
+    <Glyph>Extension:FTP|Glyphs\Actions\FTPExplorerShowLogWindow.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actFTPExplorerBrowse" addin="FTP">
+    <Caption>Browse</Caption>
+    <Hint>Browse to the selected item using the internal browser</Hint>
+    <Description></Description>
+    <Category>FTP</Category>
+    <Script>FTPExplorerBrowse
+</Script>
+    <Glyph>Extension:FTP|Glyphs\Actions\FTPExplorerBrowse.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actFTPExplorerSynchronizeWithSolutionExplorer" addin="FTP">
+    <Caption>Synchronize with Solution Explorer</Caption>
+    <Hint>Browse to the appropriate directory when the selection changes in the Solution Explorer</Hint>
+    <Description></Description>
+    <Category>FTP</Category>
+    <Script>SetBooleanProperty("/Extensions/FTP/FTPExplorer/SynchronizeWithSolutionExplorer")
+</Script>
+    <Glyph>Extension:FTP|Glyphs\Actions\FTPExplorerSynchronizeWithSolutionExplorer.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actFTPPublishActiveDocument" addin="FTP">
+    <Caption>Publish active document...</Caption>
+    <Hint>Display the FTP publish dialog for the current document</Hint>
+    <Description></Description>
+    <Category>FTP</Category>
+    <Script>FTPPublishActiveDocument
+</Script>
+    <Glyph>Extension:FTP|Glyphs\Actions\FTPPublishActiveDocument.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+  <Action id="actFTPPublishActiveDocumentWithProjectSettings" addin="FTP">
+    <Caption>Publish active document with previous publish settings</Caption>
+    <Hint>Publish the current document using the project's last publish settings</Hint>
+    <Description></Description>
+    <Category>FTP</Category>
+    <Script>FTPPublishActiveDocument("True")
+</Script>
+    <Glyph>Extension:FTP|Glyphs\Actions\FTPPublishActiveDocumentWithProjectSettings.bmp</Glyph>
+    <ShortCuts>
+      <ShortCut code="0"></ShortCut>
+    </ShortCuts>
+    <Context>
+      <NoSpecificContext/>
+    </Context>
+  </Action>
+</Actions>
