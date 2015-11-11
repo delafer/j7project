@@ -2,21 +2,21 @@ package org.delafer.xmlbench.compressors;
 
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.zip.Deflater;
-import java.util.zip.DeflaterOutputStream;
-import java.util.zip.Inflater;
-import java.util.zip.InflaterInputStream;
 
-public class JavaZipFast implements ICompressor {
+import net.jpountz.lz4.LZ4BlockInputStream;
+import net.jpountz.lz4.LZ4BlockOutputStream;
+import net.jpountz.lz4.LZ4Factory;
 
-	public static final int UID = 2;
+public class LZ4CompressorUnsafe implements ICompressor {
+
+	public static final int UID = 5;
 
 
 	/* (non-Javadoc)
 	 * @see org.delafer.xmlbench.compressors.ICompressor#getName()
 	 */
 	public String getName() {
-		return "Build-in Java ZIP Deflater (fast mode)";
+		return "LZ4 Compressor (Java Unsafe)";
 	}
 
 	/* (non-Javadoc)
@@ -25,8 +25,6 @@ public class JavaZipFast implements ICompressor {
 	public String getDescription() {
 		return getName();
 	}
-
-	private static int BUFFER_SIZE = 512;
 
 	/* (non-Javadoc)
 	 * @see org.delafer.xmlbench.compressors.ICompressor#getURL()
@@ -38,9 +36,8 @@ public class JavaZipFast implements ICompressor {
 	/* (non-Javadoc)
 	 * @see org.delafer.xmlbench.compressors.ICompressor#decompressData(java.io.InputStream)
 	 */
-	public InputStream decompressor(InputStream is) {
-
-		InflaterInputStream iis = new InflaterInputStream(is);
+	public InputStream decompressor(InputStream is) throws Exception{
+		LZ4BlockInputStream iis = new LZ4BlockInputStream(is, LZ4Factory.fastestJavaInstance().fastDecompressor());
 		return iis;
 	}
 
@@ -48,8 +45,8 @@ public class JavaZipFast implements ICompressor {
 	 * @see org.delafer.xmlbench.compressors.ICompressor#compressData(java.io.OutputStream)
 	 */
 
-	public OutputStream compressor(OutputStream inData) {
-		DeflaterOutputStream	deflaterStream = new FixedDeflaterOutputStream(inData,  Deflater.BEST_SPEED);
+	public OutputStream compressor(OutputStream inData)throws Exception {
+		LZ4BlockOutputStream deflaterStream = new LZ4BlockOutputStream(inData, ( 1 << 16),  LZ4Factory.fastestJavaInstance().fastCompressor());
 		return deflaterStream;
 
 	}

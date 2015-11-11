@@ -10,7 +10,7 @@ package org.libjpegturbo.turbojpeg;
 public class TJException extends Exception {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 5739825299598164754L;
 
@@ -50,7 +50,8 @@ public class TJException extends Exception {
 	 * @param writableStackTrace
 	 */
 	public TJException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-		super(message, cause, enableSuppression, writableStackTrace);
+		super(message, cause);
+		//super(message, cause, enableSuppression, writableStackTrace);
 	}
 
 }

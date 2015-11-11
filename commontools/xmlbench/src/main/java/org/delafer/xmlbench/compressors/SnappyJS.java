@@ -15,7 +15,7 @@ public class SnappyJS implements ICompressor {
 	 * @see org.delafer.xmlbench.compressors.ICompressor#getName()
 	 */
 	public String getName() {
-		return "Google Snappy Jarnbjo";
+		return "Snappy Jarnbjo (Google codec)";
 	}
 
 	/* (non-Javadoc)

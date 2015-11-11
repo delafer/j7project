@@ -10,7 +10,7 @@ import org.anarres.lzo.commons.LzoCompressorOutputStream;
 public class LZOCompressor implements ICompressor {
 
 	private static final LzoAlgorithm ALGORITM = LzoAlgorithm.LZO1X;
-	public static final int UID = 18;
+	public static final int UID = 8;
 
 
 	/* (non-Javadoc)

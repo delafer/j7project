@@ -9,7 +9,7 @@ import java.util.zip.InflaterInputStream;
 
 public class Exificient implements ICompressor {
 
-	public static final int UID = 4;
+	public static final int UID = 1000;
 
 
 	/* (non-Javadoc)

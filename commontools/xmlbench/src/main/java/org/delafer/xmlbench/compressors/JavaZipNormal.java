@@ -8,26 +8,26 @@ import java.util.zip.Inflater;
 import java.util.zip.InflaterInputStream;
 
 public class JavaZipNormal implements ICompressor {
-	
-	public static final int UID = 2;
 
-	
+	public static final int UID = 3;
+
+
 	/* (non-Javadoc)
 	 * @see org.delafer.xmlbench.compressors.ICompressor#getName()
 	 */
 	public String getName() {
 		return "Build-in Java ZIP Deflater (normal mode)";
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.delafer.xmlbench.compressors.ICompressor#getDescription()
 	 */
 	public String getDescription() {
 		return getName();
 	}
-	
+
 	private static int BUFFER_SIZE = 512;
-	
+
 	/* (non-Javadoc)
 	 * @see org.delafer.xmlbench.compressors.ICompressor#getURL()
 	 */
@@ -39,11 +39,11 @@ public class JavaZipNormal implements ICompressor {
 	 * @see org.delafer.xmlbench.compressors.ICompressor#decompressData(java.io.InputStream)
 	 */
 	public InputStream decompressor(InputStream is) {
-		
+
 		InflaterInputStream iis = new InflaterInputStream(is);
 		return iis;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.delafer.xmlbench.compressors.ICompressor#compressData(java.io.OutputStream)
 	 */
@@ -53,5 +53,5 @@ public class JavaZipNormal implements ICompressor {
 		return deflaterStream;
 
 	}
-	
+
 }

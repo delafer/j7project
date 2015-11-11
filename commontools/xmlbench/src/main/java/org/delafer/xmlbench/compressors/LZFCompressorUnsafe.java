@@ -3,20 +3,23 @@ package org.delafer.xmlbench.compressors;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import net.jpountz.lz4.LZ4BlockInputStream;
-import net.jpountz.lz4.LZ4BlockOutputStream;
-import net.jpountz.lz4.LZ4Factory;
+import com.ning.compress.BufferRecycler;
+import com.ning.compress.lzf.LZFChunk;
+import com.ning.compress.lzf.LZFInputStream;
+import com.ning.compress.lzf.LZFOutputStream;
+import com.ning.compress.lzf.util.ChunkDecoderFactory;
+import com.ning.compress.lzf.util.ChunkEncoderFactory;
 
-public class LZ4Compressor implements ICompressor {
+public class LZFCompressorUnsafe implements ICompressor {
 
-	public static final int UID = 13;
+	public static final int UID = 7;
 
 
 	/* (non-Javadoc)
 	 * @see org.delafer.xmlbench.compressors.ICompressor#getName()
 	 */
 	public String getName() {
-		return "LZ4 Compressor (Java Safe)";
+		return "LZF (Java Unsafe) Compressor by Marc A. Lehmann";
 	}
 
 	/* (non-Javadoc)
@@ -37,7 +40,8 @@ public class LZ4Compressor implements ICompressor {
 	 * @see org.delafer.xmlbench.compressors.ICompressor#decompressData(java.io.InputStream)
 	 */
 	public InputStream decompressor(InputStream is) throws Exception{
-		LZ4BlockInputStream iis = new LZ4BlockInputStream(is, LZ4Factory.safeInstance().fastDecompressor());
+
+		LZFInputStream iis = new LZFInputStream(ChunkDecoderFactory.safeInstance(), is, BufferRecycler.instance(), false);
 		return iis;
 	}
 
@@ -46,7 +50,7 @@ public class LZ4Compressor implements ICompressor {
 	 */
 
 	public OutputStream compressor(OutputStream inData)throws Exception {
-		LZ4BlockOutputStream deflaterStream = new LZ4BlockOutputStream(inData, ( 1 << 16),  LZ4Factory.safeInstance().fastCompressor());
+		LZFOutputStream deflaterStream = new LZFOutputStream(ChunkEncoderFactory.safeInstance(LZFChunk.MAX_CHUNK_LEN), inData);
 		return deflaterStream;
 
 	}

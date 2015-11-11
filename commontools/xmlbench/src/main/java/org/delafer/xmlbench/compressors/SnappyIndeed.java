@@ -2,21 +2,22 @@ package org.delafer.xmlbench.compressors;
 
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.zip.Deflater;
-import java.util.zip.DeflaterOutputStream;
-import java.util.zip.Inflater;
-import java.util.zip.InflaterInputStream;
 
-public class JavaZipFast implements ICompressor {
+import com.indeed.util.compress.BlockCompressorStream;
+import com.indeed.util.compress.BlockDecompressorStream;
+import com.indeed.util.compress.snappy.SnappyCompressor;
+import com.indeed.util.compress.snappy.SnappyDecompressor;
 
-	public static final int UID = 2;
+public class SnappyIndeed implements ICompressor {
+
+	public static final int UID = 9;
 
 
 	/* (non-Javadoc)
 	 * @see org.delafer.xmlbench.compressors.ICompressor#getName()
 	 */
 	public String getName() {
-		return "Build-in Java ZIP Deflater (fast mode)";
+		return "Snappy (Indeed JNI Java-Port)";
 	}
 
 	/* (non-Javadoc)
@@ -25,8 +26,6 @@ public class JavaZipFast implements ICompressor {
 	public String getDescription() {
 		return getName();
 	}
-
-	private static int BUFFER_SIZE = 512;
 
 	/* (non-Javadoc)
 	 * @see org.delafer.xmlbench.compressors.ICompressor#getURL()
@@ -38,9 +37,8 @@ public class JavaZipFast implements ICompressor {
 	/* (non-Javadoc)
 	 * @see org.delafer.xmlbench.compressors.ICompressor#decompressData(java.io.InputStream)
 	 */
-	public InputStream decompressor(InputStream is) {
-
-		InflaterInputStream iis = new InflaterInputStream(is);
+	public InputStream decompressor(InputStream is) throws Exception{
+		BlockDecompressorStream iis = new BlockDecompressorStream(is, new SnappyDecompressor());
 		return iis;
 	}
 
@@ -48,9 +46,9 @@ public class JavaZipFast implements ICompressor {
 	 * @see org.delafer.xmlbench.compressors.ICompressor#compressData(java.io.OutputStream)
 	 */
 
-	public OutputStream compressor(OutputStream inData) {
-		DeflaterOutputStream	deflaterStream = new FixedDeflaterOutputStream(inData,  Deflater.BEST_SPEED);
-		return deflaterStream;
+	public OutputStream compressor(OutputStream inData)throws Exception {
+		BlockCompressorStream bcs = new BlockCompressorStream(inData, new SnappyCompressor());
+		return bcs;
 
 	}
 

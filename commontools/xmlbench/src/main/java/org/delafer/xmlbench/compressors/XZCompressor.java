@@ -9,7 +9,7 @@ import org.tukaani.xz.XZOutputStream;
 
 public class XZCompressor implements ICompressor {
 
-	public static final int UID = 14;
+	public static final int UID = 13;
 
 
 	/* (non-Javadoc)

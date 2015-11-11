@@ -426,7 +426,7 @@ public final class ObjArgs {
 
    private final static HashMap<Class, Class> autoConv;
    static {
-	   autoConv = new HashMap<>(8, 1f);
+	   autoConv = new HashMap<Class, Class>(8, 1f);
 	   autoConv.put(int.class, Integer.class);
 	   autoConv.put(long.class, Long.class);
 	   autoConv.put(byte.class, Byte.class);

@@ -3,21 +3,23 @@ package org.delafer.xmlbench.compressors;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import com.indeed.util.compress.BlockCompressorStream;
-import com.indeed.util.compress.BlockDecompressorStream;
-import com.indeed.util.compress.snappy.SnappyCompressor;
-import com.indeed.util.compress.snappy.SnappyDecompressor;
+import com.ning.compress.BufferRecycler;
+import com.ning.compress.lzf.LZFChunk;
+import com.ning.compress.lzf.LZFInputStream;
+import com.ning.compress.lzf.LZFOutputStream;
+import com.ning.compress.lzf.util.ChunkDecoderFactory;
+import com.ning.compress.lzf.util.ChunkEncoderFactory;
 
-public class IndeedSnappy implements ICompressor {
+public class LZFCompressorSafe implements ICompressor {
 
-	public static final int UID = 16;
+	public static final int UID = 6;
 
 
 	/* (non-Javadoc)
 	 * @see org.delafer.xmlbench.compressors.ICompressor#getName()
 	 */
 	public String getName() {
-		return "Snappy (Indeed Java-Port)";
+		return "LZF (Java Safe) Compressor by Marc A. Lehmann";
 	}
 
 	/* (non-Javadoc)
@@ -38,7 +40,8 @@ public class IndeedSnappy implements ICompressor {
 	 * @see org.delafer.xmlbench.compressors.ICompressor#decompressData(java.io.InputStream)
 	 */
 	public InputStream decompressor(InputStream is) throws Exception{
-		BlockDecompressorStream iis = new BlockDecompressorStream(is, new SnappyDecompressor());
+
+		LZFInputStream iis = new LZFInputStream(ChunkDecoderFactory.safeInstance(), is, BufferRecycler.instance(), false);
 		return iis;
 	}
 
@@ -47,8 +50,8 @@ public class IndeedSnappy implements ICompressor {
 	 */
 
 	public OutputStream compressor(OutputStream inData)throws Exception {
-		BlockCompressorStream bcs = new BlockCompressorStream(inData, new SnappyCompressor());
-		return bcs;
+		LZFOutputStream deflaterStream = new LZFOutputStream(ChunkEncoderFactory.safeInstance(LZFChunk.MAX_CHUNK_LEN), inData);
+		return deflaterStream;
 
 	}
 

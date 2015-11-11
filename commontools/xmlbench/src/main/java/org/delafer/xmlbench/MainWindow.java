@@ -22,6 +22,10 @@ public class MainWindow {
 	 */
 	public static void main(String[] args) {
 		try {
+
+			System.out.println(System.getProperty("java.vm.name"));
+			System.out.println(System.getProperty("java.vm.info"));
+
 			MainWindow window = new MainWindow();
 			Shutdown.addHook();
 			window.open();
@@ -32,7 +36,7 @@ public class MainWindow {
 
 	public MainWindow() {
 		super();
-		display = Display.getDefault(); 
+		display = Display.getDefault();
 	}
 
 	/**
@@ -62,13 +66,13 @@ public class MainWindow {
 		shlXmlBenchmarks.setImage(ImageRepository.getImage("main_icon"));
 		Menu menu = new Menu(shlXmlBenchmarks, SWT.BAR);
 		shlXmlBenchmarks.setMenuBar(menu);
-		
+
 		MenuItem mntmNewSubmenu = new MenuItem(menu, SWT.CASCADE);
 		mntmNewSubmenu.setText("Menu");
-		
+
 		Menu menu_1 = new Menu(mntmNewSubmenu);
 		mntmNewSubmenu.setMenu(menu_1);
-		
+
 		MenuItem mntmNewItem_1 = new MenuItem(menu_1, SWT.NONE);
 		mntmNewItem_1.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -78,7 +82,7 @@ public class MainWindow {
 			}
 		});
 		mntmNewItem_1.setText("Exit");
-		
+
 		SmartWizard composite = new SmartWizard(shlXmlBenchmarks, SWT.NONE);
 		composite.init();
 	}

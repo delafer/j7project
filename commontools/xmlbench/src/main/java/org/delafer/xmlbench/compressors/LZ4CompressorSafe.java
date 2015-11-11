@@ -3,19 +3,20 @@ package org.delafer.xmlbench.compressors;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import org.xerial.snappy.SnappyInputStream;
-import org.xerial.snappy.SnappyOutputStream;
+import net.jpountz.lz4.LZ4BlockInputStream;
+import net.jpountz.lz4.LZ4BlockOutputStream;
+import net.jpountz.lz4.LZ4Factory;
 
-public class XerialSnappy implements ICompressor {
+public class LZ4CompressorSafe implements ICompressor {
 
-	public static final int UID = 15;
+	public static final int UID = 4;
 
 
 	/* (non-Javadoc)
 	 * @see org.delafer.xmlbench.compressors.ICompressor#getName()
 	 */
 	public String getName() {
-		return "Snappy Compressor (Xerial Java-Port)";
+		return "LZ4 Compressor (Java Safe)";
 	}
 
 	/* (non-Javadoc)
@@ -36,11 +37,8 @@ public class XerialSnappy implements ICompressor {
 	 * @see org.delafer.xmlbench.compressors.ICompressor#decompressData(java.io.InputStream)
 	 */
 	public InputStream decompressor(InputStream is) throws Exception{
-
-		InputStream a;
-
-		SnappyInputStream is2 = new SnappyInputStream(is);
-		return is2;
+		LZ4BlockInputStream iis = new LZ4BlockInputStream(is, LZ4Factory.safeInstance().fastDecompressor());
+		return iis;
 	}
 
 	/* (non-Javadoc)
@@ -48,7 +46,7 @@ public class XerialSnappy implements ICompressor {
 	 */
 
 	public OutputStream compressor(OutputStream inData)throws Exception {
-		SnappyOutputStream deflaterStream = new SnappyOutputStream(inData);
+		LZ4BlockOutputStream deflaterStream = new LZ4BlockOutputStream(inData, ( 1 << 16),  LZ4Factory.safeInstance().fastCompressor());
 		return deflaterStream;
 
 	}

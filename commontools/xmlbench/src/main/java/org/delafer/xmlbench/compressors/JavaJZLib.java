@@ -6,26 +6,26 @@ import java.io.OutputStream;
 import com.jcraft.jzlib.JZlib;
 
 public class JavaJZLib implements ICompressor {
-	
-	public static final int UID = 3;
 
-	
+	public static final int UID = 1;
+
+
 	/* (non-Javadoc)
 	 * @see org.delafer.xmlbench.compressors.ICompressor#getName()
 	 */
 	public String getName() {
 		return "JZlib is a implementation of zlib/zip in pure Java (fast mode)";
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.delafer.xmlbench.compressors.ICompressor#getDescription()
 	 */
 	public String getDescription() {
 		return getName();
 	}
-	
+
 	public static int BUFFER_SIZE = 2048;
-	
+
 	/* (non-Javadoc)
 	 * @see org.delafer.xmlbench.compressors.ICompressor#getURL()
 	 */
@@ -39,7 +39,7 @@ public class JavaJZLib implements ICompressor {
 	public InputStream decompressor(InputStream is)throws Exception  {
 		return new com.jcraft.jzlib.InflaterInputStream(is, new com.jcraft.jzlib.Inflater(), BUFFER_SIZE);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.delafer.xmlbench.compressors.ICompressor#compressData(java.io.OutputStream)
 	 */
@@ -49,5 +49,5 @@ public class JavaJZLib implements ICompressor {
 		return new com.jcraft.jzlib.DeflaterOutputStream(inData, deflt, BUFFER_SIZE);
 
 	}
-	
+
 }

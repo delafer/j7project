@@ -3,14 +3,10 @@ package org.delafer.xmlbench.compressors;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import com.ning.compress.BufferRecycler;
-import com.ning.compress.lzf.LZFChunk;
-import com.ning.compress.lzf.LZFInputStream;
-import com.ning.compress.lzf.LZFOutputStream;
-import com.ning.compress.lzf.util.ChunkDecoderFactory;
-import com.ning.compress.lzf.util.ChunkEncoderFactory;
+import org.xerial.snappy.SnappyInputStream;
+import org.xerial.snappy.SnappyOutputStream;
 
-public class LZFCompressor implements ICompressor {
+public class SnappyXerial implements ICompressor {
 
 	public static final int UID = 12;
 
@@ -19,7 +15,7 @@ public class LZFCompressor implements ICompressor {
 	 * @see org.delafer.xmlbench.compressors.ICompressor#getName()
 	 */
 	public String getName() {
-		return "LZF (Java Safe) Compressor by Marc A. Lehmann";
+		return "Snappy (Xerial JNI Java-Port)";
 	}
 
 	/* (non-Javadoc)
@@ -40,9 +36,8 @@ public class LZFCompressor implements ICompressor {
 	 * @see org.delafer.xmlbench.compressors.ICompressor#decompressData(java.io.InputStream)
 	 */
 	public InputStream decompressor(InputStream is) throws Exception{
-
-		LZFInputStream iis = new LZFInputStream(ChunkDecoderFactory.safeInstance(), is, BufferRecycler.instance(), false);
-		return iis;
+		SnappyInputStream is2 = new SnappyInputStream(is);
+		return is2;
 	}
 
 	/* (non-Javadoc)
@@ -50,7 +45,7 @@ public class LZFCompressor implements ICompressor {
 	 */
 
 	public OutputStream compressor(OutputStream inData)throws Exception {
-		LZFOutputStream deflaterStream = new LZFOutputStream(ChunkEncoderFactory.safeInstance(LZFChunk.MAX_CHUNK_LEN), inData);
+		SnappyOutputStream deflaterStream = new SnappyOutputStream(inData);
 		return deflaterStream;
 
 	}

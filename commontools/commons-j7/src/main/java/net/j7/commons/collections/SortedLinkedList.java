@@ -128,7 +128,7 @@ public class SortedLinkedList<E> extends AbstractSequentialList<E> implements Li
      */
     private void linkFirst(E e) {
         final Node<E> f = first;
-        final Node<E> newNode = new Node<>(null, e, f);
+        final Node<E> newNode = new Node<E>(null, e, f);
         first = newNode;
         if (f == null)
             last = newNode;
@@ -143,7 +143,7 @@ public class SortedLinkedList<E> extends AbstractSequentialList<E> implements Li
      */
     void linkLast(E e) {
         final Node<E> l = last;
-        final Node<E> newNode = new Node<>(l, e, null);
+        final Node<E> newNode = new Node<E>(l, e, null);
         last = newNode;
         if (l == null)
             first = newNode;
@@ -159,7 +159,7 @@ public class SortedLinkedList<E> extends AbstractSequentialList<E> implements Li
     void linkBefore(E e, Node<E> succ) {
         // assert succ != null;
         final Node<E> pred = succ.prev;
-        final Node<E> newNode = new Node<>(pred, e, succ);
+        final Node<E> newNode = new Node<E>(pred, e, succ);
         succ.prev = newNode;
         if (pred == null)
             first = newNode;
@@ -452,7 +452,7 @@ public class SortedLinkedList<E> extends AbstractSequentialList<E> implements Li
 
         for (Object o : a) {
             @SuppressWarnings("unchecked") E e = (E) o;
-            Node<E> newNode = new Node<>(pred, e, null);
+            Node<E> newNode = new Node<E>(pred, e, null);
             if (pred == null)
                 first = newNode;
             else

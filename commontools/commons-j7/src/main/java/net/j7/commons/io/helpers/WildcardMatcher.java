@@ -57,7 +57,7 @@ public class WildcardMatcher {
 	      boolean anyChars = false;
 	      int textIdx = 0;
 	      int wcsIdx = 0;
-	      FastStack<int[]> backtrack = new FastStack<>(6);
+	      FastStack<int[]> backtrack = new FastStack<int[]>(6);
 	      // loop around a backtrack stack, to handle complex * matching
 	      do {
 	         if (backtrack.size() > 0) {
@@ -164,7 +164,7 @@ public class WildcardMatcher {
 	         return new String[]{txt};
 	      }
 	      char[] array = txt.toCharArray();
-	      ArrayList<String> list = new ArrayList<>();
+	      ArrayList<String> list = new ArrayList<String>();
 	      StringBuilder sb = new StringBuilder(txt.length());
 	      for (int i = 0; i < array.length; i++) {
 	         if (array[i] == '?' || array[i] == '*') {
