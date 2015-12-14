@@ -47,8 +47,25 @@ public class Range implements Comparable<Range>, Cloneable, Serializable {
 		return rangeFrom != null;
 	}
 
+	public boolean intersects(Range subRange) {
+		if (subRange == null) return false;
+		return Math.max(this.lowerBound(), subRange.lowerBound()) <= Math.min(this.upperBound(), subRange.upperBound());
+	}
+
+
+
+	public boolean contains(Range subRange) {
+		if (subRange == null) return true;
+		return this.lowerBound() <= subRange.lowerBound() && this.upperBound() >= subRange.upperBound();
+	}
+
+	public boolean subset(Range range) {
+		if (range == null) return false;
+		return range.lowerBound() <= this.lowerBound() && range.upperBound() >= this.upperBound();
+	}
+
 	public int length() {
-		return !hasLowerBound() && !hasUpperBound() ? (rangeFrom - rangeTo) : -1;
+		return hasLowerBound() && hasUpperBound() ? (rangeTo - rangeFrom + 1) : -1;
 	}
 
 	public int upperBound() {
@@ -78,7 +95,11 @@ public class Range implements Comparable<Range>, Cloneable, Serializable {
 
 	@Override
 	public int compareTo(Range o) {
-		return 0;
+		int dif = this.lowerBound() - o.lowerBound();
+		if (dif == 0) {
+			dif = this.upperBound() - o.upperBound();
+		}
+		return dif;
 	}
 
 	@Override
