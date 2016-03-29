@@ -107,3 +107,6 @@ workspace/Servers/*/web.xml
 frontend/client-gui/new  2.txt
 #*.dll
 *.properties
+.recommenders/
+commontools/desktop.ini
+commontools/xanderView/_zlst.csv

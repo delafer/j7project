@@ -8,11 +8,11 @@ import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileChannel.MapMode;
 
-import net.j7.commons.base.Equals;
-
 import org.delafer.xanderView.gui.config.ApplInstance;
 import org.delafer.xanderView.hash.Hasher;
 import org.delafer.xanderView.interfaces.IAbstractReader;
+
+import net.j7.commons.base.Equals;
 
 public class FileImageEntry extends ImageEntry<String> {
 

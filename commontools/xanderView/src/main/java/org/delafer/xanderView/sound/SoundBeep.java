@@ -29,12 +29,11 @@ public class SoundBeep {
 			is = new BufferedInputStream(SoundBeep.class.getResourceAsStream("/audio/sound01.wav"));
 		    AudioFormat format;
 		    DataLine.Info info;
-		    Clip clip;
 
 		    final AudioInputStream stream = AudioSystem.getAudioInputStream(is);
 		    format = stream.getFormat();
 		    info = new DataLine.Info(Clip.class, format);
-		    clip = (Clip) AudioSystem.getLine(info);
+		    final Clip clip = (Clip) AudioSystem.getLine(info);
 		    clip.open(stream);
 		    clip.addLineListener(new LineListener() {
 				public void update(LineEvent le) {

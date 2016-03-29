@@ -101,7 +101,7 @@ public class CopyService {
 		} catch (InterruptedException e) {}
 	}
 
-	public void copy(ImageEntry<?> entry, CopyObserver observer) {
+	public void copy(final ImageEntry<?> entry, final CopyObserver observer) {
 			Thread worker = new Thread("copyService") {
 
 				@Override

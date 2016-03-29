@@ -3,9 +3,9 @@ package org.delafer.xanderView.file.entry;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
-import net.sf.sevenzipjbinding.IInArchive;
-
 import org.delafer.xanderView.hash.Hasher;
+
+import net.sf.sevenzipjbinding.IInArchive;
 
 public class FileDirEntry extends ImageEntry<String> {
 
