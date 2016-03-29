@@ -106,7 +106,7 @@ public class FileReader implements IAbstractReader {
 					while(notDone){
 						try{
 							watchKey = watchService.poll(1,TimeUnit.SECONDS);
-							List<WatchEvent<?>> events =watchKey != null ?  watchKey.pollEvents() : Collections.emptyList();
+							List<WatchEvent<?>> events =watchKey != null ?  watchKey.pollEvents() : Collections.EMPTY_LIST;
 							for(WatchEvent<?> event : events){
 								Kind<?> kind = event.kind();
 			                    if (kind == StandardWatchEventKinds.OVERFLOW) {
