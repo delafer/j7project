@@ -9,7 +9,7 @@ import net.j7.commons.collections.Maps;
 import net.j7.commons.strings.StringUtils;
 
 /**
- * The Class Walker.
+ * The Class<?> Walker.
  *
  * @author tavrovsa
  *
@@ -86,7 +86,7 @@ public final class Walker extends AbstractWalker {
 		Object pro = processed.get(obj);
 		if (pro!=null) return pro;
 
-		Class cls = obj.getClass();
+		Class<?> cls = obj.getClass();
 
 		if (cls.isPrimitive() || IGNR.contains(cls)) {
 			return toReturn(obj, obj, processed);
@@ -200,7 +200,7 @@ public final class Walker extends AbstractWalker {
 		return sb.append(field).toString();
 	}
 
-	private static final Field[] getAllFields(Class clazz) {
+	private static final Field[] getAllFields(Class<?> clazz) {
 		Set<Field> allFields = new HashSet<Field>();
 		while (clazz!=null) {
 			Field[] fields = clazz.getDeclaredFields();
@@ -214,9 +214,9 @@ public final class Walker extends AbstractWalker {
 		return all;
 	}
 
-	private final static transient Map<Class, Field[]> cachedField= Maps.newSynchronizedMap();
+	private final static transient Map<Class<?>, Field[]> cachedField= Maps.newSynchronizedMap();
 
-	private static final Field[] getCachedFields(Class clazz) {
+	private static final Field[] getCachedFields(Class<?> clazz) {
 		Field[] fields = cachedField.get(clazz);
 		if (null==fields) {
 			fields = getAllFields(clazz);
