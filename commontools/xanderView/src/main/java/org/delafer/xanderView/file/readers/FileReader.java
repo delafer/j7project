@@ -7,23 +7,20 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.WatchEvent.Kind;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
+
+import net.j7.commons.io.*;
+import net.j7.commons.io.AbstractFileProcessor.FileInfo;
+import net.j7.commons.io.AbstractFileProcessor.Recurse;
 
 import org.delafer.xanderView.comparator.BasicFileComparator;
 import org.delafer.xanderView.file.ContentChangeWatcher;
-import org.delafer.xanderView.file.entry.FileImageEntry;
-import org.delafer.xanderView.file.entry.ImageEntry;
+import org.delafer.xanderView.file.entry.*;
 import org.delafer.xanderView.file.entry.ImageEntry.ImageType;
 import org.delafer.xanderView.interfaces.IAbstractReader;
 
 import com.sun.nio.file.ExtendedWatchEventModifier;
-
-import net.j7.commons.io.AbstractFileProcessor;
-import net.j7.commons.io.AbstractFileProcessor.FileInfo;
-import net.j7.commons.io.FileUtils;
 
 public class FileReader implements IAbstractReader {
 
@@ -64,7 +61,7 @@ public class FileReader implements IAbstractReader {
 
 				}
 			};
-			scanner.setRecurseSubDirectories(true);
+			scanner.setMode(Recurse.FNE);
 			scanner.start();
 
 		} catch (Exception e) {
