@@ -2,10 +2,11 @@ package org.delafer.xanderView.file.entry;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
-
-import org.delafer.xanderView.hash.Hasher;
+import java.util.Objects;
 
 import net.sf.sevenzipjbinding.IInArchive;
+
+import org.delafer.xanderView.hash.Hasher;
 
 public class FileDirEntry extends ImageEntry<String> {
 
@@ -22,15 +23,26 @@ public class FileDirEntry extends ImageEntry<String> {
 		this.name = name;
 		this.size = size;
 		this.identifier = fullPath;
-		if (null != fullPath)
+	}
+
+	/* (non-Javadoc)
+	 * @see org.delafer.xanderView.file.entry.ImageEntry#CRC()
+	 */
+	@Override
+	public Long CRC() {
+
+		if (this.crc == null && null != identifier)
 		try {
-			calcCRC(readNIOHash(fullPath));
+			calcCRC(readNIOHash(identifier));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
+		return this.crc;
 	}
 
-	public FileDirEntry(String fullPath, String name, long size, long crc) {
+
+	public FileDirEntry(String fullPath, String name, long size, Long crc) {
 		this.name = name;
 		this.size = size;
 		this.identifier = fullPath;
@@ -74,8 +86,9 @@ public class FileDirEntry extends ImageEntry<String> {
 
 	@Override
 	public int hashCode() {
-		int result =  (int) (crc ^ (crc >>> 32));
-		return result;
+//		int result =  (int) (crc ^ (crc >>> 32));
+//		return result;
+		return super.hashCode();
 	}
 
 	@Override
@@ -84,7 +97,7 @@ public class FileDirEntry extends ImageEntry<String> {
 
 		if (!(obj instanceof ImageEntry))  return false;
 		final ImageEntry<?> o = (ImageEntry<?>) obj;
-		return (crc == o.crc);
+		return (Objects.equals(CRC(), o.CRC()));
 	}
 
 	@Override

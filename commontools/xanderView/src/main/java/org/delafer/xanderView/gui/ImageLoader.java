@@ -27,7 +27,7 @@ public abstract class ImageLoader {
 		try {
 			if (entry == null) return ;
 			String info = Args.fill("%1 [%2/%3]", entry.shortName(),String.valueOf(container.currentIndex()),String.valueOf(container.size()));
-			if (CopyService.exists(entry)) info += "*";
+
 			loadImage(entry, info, panel);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -50,6 +50,9 @@ public abstract class ImageLoader {
 			if (img == null) return ;
 //			GammaFilter filter = new GammaFilter(0.4f);
 //			img = filter.filter(img, null);
+
+			if (CopyService.exists(entry)) text += "*";
+
 			if (panel.setImage(img, text, orientator.getImageData(entry.CRC()))) {
 				panel.showImage();
 			}

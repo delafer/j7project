@@ -14,10 +14,12 @@ import org.delafer.xanderView.file.entry.*;
 import org.delafer.xanderView.file.entry.ImageEntry.ImageType;
 import org.delafer.xanderView.file.readers.FileReader;
 import org.delafer.xanderView.general.State;
+import org.delafer.xanderView.gui.ImageCanvas;
 import org.delafer.xanderView.gui.SplashWindow;
 import org.delafer.xanderView.gui.config.ApplConfiguration;
 import org.delafer.xanderView.gui.config.ApplInstance;
 import org.delafer.xanderView.gui.helpers.MultiShell;
+import org.delafer.xanderView.gui.helpers.UIHelpers;
 import org.delafer.xanderView.interfaces.IAbstractReader.FileEvent;
 import org.eclipse.swt.widgets.Display;
 
@@ -61,9 +63,11 @@ public class CopyService {
 		return images.size();
 	}
 
+
+
 	public static boolean exists(ImageEntry<?> img) {
-		FileDirEntry e = new FileDirEntry(null, img.name, img.size);
-		e.crc = img.crc;
+		FileDirEntry e = new FileDirEntry(UIHelpers.asString(img.getIdentifier()), img.name(), img.size());
+		e.crc = img.CRC();
 		return CopyService.instance().images.contains(e);
 	}
 
@@ -151,7 +155,7 @@ public class CopyService {
 	public State copySync(ImageEntry<?> entry) {
 		try {
 
-			FileDirEntry fde = new FileDirEntry(null,null,0);
+			FileDirEntry fde = new FileDirEntry(null,null,entry.size());
 			fde.crc = entry.CRC();
 
 			if (images.contains(fde)) {
@@ -323,9 +327,10 @@ public class CopyService {
 	public static class CopyObserver {
 
 		private MultiShell shell;
-
-		public CopyObserver(MultiShell shell) {
+		private ImageCanvas panel;
+		public CopyObserver(MultiShell shell, ImageCanvas canv) {
 			this.shell = shell;
+			this.panel = canv;
 		}
 
 		public void done(final State state) {
@@ -333,6 +338,12 @@ public class CopyService {
 
 				public void run() {
 					new SplashWindow(shell.active(), state);
+
+					if (State.Success.equals(state)) {
+						panel.setExist(true);
+						panel.showImage();
+					}
+
 				}
 
 			});

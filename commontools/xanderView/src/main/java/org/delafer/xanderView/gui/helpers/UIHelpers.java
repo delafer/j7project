@@ -16,6 +16,10 @@ import org.eclipse.swt.widgets.MenuItem;
 
 public class UIHelpers {
 
+	public static String asString(Object obj) {
+		return obj != null ? obj.toString() : null;
+	}
+
 	  public static void disposeComposite(Composite composite,boolean disposeSelf) {
 		    if(composite == null || composite.isDisposed())
 		      return;

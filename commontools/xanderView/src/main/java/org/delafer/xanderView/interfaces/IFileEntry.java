@@ -5,7 +5,7 @@ public interface IFileEntry<E> {
 
 	public E getIdentifier();
 
-	public long CRC();
+	public Long CRC();
 
 	public String name();
 

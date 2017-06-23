@@ -98,14 +98,14 @@ public class FileImageEntry extends ImageEntry<String> {
         return bytes;
 	}
 
-	@Override
-	public int hashCode() {
-		int result =  ((name == null) ? 0 : name.hashCode());
-		result = 31 * result + ((identifier == null) ? 0 : identifier.hashCode());
-//		result = 31 * result + (int) (size ^ (size >>> 32));
-
-		return result;
-	}
+//	@Override
+//	public int hashCode() {
+//		int result =  ((name == null) ? 0 : name.hashCode());
+//		result = 31 * result + ((identifier == null) ? 0 : identifier.hashCode());
+////		int result = (int) (size ^ (size >>> 32));
+//
+//		return result;
+//	}
 
 
 	@Override

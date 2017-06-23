@@ -77,6 +77,11 @@ public class ImageCanvas extends Canvas implements MouseListener  {
         //this.setOpaque(true);
     }
 
+    public void setExist(boolean exists) {
+    	if (exists && !text.endsWith("*")) text += "*";
+    	if (!exists && text.endsWith("*")) text = text.substring(0, text.length()-1);
+    }
+
     public boolean setImage(BufferedImage image, String text, ImageData imgData) {
    	 	this.imageSource = image;
    	 	this.text = text;
@@ -234,6 +239,8 @@ public class ImageCanvas extends Canvas implements MouseListener  {
         }
 
         if (!StringUtils.isEmpty(panel.text)) {
+
+
 
         	AttributedString as = new AttributedString(panel.text);
 

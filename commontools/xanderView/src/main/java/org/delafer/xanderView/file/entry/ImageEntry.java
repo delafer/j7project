@@ -20,7 +20,7 @@ public abstract class ImageEntry<E> implements IImageEntry<E> {
 	public String name;
 	public long size;
 	public ImageSize imageSize;
-	public long crc;
+	public Long crc;
 	public ImageType imageType;
 
 	protected IAbstractReader parent;
@@ -56,7 +56,7 @@ public abstract class ImageEntry<E> implements IImageEntry<E> {
 	}
 
 
-	public long CRC() {
+	public Long CRC() {
 		return crc;
 	}
 
@@ -93,8 +93,8 @@ public abstract class ImageEntry<E> implements IImageEntry<E> {
 
 	@Override
 	public int hashCode() {
-		int result =  ((name == null) ? 0 : name.hashCode());
-//		result = 31 * result + (int) (size ^ (size >>> 32));
+//		int result =  ((name == null) ? 0 : name.hashCode());
+		int result = (int) (size ^ (size >>> 32));
 
 		return result;
 	}
