@@ -89,18 +89,21 @@ public abstract class ImageLoader {
 		TJDecompressor tjd = null;
 			try {
 				tjd = new TJDecompressor(bytes);
+				ImageSize size = new ImageSize(tjd.getWidth(), tjd.getHeight());
+				TJScalingFactor sf =  new TJScalingFactor(1, getDenom(size));
+				int width = sf.getScaled(size.width);
+				int height = sf.getScaled(size.height);
+				int flags = bytes.length >= 1750000 ? TJ.FLAG_FASTUPSAMPLE | TJ.FLAG_FASTDCT  : 0;
+				BufferedImage img = tjd.decompress(width, height, BufferedImage.TYPE_3BYTE_BGR, flags);
+//				BufferedImage img = tjd.decompress(width, height, BufferedImage.TYPE_INT_RGB, 0);
+				return img;
 			} catch (Exception e) {
 				return loadCommonImage(bytes);
+			} finally {
+				tjd.close();
 			}
 
-			ImageSize size = new ImageSize(tjd.getWidth(), tjd.getHeight());
-			TJScalingFactor sf =  new TJScalingFactor(1, getDenom(size));
-			int width = sf.getScaled(size.width);
-			int height = sf.getScaled(size.height);
-			int flags = bytes.length >= 1750000 ? TJ.FLAG_FASTUPSAMPLE | TJ.FLAG_FASTDCT  : 0;
-			BufferedImage img = tjd.decompress(width, height, BufferedImage.TYPE_3BYTE_BGR, flags);
-//			BufferedImage img = tjd.decompress(width, height, BufferedImage.TYPE_INT_RGB, 0);
-			return img;
+
 	}
 
 }

@@ -12,19 +12,18 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import net.j7.commons.io.AbstractFileProcessor;
-import net.j7.commons.io.AbstractFileProcessor.FileInfo;
-import net.j7.commons.io.FileUtils;
-
 import org.delafer.xanderView.comparator.BasicFileComparator;
 import org.delafer.xanderView.file.ContentChangeWatcher;
 import org.delafer.xanderView.file.entry.FileImageEntry;
 import org.delafer.xanderView.file.entry.ImageEntry;
 import org.delafer.xanderView.file.entry.ImageEntry.ImageType;
-import org.delafer.xanderView.gui.config.ApplInstance;
 import org.delafer.xanderView.interfaces.IAbstractReader;
 
 import com.sun.nio.file.ExtendedWatchEventModifier;
+
+import net.j7.commons.io.AbstractFileProcessor;
+import net.j7.commons.io.AbstractFileProcessor.FileInfo;
+import net.j7.commons.io.FileUtils;
 
 public class FileReader implements IAbstractReader {
 
@@ -65,7 +64,7 @@ public class FileReader implements IAbstractReader {
 
 				}
 			};
-			scanner.setRecurseSubDirectories(false);
+			scanner.setRecurseSubDirectories(true);
 			scanner.start();
 
 		} catch (Exception e) {

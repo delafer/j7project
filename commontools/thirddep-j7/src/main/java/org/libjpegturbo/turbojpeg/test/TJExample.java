@@ -313,7 +313,7 @@ public class TJExample implements TJCustomFilter {
 
   public void customFilter(ShortBuffer coeffBuffer, Rectangle bufferRegion,
     Rectangle planeRegion, int componentIndex, int transformIndex,
-    TJTransform transform) throws Exception {
+    TJTransform transform) {
     for(int i=0; i<bufferRegion.width*bufferRegion.height; i++) {
 	    coeffBuffer.put(i, (short)(-coeffBuffer.get(i)));
     }

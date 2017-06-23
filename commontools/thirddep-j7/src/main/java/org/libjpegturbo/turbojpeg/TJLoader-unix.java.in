@@ -1,5 +1,5 @@
 /*
- * Copyright (C)2015 Viktor Szathmáry.  All Rights Reserved.
+ * Copyright (C)2011-2013, 2016 D. R. Commander.  All Rights Reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -28,26 +28,32 @@
 
 package org.libjpegturbo.turbojpeg;
 
-import java.io.IOException;
-
-public class TJException extends IOException {
-
-  private static final long serialVersionUID = 1L;
-
-  public TJException() {
-    super();
+final class TJLoader {
+  static void load() {
+    try {
+      System.loadLibrary("turbojpeg");
+    } catch (java.lang.UnsatisfiedLinkError e) {
+      String os = System.getProperty("os.name").toLowerCase();
+      if (os.indexOf("mac") >= 0) {
+        try {
+          System.load("@CMAKE_INSTALL_FULL_LIBDIR@/libturbojpeg.jnilib");
+        } catch (java.lang.UnsatisfiedLinkError e2) {
+          System.load("/usr/lib/libturbojpeg.jnilib");
+        }
+      } else {
+        try {
+          System.load("@CMAKE_INSTALL_FULL_LIBDIR@/libturbojpeg.so");
+        } catch (java.lang.UnsatisfiedLinkError e3) {
+          String libdir = "@CMAKE_INSTALL_FULL_LIBDIR@";
+          if (libdir.equals("@CMAKE_INSTALL_DEFAULT_PREFIX@/lib64")) {
+            System.load("@CMAKE_INSTALL_DEFAULT_PREFIX@/lib32/libturbojpeg.so");
+          } else if (libdir.equals("@CMAKE_INSTALL_DEFAULT_PREFIX@/lib32")) {
+            System.load("@CMAKE_INSTALL_DEFAULT_PREFIX@/lib64/libturbojpeg.so");
+          } else {
+            throw e3;
+          }
+        }
+      }
+    }
   }
-
-  public TJException(String message, Throwable cause) {
-    super(message, cause);
-  }
-
-  public TJException(String message) {
-    super(message);
-  }
-
-  public TJException(Throwable cause) {
-    super(cause);
-  }
-
 }

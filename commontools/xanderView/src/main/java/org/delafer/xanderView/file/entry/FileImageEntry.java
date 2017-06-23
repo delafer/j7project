@@ -1,18 +1,16 @@
 package org.delafer.xanderView.file.entry;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.lang.reflect.Method;
+import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileChannel.MapMode;
 
+import net.j7.commons.base.Equals;
+
 import org.delafer.xanderView.gui.config.ApplInstance;
 import org.delafer.xanderView.hash.Hasher;
 import org.delafer.xanderView.interfaces.IAbstractReader;
-
-import net.j7.commons.base.Equals;
 
 public class FileImageEntry extends ImageEntry<String> {
 
@@ -51,6 +49,21 @@ public class FileImageEntry extends ImageEntry<String> {
 		this.crc = Hasher.hash().calc(ret, this.size);
 	}
 
+//	private static Method cleaner;
+//	private static Method clean;
+//
+//	static {
+//		try {
+//			cleaner = Class.forName("java.nio.DirectByteBufferR").getMethod("cleaner");
+//			cleaner.setAccessible(true);
+//			clean = Class.forName("sun.misc.Cleaner").getMethod("clean");
+//			clean.setAccessible(true);
+//		} catch (NoSuchMethodException | SecurityException | ClassNotFoundException e) {
+//			e.printStackTrace();
+//		}
+//	}
+
+	@SuppressWarnings("restriction")
 	private static void closeDirectBuffer(ByteBuffer cb) {
 	    if (!cb.isDirect()) return;
 
@@ -58,25 +71,27 @@ public class FileImageEntry extends ImageEntry<String> {
 	    // but static import from sun.* package is risky for non-SUN virtual machine.
 	    //try { ((sun.nio.ch.DirectBuffer)cb).cleaner().clean(); } catch (Exception ex) { }
 	    try {
-	        Method cleaner = cb.getClass().getMethod("cleaner");
-	        cleaner.setAccessible(true);
-	        Method clean = Class.forName("sun.misc.Cleaner").getMethod("clean");
-	        clean.setAccessible(true);
-	        clean.invoke(cleaner.invoke(cb));
+	    	((sun.nio.ch.DirectBuffer)cb).cleaner().clean();
+//	        if (clean != null && cleaner != null) {
+//	        	clean.invoke(cleaner.invoke(cb));
+//	        }
+
 	    } catch(Exception ex) { }
 	    cb = null;
 	}
 
 	public final static byte[] readNIO(String fileName) throws IOException {
-		FileInputStream fis = new FileInputStream(fileName);
+		RandomAccessFile fis = new RandomAccessFile(fileName, "r");
+//		FileInputStream fis = new FileInputStream(fileName);
 		FileChannel fc = fis.getChannel();
-		final int size = fis.available();
+		final int size = (int)fc.size();
 		MappedByteBuffer buf = fc.map(MapMode.READ_ONLY, 0, size);
         final byte[] bytes = new byte[size];
-        buf.get(bytes);
         buf.clear();
+        buf.get(bytes);
         fc.force(true);
-        fc.close();
+
+//        fc.close();
         fis.close();
         closeDirectBuffer(buf);
 

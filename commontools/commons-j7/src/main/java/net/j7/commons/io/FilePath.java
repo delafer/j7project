@@ -57,7 +57,10 @@ public class FilePath {
 			File path = new File(ret);
 			if (!path.exists()) {
 				File mkPath = filemode ? path.getParentFile() : path;
-				mkPath.mkdirs();
+				if (null != mkPath) {
+					mkPath.mkdirs();
+				}
+
 				if (filemode)
 					createNewFile(path);
 			}

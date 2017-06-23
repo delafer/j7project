@@ -52,7 +52,7 @@ public class ResourceReader {
 	    * @return the string
 	    * @throws IOException Signals that an I/O exception has occurred.
 	    */
-	   private String convertStreamToString(InputStream is, String encoding) throws IOException {
+	   public static String convertStreamToString(InputStream is, String encoding) throws IOException {
 	     /*
 	      * To convert the InputStream to String we use the
 	      * Reader.read(char[] buffer) method. We iterate until the
