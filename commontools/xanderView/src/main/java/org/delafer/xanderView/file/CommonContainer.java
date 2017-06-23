@@ -8,6 +8,7 @@ import java.util.ListIterator;
 import net.j7.commons.base.Equals;
 import net.j7.commons.base.Numbers;
 import net.j7.commons.collections.SortedLinkedList;
+import net.j7.commons.io.AbstractFileProcessor.Recurse;
 import net.j7.commons.io.TextFileUtils;
 import net.j7.commons.io.TextFileUtils.TextReader;
 import net.j7.commons.strings.StringUtils;
@@ -50,6 +51,12 @@ public class CommonContainer {
 					String content = tr.readAll();
 					String[] cont = content.trim().split(ApplInstance.LAST_ENTRY_DIV);
 					locationArg = cont.length>0 ? cont[0] : null;
+
+					if (locationArg != null && locationArg.length() >= 2) {
+					if (isLetter(locationArg.charAt(0))
+						&& ':' == locationArg.charAt(1)) locationArg = locationArg.substring(2);
+				}
+
 					entry = cont.length>1 ? Numbers.getResultAsInteger(cont[1]) : null;
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -57,10 +64,7 @@ public class CommonContainer {
 			}
 		}
 
-		if (locationArg != null && locationArg.length() >= 2) {
-			if (isLetter(locationArg.charAt(0))
-				&& ':' == locationArg.charAt(1)) locationArg = locationArg.substring(2);
-		}
+
 		this.pathFile = new File(locationArg);
 		this.reader = getReader(pathFile);
 //		this.pathContainer = reader.getContainerPath();
@@ -102,7 +106,7 @@ public class CommonContainer {
 
 		}
 
-		return new FileReader(aFile);
+		return new FileReader(aFile, Recurse.FNE);
 	}
 
 	public void initialize() {

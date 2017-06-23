@@ -158,7 +158,6 @@ public abstract class AbstractFileProcessor {
 		if (entry.isDirectory()) {
 
 			if (Recurse.Flat.equals(recurse)) return;
-			doneDirs++;
 			doDir(entry);
 
 			String[] children = entry.list();
@@ -173,7 +172,12 @@ public abstract class AbstractFileProcessor {
 						doFile(record);
 					}
 				}
-				if ((Recurse.Recursiv.equals(recurse) || doneFiles == 0) && null != dirs) {
+
+//				if (Recurse.FNE.equals(mode) && doneFiles > 0) {
+//					flagStopped = true;
+//				}
+
+				if ((Recurse.Recursiv.equals(mode) || doneFiles == 0) && null != dirs) {
 					for (File next : dirs) {
 						listContents(next, mode);
 					}
@@ -202,6 +206,8 @@ public abstract class AbstractFileProcessor {
 			logger.error("Error processing dir", e);
 			if (stopOnException)
 				stopProcessing();
+		} finally {
+			doneDirs++;
 		}
 	}
 
@@ -218,11 +224,12 @@ public abstract class AbstractFileProcessor {
 		if (skip(entry, fileData) || !accept(entry, fileData)) return;
 		try {
 			processFile(entry, fileData);
-			doneFiles++;
 		} catch (Exception e) {
 			logger.error("Error processing file", e);
 			if (stopOnException)
 				stopProcessing();
+		} finally {
+			doneFiles++;
 		}
 	}
 

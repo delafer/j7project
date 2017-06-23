@@ -8,6 +8,7 @@ import java.util.*;
 import net.j7.commons.base.Equals;
 import net.j7.commons.io.FilePath;
 import net.j7.commons.io.FileUtils;
+import net.j7.commons.io.AbstractFileProcessor.Recurse;
 
 import org.delafer.xanderView.common.SimpleNameIncrementer;
 import org.delafer.xanderView.file.entry.*;
@@ -82,7 +83,7 @@ public class CopyService {
 	private void initializeByPath(String locationArg) {
 		this.pathTxt = locationArg;
 		this.pathFile = new File(locationArg);
-		this.reader = new FileReader(pathFile);
+		this.reader = new FileReader(pathFile, Recurse.Flat);
 		this.images = new HashSet<FileDirEntry>();
 		initializeInternal();
 

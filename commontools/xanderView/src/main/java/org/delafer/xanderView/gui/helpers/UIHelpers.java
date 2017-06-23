@@ -20,6 +20,12 @@ public class UIHelpers {
 		return obj != null ? obj.toString() : null;
 	}
 
+	public static void sleep(long ms) {
+		try {
+			Thread.sleep(ms);
+		} catch (InterruptedException ignore) {}
+	}
+
 	  public static void disposeComposite(Composite composite,boolean disposeSelf) {
 		    if(composite == null || composite.isDisposed())
 		      return;

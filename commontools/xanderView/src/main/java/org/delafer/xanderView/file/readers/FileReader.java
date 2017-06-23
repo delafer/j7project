@@ -5,34 +5,44 @@ import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardWatchEventKinds;
+import java.nio.file.WatchEvent;
 import java.nio.file.WatchEvent.Kind;
-import java.util.*;
+import java.nio.file.WatchKey;
+import java.nio.file.WatchService;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
-
-import net.j7.commons.io.*;
-import net.j7.commons.io.AbstractFileProcessor.FileInfo;
-import net.j7.commons.io.AbstractFileProcessor.Recurse;
 
 import org.delafer.xanderView.comparator.BasicFileComparator;
 import org.delafer.xanderView.file.ContentChangeWatcher;
-import org.delafer.xanderView.file.entry.*;
+import org.delafer.xanderView.file.entry.FileImageEntry;
+import org.delafer.xanderView.file.entry.ImageEntry;
 import org.delafer.xanderView.file.entry.ImageEntry.ImageType;
 import org.delafer.xanderView.interfaces.IAbstractReader;
 
 import com.sun.nio.file.ExtendedWatchEventModifier;
+
+import net.j7.commons.io.AbstractFileProcessor;
+import net.j7.commons.io.AbstractFileProcessor.FileInfo;
+import net.j7.commons.io.AbstractFileProcessor.Recurse;
+import net.j7.commons.io.FileUtils;
 
 public class FileReader implements IAbstractReader {
 
 	ContentChangeWatcher watcher;
 	private WatchService watchService;
 	private File sourceFile;
+	private Recurse mode;
 
 
-
-	public FileReader(File sourceFile) {
+	public FileReader(File sourceFile, Recurse mode) {
 		super();
 		this.sourceFile = sourceFile;
+		this.mode = mode;
 	}
 
 	public void read(final List<ImageEntry<?>> entries) {
@@ -50,6 +60,7 @@ public class FileReader implements IAbstractReader {
 
 				@Override
 				public void processFile(File file, FileInfo fileInfo) throws Exception {
+//					System.out.println(fileInfo.getNameWithPath());
 					FileImageEntry entry = new FileImageEntry(FileReader.this, fileInfo.getNameWithPath(), fileInfo.getFileName(), fileInfo.getFileSize());
 					entries.add(entry);
 
@@ -61,7 +72,7 @@ public class FileReader implements IAbstractReader {
 
 				}
 			};
-			scanner.setMode(Recurse.FNE);
+			scanner.setMode(mode);
 			scanner.start();
 
 		} catch (Exception e) {

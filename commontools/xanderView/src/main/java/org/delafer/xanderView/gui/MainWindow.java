@@ -230,6 +230,7 @@ public final class MainWindow extends ImageLoader{
 		case 16777232://F7
 		case 16777234://F9
 			CopyService.instance().copy(pointer.getCurrent(), new CopyObserver(shell, panel));
+			UIHelpers.sleep(100);
 //			SplashWindow splash = new SplashWindow(shell.active(), res);
 			break;
 		case 107:
