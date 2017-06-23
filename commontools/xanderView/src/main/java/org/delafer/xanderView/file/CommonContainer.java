@@ -57,6 +57,10 @@ public class CommonContainer {
 			}
 		}
 
+		if (locationArg != null && locationArg.length() >= 2) {
+			if (isLetter(locationArg.charAt(0))
+				&& ':' == locationArg.charAt(1)) locationArg = locationArg.substring(2);
+		}
 		this.pathFile = new File(locationArg);
 		this.reader = getReader(pathFile);
 //		this.pathContainer = reader.getContainerPath();
@@ -81,6 +85,10 @@ public class CommonContainer {
 			}
 		}
 
+	}
+
+	private boolean isLetter(char ch) {
+		return (ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z');
 	}
 
 	private IAbstractReader getReader(File aFile) {
