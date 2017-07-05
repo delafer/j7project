@@ -30,7 +30,7 @@ public class EncodeName {
 			return sb.toString().trim();
 	   }
 
-	char[] c = new char[] {' ','~','!', '@', '#', '$', '%', '^', '&', '(', ')', '-', '+', '_','=','[',']', '{','}'};
+	static char[] chars = new char[] {' ','~','!', '@', '#', '$', '%', '^', '&', '(', ')', '-', '+', '_','=','[',']', '{','}'};
 
 	public static void main3(String[] args) {
 		Map<Character, Character> a = new TreeMap<>();
@@ -88,52 +88,104 @@ public class EncodeName {
 				sb.append(uc ? r : Character.toLowerCase(r));
 			} else
 			{
-				sb.append(special(ch));
+				sb.append(shf(special0(ch), i));
 			}
 		}
 		return sb.toString();
 	}
 
-	private static char special(char ch) {
+	private static int code(char ch) {
 		switch (ch) {
 		case ' ':
-			return '_';
+			return 0;
 		case '~':
-			return '@';
+			return 1;
 		case '!':
-			return '[';
+			return 2;
 		case '@':
-			return '}';
+			return 3;
 		case '#':
-			return '$';
+			return 4;
 		case '$':
-			return '^';
+			return 5;
 		case '%':
-			return '~';
+			return 6;
 		case '^':
-			return ')';
+			return 7;
 		case '&':
-			return '!';
+			return 8;
 		case '(':
-			return '-';
+			return 9;
 		case ')':
-			return '#';
+			return 10;
 		case '-':
-			return ' ';
+			return 11;
 		case '+':
-			return '=';
+			return 12;
 		case '_':
-			return '$';
+			return 13;
 		case '=':
-			return '(';
+			return 14;
 		case '[':
-			return '%';
+			return 15;
 		case ']':
-			return '{';
+			return 16;
 		case '{':
-			return '+';
+			return 17;
 		case '}':
-			return ']';
+			return 18;
+		default:
+			return -1;
+		}
+	}
+
+	private static char special0(char ch) {
+		switch (ch) {
+		case ' ': return '_';
+		case '~': return '@';
+		case '!': return '[';
+		case '@': return '}';
+		case '#': return '&';
+		case '$': return '^';
+		case '%': return '~';
+		case '^': return ')';
+		case '&': return '!';
+		case '(': return '-';
+		case ')': return '#';
+		case '-': return ' ';
+		case '+': return '=';
+		case '_': return '$';
+		case '=': return '(';
+		case '[': return '%';
+		case ']': return '{';
+		case '{': return '+';
+		case '}': return ']';
+		default:
+			return ch;
+		}
+	}
+
+	private static char special1(char ch) {
+		switch (ch) {
+		case '_': return ' ';
+		case '@': return '~';
+		case '[': return '!';
+		case '}': return '@';
+		case '&': return '#';
+		case '^': return '$';
+		case '~': return '%';
+		case ')': return '^';
+		case '!': return '&';
+		case '-': return '(';
+		case '#': return ')';
+		case ' ': return '-';
+		case '=': return '+';
+		case '$': return '_';
+		case '(': return '=';
+		case '%': return '[';
+		case '{': return ']';
+		case '+': return '{';
+		case ']': return '}';
 		default:
 			return ch;
 		}
@@ -156,7 +208,7 @@ public class EncodeName {
 				char r = ((char)((int)uch - ncode));
 				sb.append(uc ? r : Character.toLowerCase(r));
 			} else {
-				sb.append(ch);
+				sb.append(special1(shf2(ch, i)));
 			}
 		}
 		return sb.toString();
@@ -166,21 +218,35 @@ public class EncodeName {
 		int co = ch - 65;
 		co += (order % 26);
 		return (co % 26) + 65;
-//		return ch;
 	}
 
 	private static int shift2(int ch, int order ) {
 		int co = (ch - 65) + 26;
 		co -= (order % 26);
-//		System.out.println(co+" "+(co % 26)+" "+((co % 26) + 65));
 		return (co % 26) + 65;
-//		return ch;
 	}
 
+	private static char shf(char ch, int order ) {
+		int co = code(ch);
+		if (co < 0) return ch;
+		co += (order % 19);
+		return chars[(co % 19)];
+	}
+
+	private static char shf2(char ch, int order ) {
+		int co = code(ch);
+		if (co < 0) return ch;
+		co += 19;
+		co -= (order % 19);
+		return chars[(co % 19)];
+	}
+
+
 	public static void main(String[] args) {
-		System.out.println((encrypt("Teenage sex anal (portno) pthcf 16 yo.")));
-		System.out.println((encrypt("AAAB")));
-		System.out.println((encrypt("AABB")));
+		System.out.println((encrypt("Image picture 001.jpg")));
+//		System.out.println((encrypt("ASTalavista baby")));
+//		System.out.println((encrypt("AAAB")));
+//		System.out.println((encrypt("AABB")));
 //		System.out.println(shift2(shift(69, 133), 133));
 	}
 }
