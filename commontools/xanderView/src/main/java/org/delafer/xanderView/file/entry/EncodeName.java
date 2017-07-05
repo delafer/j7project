@@ -4,8 +4,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.*;
 
-import org.libjpegturbo.turbojpeg.test.Main;
-
 public class EncodeName {
 
 	public EncodeName() {
@@ -71,8 +69,12 @@ public class EncodeName {
 
 	final static int[] codes = new int[] {-8,-6,1,-9,-12,-10,2,5,-6,-10,-12,8,-8,2,-11,-2,16,8,5,-5,-1,16,16,5,1,15};
 	final static int[] codes2 = new int[] {-16,-1,-5,-8,-2,-16,-16,6,8,-8,-15,-2,9,-5,6,10,12,2,-5,10,8,1,12,-1,5,11};
-
+	final static int MAX_LEN = 228;
 	public static String encrypt(String name) {
+
+		if (name == null || name.length() == 0) return name;
+		if (name.length()>MAX_LEN) name = name.substring(0, MAX_LEN);
+
 		char ch, uch;
 
 		StringBuilder sb = new StringBuilder(name.length());
@@ -96,46 +98,26 @@ public class EncodeName {
 
 	private static int code(char ch) {
 		switch (ch) {
-		case ' ':
-			return 0;
-		case '~':
-			return 1;
-		case '!':
-			return 2;
-		case '@':
-			return 3;
-		case '#':
-			return 4;
-		case '$':
-			return 5;
-		case '%':
-			return 6;
-		case '^':
-			return 7;
-		case '&':
-			return 8;
-		case '(':
-			return 9;
-		case ')':
-			return 10;
-		case '-':
-			return 11;
-		case '+':
-			return 12;
-		case '_':
-			return 13;
-		case '=':
-			return 14;
-		case '[':
-			return 15;
-		case ']':
-			return 16;
-		case '{':
-			return 17;
-		case '}':
-			return 18;
-		default:
-			return -1;
+		case ' ': return 0;
+		case '~': return 1;
+		case '!': return 2;
+		case '@': return 3;
+		case '#': return 4;
+		case '$': return 5;
+		case '%': return 6;
+		case '^': return 7;
+		case '&': return 8;
+		case '(': return 9;
+		case ')': return 10;
+		case '-': return 11;
+		case '+': return 12;
+		case '_': return 13;
+		case '=': return 14;
+		case '[': return 15;
+		case ']': return 16;
+		case '{': return 17;
+		case '}': return 18;
+		default: return -1;
 		}
 	}
 
@@ -192,6 +174,7 @@ public class EncodeName {
 	}
 
 	public static String decrypt(String name) {
+		if (name == null || name.length() == 0) return name;
 		char ch, uch;
 
 		StringBuilder sb = new StringBuilder(name.length());
@@ -202,7 +185,7 @@ public class EncodeName {
 				boolean uc = Character.isUpperCase(ch);
 				uch = Character.toUpperCase(ch);
 				uch = (char)(shift2((int)uch, i));
-				System.out.println(":"+uch);
+//				System.out.println(":"+uch);
 				int code = (int)uch - 65;
 				int ncode = codes2[code];
 				char r = ((char)((int)uch - ncode));
@@ -216,14 +199,18 @@ public class EncodeName {
 
 	private static int shift(int ch, int order ) {
 		int co = ch - 65;
-		co += (order % 26);
+		co += (hashCode(order) % 26);
 		return (co % 26) + 65;
+	}
+
+	private static int hashCode(int order) {
+		return (order + "$").hashCode();
 	}
 
 	private static int shift2(int ch, int order ) {
 		int co = (ch - 65) + 26;
-		co -= (order % 26);
-		return (co % 26) + 65;
+		co -= (hashCode(order) % 26);
+		return (co % 26) + 65 ;
 	}
 
 	private static char shf(char ch, int order ) {
@@ -243,7 +230,9 @@ public class EncodeName {
 
 
 	public static void main(String[] args) {
-		System.out.println((encrypt("Image picture 001.jpg")));
+		String x = encrypt("In the Java programming language language, every class implicitly or explicitly provides a hashCode() method");
+		System.out.println("Encrypted: "+x);
+		System.out.println("Decrypted: "+decrypt(x));
 //		System.out.println((encrypt("ASTalavista baby")));
 //		System.out.println((encrypt("AAAB")));
 //		System.out.println((encrypt("AABB")));
