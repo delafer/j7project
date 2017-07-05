@@ -5,11 +5,11 @@ import java.util.Arrays;
 import net.j7.commons.types.BitNumber;
 import net.j7.commons.utils.RandomUtil;
 
-public class Encryptor {
+public class EncryptorOld {
 
 	private static final int RSM = 0x000000FF;
 
-	public Encryptor() {
+	public EncryptorOld() {
 		// TODO Auto-generated constructor stub
 	}
 

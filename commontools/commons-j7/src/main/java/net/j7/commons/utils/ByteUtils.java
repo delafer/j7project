@@ -5,6 +5,61 @@ public final class ByteUtils {
 
     private static final long MIN_VALUE_B = Long.MIN_VALUE + 1;
 
+
+//    public static byte[] shortToByteArray(short s) {
+//        return new byte[]{(byte)(s & 0x00FF),(byte)((s & 0xFF00)>>8)};
+//    }
+//
+//
+//    public static byte[] shortToByteArray2(int s) {
+//        return new byte[]{(byte)(s & 0xFF),(byte)((s >> 8) & 0xFF)};
+//    }
+
+    public static byte[] UIntToByte2(int value) {
+    	if (value < 0) value = 0;
+    	if (value > Short.MAX_VALUE) value = Short.MAX_VALUE;
+    	value += Short.MIN_VALUE;
+		return new byte[] {(byte) (value >>> 8),
+		(byte) value};
+    }
+
+    public static int Byte2ToUInt(byte[] arr) {
+//        return (short)(((arr[0] & 0xFF) << 8) +
+//		        (arr[1] & 0xFF));
+    	int  x =  (arr[0]<<8 | arr[1] & 0xFF);
+    	x -= Short.MIN_VALUE;
+    	return x;
+    }
+
+//    public static void main(String[] args) {
+////    	show(shortToByteArray((short)10000));
+////    	show(shortToByteArray3((short)10000));
+////    	System.out.println(byteArrayToShort(shortToByteArray3((short)-32768)));
+////    	System.out.println(byteArrayToShort(shortToByteArray3((short)-30000)));
+////    	System.out.println(byteArrayToShort(shortToByteArray3((short)-10000)));
+////    	System.out.println(byteArrayToShort(shortToByteArray3((short)-100)));
+////    	System.out.println(byteArrayToShort(shortToByteArray3((short)-1)));
+//    	System.out.println(byte2ToInt(intToByte2((short)0)));
+//    	System.out.println(byte2ToInt(intToByte2((short)1)));
+//    	System.out.println(byte2ToInt(intToByte2((short)100)));
+//    	System.out.println(byte2ToInt(intToByte2((short)10000)));
+//    	System.out.println(byte2ToInt(intToByte2((short)30000)));
+//    	System.out.println(byte2ToInt(intToByte2((short)32767)));
+//    	System.out.println(byte2ToInt(intToByte2((short)42767)));
+//    	System.out.println(byte2ToInt(intToByte2(65535)));
+//    	System.out.println(byte2ToInt(intToByte2(65536)));
+////    	int x = Short.MIN_VALUE;
+////    	int y = Short.MAX_VALUE;
+////    	for (int i = x; i <= y; i++) {
+////			if ((short)i != byteArrayToShort(shortToByteArray3((short)i))) System.out.println("error");
+////		}
+//	}
+
+    public static void show(byte[] arr) {
+    	System.out.println(arr[0] + " & "+arr[1]);
+    }
+
+
 	public static int byteArrayToInt(byte[] b) {
         return
         (b[0] << 24) +
