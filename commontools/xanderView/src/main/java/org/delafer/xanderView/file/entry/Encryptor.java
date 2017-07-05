@@ -1,32 +1,103 @@
 package org.delafer.xanderView.file.entry;
 
 import java.nio.ByteBuffer;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
+import java.security.InvalidKeyException;
+import java.security.SecureRandom;
+import java.security.Security;
 
 import javax.crypto.Cipher;
-import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.SecretKeySpec;
 
 public class Encryptor {
+	
+	static byte[] arrKey = randomKey(16); 
+	static Cipher encrypt;
+	static Cipher decrypt;
+	static SecretKeySpec sks;
+	static {
+		Security.setProperty("crypto.policy", "unlimited");
+		encrypt = getCipher(true);
+		decrypt = getCipher(false);
+	}
+	
+	public static byte[] randomKey(int size) {
+		SecureRandom random = new SecureRandom();
+		byte[] bytes = new byte[size];
+		random.nextBytes(bytes);
+		return bytes;
+	};
+	
+	private static Cipher getCipher(boolean mode) {
+		Cipher r = null;
+		try {
+			r = Cipher.getInstance("AES_128/ECB/NoPadding", "SunJCE");
+//			SecretKeyFactory f = SecretKeyFactory.getInstance("AES", "SunJCE");
+			sks = new SecretKeySpec(arrKey, "AES");
+//			SecretKey key = f.generateSecret(sks);
+//			r.init(mode ? Cipher.ENCRYPT_MODE : Cipher.DECRYPT_MODE, sks);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return r;
+	}
 
 	public Encryptor() {
 	}
 
-	public ByteBuffer encrypt(ByteBuffer input) {
-		return input;
-	}
-
-	public ByteBuffer decrypt(ByteBuffer input) {
+	public static ByteBuffer encrypt(ByteBuffer input) {
 		try {
-			Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding", "SunJCE");
-		} catch (NoSuchAlgorithmException | NoSuchProviderException | NoSuchPaddingException e) {
-			// TODO Auto-generated catch block
+			encrypt.init(Cipher.ENCRYPT_MODE, sks);
+		} catch (InvalidKeyException e) {
 			e.printStackTrace();
 		}
-		//cipher.update(arg0, arg1, arg2)
-//        cipher.init(mode, key.getKey());
-		return input;
+		return encrypt0(encrypt, input);
 	}
+	
+	public static ByteBuffer decrypt(ByteBuffer input) {
+		try {
+			decrypt.init(Cipher.DECRYPT_MODE, sks);
+		} catch (InvalidKeyException e) {
+			e.printStackTrace();
+		}
+		return decrypt0(decrypt, input);
+	}
+
+
+	
+	 public static ByteBuffer encrypt0(Cipher cipher, ByteBuffer input) {
+    if (input == null || !input.hasRemaining()) return input;
+    try {
+     int inputSize = input.remaining();
+      ByteBuffer output = ByteBuffer.allocate(cipher.getOutputSize(inputSize));
+		// OpensslCipher#update will maintain crypto context.
+		int n = cipher.update(input, output);
+		if (n < input.remaining()) {
+			cipher.doFinal(input, output);
+		}
+      
+      output.rewind(); //.flip();
+      return output;
+    } catch (Exception e) {
+      throw new IllegalStateException(e);
+    }
+  }
+	 
+	  public static ByteBuffer decrypt0(Cipher cipher, ByteBuffer input) {
+	    if (input == null || !input.hasRemaining()) return input;
+	    try {
+	      int inputSize = input.remaining();
+	      ByteBuffer output = ByteBuffer.allocate(cipher.getOutputSize(inputSize));
+			// OpensslCipher#update will maintain crypto context.
+			int n = cipher.update(input, output);
+			if (n < input.remaining()) {
+				cipher.doFinal(input, output);
+			} 
+			output.rewind(); //.flip();
+	      return output;
+	    } catch (Exception e) {
+	      throw new IllegalStateException(e);
+	    }
+	  }
 
 //	 public static ByteBuffer encrypt(ByteBuffer clear) {
 //		    if (clear == null || !clear.hasRemaining()) return clear;

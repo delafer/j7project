@@ -85,7 +85,9 @@ public class FileImageEntry extends ImageEntry<String> {
 //		FileInputStream fis = new FileInputStream(fileName);
 		FileChannel fc = fis.getChannel();
 		final int size = (int)fc.size();
-		MappedByteBuffer buf = fc.map(MapMode.READ_ONLY, 0, size);
+		MappedByteBuffer buf0 = fc.map(MapMode.READ_ONLY, 0, size);
+		
+		ByteBuffer buf = Encryptor.decrypt(Encryptor.encrypt(buf0));
         final byte[] bytes = new byte[size];
         buf.clear();
         buf.get(bytes);
