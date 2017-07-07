@@ -19,9 +19,9 @@ import java.util.concurrent.TimeUnit;
 
 import org.delafer.xanderView.comparator.BasicFileComparator;
 import org.delafer.xanderView.file.ContentChangeWatcher;
-import org.delafer.xanderView.file.entry.FileImageEntry;
-import org.delafer.xanderView.file.entry.ImageEntry;
-import org.delafer.xanderView.file.entry.ImageEntry.ImageType;
+import org.delafer.xanderView.file.entry.ImageFS;
+import org.delafer.xanderView.file.entry.ImageAbstract;
+import org.delafer.xanderView.file.entry.ImageAbstract.ImageType;
 import org.delafer.xanderView.interfaces.IAbstractReader;
 
 import com.sun.nio.file.ExtendedWatchEventModifier;
@@ -45,7 +45,7 @@ public class FileReader implements IAbstractReader {
 		this.mode = mode;
 	}
 
-	public void read(final List<ImageEntry<?>> entries) {
+	public void read(final List<ImageAbstract<?>> entries) {
 		try {
 
 			AbstractFileProcessor scanner = new AbstractFileProcessor(getContainerPath()) {
@@ -54,14 +54,14 @@ public class FileReader implements IAbstractReader {
 				@Override
 				public boolean accept(File entry, FileInfo fileData) {
 //					try {Thread.currentThread().sleep( 50 );}catch(Exception e){}
-					ImageType imageType = ImageEntry.getType(fileData.getNameWithPath());
+					ImageType imageType = ImageAbstract.getType(fileData.getNameWithPath());
 					return !imageType.equals(ImageType.UNKNOWN);
 				}
 
 				@Override
 				public void processFile(File file, FileInfo fileInfo) throws Exception {
 //					System.out.println(fileInfo.getNameWithPath());
-					FileImageEntry entry = new FileImageEntry(FileReader.this, fileInfo.getNameWithPath(), fileInfo.getFileName(), fileInfo.getFileSize());
+					ImageAbstract<?> entry = ImageFS.getInstance(FileReader.this, fileInfo.getNameWithPath(), fileInfo.getFileName(), fileInfo.getFileSize());
 					entries.add(entry);
 
 
@@ -158,19 +158,19 @@ public class FileReader implements IAbstractReader {
 //	}
 
 	@SuppressWarnings("unchecked")
-	public FileImageEntry getEntryByIdentifier(Object id) throws IOException {
+	public ImageAbstract<?> getEntryByIdentifier(Object id) throws IOException {
 		String filePath = (String) id;
 
 
 
 		FileInfo fileInfo = new FileInfo(new File(filePath));
-		FileImageEntry entry = new FileImageEntry(this, fileInfo.getNameWithPath(), fileInfo.getFileName(), fileInfo.getFileSize());
+		ImageAbstract<?> entry = ImageFS.getInstance(this, fileInfo.getNameWithPath(), fileInfo.getFileName(), fileInfo.getFileSize());
 
 		return entry;
 	}
 
 	@Override
-	public Comparator<ImageEntry<?>> getComparator() {
+	public Comparator<ImageAbstract<?>> getComparator() {
 		return BasicFileComparator.instance();
 	}
 

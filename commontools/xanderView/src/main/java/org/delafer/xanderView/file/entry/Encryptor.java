@@ -11,6 +11,8 @@ import net.j7.commons.utils.ByteUtils;
 
 public class Encryptor {
 
+	private static final byte ALGHORITM_AES_128_ECB_NP = (byte)1;
+
 	static final Charset utf8;
 
 	static Cipher encrypt;
@@ -36,7 +38,7 @@ public class Encryptor {
 //			r = Cipher.getInstance("AES_128/ECB/NoPadding", "SunJCE");
 			r = Cipher.getInstance("AES/ECB/PKCS5Padding", "SunJCE");
 //			SecretKeyFactory f = SecretKeyFactory.getInstance("AES", "SunJCE");
-			sks = CipherKey.getPBEKey("Siloch12aaa");
+			sks = CipherKey.getKey("Siloch12aaa");
 //			SecretKey key = f.generateSecret(sks);
 			r.init(mode ? Cipher.ENCRYPT_MODE : Cipher.DECRYPT_MODE, sks);
 		} catch (Exception e) {
@@ -48,37 +50,46 @@ public class Encryptor {
 	public Encryptor() {
 	}
 
-	public static ByteBuffer encrypt(ByteBuffer input, String name) {
-//		try {
-//			encrypt.init(Cipher.ENCRYPT_MODE, sks/*,  new IvParameterSpec(CipherKey.iv)*/);
-//		} catch (InvalidKeyException /*| InvalidAlgorithmParameterException*/ e) {
-//			e.printStackTrace();
-//		}
-		return encrypt0(encrypt, input, name);
+	public static ByteBuffer encrypt(DecData data) {
+		try {
+			encrypt.init(Cipher.ENCRYPT_MODE, sks/*,  new IvParameterSpec(CipherKey.iv)*/);
+		} catch (InvalidKeyException /*| InvalidAlgorithmParameterException*/ e) {
+			e.printStackTrace();
+		}
+		return encrypt0(encrypt, data);
 	}
 
-	public static ByteBuffer decrypt(ByteBuffer input) {
-//		try {
-//			decrypt.init(Cipher.DECRYPT_MODE, sks);
-//		} catch (InvalidKeyException e) {
-//			e.printStackTrace();
-//		}
+	public static DecData decrypt(ByteBuffer input) {
+		try {
+			decrypt.init(Cipher.DECRYPT_MODE, sks);
+		} catch (InvalidKeyException e) {
+			e.printStackTrace();
+		}
 		return decrypt0(decrypt, input);
 	}
 
+	private static ByteBuffer header(byte[] name) {
+		ByteBuffer bb  = ByteBuffer.allocateDirect(3 + name.length);
+		bb.put(Encryptor.ALGHORITM_AES_128_ECB_NP);
+		bb.put(ByteUtils.UIntToByte2(name.length));
+		bb.put(name);
+		bb.rewind();
+		return bb;
+	}
 
 
-	 public static ByteBuffer encrypt0(Cipher cipher, ByteBuffer input, String name) {
-    if (input == null || !input.hasRemaining()) return input;
+	 public static ByteBuffer encrypt0(Cipher cipher, DecData data) {
+    if (data.get() == null || !data.get().hasRemaining()) return data.get();
     try {
-     byte[] encName = name.getBytes(utf8);
-     int inputSize = input.remaining() + 3 + encName.length;
+     byte[] encName = data.name().getBytes(utf8);
+     int inputSize = data.get().remaining() + 3 + encName.length;
      System.out.println(">"+inputSize);
       ByteBuffer output = ByteBuffer.allocate(cipher.getOutputSize(inputSize));
 
-       cipher.update(ByteBuffer.wrap(new byte[] {1}), output);
-       cipher.update(ByteBuffer.wrap(ByteUtils.UIntToByte2(encName.length)), output);
-       cipher.update(ByteBuffer.wrap(encName), output);
+//       cipher.update(ByteBuffer.wrap(new byte[] {1}), output);
+//       cipher.update(ByteBuffer.wrap(ByteUtils.UIntToByte2(encName.length)), output);
+//       cipher.update(ByteBuffer.wrap(encName), output);
+      cipher.update(header(encName), output);
 
 //		// OpensslCipher#update will maintain crypto context.
 //		int n = cipher.update(input, output);
@@ -86,7 +97,7 @@ public class Encryptor {
 //			cipher.doFinal(input, output);
 //		}
 //		else {
-			cipher.doFinal(input, output);
+			cipher.doFinal(data.get(), output);
 //		}
 
       output.rewind(); //.flip();
@@ -96,11 +107,11 @@ public class Encryptor {
     }
   }
 
-	  public static ByteBuffer decrypt0(Cipher cipher, ByteBuffer input) {
-	    if (input == null || !input.hasRemaining()) return input;
+	  public static DecData decrypt0(Cipher cipher, ByteBuffer input) {
+	    if (input == null || !input.hasRemaining()) return new DecData(input, null);
 	    try {
 	      int inputSize = input.remaining();
-
+	      System.out.println("ISIZE: "+inputSize);
 	      ByteBuffer output = ByteBuffer.allocate(cipher.getOutputSize(inputSize));
 			// OpensslCipher#update will maintain crypto context.
 //			int n = cipher.update(input, output);
@@ -122,7 +133,7 @@ public class Encryptor {
 			System.out.println(" name: ["+new String(name, utf8)+"]");
 //			output = output.slice();
 
-	      return output;
+	      return new DecData(output, new String(name, utf8));
 	    } catch (Exception e) {
 	      throw new IllegalStateException(e);
 	    }
@@ -157,5 +168,26 @@ public class Encryptor {
 //		      throw new IllegalStateException(e);
 //		    }
 //		  }
+
+	  public static class DecData {
+
+		private String name;
+		private ByteBuffer bb;
+
+		public DecData(ByteBuffer bb, String name) {
+			this.bb = bb;
+			this.name = name;
+		}
+
+		public String name() {
+			return this.name;
+		}
+
+		public ByteBuffer get() {
+			return this.bb;
+		}
+
+
+	  }
 
 }

@@ -2,7 +2,7 @@ package org.delafer.xanderView.file;
 
 import net.j7.commons.utils.RandomUtil;
 
-import org.delafer.xanderView.file.entry.ImageEntry;
+import org.delafer.xanderView.file.entry.ImageAbstract;
 import org.delafer.xanderView.general.State;
 import org.delafer.xanderView.gui.SplashWindow;
 import org.delafer.xanderView.gui.helpers.MultiShell;
@@ -16,12 +16,12 @@ public class CommonContainerExt extends CommonContainer{
 		super(locationArg);
 		randomMode = false;
 		startAt = this.currentIndex();
-//		ImageEntry e = this.getCurrent();
+//		ImageAbstract e = this.getCurrent();
 //		System.out.println(e);
 	}
 
 	@Override
-	public ImageEntry<?> getPrevious10() {
+	public ImageAbstract<?> getPrevious10() {
 		if (randomMode)
 			return this.getPrevious();
 		else
@@ -29,7 +29,7 @@ public class CommonContainerExt extends CommonContainer{
 	}
 
 	@Override
-	public ImageEntry<?> getNext10() {
+	public ImageAbstract<?> getNext10() {
 		if (randomMode)
 			return this.getNext();
 		else
@@ -37,15 +37,15 @@ public class CommonContainerExt extends CommonContainer{
 	}
 
 	@Override
-	public ImageEntry<?> getNext() {
+	public ImageAbstract<?> getNext() {
 		if (!randomMode) {
-			ImageEntry<?> next =  super.getNext();
+			ImageAbstract<?> next =  super.getNext();
 			checkStartReached();
 			return next;
 		}
 		int skip = RandomUtil.getRandomInt(1, size()-1);
 //		System.out.println(skip);
-		ImageEntry<?> ret = null;
+		ImageAbstract<?> ret = null;
 		for (int j = skip; j > 0; j--) {
 			ret = super.getNext();
 		}
@@ -54,14 +54,14 @@ public class CommonContainerExt extends CommonContainer{
 
 
 	@Override
-	public ImageEntry<?> getPrevious() {
+	public ImageAbstract<?> getPrevious() {
 		if (!randomMode) {
-			ImageEntry<?> prev =  super.getPrevious();
+			ImageAbstract<?> prev =  super.getPrevious();
 			checkStartReached();
 			return prev;
 		}
 		int skip = RandomUtil.getRandomInt(1, size()-1);
-		ImageEntry<?> ret = null;
+		ImageAbstract<?> ret = null;
 		for (int j = skip; j > 0; j--) {
 			ret = super.getPrevious();
 		}

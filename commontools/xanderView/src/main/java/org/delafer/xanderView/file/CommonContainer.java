@@ -13,8 +13,8 @@ import net.j7.commons.io.TextFileUtils;
 import net.j7.commons.io.TextFileUtils.TextReader;
 import net.j7.commons.strings.StringUtils;
 
-import org.delafer.xanderView.file.entry.ImageEntry;
-import org.delafer.xanderView.file.entry.ImageEntry.ImageType;
+import org.delafer.xanderView.file.entry.ImageAbstract;
+import org.delafer.xanderView.file.entry.ImageAbstract.ImageType;
 import org.delafer.xanderView.file.readers.FileReader;
 import org.delafer.xanderView.file.readers.SevenZipReader;
 import org.delafer.xanderView.gui.config.ApplConfiguration;
@@ -25,12 +25,12 @@ import org.delafer.xanderView.sound.SoundBeep;
 
 public class CommonContainer {
 
-	SortedLinkedList<ImageEntry<?>> images;
-	ListIterator<ImageEntry<?>> iterator;
+	SortedLinkedList<ImageAbstract<?>> images;
+	ListIterator<ImageAbstract<?>> iterator;
 	File pathFile;
 //	String pathContainer;
 	IAbstractReader reader;
-	ImageEntry<?> current = null;
+	ImageAbstract<?> current = null;
 	int direction = 0;
 	boolean loop;
 
@@ -68,8 +68,8 @@ public class CommonContainer {
 		this.pathFile = new File(locationArg);
 		this.reader = getReader(pathFile);
 //		this.pathContainer = reader.getContainerPath();
-		Comparator<ImageEntry<?>> comparator = this.reader.getComparator();
-		this.images = new SortedLinkedList<ImageEntry<?>>(comparator);
+		Comparator<ImageAbstract<?>> comparator = this.reader.getComparator();
+		this.images = new SortedLinkedList<ImageAbstract<?>>(comparator);
 		loop = ApplConfiguration.instance().getBoolean(ApplConfiguration.LOOP_CURRENT_SOURCE);
 		initialize();
 
@@ -122,15 +122,15 @@ public class CommonContainer {
 						File aFile = new File(fileName);
 						if (aFile.isDirectory()) return ;
 
-						ImageType imgType = ImageEntry.getType(fileName);
+						ImageType imgType = ImageAbstract.getType(fileName);
 						if (ImageType.UNKNOWN.equals(imgType)) return ;
 
-						ImageEntry<?> entryNew = reader.getEntryByIdentifier(id);
+						ImageAbstract<?> entryNew = reader.getEntryByIdentifier(id);
 						images.add(entryNew);
 						updateIterator();
 						break;
 					case Delete:
-						ImageEntry<?> entryDel = reader.getEntryByIdentifier(id);
+						ImageAbstract<?> entryDel = reader.getEntryByIdentifier(id);
 						images.remove(entryDel);
 						if (current != null) {
 							if (Equals.equal(current.getIdentifier(), entryDel.getIdentifier())) {
@@ -155,7 +155,7 @@ public class CommonContainer {
 
 	}
 
-	protected void readStructure(SortedLinkedList<ImageEntry<?>> list) throws Exception {
+	protected void readStructure(SortedLinkedList<ImageAbstract<?>> list) throws Exception {
 		reader.read(list);
 	}
 
@@ -165,7 +165,7 @@ public class CommonContainer {
 		return idx;
 	}
 
-	public ImageEntry<?> getNext() {
+	public ImageAbstract<?> getNext() {
 		if (direction == -1) {
 			if (iterator.hasNext()) {
 				iterator.next();
@@ -210,19 +210,19 @@ public class CommonContainer {
 		return iterator.nextIndex();
 	}
 
-	public ImageEntry<?> getPrevious10() {
+	public ImageAbstract<?> getPrevious10() {
 		if (size()>= 10) for (int i = 8; i >= 0; i--) getPrevious();
 
 		return getPrevious();
 	}
 
-	public ImageEntry<?> getNext10() {
+	public ImageAbstract<?> getNext10() {
 		if (size()>= 10) for (int i = 8; i >= 0; i--) getNext();
 
 		return getNext();
 	}
 
-	public ImageEntry<?> getPrevious() {
+	public ImageAbstract<?> getPrevious() {
 		if (direction == 1) {
 			if (iterator.hasPrevious()) {
 				iterator.previous();
@@ -261,7 +261,7 @@ public class CommonContainer {
 	}
 
 
-	public ImageEntry<?> getCurrent() {
+	public ImageAbstract<?> getCurrent() {
 		return current;
 	}
 

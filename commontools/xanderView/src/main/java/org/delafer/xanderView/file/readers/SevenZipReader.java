@@ -7,9 +7,9 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.delafer.xanderView.file.ContentChangeWatcher;
-import org.delafer.xanderView.file.entry.ImageEntry;
-import org.delafer.xanderView.file.entry.ZipImageEntry;
-import org.delafer.xanderView.file.entry.ImageEntry.ImageType;
+import org.delafer.xanderView.file.entry.ImageAbstract;
+import org.delafer.xanderView.file.entry.ImageZip;
+import org.delafer.xanderView.file.entry.ImageAbstract.ImageType;
 import org.delafer.xanderView.gui.config.ApplInstance;
 import org.delafer.xanderView.interfaces.IAbstractReader;
 
@@ -33,7 +33,7 @@ public class SevenZipReader implements IAbstractReader {
 		this.sourceFile = sourceFile;
 	}
 
-	public void read(List<ImageEntry<?>> entries) {
+	public void read(List<ImageAbstract<?>> entries) {
 		try {
 			String fileName = getContainerPath();
 			boolean neu = true;
@@ -43,7 +43,7 @@ public class SevenZipReader implements IAbstractReader {
 			int numberOfItems = archive.getNumberOfItems();
 
 			for (int i = 0; i < numberOfItems; i++) {
-				ZipImageEntry entry = getEntryByIdentifier(i);
+				ImageZip entry = getEntryByIdentifier(i);
 //				System.out.println(entry);
 				if (entry != null) entries.add(entry);
 			}
@@ -73,20 +73,20 @@ public class SevenZipReader implements IAbstractReader {
 	}
 
 	@SuppressWarnings("unchecked")
-	public  ZipImageEntry getEntryByIdentifier(Object id) throws IOException {
+	public  ImageZip getEntryByIdentifier(Object id) throws IOException {
 		if (id == null) return null;
 		int i = ((Number)id).intValue();
 		String pathName = (String)archive.getProperty(i, PropID.PATH);
 		Long size = (Long)archive.getProperty(i, PropID.SIZE);
 
-		ImageType imageType = ImageEntry.getType(pathName);
+		ImageType imageType = ImageAbstract.getType(pathName);
 		if (imageType.equals(ImageType.UNKNOWN)) return null;
 
-		return new ZipImageEntry(this, archive, i, pathName, size);
+		return new ImageZip(this, archive, i, pathName, size);
 	}
 
 	@Override
-	public Comparator<ImageEntry<?>> getComparator() {
+	public Comparator<ImageAbstract<?>> getComparator() {
 		return null;
 	}
 

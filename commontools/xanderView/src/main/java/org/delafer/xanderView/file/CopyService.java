@@ -12,7 +12,7 @@ import net.j7.commons.io.AbstractFileProcessor.Recurse;
 
 import org.delafer.xanderView.common.SimpleNameIncrementer;
 import org.delafer.xanderView.file.entry.*;
-import org.delafer.xanderView.file.entry.ImageEntry.ImageType;
+import org.delafer.xanderView.file.entry.ImageAbstract.ImageType;
 import org.delafer.xanderView.file.readers.FileReader;
 import org.delafer.xanderView.general.State;
 import org.delafer.xanderView.gui.ImageCanvas;
@@ -52,8 +52,8 @@ public class CopyService {
 
     private transient Object lockObj = new Object();
 
-	Set<FileDirEntry> images;
-//	ListIterator<FileImageEntry> iterator;
+	Set<ImageAbstract<?>> images;
+//	ListIterator<ImageFS> iterator;
 	File pathFile;
 	String pathTxt;
 	FileReader reader;
@@ -66,9 +66,9 @@ public class CopyService {
 
 
 
-	public static boolean exists(ImageEntry<?> img) {
-		FileDirEntry e = new FileDirEntry(UIHelpers.asString(img.getIdentifier()), img.name(), img.size());
-		e.crc = img.CRC();
+	public static boolean exists(ImageAbstract<?> img) {
+		ImageFS e = new ImageFS(UIHelpers.asString(img.getIdentifier()), img.name(), img.size());
+		e.setCRC(img.CRC());
 		return CopyService.instance().images.contains(e);
 	}
 
@@ -84,13 +84,13 @@ public class CopyService {
 		this.pathTxt = locationArg;
 		this.pathFile = new File(locationArg);
 		this.reader = new FileReader(pathFile, Recurse.Flat);
-		this.images = new HashSet<FileDirEntry>();
+		this.images = new HashSet<>();
 		initializeInternal();
 
 	}
 
-	private FileDirEntry findByName(String name) {
-		for (FileDirEntry next : images) {
+	private ImageAbstract<?>  findByName(String name) {
+		for (ImageAbstract<?> next : images) {
 			if (Equals.equal(next.getIdentifier(), name)) return next;
 		}
 		return null;
@@ -106,7 +106,7 @@ public class CopyService {
 		} catch (InterruptedException e) {}
 	}
 
-	public void copy(final ImageEntry<?> entry, final CopyObserver observer) {
+	public void copy(final ImageAbstract<?> entry, final CopyObserver observer) {
 			Thread worker = new Thread("copyService") {
 
 				@Override
@@ -153,21 +153,21 @@ public class CopyService {
 	}
 
 
-	public State copySync(ImageEntry<?> entry) {
+	public State copySync(ImageAbstract<?> entry) {
 		try {
 
-			FileDirEntry fde = new FileDirEntry(null,null,entry.size());
-			fde.crc = entry.CRC();
+			ImageFS fde = new ImageFS(null,null,entry.size());
+			fde.setCRC(entry.CRC());
 
 			if (images.contains(fde)) {
 //				System.out.println("Already exists!!!");
-//				for (FileDirEntry next : images) {
+//				for (ImageDir next : images) {
 //					System.out.println(next.identifier+" "+next.name+" "+next.crc);
 //				}
 				return State.Ignore;
 			}
 
-			String fileName = entry.name;
+			String fileName = entry.name();
 			String baseName = FileUtils.getBaseName(fileName);
 			String ext = FileUtils.getExtension(fileName);
 
@@ -181,9 +181,10 @@ public class CopyService {
 			nioTransferCopy(entry, aFile);
 
 
-			FileDirEntry newEntry = new FileDirEntry(FileUtils.extractFullPathName(aFile), fileName, entry.size, entry.crc);
+			ImageFS newEntry = new ImageFS(FileUtils.extractFullPathName(aFile), fileName, entry.size());
+			newEntry.setCRC(entry.CRC());
 
-			FileDirEntry removeIt = CopyService.this.findByName(newEntry.getIdentifier());
+			ImageAbstract<?>  removeIt = CopyService.this.findByName(newEntry.getIdentifier());
 			images.remove(removeIt);
 
 			addImage(newEntry);
@@ -196,7 +197,7 @@ public class CopyService {
 
 	}
 
-	private void addImage(FileDirEntry add) {
+	private void addImage(ImageAbstract<?> add) {
 		if (add == null) return ;
 		if (images.size()>0) {
 			if (images.contains(add)) images.remove(add);
@@ -216,12 +217,13 @@ public class CopyService {
 	    }
 	}
 
-    private static void nioTransferCopy(ImageEntry<?> entry, File target) throws IOException {
+    private static void nioTransferCopy(ImageAbstract<?> entry, File target) throws IOException {
         FileChannel out = null;
 
         try {
             out = new FileOutputStream(target).getChannel();
-            out.write(ByteBuffer.wrap(entry.content()));
+            //out.write(ByteBuffer.wrap(entry.content()));
+            out.write(entry.content().get());
             out.force(true);
         } finally {
             close(out);
@@ -252,15 +254,15 @@ public class CopyService {
 						File aFile = new File(fileName);
 						if (aFile.isDirectory()) return ;
 
-						ImageType imgType = ImageEntry.getType(fileName);
+						ImageType imgType = ImageAbstract.getType(fileName);
 						if (ImageType.UNKNOWN.equals(imgType)) return ;
 
-						FileImageEntry entryNew = reader.getEntryByIdentifier(id);
-						addImage(FileDirEntry.as(entryNew));
+						ImageAbstract<String> entryNew = (ImageAbstract<String>)reader.getEntryByIdentifier(id);
+						addImage((entryNew));
 						break;
 					case Delete:
-						FileImageEntry entryDel = reader.getEntryByIdentifier(id);
-						FileDirEntry fde = CopyService.this.findByName(entryDel.getIdentifier());
+						ImageAbstract<String>  entryDel = (ImageAbstract<String>)reader.getEntryByIdentifier(id);
+						ImageAbstract<?> fde = CopyService.this.findByName(entryDel.getIdentifier());
 						images.remove(fde);
 						break;
 					default:
@@ -285,11 +287,11 @@ public class CopyService {
 			public void run() {
 				synchronized (lockObj) {
 
-				List<ImageEntry<?>> toAdd = new ArrayList<ImageEntry<?>>();
+				List<ImageAbstract<?>> toAdd = new ArrayList<ImageAbstract<?>>();
 				reader.read(toAdd);
 
-				for (ImageEntry<?> next : toAdd) {
-					images.add(FileDirEntry.as((FileImageEntry)next));
+				for (ImageAbstract<?> next : toAdd) {
+					images.add(((ImageFS)next));
 				}
 				reader.initialize();
 
@@ -305,7 +307,7 @@ public class CopyService {
 	}
 
 //	public void test() {
-//		for (FileDirEntry fileDirEntry : images) {
+//		for (ImageDir fileDirEntry : images) {
 //			System.out.println(fileDirEntry);
 //		}
 //	}

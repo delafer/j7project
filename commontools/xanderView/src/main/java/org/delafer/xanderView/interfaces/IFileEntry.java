@@ -1,5 +1,7 @@
 package org.delafer.xanderView.interfaces;
 
+import org.delafer.xanderView.file.entry.Buf;
+
 public interface IFileEntry<E> {
 
 
@@ -11,6 +13,6 @@ public interface IFileEntry<E> {
 
 	public long size();
 
-	public byte[] content();
+	public Buf content();
 
 }

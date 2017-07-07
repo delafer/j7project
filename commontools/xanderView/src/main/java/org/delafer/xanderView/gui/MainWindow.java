@@ -8,10 +8,10 @@ import java.awt.event.MouseAdapter;
 import net.j7.commons.strings.StringUtils;
 
 import org.delafer.xanderView.common.ImageSize;
-import org.delafer.xanderView.file.CommonContainerExt;
-import org.delafer.xanderView.file.CopyService;
+import org.delafer.xanderView.file.*;
 import org.delafer.xanderView.file.CopyService.CopyObserver;
-import org.delafer.xanderView.file.entry.ImageEntry;
+import org.delafer.xanderView.file.entry.ImageAbstract;
+import org.delafer.xanderView.file.entry.ImageEnc;
 import org.delafer.xanderView.general.State;
 import org.delafer.xanderView.gui.config.ApplConfiguration;
 import org.delafer.xanderView.gui.config.OrientationStore;
@@ -162,6 +162,7 @@ public final class MainWindow extends ImageLoader{
 	}
 
 	protected void bindKeyEvent(Event e) {
+		System.out.println("CODE: "+e.keyCode);
 		switch (e.keyCode) {
 		case SWT.ESC:
 			shell.close();
@@ -204,7 +205,7 @@ public final class MainWindow extends ImageLoader{
 			break;
 		case 115:
 			//S -> save
-			ImageEntry<?> current = pointer.getCurrent();
+			ImageAbstract<?> current = pointer.getCurrent();
 			if (current != null) {
 				OrientationStore.instance().setOrientation(current.CRC(), panel.getOrientation());
 				OrientationStore.instance().setScaleConst(current.CRC(), panel.getScaleFactor());
@@ -225,6 +226,11 @@ public final class MainWindow extends ImageLoader{
 		case 16777261:
 			panel.scaleDown();
 			panel.showImage();
+			break;
+		case 16777226:
+			//F1 F1 F1
+			CopyService.instance().copy(new ImageEnc<>(pointer.getCurrent()), new CopyObserver(shell, panel));
+			UIHelpers.sleep(100);
 			break;
 		case 16777233://F8
 		case 16777232://F7
@@ -312,7 +318,7 @@ public final class MainWindow extends ImageLoader{
 		UIHelpers.addMenuItem(submenu, "Select image to &Open\tCtrl+O", SWT.MOD1 + 'O', new Listener() {
 			public void handleEvent(Event event) {
 				 FileDialog dialog = new FileDialog(MainWindow.this.shell.wndShell(), SWT.OPEN);
-				   dialog.setFilterExtensions(new String [] {"*.jpg;*.jpeg;*.jpe;*.jfif;*.jif;*.jfi;*.bmp;*.rle;*.dib;*.png,*.gif;*.;*.zip;*.jzip"});
+				   dialog.setFilterExtensions(new String [] {"*.jpg;*.jpeg;*.jpe;*.jfif;*.jif;*.jfi;*.bmp;*.rle;*.dib;*.png,*.gif;*.;*.zip;*.jzip;*.cry"});
 				   dialog.setFilterPath(pointer.getLocation());
 				   String result = dialog.open();
 				   if (StringUtils.isEmpty(result)) return ;

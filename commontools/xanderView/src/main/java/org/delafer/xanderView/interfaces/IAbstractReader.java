@@ -5,7 +5,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.delafer.xanderView.file.ContentChangeWatcher;
-import org.delafer.xanderView.file.entry.ImageEntry;
+import org.delafer.xanderView.file.entry.ImageAbstract;
 
 public interface IAbstractReader {
 
@@ -14,15 +14,15 @@ public interface IAbstractReader {
 
 	public void initialize();
 
-	public void read(List<ImageEntry<?>> entries);
+	public void read(List<ImageAbstract<?>> entries);
 
 	public void close();
 
 	public void register(ContentChangeWatcher watcher);
 
-	public <E extends ImageEntry<?>>E getEntryByIdentifier(Object id) throws IOException ;
+	public <E extends ImageAbstract<?>>E getEntryByIdentifier(Object id) throws IOException ;
 
-	public Comparator<ImageEntry<?>> getComparator();
+	public Comparator<ImageAbstract<?>> getComparator();
 
 	public String getContainerPath();
 

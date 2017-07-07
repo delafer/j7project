@@ -1,12 +1,14 @@
 package org.delafer.xanderView.hash;
 
+import java.nio.ByteBuffer;
+
 import net.jpountz.xxhash.XXHash64;
 import net.jpountz.xxhash.XXHashFactory;
 
 public class Hasher {
 
 	private XXHash64 hash64;
-	public static final int SIZE = 2048;
+	public static final int HSIZE = 4096;
 
 
 	/**
@@ -32,8 +34,15 @@ public class Hasher {
 		hash64 = hash.hash64();
 	}
 
+	public long calc(ByteBuffer buf, long seed) {
+		long h = hash64.hash(buf, 0, min(buf.remaining(), HSIZE), seed);
+		buf.rewind();
+		return h;
+	}
+
+
 	public long calc(byte[] buf, long seed) {
-		return hash64.hash(buf, 0, min(buf.length, SIZE), seed);
+		return hash64.hash(buf, 0, min(buf.length, HSIZE), seed);
 	}
 
 

@@ -5,20 +5,14 @@ import java.io.File;
 
 import javax.imageio.ImageIO;
 
-import net.j7.commons.strings.Args;
-import net.j7.commons.strings.StringUtils;
 import net.j7.commons.utils.Metrics;
 
 import org.delafer.xanderView.common.ImageSize;
-import org.delafer.xanderView.file.entry.FileImageEntry;
-import org.delafer.xanderView.orientation.OrientationCommons;
+import org.delafer.xanderView.file.entry.HelperFS;
 import org.libjpegturbo.turbojpeg.TJDecompressor;
 import org.libjpegturbo.turbojpeg.TJScalingFactor;
 
-import com.mortennobel.imagescaling.AdvancedResizeOp;
-import com.mortennobel.imagescaling.ResampleFilters;
-import com.mortennobel.imagescaling.ResampleOp;
-import com.mortennobel.imagescaling.ResampleOpSlow;
+import com.mortennobel.imagescaling.*;
 
 public class TesterSingle {
 	//HQ_NAA_dither
@@ -34,7 +28,7 @@ public class TesterSingle {
 
 	public static BufferedImage getImage(String name) {
 		try {
-			byte[] a = FileImageEntry.readNIO(name);
+			byte[] a = HelperFS.readData(name, -1);
 
 			TJScalingFactor sf =  new TJScalingFactor(1, 1);
 			TJDecompressor tjd = new TJDecompressor(a);

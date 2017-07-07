@@ -1,10 +1,7 @@
 package org.delafer.xanderView.scale.test;
 
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,11 +11,9 @@ import net.j7.commons.strings.Args;
 import net.j7.commons.strings.StringUtils;
 
 import org.delafer.xanderView.common.ImageSize;
-import org.delafer.xanderView.file.entry.FileImageEntry;
+import org.delafer.xanderView.file.entry.HelperFS;
 import org.delafer.xanderView.orientation.OrientationCommons;
-import org.delafer.xanderView.scale.ResizerNobel;
-import org.delafer.xanderView.scale.ResizerBase;
-import org.delafer.xanderView.scale.ResizerOpenCV;
+import org.delafer.xanderView.scale.*;
 import org.libjpegturbo.turbojpeg.TJDecompressor;
 import org.libjpegturbo.turbojpeg.TJScalingFactor;
 
@@ -37,7 +32,7 @@ public class Tester {
 
 	public static BufferedImage getImage(String name, int type) {
 		try {
-			byte[] a = FileImageEntry.readNIO(name);
+			byte[] a = HelperFS.readData(name, -1);
 
 			TJScalingFactor sf = new TJScalingFactor(1, 1);
 			TJDecompressor tjd = new TJDecompressor(a);

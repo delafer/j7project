@@ -12,7 +12,7 @@ import net.j7.commons.strings.Args;
 import org.delafer.xanderView.common.ImageSize;
 import org.delafer.xanderView.file.CommonContainer;
 import org.delafer.xanderView.file.CopyService;
-import org.delafer.xanderView.file.entry.ImageEntry;
+import org.delafer.xanderView.file.entry.ImageAbstract;
 import org.delafer.xanderView.gui.config.OrientationStore;
 import org.libjpegturbo.turbojpeg.TJ;
 import org.libjpegturbo.turbojpeg.TJDecompressor;
@@ -23,7 +23,7 @@ public abstract class ImageLoader {
 	public abstract Dimension getSize();
 	public OrientationStore orientator = OrientationStore.instance();
 
-	protected void loadImage(CommonContainer container, ImageEntry<?> entry, ImageCanvas panel) {
+	protected void loadImage(CommonContainer container, ImageAbstract<?> entry, ImageCanvas panel) {
 		try {
 			if (entry == null) return ;
 			String info = Args.fill("%1 [%2/%3]", entry.shortName(),String.valueOf(container.currentIndex()),String.valueOf(container.size()));
@@ -34,17 +34,18 @@ public abstract class ImageLoader {
 		}
 	}
 
-	protected void loadImage(ImageEntry<?> entry, String text, ImageCanvas panel) {
+	protected void loadImage(ImageAbstract<?> entry, String text, ImageCanvas panel) {
 		try {
 			BufferedImage img = null;
+			//TODO CRY
 			switch (entry.getImageType()) {
 			case JPEG:
-				img = loadJpegImage(entry.content());
+				img = loadJpegImage(entry.content().getArray(true));
 				break;
 			case BMP:
 			case PNG:
 			default:
-				img = loadCommonImage(entry.content());
+				img = loadCommonImage(entry.content().getArray(true));
 				break;
 			}
 			if (img == null) return ;
