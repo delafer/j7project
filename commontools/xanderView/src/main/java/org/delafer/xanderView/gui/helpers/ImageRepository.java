@@ -22,7 +22,10 @@ package org.delafer.xanderView.gui.helpers;
  */
 
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -30,11 +33,12 @@ import java.util.Iterator;
 import javax.imageio.ImageIO;
 
 import org.eclipse.swt.SWTException;
-import org.eclipse.swt.graphics.*;
+import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.ImageData;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.program.Program;
 import org.eclipse.swt.widgets.Display;
-
-import com.sun.org.apache.bcel.internal.Constants;
 
 /**
  * @author Olivier
@@ -194,12 +198,12 @@ public class ImageRepository {
 	 */
 	public static Image getIconFromProgram(Program program) {
 		Image image = null;
-
+		if (program != null)
 		try {
 			image = (Image) images.get(program.toString());
 
 			if (image == null)
-				if (program != null) {
+				 {
 
 					ImageData imageData = program.getImageData();
 					if (imageData != null) {

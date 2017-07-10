@@ -57,7 +57,7 @@ public class Rotator2D extends CommonRotator {
 	    int centerX = w0 / 2;
 	    int centerY = h0 / 2;
 
-	    if (quadrants % 2 == 1) {
+	    if (!(quadrants % 2 == 0)) {
 	        w1 = h0;
 	        h1 = w0;
 	    }

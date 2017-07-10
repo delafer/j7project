@@ -2,16 +2,10 @@ package org.delafer.xanderView.file;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Comparator;
 import java.util.ListIterator;
-
-import net.j7.commons.base.Equals;
-import net.j7.commons.base.Numbers;
-import net.j7.commons.collections.SortedLinkedList;
-import net.j7.commons.io.AbstractFileProcessor.Recurse;
-import net.j7.commons.io.TextFileUtils;
-import net.j7.commons.io.TextFileUtils.TextReader;
-import net.j7.commons.strings.StringUtils;
 
 import org.delafer.xanderView.file.entry.ImageAbstract;
 import org.delafer.xanderView.file.entry.ImageAbstract.ImageType;
@@ -22,6 +16,14 @@ import org.delafer.xanderView.gui.config.ApplInstance;
 import org.delafer.xanderView.interfaces.IAbstractReader;
 import org.delafer.xanderView.interfaces.IAbstractReader.FileEvent;
 import org.delafer.xanderView.sound.SoundBeep;
+
+import net.j7.commons.base.Equals;
+import net.j7.commons.base.Numbers;
+import net.j7.commons.collections.SortedLinkedList;
+import net.j7.commons.io.AbstractFileProcessor.Recurse;
+import net.j7.commons.io.TextFileUtils;
+import net.j7.commons.io.TextFileUtils.TextReader;
+import net.j7.commons.strings.StringUtils;
 
 public class CommonContainer {
 
@@ -65,7 +67,7 @@ public class CommonContainer {
 		}
 
 
-		this.pathFile = new File(locationArg);
+		this.pathFile = new File(locationArg != null ? locationArg : currentPath());
 		this.reader = getReader(pathFile);
 //		this.pathContainer = reader.getContainerPath();
 		Comparator<ImageAbstract<?>> comparator = this.reader.getComparator();
@@ -89,6 +91,12 @@ public class CommonContainer {
 			}
 		}
 
+	}
+	
+	private static String currentPath() {
+		Path currentRelativePath = Paths.get("");
+		String s = currentRelativePath.toAbsolutePath().toString();
+		return s;
 	}
 
 	private boolean isLetter(char ch) {
@@ -130,7 +138,7 @@ public class CommonContainer {
 						updateIterator();
 						break;
 					case Delete:
-						ImageAbstract<?> entryDel = reader.getEntryByIdentifier(id);
+						ImageAbstract<?> entryDel = findByIdentifier(""+id);
 						images.remove(entryDel);
 						if (current != null) {
 							if (Equals.equal(current.getIdentifier(), entryDel.getIdentifier())) {
@@ -152,6 +160,14 @@ public class CommonContainer {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
+	}
+	
+	private ImageAbstract<?>  findByIdentifier(String ident) {
+		for (ImageAbstract<?> next : images) {
+			if (Equals.equal(next.getIdentifier(), ident)) return next;
+		}
+		return null;
 
 	}
 

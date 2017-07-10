@@ -2,6 +2,7 @@ package org.delafer.xanderView.file.entry;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.Objects;
 
 import net.j7.commons.io.FileUtils;
 import net.sf.sevenzipjbinding.*;
@@ -55,6 +56,39 @@ public class ImageZip extends ImageAbstract<Integer> {
 	public String toString() {
 		return String.format("ImageZip [identifier=%s, name=%s, size=%s, crc=%s, imageType=%s]", identifier, name, size, crc, imageType);
 	}
+	
+	@Override
+	public boolean isEquals(ImageAbstract<?> thisObj, Object obj) {
+		if (thisObj == obj) return true;
+		if (!(obj instanceof ImageAbstract))  return false;
+		final ImageAbstract<?> o = (ImageAbstract<?>) obj;
+
+		if (thisObj.size != o.size) return false;
+
+		final Long tcrc = thisObj.CRC(), ocrc = o.CRC();
+
+		if (tcrc != null && ocrc != null) {
+			return Objects.equals(tcrc, ocrc);
+		}
+		
+		if (!Objects.equals(thisObj.name(), o.name())) return false;
+
+		return true;		
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		return isEquals(this, obj);
+	}
+	
+	@Override
+	public ImageAbstract<?> cloneObj() {
+		ImageZip cloned = new ImageZip(parent, archive, identifier, name, size);
+		cloned.crc = this.crc;
+		cloned.imageSize = this.imageSize;
+		cloned.imageType = this.imageType;
+		return cloned;
+	}
 
 	@SuppressWarnings("unused")
 	public static class MyExtractCallback implements IArchiveExtractCallback {
@@ -92,7 +126,6 @@ public class ImageZip extends ImageAbstract<Integer> {
 		}
 
 		public ByteBuffer data() {
-//			return this.content;
 			bb.rewind();
 			return bb;
 		}

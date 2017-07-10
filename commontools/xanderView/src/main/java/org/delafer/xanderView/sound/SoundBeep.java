@@ -55,14 +55,14 @@ public class SoundBeep {
 
 	}
 
-	public static void main(String[] args) {
-		SoundBeep b = new SoundBeep();
-		b.beep();
-		try {
-			Thread.currentThread().sleep(1500);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+//	public static void main(String[] args) {
+//		SoundBeep b = new SoundBeep();
+//		b.beep();
+//		try {
+//			Thread.currentThread().sleep(1500);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//	}
 }

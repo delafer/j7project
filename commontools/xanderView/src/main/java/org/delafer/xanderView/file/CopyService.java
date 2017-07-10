@@ -1,18 +1,21 @@
 package org.delafer.xanderView.file;
 
-import java.io.*;
-import java.nio.ByteBuffer;
+import java.io.Closeable;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.channels.FileChannel;
-import java.util.*;
-
-import net.j7.commons.base.Equals;
-import net.j7.commons.io.FilePath;
-import net.j7.commons.io.FileUtils;
-import net.j7.commons.io.AbstractFileProcessor.Recurse;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.Set;
 
 import org.delafer.xanderView.common.SimpleNameIncrementer;
-import org.delafer.xanderView.file.entry.*;
+import org.delafer.xanderView.file.entry.ImageAbstract;
 import org.delafer.xanderView.file.entry.ImageAbstract.ImageType;
+import org.delafer.xanderView.file.entry.ImageFS;
 import org.delafer.xanderView.file.readers.FileReader;
 import org.delafer.xanderView.general.State;
 import org.delafer.xanderView.gui.ImageCanvas;
@@ -23,6 +26,11 @@ import org.delafer.xanderView.gui.helpers.MultiShell;
 import org.delafer.xanderView.gui.helpers.UIHelpers;
 import org.delafer.xanderView.interfaces.IAbstractReader.FileEvent;
 import org.eclipse.swt.widgets.Display;
+
+import net.j7.commons.base.Equals;
+import net.j7.commons.io.AbstractFileProcessor.Recurse;
+import net.j7.commons.io.FilePath;
+import net.j7.commons.io.FileUtils;
 
 public class CopyService {
 
@@ -67,9 +75,21 @@ public class CopyService {
 
 
 	public static boolean exists(ImageAbstract<?> img) {
-		ImageFS e = new ImageFS(UIHelpers.asString(img.getIdentifier()), img.name(), img.size());
-		e.setCRC(img.CRC());
-		return CopyService.instance().images.contains(e);
+//		ImageAbstract<String> e = ImageFS.getInstance(UIHelpers.asString(img.getIdentifier()), img.name(), img.size());
+//		e.setCRC(img.CRC());
+		
+		Set<ImageAbstract<?>> imgs = CopyService.instance().images;
+		boolean found = false;
+		for (ImageAbstract<?> next : imgs) {
+			if (img.size()==next.size()) {
+				next.CRC();
+				found = true;
+			}
+		}
+		if (!found) return false;
+		img.CRC();
+		
+		return found && CopyService.instance().images.contains(img);
 	}
 
 	public void init() {
@@ -89,9 +109,9 @@ public class CopyService {
 
 	}
 
-	private ImageAbstract<?>  findByName(String name) {
+	private ImageAbstract<?>  findByIdentifier(String ident) {
 		for (ImageAbstract<?> next : images) {
-			if (Equals.equal(next.getIdentifier(), name)) return next;
+			if (Equals.equal(next.getIdentifier(), ident)) return next;
 		}
 		return null;
 
@@ -156,10 +176,10 @@ public class CopyService {
 	public State copySync(ImageAbstract<?> entry) {
 		try {
 
-			ImageFS fde = new ImageFS(null,null,entry.size());
-			fde.setCRC(entry.CRC());
+//			ImageFS fde = new ImageFS(null,null,entry.size());
+//			fde.setCRC(entry.CRC());
 
-			if (images.contains(fde)) {
+			if (exists(entry)) {
 //				System.out.println("Already exists!!!");
 //				for (ImageDir next : images) {
 //					System.out.println(next.identifier+" "+next.name+" "+next.crc);
@@ -184,28 +204,50 @@ public class CopyService {
 			ImageFS newEntry = new ImageFS(FileUtils.extractFullPathName(aFile), fileName, entry.size());
 			newEntry.setCRC(entry.CRC());
 
-			ImageAbstract<?>  removeIt = CopyService.this.findByName(newEntry.getIdentifier());
-			images.remove(removeIt);
-
-			addImage(newEntry);
+			ImageAbstract<?>  removeIt = CopyService.this.findByIdentifier(newEntry.getIdentifier());
+			
+			removeImage(removeIt);
+			addImage(newEntry, false);
+			
 			return State.Success;
 
 		} catch (Throwable e) {
+			e.printStackTrace();
 			return State.Error;
 		}
 
 
 	}
 
-	private void addImage(ImageAbstract<?> add) {
+	private void addImage(ImageAbstract<?> add, boolean update) {
 		if (add == null) return ;
-		if (images.size()>0) {
-			if (images.contains(add)) images.remove(add);
+		if (update && images.size()>0) {
+			if (exists(add)) removeImage(add);
 		}
 		images.add(add);
-
-
+		
+		//debug
+		boolean ok = false;
+		for (ImageAbstract<?> next : images) {
+			if (next == add) {
+				ok =true;
+				break;
+			}
+		}
+		if (!ok) {
+			System.out.println("Can't add image!");
+		}
 	}
+	
+	private void removeImage(ImageAbstract<?> add) {
+		if (add == null) return ;
+		int size = images.size();
+		images.remove(add);
+		if (images.size() == size) {
+			System.out.println("Can't remove image: "+add);
+		}
+	}
+
 
 	private static void close(Closeable closable) {
 	    if (closable != null) {
@@ -241,6 +283,7 @@ public class CopyService {
 		return aFile;
 	}
 
+	@SuppressWarnings("unchecked")
 	private void initializeInternal() {
 
 		try {
@@ -253,17 +296,16 @@ public class CopyService {
 						String fileName = id.toString();
 						File aFile = new File(fileName);
 						if (aFile.isDirectory()) return ;
-
 						ImageType imgType = ImageAbstract.getType(fileName);
 						if (ImageType.UNKNOWN.equals(imgType)) return ;
-
+						UIHelpers.sleep(1000);
 						ImageAbstract<String> entryNew = (ImageAbstract<String>)reader.getEntryByIdentifier(id);
-						addImage((entryNew));
+						addImage(entryNew, true);
 						break;
 					case Delete:
-						ImageAbstract<String>  entryDel = (ImageAbstract<String>)reader.getEntryByIdentifier(id);
-						ImageAbstract<?> fde = CopyService.this.findByName(entryDel.getIdentifier());
-						images.remove(fde);
+						ImageAbstract<?>  entryDel = findByIdentifier(""+id);
+//						ImageAbstract<?> fde = CopyService.this.findByIdentifier(entryDel.getIdentifier());
+						removeImage(entryDel);
 						break;
 					default:
 						System.out.println("Other type");
@@ -291,7 +333,7 @@ public class CopyService {
 				reader.read(toAdd);
 
 				for (ImageAbstract<?> next : toAdd) {
-					images.add(((ImageFS)next));
+					addImage(((ImageAbstract<?>)next), false);
 				}
 				reader.initialize();
 
@@ -316,16 +358,16 @@ public class CopyService {
 //	public void onContainerContentChange() {
 //	}
 
-	public static void main(String[] args) {
-		Queue<String> a = new LinkedList<String>();
-		a.add("b");
-		a.add("x");
-		a.add("a");
-		System.out.println(a.remove());
-		System.out.println(a.remove());
-		System.out.println(a.remove());
-
-	}
+//	public static void main(String[] args) {
+//		Queue<String> a = new LinkedList<String>();
+//		a.add("b");
+//		a.add("x");
+//		a.add("a");
+//		System.out.println(a.remove());
+//		System.out.println(a.remove());
+//		System.out.println(a.remove());
+//
+//	}
 
 	public static class CopyObserver {
 

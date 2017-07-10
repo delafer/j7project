@@ -11,6 +11,7 @@ import org.delafer.xanderView.common.ImageSize;
 import org.delafer.xanderView.file.*;
 import org.delafer.xanderView.file.CopyService.CopyObserver;
 import org.delafer.xanderView.file.entry.ImageAbstract;
+import org.delafer.xanderView.file.entry.ImageDec;
 import org.delafer.xanderView.file.entry.ImageEnc;
 import org.delafer.xanderView.general.State;
 import org.delafer.xanderView.gui.config.ApplConfiguration;
@@ -28,6 +29,7 @@ import org.eclipse.swt.widgets.*;
 
 public final class MainWindow extends ImageLoader{
 
+	private static final int COPY_DELAY = 250;
 	private MultiShell shell;
 	private Display display;
 	private Composite cmpEmbedded;
@@ -162,7 +164,7 @@ public final class MainWindow extends ImageLoader{
 	}
 
 	protected void bindKeyEvent(Event e) {
-		System.out.println("CODE: "+e.keyCode);
+//		System.out.println("CODE: "+e.keyCode);
 		switch (e.keyCode) {
 		case SWT.ESC:
 			shell.close();
@@ -229,14 +231,18 @@ public final class MainWindow extends ImageLoader{
 			break;
 		case 16777226:
 			//F1 F1 F1
-			CopyService.instance().copy(new ImageEnc<>(pointer.getCurrent()), new CopyObserver(shell, panel));
-			UIHelpers.sleep(100);
+			CopyService.instance().copy(ImageEnc.getEncrypted(pointer.getCurrent()), new CopyObserver(shell, panel));
+			UIHelpers.sleep(COPY_DELAY);
+			break;
+		case 16777228:
+			CopyService.instance().copy(pointer.getCurrent(), new CopyObserver(shell, panel));
+			UIHelpers.sleep(COPY_DELAY);
 			break;
 		case 16777233://F8
 		case 16777232://F7
 		case 16777234://F9
-			CopyService.instance().copy(pointer.getCurrent(), new CopyObserver(shell, panel));
-			UIHelpers.sleep(100);
+			CopyService.instance().copy(ImageDec.getOriginal(pointer.getCurrent()), new CopyObserver(shell, panel));
+			UIHelpers.sleep(COPY_DELAY);
 //			SplashWindow splash = new SplashWindow(shell.active(), res);
 			break;
 		case 107:

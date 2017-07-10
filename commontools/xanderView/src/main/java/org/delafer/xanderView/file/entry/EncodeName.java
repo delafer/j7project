@@ -1,14 +1,16 @@
 package org.delafer.xanderView.file.entry;
 
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.util.*;
+import me.xuender.unidecode.Unidecode;
 
 public class EncodeName {
 
 	public EncodeName() {
 		// TODO Auto-generated constructor stub
 	}
+	
+   public static String transliterate(String input) {
+   	 return Unidecode.decode(input);
+   }
 
 	public static String correctFileName(String name) {
 		   if (name == null) return null;
@@ -30,51 +32,52 @@ public class EncodeName {
 
 	static char[] chars = new char[] {' ','~','!', '@', '#', '$', '%', '^', '&', '(', ')', '-', '+', '_','=','[',']', '{','}'};
 
-	public static void main3(String[] args) {
-		Map<Character, Character> a = new TreeMap<>();
-		List<Character> b = new LinkedList<>();
-
-		for (int i = 0; i < 26; i++) {
-			char c = (char)(65 + i);
-			b.add(Character.valueOf(c));
-		}
-		try {
-		SecureRandom s = SecureRandom.getInstanceStrong();
-			String a1 = "", b1 = "";
-			Map<Integer, Integer> xx = new TreeMap<Integer, Integer>();
-			for (int i = 0; i < 26; i++) {
-				Character f = Character.valueOf((char)(65 + i));
-				Character t;
-				int x;
-				do {
-					x =  s.nextInt(b.size());
-					t = b.get(x);
-				} while (f.equals(t));
-				b.remove(x);
-//				System.out.println("case '"+f+"': return "+((int)f-(int)t)+";");
-				a1 += ((int)f-(int)t)+",";
-				b1 += ((int)t-(int)f)+",";
-				xx.put(((int)t-65), ((int)f - 65));
-			}
-			System.out.println(a1);
-			System.out.println();
-//			System.out.println(b1);
-			for (Map.Entry<Integer, Integer> x : xx.entrySet()) {
-				System.out.print(x.getKey()-x.getValue()+",");
-			}
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		}
-	}
+//	public static void main3(String[] args) {
+//		Map<Character, Character> a = new TreeMap<>();
+//		List<Character> b = new LinkedList<>();
+//
+//		for (int i = 0; i < 26; i++) {
+//			char c = (char)(65 + i);
+//			b.add(Character.valueOf(c));
+//		}
+//		try {
+//		SecureRandom s = SecureRandom.getInstanceStrong();
+//			String a1 = "", b1 = "";
+//			Map<Integer, Integer> xx = new TreeMap<Integer, Integer>();
+//			for (int i = 0; i < 26; i++) {
+//				Character f = Character.valueOf((char)(65 + i));
+//				Character t;
+//				int x;
+//				do {
+//					x =  s.nextInt(b.size());
+//					t = b.get(x);
+//				} while (f.equals(t));
+//				b.remove(x);
+////				System.out.println("case '"+f+"': return "+((int)f-(int)t)+";");
+//				a1 += ((int)f-(int)t)+",";
+//				b1 += ((int)t-(int)f)+",";
+//				xx.put(((int)t-65), ((int)f - 65));
+//			}
+//			System.out.println(a1);
+//			System.out.println();
+////			System.out.println(b1);
+//			for (Map.Entry<Integer, Integer> x : xx.entrySet()) {
+//				System.out.print(x.getKey()-x.getValue()+",");
+//			}
+//		} catch (NoSuchAlgorithmException e) {
+//			e.printStackTrace();
+//		}
+//	}
 
 	final static int[] codes = new int[] {-8,-6,1,-9,-12,-10,2,5,-6,-10,-12,8,-8,2,-11,-2,16,8,5,-5,-1,16,16,5,1,15};
 	final static int[] codes2 = new int[] {-16,-1,-5,-8,-2,-16,-16,6,8,-8,-15,-2,9,-5,6,10,12,2,-5,10,8,1,12,-1,5,11};
-	final static int MAX_LEN = 228;
+	final static int MAX_LEN = 28;
 	public static String encrypt(String name) {
 
 		if (name == null || name.length() == 0) return name;
 		if (name.length()>MAX_LEN) name = name.substring(0, MAX_LEN);
 
+		name = correctFileName(transliterate(name));
 		char ch, uch;
 
 		StringBuilder sb = new StringBuilder(name.length());
@@ -229,13 +232,13 @@ public class EncodeName {
 	}
 
 
-	public static void main(String[] args) {
-		String x = encrypt("In the Java programming language language, every class implicitly or explicitly provides a hashCode() method");
-		System.out.println("Encrypted: "+x);
-		System.out.println("Decrypted: "+decrypt(x));
-//		System.out.println((encrypt("ASTalavista baby")));
-//		System.out.println((encrypt("AAAB")));
-//		System.out.println((encrypt("AABB")));
-//		System.out.println(shift2(shift(69, 133), 133));
-	}
+//	public static void main(String[] args) {
+//		String x = encrypt("In the Java programming language language, every class implicitly or explicitly provides a hashCode() method");
+//		System.out.println("Encrypted: "+x);
+//		System.out.println("Decrypted: "+decrypt(x));
+////		System.out.println((encrypt("ASTalavista baby")));
+////		System.out.println((encrypt("AAAB")));
+////		System.out.println((encrypt("AABB")));
+////		System.out.println(shift2(shift(69, 133), 133));
+//	}
 }

@@ -104,7 +104,7 @@ public abstract class ImageLoader {
 			} catch (Exception e) {
 				return loadCommonImage(bytes);
 			} finally {
-				tjd.close();
+				if (null != tjd) tjd.close();
 			}
 
 

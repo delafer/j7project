@@ -43,24 +43,29 @@ public class ImageFS extends ImageAbstract<String> {
 
 		return this.crc;
 	}
-
+	
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) return true;
+	public boolean isEquals(ImageAbstract<?> thisObj, Object obj) {
+		if (thisObj == obj) return true;
 		if (!(obj instanceof ImageAbstract))  return false;
 		final ImageAbstract<?> o = (ImageAbstract<?>) obj;
 
-		if (size != o.size) return false;
+		if (thisObj.size != o.size) return false;
 
-		final Long crc = CRC(), ocrc = o.CRC();
+		final Long tcrc = thisObj.CRC(), ocrc = o.CRC();
 
-		if (crc != null && ocrc != null) {
-			return Objects.equals(crc, ocrc);
+		if (tcrc != null && ocrc != null) {
+			return Objects.equals(tcrc, ocrc);
 		}
+		
+		if (!Objects.equals(thisObj.getIdentifier(), o.getIdentifier())) return false;
 
-		if (!Objects.equals(this.getIdentifier(), o.getIdentifier())) return false;
+		return true;		
+	}
 
-		return true;
+	
+	public boolean equals(Object obj) {
+		return isEquals(this, obj);
 	}
 
 
@@ -71,6 +76,15 @@ public class ImageFS extends ImageAbstract<String> {
 	@Override
 	protected String lastEntryId(ImageAbstract<String> ia) {
 		return ia.identifier;
+	}
+
+	@Override
+	public ImageAbstract<?> cloneObj() {
+		ImageFS cloned = new ImageFS(parent, identifier, name, size);
+		cloned.crc = this.crc;
+		cloned.imageSize = this.imageSize;
+		cloned.imageType = this.imageType;
+		return cloned;
 	}
 
 //	protected String lastEntryId(ImageAbstract<String> ia) {

@@ -150,7 +150,7 @@ public class LibraryLoader {
 	}
 
 	private boolean load(String name) {
-		System.out.println(name);
+//		System.out.println(name);
 		Boolean state = loaded.get(name);
 		if (null == state) {
 			state = Boolean.valueOf(load0(name));

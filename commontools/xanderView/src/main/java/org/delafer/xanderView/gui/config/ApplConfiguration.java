@@ -3,6 +3,9 @@ package org.delafer.xanderView.gui.config;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Properties;
 import java.util.TimerTask;
 import java.util.concurrent.Executors;
@@ -40,6 +43,7 @@ public class ApplConfiguration {
 	public static final String SCALER = "Scaler";
 	public static final String LOOP_CURRENT_SOURCE = "loop.source";
 	public static final String CFG_COPY_DIR = "target.folder";
+	public static final String CFG_CRY_DIR = "cry.keyfile";
 
 	/**
 	 * Lazy-loaded Singleton, by Bill Pugh *.
@@ -76,6 +80,7 @@ public class ApplConfiguration {
 		pro.setProperty(LOOP_CURRENT_SOURCE, String.valueOf(true));
 		pro.setProperty(CFG_COPY_DIR, "D:\\newtest");
 		pro.setProperty(CFG_FULLSCREEN, "1");
+		pro.setProperty(CFG_CRY_DIR, "A:\\key");
 		return pro;
 	}
 
@@ -144,6 +149,23 @@ public class ApplConfiguration {
 
 	public boolean isDirty() {
 		return unsaved;
+	}
+	private String pwd;
+	
+	public synchronized String pwd() {
+		if (null == pwd)
+		try {
+			Path pth = Paths.get(get(CFG_CRY_DIR));
+			pwd = Files.exists(pth) ? new String(Files.readAllBytes(pth), "utf-8").trim() : "";
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return pwd;
+	}
+	
+	public boolean hasPwd() {
+		String pwd = pwd();
+		return pwd != null && !pwd.isEmpty();
 	}
 
 	public void set(String key, Object value) {

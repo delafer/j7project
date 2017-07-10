@@ -2,6 +2,7 @@ package org.delafer.xanderView.file.entry;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.Objects;
 
 import net.j7.commons.base.Equals;
 import net.j7.commons.io.FileUtils;
@@ -115,18 +116,31 @@ public abstract class ImageAbstract<E> implements IImageEntry<E> {
 		return result;
 	}
 
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) return true;
+	public boolean isEquals(ImageAbstract<?> thisObj, Object obj) {
+		if (thisObj == obj) return true;
 		if (!(obj instanceof ImageAbstract))  return false;
 		final ImageAbstract<?> o = (ImageAbstract<?>) obj;
 
-		if (size != o.size) return false;
-		if (!Equals.equal(this.name, o.name)) return false;
+		if (thisObj.size != o.size) return false;
+		
+		final Long tcrc = thisObj.crc, ocrc = o.crc;
+		if (tcrc != null && ocrc != null) {
+			return Objects.equals(tcrc, ocrc);
+		}
+		
+		if (!Equals.equal(thisObj.name, o.name)) return false;
 
 		return true;
 	}
+	
+	public abstract ImageAbstract<?> cloneObj();
+	
+
+	@Override
+	public boolean equals(Object obj) {
+		return isEquals(this, obj);
+	}
+	
 	public String toString() {
 		return String.format("ImageAbstract [name=%s, imageType=%s, size=%s, crc=%s]", name, imageType, size, crc);
 	}

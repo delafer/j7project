@@ -93,7 +93,7 @@ public class UIHelpers {
 			       int b = (bBack * aFore + (255 - aFore) * bFore) / 255;
 			       b = b & 0xFF;
 
-			       int color = r + g << 8 + b << 16;
+			       int color = r + (g << 8) + (b << 16);
 			       imgData.setPixel(x,y,color);
 			      }
 			    }

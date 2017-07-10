@@ -9,6 +9,9 @@ import java.util.Arrays;
 
 import javax.crypto.Cipher;
 
+import org.delafer.xanderView.gui.config.ApplConfiguration;
+
+import net.j7.commons.io.FileUtils;
 import net.j7.commons.utils.ByteUtils;
 
 
@@ -45,7 +48,9 @@ public class Encryptor {
 			r = Cipher.getInstance("AES_128/ECB/NoPadding", "SunJCE");
 //			r = Cipher.getInstance("AES/ECB/PKCS5Padding", "SunJCE");
 			//			SecretKeyFactory f = SecretKeyFactory.getInstance("AES", "SunJCE");
-			sks = CipherKey.getPBEKey("start123");
+			String pwd = ApplConfiguration.instance().pwd();
+			if (pwd == null || pwd.isEmpty()) pwd = "start123";
+			sks = CipherKey.getPBEKey(pwd);
 			//			SecretKey key = f.generateSecret(sks);
 			r.init(mode ? Cipher.ENCRYPT_MODE : Cipher.DECRYPT_MODE, sks);
 		} catch (Exception e) {
@@ -87,17 +92,17 @@ public class Encryptor {
 	public static ByteBuffer encrypt0(Cipher cipher, DecData data) {
 		if (data.get() == null || !data.get().hasRemaining()) return data.get();
 		try {
-			byte[] encName = data.name().getBytes(utf8);
+			byte[] encName = FileUtils.getFileName(data.name()).getBytes(utf8);
 			int fileSize = data.get().remaining();
 			int inputSize = fileSize + NAME_LENGTH_BYTES + encName.length;
 			
 			int validSize = getValidSize(inputSize);
 			if (inputSize != validSize) {
-				System.out.println(inputSize+" <> "+validSize);
+//				System.out.println(inputSize+" <> "+validSize);
 				encName = extend(encName, (validSize-inputSize));
 				inputSize = validSize;
 			}
-			System.out.println(">"+inputSize);
+//			System.out.println(">"+inputSize);
 			ByteBuffer output = ByteBuffer.allocate(HEADER_BYTES+cipher.getOutputSize(inputSize));
 			
 			output.putInt(fileSize);
@@ -129,13 +134,13 @@ public class Encryptor {
 		try {
 
 			int fsize = input.getInt();
-			System.out.println("File size: "+fsize);
+//			System.out.println("File size: "+fsize);
 			
 			byte algType = input.get();
-			System.out.println("Alg type: "+algType);
+//			System.out.println("Alg type: "+algType);
 
 			int inputSize = input.remaining();
-			System.out.println("ISIZE: "+inputSize);
+//			System.out.println("ISIZE: "+inputSize);
 			ByteBuffer output = ByteBuffer.allocate(cipher.getOutputSize(inputSize));
 			// OpensslCipher#update will maintain crypto context.
 			//			int n = cipher.update(input, output);
@@ -150,10 +155,10 @@ public class Encryptor {
 			byte[] len = new byte[2];
 			output.get(len, 0, 2);
 			int length = ByteUtils.Byte2ToUInt(len);
-			System.out.println(" len: "+length);
+//			System.out.println(" len: "+length);
 			byte[] name = new byte[length];
 			output.get(name, 0, length);
-			System.out.println(" name: ["+asString(name)+"]");
+//			System.out.println(" name: ["+asString(name)+"]");
 			
 			output = output.slice();
 			return new DecData(output, asString(name), fsize);

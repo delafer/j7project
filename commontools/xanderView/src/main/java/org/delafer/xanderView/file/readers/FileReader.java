@@ -22,10 +22,12 @@ import org.delafer.xanderView.file.ContentChangeWatcher;
 import org.delafer.xanderView.file.entry.ImageFS;
 import org.delafer.xanderView.file.entry.ImageAbstract;
 import org.delafer.xanderView.file.entry.ImageAbstract.ImageType;
+import org.delafer.xanderView.gui.config.ApplConfiguration;
 import org.delafer.xanderView.interfaces.IAbstractReader;
 
 import com.sun.nio.file.ExtendedWatchEventModifier;
 
+import net.j7.commons.base.Equals;
 import net.j7.commons.io.AbstractFileProcessor;
 import net.j7.commons.io.AbstractFileProcessor.FileInfo;
 import net.j7.commons.io.AbstractFileProcessor.Recurse;
@@ -55,7 +57,11 @@ public class FileReader implements IAbstractReader {
 				public boolean accept(File entry, FileInfo fileData) {
 //					try {Thread.currentThread().sleep( 50 );}catch(Exception e){}
 					ImageType imageType = ImageAbstract.getType(fileData.getNameWithPath());
-					return !imageType.equals(ImageType.UNKNOWN);
+					
+					if (ImageType.UNKNOWN.equals(imageType)) return false;
+					if (ImageType.ENCRYPTED.equals(imageType) && !ApplConfiguration.instance().hasPwd()) return false;
+					
+					return true;
 				}
 
 				@Override
@@ -156,7 +162,7 @@ public class FileReader implements IAbstractReader {
 //		FileReader r = new FileReader();
 //		r.initialize("C:\\work\\cc\\");
 //	}
-
+	
 	@SuppressWarnings("unchecked")
 	public ImageAbstract<?> getEntryByIdentifier(Object id) throws IOException {
 		String filePath = (String) id;

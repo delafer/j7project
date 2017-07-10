@@ -19,6 +19,7 @@ public final class Buf implements Closeable {
 	}
 
 	public final ByteBuffer get() {
+		b.rewind();
 		return b;
 	}
 
@@ -28,7 +29,7 @@ public final class Buf implements Closeable {
 	     b.get(bytes);
 	     b.rewind();
 
-	     if (close && 5==1)
+	     if (close)
 			try {
 				this.close();
 			} catch (IOException e) {
@@ -39,12 +40,12 @@ public final class Buf implements Closeable {
 	}
 
 	public final void close() throws IOException {
-		HelperFS.closeDirectBuffer(b);
+//		HelperFS.closeDirectBuffer(b);
 		if (null != c) {
 			c.close();
-			c = null;
+//			c = null;
 		}
-		b = null;
+//		b = null;
 	}
 
 }

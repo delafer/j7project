@@ -18,11 +18,14 @@ public final class LazyUpdaterAbstract extends Thread {
 	}
 
 	static LazyUpdaterAbstract updater;
+	static final Object obj = new Object();
 
 	public static void doTask(Runnable task) {
-		if (null == updater) {
-			updater = new LazyUpdaterAbstract();
-			updater.start();
+		synchronized (obj) {
+			if (null == updater) {
+				updater = new LazyUpdaterAbstract();
+				updater.start();
+			}	
 		}
 		updater.update(task);
 	}

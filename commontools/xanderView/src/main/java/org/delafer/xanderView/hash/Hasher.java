@@ -33,11 +33,16 @@ public class Hasher {
 		XXHashFactory hash = XXHashFactory.fastestInstance();
 		hash64 = hash.hash64();
 	}
-
+	static volatile int x = 0;
 	public long calc(ByteBuffer buf, long seed) {
-		long h = hash64.hash(buf, 0, min(buf.remaining(), HSIZE), seed);
-		buf.rewind();
-		return h;
+		buf.clear();
+		int size = (int)seed;
+		if (size > buf.remaining()) size = buf.remaining();
+		byte[] aa = new byte[size];
+		buf.get(aa);
+		buf.clear();
+//		ByteBufferFileUtils.writeToFile("A:\\"+(++x)+".bin", ByteBuffer.wrap(aa));
+		return calc(aa, seed);
 	}
 
 
