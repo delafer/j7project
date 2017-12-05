@@ -44,6 +44,9 @@ public class EntryXml implements IEntry {
 //		}
 	}
 
+	public Map<String, String> attributes() {
+		return this.attrs;
+	}
 
 
 	public void setValue(ReplacementType type, String value) {
@@ -129,12 +132,27 @@ public class EntryXml implements IEntry {
 		return s;
 	}
 
+	public boolean isAttribute() {
+		return qName != null && qName.startsWith(IEntry.ATTR_PREFFIX);
+	}
+
 	public CharSequence render() {
 
 
 		if (isIgnored()) return "";
 
 		StringBuilder s = new StringBuilder();
+
+
+		if (isAttribute()) {
+			s.append(' ').append(qName.substring(IEntry.ATTR_PREFFIX.length())).append("=\"");
+			for (IEntry node : this.childs) {
+				s.append(node.render());
+			}
+			s.append("\"");
+			return s;
+		}
+
 
 		if (this.parent == null) s.append(header);
 
@@ -148,10 +166,14 @@ public class EntryXml implements IEntry {
 
 		if (this.childs.size() != 0) {
 
+			for (IEntry node : this.childs) {
+				if (node.isAttribute()) s.append(node.render());
+			}
+
 			s.append('>');
 
 			for (IEntry node : this.childs) {
-				s.append(node.render());
+				if (!node.isAttribute()) s.append(node.render());
 			}
 
 			s.append("</");
@@ -181,6 +203,21 @@ public class EntryXml implements IEntry {
            tagName = tag.name();
         }
      }
+
+//    private String attrKey(String preffix, String suffix) {
+//    	if (preffix==null) preffix="";
+//    	if (suffix==null) suffix="";
+//    	return new StringBuilder(preffix.length()+suffix.length()+1).append(preffix).append('#').append(suffix).toString();
+//    }
+//
+//    public MetaTag getMetaTagByAttrKey(String attrName, DocumentType docType) {
+//    	if (docType == null || attrName == null) return null;
+//        MetaTag tag = SaxTransformer.getTagByPath(attrKey(path, attrName), docType);
+//        if (null == tag && null != parent) {
+//           tag = SaxTransformer.getTagByPath(attrKey(qName, attrName), docType);
+//        }
+//        return tag;
+//     }
 
 
 

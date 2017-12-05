@@ -57,4 +57,8 @@ public class EntryText implements IEntry {
 	public boolean isTagStructure() {
 		return Content.EmptyChars.equals(content);
 	}
+
+	public boolean isAttribute() {
+		return false;
+	}
 }

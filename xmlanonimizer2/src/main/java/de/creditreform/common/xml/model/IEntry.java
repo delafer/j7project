@@ -7,6 +7,10 @@ public interface IEntry extends Serializable {
 	public enum Type {XmlTag, XmlText};
 
 
+	public final static String ATTR_PREFFIX = "#";
+
+	public boolean isAttribute();
+
 //	public enum DocumentType {
 //		ReportResponse("ns2:reportResponse"), MainBoxEntryResponse("ns2:mailboxentryResponse"), Lieferung("Lieferung"), Unknown("Unknown"); // unknown document type
 //
