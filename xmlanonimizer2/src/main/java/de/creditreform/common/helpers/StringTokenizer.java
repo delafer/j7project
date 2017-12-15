@@ -10,7 +10,7 @@ public class StringTokenizer {
 	}
 
 	public static void tokenize(EntryXml xml, String s) {
-
+//			 System.out.println("{"+s+"}");
 			 int r = -1;
 
 		     int j;

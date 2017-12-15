@@ -4,21 +4,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
+import javax.xml.parsers.*;
+import javax.xml.stream.XMLInputFactory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xml.sax.Attributes;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
+import org.xml.sax.*;
 
 import de.creditreform.common.helpers.WildcardMatcher;
-import de.creditreform.common.xml.model.DocumentType;
-import de.creditreform.common.xml.model.MetaTag;
-import de.creditreform.common.xml.model.XmlModel;
+import de.creditreform.common.xml.model.*;
+import de.creditreform.common.xml.transformer.test.SimpleEntityResolver;
+import de.creditreform.common.xml.transformer.test.XMLInputStream;
 
 /**
  * The SAX2 XmlParser . simple SAX2 class to parse reportResponse,
@@ -98,10 +94,19 @@ public class SaxTransformer {
 				XMLReader reader = parser.getXMLReader();
 
 				handler = new XmlHandler();
-				reader.setContentHandler(handler);
-				InputSource source= new InputSource(is);
 
+				reader.setEntityResolver(new SimpleEntityResolver());
+				reader.setContentHandler(handler);
+				InputSource source= new InputSource(new XMLInputStream(is));
 				reader.parse(source);
+
+//				Map<String, String> r = handler.result;
+//				System.out.println();
+//				System.out.println("NEW NEW NEW NEW NEW NEW");
+//				System.out.println();
+//				for (Map.Entry<String, String> next : r.entrySet()) {
+//					System.out.println(next.getValue()+"="+next.getKey());
+//				}
 
 				return handler.getModel();
 

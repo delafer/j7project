@@ -21,12 +21,14 @@ public class EntryXml implements IEntry {
 	private static final String header = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"+StringUtils.LF_DOS;
 
 	public String qName;
-	String path;
+	public String path;
 //	public boolean isSkipped;
 	public String tagName;
 	Map<String, String> attrs;
 	EntryXml parent;
 	private boolean ignored;
+
+	private char[] characters;
 
 	private LinkedList<IEntry> childs = new LinkedList<IEntry>();
 
@@ -46,6 +48,23 @@ public class EntryXml implements IEntry {
 
 	public Map<String, String> attributes() {
 		return this.attrs;
+	}
+
+	public void addChars(char[] ch, int start, int length) {
+
+		if (null == characters) {
+			if (ch.length == length) {
+				characters = ch;
+			} else {
+				characters = new char[length];
+				System.arraycopy(ch, start, characters, 0, length);
+			}
+		} else {
+			char[] newch = new char[characters.length+length];
+			System.arraycopy(characters, 0, newch, 0, characters.length);
+			System.arraycopy(ch, start, newch, characters.length, length);
+			characters =newch;
+		}
 	}
 
 
@@ -86,7 +105,18 @@ public class EntryXml implements IEntry {
 		this.childs.add(childNode);
 	}
 
+	public void addCleanValue() {
+		if (characters == null || characters.length == 0) return ;
 
+		String toAdd = new String(characters);
+		if (toAdd.length() == 0) return;
+//		System.out.println("<"+toAdd+">");
+//		this.addValue(toAdd, Content.Text);
+		StringTokenizer.tokenize(this, StringEscapeUtils.unescapeHtml4(toAdd));
+		characters = null;
+	}
+
+	@Deprecated
 	public void addCleanValue(String toAdd) {
 		StringTokenizer.tokenize(this, toAdd);
 	}
@@ -94,6 +124,7 @@ public class EntryXml implements IEntry {
 
 	public void addValue(String toAdd, Content cnt) {
 		if (null == toAdd || toAdd.length() == 0) return;
+//		System.out.println("["+toAdd+"]");
 //		System.out.println("["+toAdd+"]");
 		getTextNode(cnt).addText(toAdd);
 	}

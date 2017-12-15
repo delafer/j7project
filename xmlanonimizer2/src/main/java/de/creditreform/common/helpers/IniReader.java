@@ -34,6 +34,9 @@ public abstract class IniReader {
 
 
 	private void onNewValueInt(String name, String value) throws Exception {
+		value = value.trim();
+		int idx = value.lastIndexOf("--");
+		if (idx>=0) value = value.substring(0, idx).trim();
 		onNewValue(name.trim(), value.trim(), this.blkName);
 
 	}

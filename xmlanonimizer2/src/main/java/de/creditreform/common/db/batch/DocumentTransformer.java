@@ -35,7 +35,7 @@ public final class DocumentTransformer implements Serializable, Cloneable {
 	public String getTransformedXml() {
 
 			if (result().ok()) {
-					return XmlTools.prettyPrintXML(result().getXml(), "UTF-8");
+					return result().getXml(); //XmlTools.prettyPrintXML(result().getXml(), "UTF-8");
 			} else {
 					return "";
 			}

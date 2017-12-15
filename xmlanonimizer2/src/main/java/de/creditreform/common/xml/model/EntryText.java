@@ -30,6 +30,11 @@ public class EntryText implements IEntry {
 	}
 
 	public CharSequence render() {
+//		if (text != null && !StringUtils.isEmpty(text)) {
+//			System.out.println(":::"+text.toString()+" | "+StringEscapeUtils.escapeXml10(text.toString()));
+//			if (text.toString().startsWith("gesch")) return "01234567890";
+//		}
+
 		return null != text ? isTagStructure() ? text: StringEscapeUtils.escapeXml10(text.toString()) : "";
 	}
 

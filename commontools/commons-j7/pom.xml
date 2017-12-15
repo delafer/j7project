@@ -11,6 +11,33 @@
     <name>commons-j7</name>
     <packaging>jar</packaging>
 
+    <repositories>
+        <repository>
+            <id>jgit-repository</id>
+            <url>https://repo.eclipse.org/content/groups/releases/</url>
+        </repository>
+        <repository>
+            <id>tmatesoft-repository</id>
+            <url>https://maven.tmatesoft.com/content/repositories/releases/</url>
+        </repository>
+        <repository>
+            <id>jenkins-repository</id>
+            <url>http://repo.jenkins-ci.org/releases/</url>
+        </repository>
+        <repository>
+            <id>MavenCentral</id>
+            <name>Maven repository</name>
+            <url>http://repo1.maven.org/maven2</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+
 <!--	<url>http://maven.apache.org</url>-->
     <properties>
         <junit.version>4.8.2</junit.version>
@@ -24,8 +51,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.2</version>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <source>1.7</source>
+                    <target>1.7</target>
                 </configuration>
             </plugin>
             <plugin>
@@ -40,6 +67,9 @@
                         </goals>
                         <configuration>
                             <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>net.j7.commons.tmp.MavenRefactoring</mainClass>
+                                </transformer>
                             </transformers>
                             <filters>
 <!-- Exclude of dummy.sf and dummy.dsa -->
@@ -62,22 +92,24 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>commons-cli</groupId>
+            <artifactId>commons-cli</artifactId>
+            <version>1.3.1</version>
+         </dependency>
+
     </dependencies>
 </project>
