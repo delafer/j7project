@@ -69,6 +69,7 @@ public class EntryXml implements IEntry {
 
 
 	public void setValue(ReplacementType type, String value) {
+		value  = anonymize(value);
 		switch (type) {
 		case ReplaceAll:
 			childs.clear();
@@ -99,7 +100,36 @@ public class EntryXml implements IEntry {
 
 	}
 
+	private static boolean isNumeric(String aa) {
+		if (aa == null || aa.isEmpty()) return false;
+		try {
+			Long.parseLong(aa.trim());
+			return true;
+		} catch (NumberFormatException ignore) {
+		}
+		return false;
+	}
 
+
+	private String anonymize(String value) {
+		if (value == null || value.isEmpty()) return value;
+		boolean isNumber = isNumeric(value);
+		if (isNumber && value.length()==14) return value;
+
+		if (isNumber) {
+			return RandomUtil.generateRandomNum(value.length());
+		}
+
+		if (isStandard(value)) return value;
+
+		return RandomUtil.rerandom(value);
+	}
+
+	private boolean isStandard(String value) {
+		value = value.toLowerCase();
+		if ("true".equals(value) || "false".equals(value) || "de".equals(value)) return true;
+		return false;
+	}
 
 	protected void addNode(EntryXml childNode) {
 		this.childs.add(childNode);
