@@ -1,6 +1,8 @@
 package net.j7.commons.ui;
 
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
 
 public class Convertors {
 
@@ -14,8 +16,19 @@ public class Convertors {
 	public static final long SIZE_PETABYTE = SIZE_TERABYTE << POWER;
 	public static final long SIZE_EXABYTE = SIZE_PETABYTE << POWER;
 
-	private static final transient DecimalFormat floatFormat		= new DecimalFormat("0.##");
+	private static final transient DecimalFormat floatFormat		= new DecimalFormat("0.##", new DecimalFormatSymbols(Locale.US));
 
+	public static void main(String[] args) {
+		System.out.println(floatFormat.format(1d));
+		System.out.println(floatFormat.format(10000d));
+		System.out.println(floatFormat.format(10000.35d));
+		System.out.println(floatFormat.format(0.3d));
+		System.out.println(floatFormat.format(100.01d));
+		System.out.println(floatFormat.format(100.5d));
+		System.out.println(floatFormat.format(100.555d));
+		System.out.println(floatFormat.format(0.01d));
+	}
+	
    public enum TimeUnit {
 	      Millisecond(1l),
 	      Second(Millisecond.ms() * 1000l),

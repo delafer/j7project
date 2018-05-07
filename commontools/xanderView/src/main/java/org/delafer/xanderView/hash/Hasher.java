@@ -8,7 +8,7 @@ import net.jpountz.xxhash.XXHashFactory;
 public class Hasher {
 
 	private XXHash64 hash64;
-	public static final int HSIZE = 4096;
+	public static final int HSIZE = 2048;
 
 
 	/**
