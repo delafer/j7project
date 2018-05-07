@@ -44,6 +44,9 @@ atlassian-ide-plugin.xml
 /.idea/dictionaries
 /.idea/workspace.xml
 /.idea/tasks.xml
+!.idea/runConfigurations/
+!.idea/codeStyleSettings.xml
+
 
 # NetBeans
 nbproject/
@@ -108,5 +111,50 @@ frontend/client-gui/new  2.txt
 #*.dll
 *.properties
 .recommenders/
-commontools/desktop.ini
-commontools/xanderView/_zlst.csv
+desktop.ini
+_zlst.csv
+.eclipse-pmd
+
+# compiled output
+/dist
+/tmp
+/out-tsc
+
+# dependencies
+/node_modules
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# misc
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+npm-debug.log
+yarn-error.log
+testem.log
+/typings
+/reports
+/src/translations/template.*
+/src/environments/.env.*
+
+Thumbs.db
+
+# e2e
+/e2e/*.js
+/e2e/*.map
+
+# Cordova
+/www
+/plugins
+/platforms
