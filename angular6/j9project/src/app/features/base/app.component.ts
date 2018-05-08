@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AppComponent implements OnInit {
 
-  title : string = 'Alex, Sascha, Mascha';
+  title   = 'Alex, Sascha, Mascha';
 
   ngOnInit(): void {
     console.log(this.title);
