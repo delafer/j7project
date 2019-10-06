@@ -1,15 +1,21 @@
 package org.delafer.xanderView.file;
 
+import net.j7.commons.collections.SortedLinkedList;
 import net.j7.commons.utils.RandomUtil;
 
+import org.delafer.xanderView.comparator.RandomComparator;
 import org.delafer.xanderView.file.entry.ImageAbstract;
 import org.delafer.xanderView.general.State;
 import org.delafer.xanderView.gui.SplashWindow;
 import org.delafer.xanderView.gui.helpers.MultiShell;
 
+import java.io.IOException;
+import java.util.Comparator;
+
 public class CommonContainerExt extends CommonContainer{
 
 	private boolean randomMode;
+	private boolean onlyExisting;
 	int startAt;
 
 	public CommonContainerExt(String locationArg) {
@@ -22,7 +28,7 @@ public class CommonContainerExt extends CommonContainer{
 
 	@Override
 	public ImageAbstract<?> getPrevious10() {
-		if (randomMode)
+		if (onlyExisting)
 			return this.getPrevious();
 		else
 			return super.getPrevious10();
@@ -30,7 +36,7 @@ public class CommonContainerExt extends CommonContainer{
 
 	@Override
 	public ImageAbstract<?> getNext10() {
-		if (randomMode)
+		if (onlyExisting)
 			return this.getNext();
 		else
 			return super.getNext10();
@@ -38,33 +44,33 @@ public class CommonContainerExt extends CommonContainer{
 
 	@Override
 	public ImageAbstract<?> getNext() {
-		if (!randomMode) {
+		if (!onlyExisting) {
 			ImageAbstract<?> next =  super.getNext();
 			checkStartReached();
 			return next;
 		}
-		int skip = RandomUtil.getRandomInt(1, size()-1);
-//		System.out.println(skip);
+		int s = this.size();
 		ImageAbstract<?> ret = null;
-		for (int j = skip; j > 0; j--) {
+		do {
 			ret = super.getNext();
-		}
+		} while (((s--)>0) && CopyService.exists(ret));
 		return ret;
 	}
 
 
 	@Override
 	public ImageAbstract<?> getPrevious() {
-		if (!randomMode) {
+		if (!onlyExisting) {
 			ImageAbstract<?> prev =  super.getPrevious();
 			checkStartReached();
 			return prev;
 		}
-		int skip = RandomUtil.getRandomInt(1, size()-1);
+		int s = this.size();
 		ImageAbstract<?> ret = null;
-		for (int j = skip; j > 0; j--) {
+		do {
 			ret = super.getPrevious();
-		}
+		} while (((s--)>0) && CopyService.exists(ret));
+
 		return ret;
 	}
 
@@ -77,6 +83,19 @@ public class CommonContainerExt extends CommonContainer{
 
 	public void switchRandomAccess() {
 		this.randomMode = !randomMode;
+		if (!randomMode) {
+			initImagesForComparator(null);
+		} else {
+			initImagesForComparator(new RandomComparator());
+		}
+	}
+
+	public void switchOnlyExisting() {
+		this.onlyExisting = !onlyExisting;
+	}
+
+	public boolean isOnlyExisting() {
+		return onlyExisting;
 	}
 
 	public boolean isRandomMode() {

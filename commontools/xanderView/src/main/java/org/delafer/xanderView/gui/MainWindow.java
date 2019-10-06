@@ -205,6 +205,11 @@ public final class MainWindow extends ImageLoader{
 			pointer.switchRandomAccess();
 			new SplashWindow(shell.active(), pointer.isRandomMode() ? State.Special1 : State.Success);
 			break;
+		case 113:
+			//only non existing: "Q"
+			pointer.switchOnlyExisting();
+			new SplashWindow(shell.active(), pointer.isOnlyExisting() ? State.Special1 : State.Success);
+			break;
 		case 115:
 			//S -> save
 			ImageAbstract<?> current = pointer.getCurrent();

@@ -92,6 +92,14 @@ public class CommonContainer {
 		}
 
 	}
+
+	protected void initImagesForComparator(Comparator<ImageAbstract<?>> comparator) {
+		if (null == comparator) {
+			comparator = this.reader.getComparator();
+		}
+		this.images = new SortedLinkedList<ImageAbstract<?>>(this.images, comparator);
+		updateIterator();
+	}
 	
 	private static String currentPath() {
 		Path currentRelativePath = Paths.get("");
@@ -163,7 +171,7 @@ public class CommonContainer {
 
 	}
 	
-	private ImageAbstract<?>  findByIdentifier(String ident) {
+	protected ImageAbstract<?>  findByIdentifier(String ident) {
 		for (ImageAbstract<?> next : images) {
 			if (Equals.equal(next.getIdentifier(), ident)) return next;
 		}
