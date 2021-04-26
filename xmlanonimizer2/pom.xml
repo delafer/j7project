@@ -14,7 +14,7 @@
 		<slf4j.version>1.7.10</slf4j.version>
 		<commons.lang3.version>3.3.2</commons.lang3.version>
 		<commons.cli.version>1.2</commons.cli.version>
-		<commons.io.version>2.4</commons.io.version>
+		<commons.io.version>2.7</commons.io.version>
 		<commons.codec.version>1.10</commons.codec.version>
 		<oracle.ojdbc.version>10.2.0.1.0</oracle.ojdbc.version>
 		<flying.saucer.version>R8</flying.saucer.version>
