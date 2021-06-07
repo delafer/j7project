@@ -12,7 +12,7 @@
         <net.j7.commons.version>1.0.0</net.j7.commons.version> 
         <net.j7.thirddep.version>1.0.0</net.j7.thirddep.version> 
         <junit.version>4.8.2</junit.version> 
-        <logback.version>1.1.2</logback.version> 
+        <logback.version>1.2.0</logback.version> 
         <slf4j.version>1.7.10</slf4j.version> 
         <org.jocl.version>0.2.0-RC00</org.jocl.version> 
         <com.carrotsearch.version>0.7.1</com.carrotsearch.version> 
