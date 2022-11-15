@@ -42,7 +42,8 @@ public class MultiShell  {
 		fullscreen = ApplConfiguration.instance().getBoolean(ApplConfiguration.CFG_FULLSCREEN);
 		listeners = new ArrayList<DoubleValue<Integer,Listener>>();
 		wndShell = new Shell(display,  NO_REDRAW_RESIZE | NO_BACKGROUND | APPLICATION_MODAL | NO_SCROLL | DOUBLE_BUFFERED  | SWT.SHELL_TRIM  );
-		fullscrShell = new Shell(wndShell,  ON_TOP | NO_REDRAW_RESIZE | NO_BACKGROUND | APPLICATION_MODAL | NO_SCROLL | DOUBLE_BUFFERED  | SWT.NO_TRIM);
+		//fullscrShell = new Shell(wndShell,  ON_TOP | NO_REDRAW_RESIZE | NO_BACKGROUND | APPLICATION_MODAL | NO_SCROLL | DOUBLE_BUFFERED  | SWT.NO_TRIM);
+		fullscrShell = new Shell(wndShell,  NO_REDRAW_RESIZE | NO_BACKGROUND | APPLICATION_MODAL | NO_SCROLL | DOUBLE_BUFFERED  | SWT.NO_TRIM);
 		fullscrShell.setFullScreen(true);
 		MultiShell.shell = this;
 		addIcons();

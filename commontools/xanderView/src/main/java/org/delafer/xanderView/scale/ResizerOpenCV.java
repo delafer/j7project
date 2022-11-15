@@ -4,9 +4,11 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBuffer;
 import java.awt.image.DataBufferByte;
 import java.awt.image.DataBufferInt;
+import java.util.Date;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import net.j7.commons.jni.LibraryLoader;
-import net.j7.commons.utils.Metrics;
 
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
@@ -25,31 +27,24 @@ public class ResizerOpenCV extends ResizerBase {
 		return 5;
 	}
 
-	private ResizerOpenCV() {
-		super();
+	static {
 		LibraryLoader.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-		BufferedImage img = new BufferedImage(2, 2, BufferedImage.TYPE_INT_RGB);
-		img = this.resize(img, 3, 3);
 	}
 
-	private static final class Holder {
-		/** The Constant INSTANCE. */
-		private final static transient ResizerOpenCV INSTANCE = new ResizerOpenCV();
+	private static final ConcurrentMap<Integer, ResizerOpenCV> multitons = new ConcurrentHashMap<>();
+
+
+	public static ResizerOpenCV instance(final int key) {
+		return multitons.computeIfAbsent(key, ResizerOpenCV::new);
 	}
 
-	/**
-	 * Gets the single instance of ResourcesDR.
-	 *
-	 * @return single instance of ResourcesDR
-	 */
-	public static final ResizerOpenCV instance() {
-		return Holder.INSTANCE;
-	}
-
-	int current;
+	private final Integer current;
 
 	private ResizerOpenCV(int current) {
-		this.current = current;
+		super();
+		this.current = Integer.valueOf(current);
+		//BufferedImage img = new BufferedImage(3, 3, BufferedImage.TYPE_INT_RGB);
+		//img = this.resize(img, 6, 6);
 	}
 
 	private static int types[] = new int[] {Imgproc.INTER_NEAREST, Imgproc.INTER_AREA, Imgproc.INTER_LINEAR, Imgproc.INTER_CUBIC, Imgproc.INTER_LANCZOS4 };
@@ -95,44 +90,51 @@ public class ResizerOpenCV extends ResizerBase {
 //	      System.out.println(String.format("Elapsed time: %.2f ms", (float)(endTime - startTime)/1000000));
 	      return image;
 	}
+	private Mat resizeMat;
 
 	@Override
 	public BufferedImage resize(BufferedImage input, int width, int height) {
-		Mat resize = new Mat();
+		if (null == resizeMat) {
+			resizeMat = new Mat();
+		}
 		Size size = new Size(width, height);
 		Mat mt = null;
 		try {
 			mt = matify(input);
 		} catch (java.lang.UnsupportedOperationException u) {
+			//u.printStackTrace();
 		}
 
 
 		if (mt == null) {
 			//workaround
+			System.out.println("workaround");
 			return new ResizerNobel(4).resize(input, width, height);
 		}
-		Imgproc.resize(mt, resize, size, 0f, 0f, types[current]);
-        BufferedImage resized = MatToBufferedImage(resize);
+		//System.out.println("mt: "+mt+" resize: "+(resizeMat != null ? resizeMat.size() : null)+ " size: "+size+ " current: "+current);
+		Imgproc.resize(mt, resizeMat, size, 0f, 0f, types[current()]);
+        BufferedImage resized = MatToBufferedImage(resizeMat);
+		mt.release();
         return resized;
 	}
 
 	@Override
 	public String name() {
-		return names[current];
+		return names[current()];
 	}
 
 	@Override
 	public ResizerBase as(int filterI) {
-		return new ResizerOpenCV(filterI);
+		return ResizerOpenCV.instance(filterI);
 	}
 
 	@Override
 	public int current() {
-		return current;
+		return current.intValue();
 	}
 
 	public static void main(String[] args) {
-		int max = ResizerOpenCV.instance().getMaxFilters();
+		int max = ResizerOpenCV.instance(2).getMaxFilters();
 		for (int i = 0; i < max; i++) {
 			ResizerBase rs = new ResizerOpenCV(i);
 			System.out.println("["+i+"]="+rs.name());

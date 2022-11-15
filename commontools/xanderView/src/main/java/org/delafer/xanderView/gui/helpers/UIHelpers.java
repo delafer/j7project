@@ -21,9 +21,12 @@ public class UIHelpers {
 	}
 
 	public static void sleep(long ms) {
+
 		try {
 			Thread.sleep(ms);
-		} catch (InterruptedException ignore) {}
+		} catch (InterruptedException ignore) {
+			Thread.currentThread().interrupt();
+		}
 	}
 
 	  public static void disposeComposite(Composite composite,boolean disposeSelf) {

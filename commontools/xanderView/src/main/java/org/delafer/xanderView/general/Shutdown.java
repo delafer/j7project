@@ -1,6 +1,7 @@
 package org.delafer.xanderView.general;
 
 import java.io.IOException;
+import java.util.Scanner;
 
 import org.delafer.xanderView.gui.config.ApplConfiguration;
 import org.delafer.xanderView.gui.config.ApplInstance;
@@ -19,30 +20,54 @@ public class Shutdown {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-
-				while (ApplInstance.openTasks.get() > 0) {
+				int i = 0;
+				while (ApplInstance.openTasks.get() > 0 || i < 6) {
 					try {
+						i++;
 						sleep(250);yield();
 					} catch (InterruptedException e) {}
 				}
+				Shutdown.exit();
 			}
 		});
+	}
+
+	private static void clearKeyboard() {
+		boolean found = false;
+		long start = System.currentTimeMillis();
+		do {
+			try {
+
+				if (System.in.available()>0) {
+					byte[] buf = new byte[System.in.available()];
+					System.in.read(buf);
+					found = true;
+				}
+			} catch (IOException e) {
+				found = false;
+			}
+		} while (found && (System.currentTimeMillis() - start)<500L);
+		try {
+			System.in.reset();
+		} catch (IOException ignore) {}
 	}
 
 	public static void exit() {
 		try {
 		Thread cur = Thread.currentThread();
 		int tCnt = Thread.activeCount();
-		Thread[] threads = new Thread[tCnt];
-		Thread.enumerate(threads);
-		for (Thread thread : threads) {
-			try {
-				if (thread != cur)
-				thread.interrupt();
-			} catch (Throwable e) {}
+		if (tCnt > 0) {
+			Thread[] threads = new Thread[tCnt];
+			Thread.enumerate(threads);
+			for (Thread thread : threads) {
+				try {
+					if (thread != cur)
+						thread.interrupt();
+				} catch (Throwable e) {}
+			}
 		}
 		System.out.println(tCnt+" ACTIVE THREADS STOPPED");
-		System.exit(0);
+		clearKeyboard();
 //		cur.interrupt();
 
 	} catch (Exception e) {

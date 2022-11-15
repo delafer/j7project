@@ -43,6 +43,7 @@ public final class MainWindow extends ImageLoader{
 	}
 
 	public void open(String path) {
+		if (path.startsWith("\"") && path.endsWith("\"")) path = path.substring(1, path.length()-1);
 		initPath(path);
 		intitialize();
 		show();
@@ -163,12 +164,20 @@ public final class MainWindow extends ImageLoader{
 		});
 	}
 
+	private void terminateApp() {
+		Display.getDefault().asyncExec(new Runnable() {
+			public void run() {
+				UIHelpers.sleep(250);
+				shell.close();
+			}
+		});
+	}
+
 	protected void bindKeyEvent(Event e) {
 //		System.out.println("CODE: "+e.keyCode);
 		switch (e.keyCode) {
 		case SWT.ESC:
-			shell.close();
-			System.exit(0);
+			terminateApp();
 			break;
 		case SWT.ARROW_DOWN:
 			loadImage(pointer, pointer.getPrevious10(), panel);

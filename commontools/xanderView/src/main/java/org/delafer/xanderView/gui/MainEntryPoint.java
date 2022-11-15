@@ -11,20 +11,20 @@ public class MainEntryPoint {
 
 
 	public static void main(String[] args) {
+		Shutdown.addHook();
 		String toOpen = args.length > 0 ? args[0] : null;
 //		if (StringUtils.isEmpty(toOpen)) {
 //			System.out.println("Please specify an image name or directory to start jpeg viewer");
 //			System.exit(0);
 //		}
-		Metrics.enable(true);
+		Metrics.enable(false);
 
 		initializeApp();
 
 
 		MainWindow gui = new MainWindow();
-		Shutdown.addHook();
 		gui.open(toOpen);
-
+		System.exit(0);
 
 	}
 

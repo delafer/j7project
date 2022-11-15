@@ -56,7 +56,7 @@ public class TesterQuality {
 					ScalrResizer.instance,
 					BufferedImageResizer.instance,
 					CustomScalers.instance,
-					ResizerOpenCV.instance()
+					ResizerOpenCV.instance(1)
 					};
 
 			List<ResizerBase> filters = new ArrayList<ResizerBase>();
