@@ -1,5 +1,5 @@
 /*
- * Copyright (C)2011-2015, 2018 D. R. Commander.  All Rights Reserved.
+ * Copyright (C)2011-2015, 2018, 2022 D. R. Commander.  All Rights Reserved.
  * Copyright (C)2015 Viktor Szathmáry.  All Rights Reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -89,11 +89,20 @@ public class TJDecompressor implements Closeable {
   }
 
   /**
-   * Associate the JPEG image of length <code>imageSize</code> bytes stored in
-   * <code>jpegImage</code> with this decompressor instance.  This image will
-   * be used as the source image for subsequent decompress operations.
+   * Associate the JPEG image or "abbreviated table specification" (AKA
+   * "tables-only") datastream of length <code>imageSize</code> bytes stored in
+   * <code>jpegImage</code> with this decompressor instance.  If
+   * <code>jpegImage</code> contains a JPEG image, then this image will be used
+   * as the source image for subsequent decompress operations.  Passing a
+   * tables-only datastream to this method primes the decompressor with
+   * quantization and Huffman tables that can be used when decompressing
+   * subsequent "abbreviated image" datastreams.  This is useful, for instance,
+   * when decompressing video streams in which all frames share the same
+   * quantization and Huffman tables.
    *
-   * @param jpegImage JPEG image buffer.  This buffer is not modified.
+   * @param jpegImage buffer containing a JPEG image or an "abbreviated table
+   * specification" (AKA "tables-only") datastream.  This buffer is not
+   * modified.
    *
    * @param imageSize size of the JPEG image (in bytes)
    */
@@ -105,16 +114,6 @@ public class TJDecompressor implements Closeable {
     jpegBufSize = imageSize;
     decompressHeader(jpegBuf, jpegBufSize);
     yuvImage = null;
-  }
-
-  /**
-   * @deprecated Use {@link #setSourceImage(byte[], int)} instead.
-   */
-  @SuppressWarnings("checkstyle:JavadocMethod")
-  @Deprecated
-  public void setJPEGImage(byte[] jpegImage, int imageSize)
-                           throws TJException {
-    setSourceImage(jpegImage, imageSize);
   }
 
   /**
@@ -388,27 +387,9 @@ public class TJDecompressor implements Closeable {
                 yuvImage.getStrides(), yuvImage.getSubsamp(), dstBuf, x, y,
                 yuvImage.getWidth(), pitch, yuvImage.getHeight(), pixelFormat,
                 flags);
-    else {
-      if (x > 0 || y > 0)
-        decompress(jpegBuf, jpegBufSize, dstBuf, x, y, desiredWidth, pitch,
-                   desiredHeight, pixelFormat, flags);
-      else
-        decompress(jpegBuf, jpegBufSize, dstBuf, desiredWidth, pitch,
-                   desiredHeight, pixelFormat, flags);
-    }
-  }
-
-  /**
-   * @deprecated Use
-   * {@link #decompress(byte[], int, int, int, int, int, int, int)} instead.
-   */
-  @SuppressWarnings("checkstyle:JavadocMethod")
-  @Deprecated
-  public void decompress(byte[] dstBuf, int desiredWidth, int pitch,
-                         int desiredHeight, int pixelFormat, int flags)
-                         throws TJException {
-    decompress(dstBuf, 0, 0, desiredWidth, pitch, desiredHeight, pixelFormat,
-               flags);
+    else
+      decompress(jpegBuf, jpegBufSize, dstBuf, x, y, desiredWidth, pitch,
+                 desiredHeight, pixelFormat, flags);
   }
 
   /**
@@ -447,7 +428,8 @@ public class TJDecompressor implements Closeable {
     if (pitch == 0)
       pitch = scaledWidth * pixelSize;
     byte[] buf = new byte[pitch * scaledHeight];
-    decompress(buf, desiredWidth, pitch, desiredHeight, pixelFormat, flags);
+    decompress(buf, 0, 0, desiredWidth, pitch, desiredHeight, pixelFormat,
+               flags);
     return buf;
   }
 
@@ -492,17 +474,6 @@ public class TJDecompressor implements Closeable {
     decompressToYUV(jpegBuf, jpegBufSize, dstImage.getPlanes(),
                     dstImage.getOffsets(), dstImage.getWidth(),
                     dstImage.getStrides(), dstImage.getHeight(), flags);
-  }
-
-  /**
-   * @deprecated Use {@link #decompressToYUV(YUVImage, int)} instead.
-   */
-  @SuppressWarnings("checkstyle:JavadocMethod")
-  @Deprecated
-  public void decompressToYUV(byte[] dstBuf, int flags) throws TJException {
-    YUVImage dstYUVImage = new YUVImage(dstBuf, jpegWidth, 4, jpegHeight,
-                                        jpegSubsamp);
-    decompressToYUV(dstYUVImage, flags);
   }
 
   /**
@@ -614,17 +585,6 @@ public class TJDecompressor implements Closeable {
                                         jpegSubsamp);
     decompressToYUV(dstYUVImage, flags);
     return dstYUVImage;
-  }
-
-  /**
-   * @deprecated Use {@link #decompressToYUV(int, int, int, int)} instead.
-   */
-  @SuppressWarnings("checkstyle:JavadocMethod")
-  @Deprecated
-  public byte[] decompressToYUV(int flags) throws TJException {
-    YUVImage dstYUVImage = new YUVImage(jpegWidth, 4, jpegHeight, jpegSubsamp);
-    decompressToYUV(dstYUVImage, flags);
-    return dstYUVImage.getBuf();
   }
 
   /**
@@ -881,26 +841,12 @@ public class TJDecompressor implements Closeable {
   private native void decompressHeader(byte[] srcBuf, int size)
     throws TJException;
 
-  @Deprecated
-  private native void decompress(byte[] srcBuf, int size, byte[] dstBuf,
-    int desiredWidth, int pitch, int desiredHeight, int pixelFormat, int flags)
-    throws TJException;
-
   private native void decompress(byte[] srcBuf, int size, byte[] dstBuf, int x,
     int y, int desiredWidth, int pitch, int desiredHeight, int pixelFormat,
     int flags) throws TJException;
 
-  @Deprecated
-  private native void decompress(byte[] srcBuf, int size, int[] dstBuf,
-    int desiredWidth, int stride, int desiredHeight, int pixelFormat,
-    int flags) throws TJException;
-
   private native void decompress(byte[] srcBuf, int size, int[] dstBuf, int x,
     int y, int desiredWidth, int stride, int desiredHeight, int pixelFormat,
-    int flags) throws TJException;
-
-  @Deprecated
-  private native void decompressToYUV(byte[] srcBuf, int size, byte[] dstBuf,
     int flags) throws TJException;
 
   private native void decompressToYUV(byte[] srcBuf, int size,

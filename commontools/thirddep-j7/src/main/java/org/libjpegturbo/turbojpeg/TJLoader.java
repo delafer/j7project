@@ -33,7 +33,7 @@ import net.j7.commons.jni.LibraryLoader;
 final class TJLoader {
   static void load() {
 //	  System.out.println("loading");
-	  LibraryLoader.loadLibrary("turbojpeg");
+	  LibraryLoader.loadLibrary("libturbojpeg");
     //System.loadLibrary("turbojpeg64");
 	//Library.loadLibrary("turbojpeg");
   }

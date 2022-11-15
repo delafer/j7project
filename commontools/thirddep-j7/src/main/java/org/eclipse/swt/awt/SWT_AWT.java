@@ -177,19 +177,19 @@ public static Frame new_Frame (final Composite parent) {
 				}
 				final Frame frame = (Frame) value;
 				
-				/*
-				* TEMPORARY CODE
-				* 
-				* For some reason, the graphics configuration of the embedded
-				* frame is not initialized properly. This causes an exception
-				* when the depth of the screen is changed.
-				*/
-				try {
-					clazz = Class.forName("sun.awt.windows.WComponentPeer");
-					Field field = clazz.getDeclaredField("winGraphicsConfig");
-					field.setAccessible(true);
-					field.set(frame.getPeer(), frame.getGraphicsConfiguration());
-				} catch (Throwable e) {}
+//				/*
+//				* TEMPORARY CODE
+//				*
+//				* For some reason, the graphics configuration of the embedded
+//				* frame is not initialized properly. This causes an exception
+//				* when the depth of the screen is changed.
+//				*/
+//				try {
+//					clazz = Class.forName("sun.awt.windows.WComponentPeer");
+//					Field field = clazz.getDeclaredField("winGraphicsConfig");
+//					field.setAccessible(true);
+//					field.set(frame.getPeer(), frame.getGraphicsConfiguration());
+//				} catch (Throwable e) {}
 				
 				result[0] = frame;
 			} finally {

@@ -1,5 +1,5 @@
 /*
- * Copyright (C)2011-2015, 2018 D. R. Commander.  All Rights Reserved.
+ * Copyright (C)2011-2015, 2018, 2020 D. R. Commander.  All Rights Reserved.
  * Copyright (C)2015 Viktor Szathmáry.  All Rights Reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -71,17 +71,6 @@ public class TJCompressor implements Closeable {
   public TJCompressor(byte[] srcImage, int x, int y, int width, int pitch,
                       int height, int pixelFormat) throws TJException {
     setSourceImage(srcImage, x, y, width, pitch, height, pixelFormat);
-  }
-
-  /**
-   * @deprecated Use
-   * {@link #TJCompressor(byte[], int, int, int, int, int, int)} instead.
-   */
-  @SuppressWarnings("checkstyle:JavadocMethod")
-  @Deprecated
-  public TJCompressor(byte[] srcImage, int width, int pitch, int height,
-                      int pixelFormat) throws TJException {
-    setSourceImage(srcImage, width, pitch, height, pixelFormat);
   }
 
   /**
@@ -159,18 +148,6 @@ public class TJCompressor implements Closeable {
     srcY = y;
     srcBufInt = null;
     srcYUVImage = null;
-  }
-
-  /**
-   * @deprecated Use
-   * {@link #setSourceImage(byte[], int, int, int, int, int, int)} instead.
-   */
-  @SuppressWarnings("checkstyle:JavadocMethod")
-  @Deprecated
-  public void setSourceImage(byte[] srcImage, int width, int pitch,
-                             int height, int pixelFormat) throws TJException {
-    setSourceImage(srcImage, 0, 0, width, pitch, height, pixelFormat);
-    srcX = srcY = -1;
   }
 
   /**
@@ -344,25 +321,14 @@ public class TJCompressor implements Closeable {
                                        srcYUVImage.getHeight(),
                                        srcYUVImage.getSubsamp(),
                                        dstBuf, jpegQuality, flags);
-    else if (srcBuf != null) {
-      if (srcX >= 0 && srcY >= 0)
-        compressedSize = compress(srcBuf, srcX, srcY, srcWidth, srcPitch,
-                                  srcHeight, srcPixelFormat, dstBuf, subsamp,
-                                  jpegQuality, flags);
-      else
-        compressedSize = compress(srcBuf, srcWidth, srcPitch, srcHeight,
-                                  srcPixelFormat, dstBuf, subsamp, jpegQuality,
-                                  flags);
-    } else if (srcBufInt != null) {
-      if (srcX >= 0 && srcY >= 0)
-        compressedSize = compress(srcBufInt, srcX, srcY, srcWidth, srcStride,
-                                  srcHeight, srcPixelFormat, dstBuf, subsamp,
-                                  jpegQuality, flags);
-      else
-        compressedSize = compress(srcBufInt, srcWidth, srcStride, srcHeight,
-                                  srcPixelFormat, dstBuf, subsamp, jpegQuality,
-                                  flags);
-    }
+    else if (srcBuf != null)
+      compressedSize = compress(srcBuf, srcX, srcY, srcWidth, srcPitch,
+                                srcHeight, srcPixelFormat, dstBuf, subsamp,
+                                jpegQuality, flags);
+    else if (srcBufInt != null)
+      compressedSize = compress(srcBufInt, srcX, srcY, srcWidth, srcStride,
+                                srcHeight, srcPixelFormat, dstBuf, subsamp,
+                                jpegQuality, flags);
   }
 
   /**
@@ -377,36 +343,17 @@ public class TJCompressor implements Closeable {
    * #getCompressedSize} to obtain the size of the JPEG image.
    */
   public byte[] compress(int flags) throws TJException {
-    checkSourceImage();
-    byte[] buf = new byte[TJ.bufSize(srcWidth, srcHeight, subsamp)];
+    byte[] buf;
+    if (srcYUVImage != null) {
+      buf = new byte[TJ.bufSize(srcYUVImage.getWidth(),
+                                srcYUVImage.getHeight(),
+                                srcYUVImage.getSubsamp())];
+    } else {
+      checkSourceImage();
+      buf = new byte[TJ.bufSize(srcWidth, srcHeight, subsamp)];
+    }
     compress(buf, flags);
     return buf;
-  }
-
-  /**
-   * @deprecated Use
-   * {@link #setSourceImage(BufferedImage, int, int, int, int)} and
-   * {@link #compress(byte[], int)} instead.
-   */
-  @SuppressWarnings("checkstyle:JavadocMethod")
-  @Deprecated
-  public void compress(BufferedImage srcImage, byte[] dstBuf, int flags)
-                       throws TJException {
-    setSourceImage(srcImage, 0, 0, 0, 0);
-    compress(dstBuf, flags);
-  }
-
-  /**
-   * @deprecated Use
-   * {@link #setSourceImage(BufferedImage, int, int, int, int)} and
-   * {@link #compress(int)} instead.
-   */
-  @SuppressWarnings("checkstyle:JavadocMethod")
-  @Deprecated
-  public byte[] compress(BufferedImage srcImage, int flags)
-                         throws TJException {
-    setSourceImage(srcImage, 0, 0, 0, 0);
-    return compress(flags);
   }
 
   /**
@@ -444,21 +391,6 @@ public class TJCompressor implements Closeable {
                 dstImage.getStrides(), dstImage.getSubsamp(), flags);
     }
     compressedSize = 0;
-  }
-
-  /**
-   * @deprecated Use {@link #encodeYUV(YUVImage, int)} instead.
-   */
-  @SuppressWarnings("checkstyle:JavadocMethod")
-  @Deprecated
-  public void encodeYUV(byte[] dstBuf, int flags) throws TJException {
-    if (dstBuf == null)
-      throw new IllegalArgumentException("Invalid argument in encodeYUV()");
-    checkSourceImage();
-    checkSubsampling();
-    YUVImage dstYUVImage = new YUVImage(dstBuf, srcWidth, 4, srcHeight,
-                                        subsamp);
-    encodeYUV(dstYUVImage, flags);
   }
 
   /**
@@ -518,45 +450,6 @@ public class TJCompressor implements Closeable {
   }
 
   /**
-   * @deprecated Use {@link #encodeYUV(int, int)} instead.
-   */
-  @SuppressWarnings("checkstyle:JavadocMethod")
-  @Deprecated
-  public byte[] encodeYUV(int flags) throws TJException {
-    checkSourceImage();
-    checkSubsampling();
-    YUVImage dstYUVImage = new YUVImage(srcWidth, 4, srcHeight, subsamp);
-    encodeYUV(dstYUVImage, flags);
-    return dstYUVImage.getBuf();
-  }
-
-  /**
-   * @deprecated Use
-   * {@link #setSourceImage(BufferedImage, int, int, int, int)} and
-   * {@link #encodeYUV(byte[], int)} instead.
-   */
-  @SuppressWarnings("checkstyle:JavadocMethod")
-  @Deprecated
-  public void encodeYUV(BufferedImage srcImage, byte[] dstBuf, int flags)
-                        throws TJException {
-    setSourceImage(srcImage, 0, 0, 0, 0);
-    encodeYUV(dstBuf, flags);
-  }
-
-  /**
-   * @deprecated Use
-   * {@link #setSourceImage(BufferedImage, int, int, int, int)} and
-   * {@link #encodeYUV(int, int)} instead.
-   */
-  @SuppressWarnings("checkstyle:JavadocMethod")
-  @Deprecated
-  public byte[] encodeYUV(BufferedImage srcImage, int flags)
-                          throws TJException {
-    setSourceImage(srcImage, 0, 0, 0, 0);
-    return encodeYUV(flags);
-  }
-
-  /**
    * Returns the size of the image (in bytes) generated by the most recent
    * compress operation.
    *
@@ -593,21 +486,9 @@ public class TJCompressor implements Closeable {
 
   // JPEG size in bytes is returned
   @SuppressWarnings("checkstyle:HiddenField")
-  @Deprecated
-  private native int compress(byte[] srcBuf, int width, int pitch,
-    int height, int pixelFormat, byte[] jpegBuf, int jpegSubsamp, int jpegQual,
-    int flags) throws TJException;
-
-  @SuppressWarnings("checkstyle:HiddenField")
   private native int compress(byte[] srcBuf, int x, int y, int width,
     int pitch, int height, int pixelFormat, byte[] jpegBuf, int jpegSubsamp,
     int jpegQual, int flags) throws TJException;
-
-  @SuppressWarnings("checkstyle:HiddenField")
-  @Deprecated
-  private native int compress(int[] srcBuf, int width, int stride,
-    int height, int pixelFormat, byte[] jpegBuf, int jpegSubsamp, int jpegQual,
-    int flags) throws TJException;
 
   @SuppressWarnings("checkstyle:HiddenField")
   private native int compress(int[] srcBuf, int x, int y, int width,
@@ -621,21 +502,9 @@ public class TJCompressor implements Closeable {
     throws TJException;
 
   @SuppressWarnings("checkstyle:HiddenField")
-  @Deprecated
-  private native void encodeYUV(byte[] srcBuf, int width, int pitch,
-    int height, int pixelFormat, byte[] dstBuf, int subsamp, int flags)
-    throws TJException;
-
-  @SuppressWarnings("checkstyle:HiddenField")
   private native void encodeYUV(byte[] srcBuf, int x, int y, int width,
     int pitch, int height, int pixelFormat, byte[][] dstPlanes,
     int[] dstOffsets, int[] dstStrides, int subsamp, int flags)
-    throws TJException;
-
-  @SuppressWarnings("checkstyle:HiddenField")
-  @Deprecated
-  private native void encodeYUV(int[] srcBuf, int width, int stride,
-    int height, int pixelFormat, byte[] dstBuf, int subsamp, int flags)
     throws TJException;
 
   @SuppressWarnings("checkstyle:HiddenField")

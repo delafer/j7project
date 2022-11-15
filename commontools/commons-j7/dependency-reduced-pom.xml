@@ -9,15 +9,14 @@
   <groupId>net.j7.commons</groupId>
   <artifactId>commons-j7</artifactId>
   <name>commons-j7</name>
-  <version>1.0.0</version>
   <build>
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.2</version>
         <configuration>
-          <source>1.8</source>
-          <target>1.8</target>
+          <source>1.7</source>
+          <target>1.7</target>
         </configuration>
       </plugin>
       <plugin>
@@ -32,7 +31,7 @@
             <configuration>
               <transformers>
                 <transformer>
-                  <mainClass>de.creditreform.common.cli.EntryPointCLI</mainClass>
+                  <mainClass>net.j7.commons.tmp.MavenRefactoring</mainClass>
                 </transformer>
               </transformers>
               <filters>
@@ -51,6 +50,27 @@
       </plugin>
     </plugins>
   </build>
+  <repositories>
+    <repository>
+      <id>jgit-repository</id>
+      <url>https://repo.eclipse.org/content/groups/releases/</url>
+    </repository>
+    <repository>
+      <id>tmatesoft-repository</id>
+      <url>https://maven.tmatesoft.com/content/repositories/releases/</url>
+    </repository>
+    <repository>
+      <id>jenkins-repository</id>
+      <url>http://repo.jenkins-ci.org/releases/</url>
+    </repository>
+    <repository>
+      <releases />
+      <snapshots />
+      <id>MavenCentral</id>
+      <name>Maven repository</name>
+      <url>http://repo1.maven.org/maven2</url>
+    </repository>
+  </repositories>
   <properties>
     <logback.version>1.1.2</logback.version>
     <slf4j.version>1.7.10</slf4j.version>
