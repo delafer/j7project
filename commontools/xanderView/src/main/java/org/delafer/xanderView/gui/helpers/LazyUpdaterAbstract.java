@@ -46,7 +46,7 @@ public final class LazyUpdaterAbstract extends Thread {
 		while (System.currentTimeMillis() - start < interval) {
 			try {
 				sleep(50);
-				yield();
+				Thread.yield();
 			} catch (InterruptedException e) {}
 		}
 		task.run();

@@ -70,7 +70,7 @@ import net.j7.commons.strings.BogusComparator;
  * @param <E> the type of elements held in this collection
  */
 
-public class SortedLinkedList<E> extends AbstractSequentialList<E> implements List<E>, Deque<E>, Cloneable, java.io.Serializable
+public class SortedLinkedList<E> extends AbstractSequentialList<E> implements List<E>, /*Deque<E>,*/ Cloneable, java.io.Serializable
 {
     transient int size = 0;
 
@@ -876,7 +876,7 @@ public class SortedLinkedList<E> extends AbstractSequentialList<E> implements Li
 
     public ListIterator<E> listIterator(E element) {
     	int insertionPoint = comparator != null ? Collections.binarySearch(this, element, comparator) : indexOf(element);
-    	System.out.println("Found: "+insertionPoint);
+    	//System.out.println("Found: "+insertionPoint);
     	int index = (insertionPoint > -1) ? insertionPoint : (-insertionPoint) - 1;
         return new ListItr(index);
     }

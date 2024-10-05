@@ -24,7 +24,7 @@ public class Shutdown {
 				while (ApplInstance.openTasks.get() > 0 || i < 6) {
 					try {
 						i++;
-						sleep(250);yield();
+						sleep(250);Thread.yield();
 					} catch (InterruptedException e) {}
 				}
 				Shutdown.exit();

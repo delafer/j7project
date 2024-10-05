@@ -2,6 +2,8 @@ package org.delafer.xanderView.file.entry;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.nio.ByteBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
@@ -44,10 +46,23 @@ public class HelperFS {
 	@SuppressWarnings("restriction")
 	public static void closeDirectBuffer(ByteBuffer cb) {
 	    if (!cb.isDirect()) return;
-	    try {
-	    	((sun.nio.ch.DirectBuffer)cb).cleaner().clean();
-	    } catch(Exception ex) { }
-	    cb = null;
+//	    try {
+//	    	((sun.nio.ch.DirectBuffer)cb).cleaner().clean();
+//	    } catch(Exception ex) { }
+//	    cb = null;
+
+        try {
+			Class<?> unsafeClass = Class.forName("sun.misc.Unsafe");
+			Field unsafeField = unsafeClass.getDeclaredField("theUnsafe");
+			unsafeField.setAccessible(true);
+			Object unsafe = unsafeField.get(null);
+			Method invokeCleaner = unsafeClass.getMethod("invokeCleaner", ByteBuffer.class);
+			invokeCleaner.invoke(unsafe, cb);
+        } catch (ReflectiveOperationException e) {
+            e.printStackTrace();
+        }
+
+
 	}
 
 	public static int min(long a1, long a2) {

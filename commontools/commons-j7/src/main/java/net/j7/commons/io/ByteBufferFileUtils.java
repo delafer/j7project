@@ -47,13 +47,13 @@ public class ByteBufferFileUtils {
 	
 
 
-@SuppressWarnings("restriction")
-public static void closeDirectBuffer(ByteBuffer cb) {
-    if (!cb.isDirect()) return;
-    try {
-    	((sun.nio.ch.DirectBuffer)cb).cleaner().clean();
-    } catch(Exception ex) { }
-    cb = null;
-}
+//@SuppressWarnings("restriction")
+//public static void closeDirectBuffer(ByteBuffer cb) {
+//    if (!cb.isDirect()) return;
+//    try {
+//    	((sun.nio.ch.DirectBuffer)cb).cleaner().clean();
+//    } catch(Exception ex) { }
+//    cb = null;
+//}
 	
 }

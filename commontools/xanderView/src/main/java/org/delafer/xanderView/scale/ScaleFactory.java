@@ -41,16 +41,18 @@ public class ScaleFactory  {
 
 
 	private IResizer getInstanceByType(int type) {
+		//if (1==1) return new ResizerJava2D(2);
 		//System.out.println("type: "+type);
 		switch (type) {
 		case SCALER_CV_LINEAR:
-			return ResizerOpenCV.instance(2);
+//			return ResizerOpenCV.instance(2);
 		case SCALER_CV_AREA:
-			return ResizerOpenCV.instance(1);
+//			return ResizerOpenCV.instance(1);
 		case SCALER_CV_BICUBIC:
-			return ResizerOpenCV.instance(3);
+//			return ResizerOpenCV.instance(3);
 		case SCALER_CV_LANCZOS4:
-			return ResizerOpenCV.instance(4);
+//			return ResizerOpenCV.instance(4);
+			new ResizerJava2D(1);
 		case SCALER_NOBEL_LANCZOS3:
 			return new ResizerNobel(0);
 		case SCALER_NOBEL_BICUBIC_HF:

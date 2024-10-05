@@ -10,7 +10,17 @@
     <artifactId>thirddep-j7</artifactId> 
     <name>thirddep-j7</name> 
     <version>1.0.0</version> 
-    <packaging>jar</packaging> 
+    <packaging>jar</packaging>
+    <scm>
+        <url>https://github.com/umjammer/vavi-image-avif/</url>
+    </scm>
+    <url>https://github.com/umjammer/vavi-image-avif/</url>
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
 
 <!--	<url>http://maven.apache.org</url>-->
     <build> 
@@ -18,21 +28,23 @@
             <plugin> 
                 <groupId>org.apache.maven.plugins</groupId> 
                 <artifactId>maven-compiler-plugin</artifactId> 
-                <configuration> 
-                    <source>1.8</source> 
-                    <target>1.8</target> 
+                <configuration>
+                    <source>16</source>
+                    <target>16</target>
+                    <compilerArgs>
+                        <arg>--add-exports</arg><arg>jdk.unsupported/com.sun.nio.file=ALL-UNNAMED</arg>
+                    </compilerArgs>
                 </configuration> 
             </plugin> 
             <plugin> 
                 <groupId>org.apache.maven.plugins</groupId> 
                 <artifactId>maven-jar-plugin</artifactId> 
-                <configuration> 
+                <configuration>
                     <archive> 
-
-<!--<index>true</index>
-            <manifest>
-              <addClasspath>true</addClasspath>
-            </manifest>-->
+<!--                        <index>true</index>-->
+<!--                        <manifest>-->
+<!--                          <addClasspath>true</addClasspath>-->
+<!--                        </manifest>-->
                         <manifestEntries> 
                             <SWT-OS>win32</SWT-OS> 
                             <SWT-WS>win32</SWT-WS> 
@@ -43,9 +55,9 @@
             </plugin> 
             <plugin> 
                 <groupId>org.apache.maven.plugins</groupId> 
-                <artifactId>maven-shade-plugin</artifactId> 
-                <version>3.3.0</version>
-                <executions> 
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.6.0</version>
+                <executions>
                     <execution> 
                         <phase>package</phase> 
                         <goals> 
@@ -55,8 +67,7 @@
                             <transformers> 
                             </transformers> 
                             <filters> 
-
-<!-- Exclude of dummy.sf and dummy.dsa -->
+                            <!-- Exclude of dummy.sf and dummy.dsa -->
                                 <filter> 
                                     <artifact>*:*</artifact> 
                                     <excludes> 
@@ -127,6 +138,21 @@
             <groupId>net.coobird</groupId> 
             <artifactId>thumbnailator</artifactId> 
             <scope>provided</scope> 
-        </dependency> 
+        </dependency>
+        <dependency>
+            <groupId>com.github.umjammer</groupId>
+            <artifactId>vavi-commons</artifactId>
+            <version>1.1.14</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.umjammer</groupId>
+            <artifactId>vavi-image</artifactId>
+            <version>1.0.11</version>
+        </dependency>
+        <dependency>
+            <groupId>net.java.dev.jna</groupId>
+            <artifactId>jna</artifactId>
+            <version>5.14.0</version>
+        </dependency>
     </dependencies> 
 </project> 

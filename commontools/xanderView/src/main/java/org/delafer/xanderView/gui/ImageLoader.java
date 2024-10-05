@@ -1,9 +1,11 @@
 package org.delafer.xanderView.gui;
 
 import java.awt.Dimension;
+import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.nio.file.Paths;
 
 import javax.imageio.ImageIO;
 
@@ -34,6 +36,7 @@ public abstract class ImageLoader {
 		}
 	}
 
+	static int imgcnt = 0;
 	protected void loadImage(ImageAbstract<?> entry, String text, ImageCanvas panel) {
 		try {
 			BufferedImage img = null;
@@ -41,6 +44,20 @@ public abstract class ImageLoader {
 			switch (entry.getImageType()) {
 			case JPEG:
 				img = loadJpegImage(entry.content().getArray(true));
+				break;
+			case AVIF:
+				imgcnt++;
+				img = loadCommonImage(entry.content().getArray(true));
+//				System.out.println(imgcnt);
+//
+//				System.out.println("color: "+img.getColorModel());
+//				ColorSpace x = img.getColorModel().getColorSpace();
+//				System.out.println("cspace: "+x.getType()+":"+x.getNumComponents()+ ":"+x.isCS_sRGB()+":"+img.getType()+"-"+img.getTransparency());
+//				System.out.println("smodel: "+img.getSampleModel());
+//				System.out.println("source: "+img.getSource());
+//				System.out.println("height: "+img.getHeight()+" width: "+img.getWidth());
+//				System.out.println();
+//				ImageIO.write(img, "PNG", Paths.get("a:\\dec_"+imgcnt+".png").toFile());
 				break;
 			case BMP:
 			case PNG:

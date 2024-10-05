@@ -145,6 +145,14 @@ public static Frame new_Frame (final Composite parent) {
 	final Frame[] result = new Frame[1];
 	final Throwable[] exception = new Throwable[1];
 	Runnable runnable = new Runnable () {
+
+		Field getFieldByName(Class<?> cls, String name)  {
+			if (cls == null || cls.isPrimitive()) return null;
+			Field field = null;
+			try { field = cls.getDeclaredField(name); } catch (Throwable ignore) {}
+			return (field!=null) ? field : getFieldByName(cls.getSuperclass(), name);
+		}
+
 		public void run () {
 			try {
 				/*
@@ -177,19 +185,28 @@ public static Frame new_Frame (final Composite parent) {
 				}
 				final Frame frame = (Frame) value;
 				
-//				/*
-//				* TEMPORARY CODE
-//				*
-//				* For some reason, the graphics configuration of the embedded
-//				* frame is not initialized properly. This causes an exception
-//				* when the depth of the screen is changed.
-//				*/
-//				try {
-//					clazz = Class.forName("sun.awt.windows.WComponentPeer");
-//					Field field = clazz.getDeclaredField("winGraphicsConfig");
-//					field.setAccessible(true);
-//					field.set(frame.getPeer(), frame.getGraphicsConfiguration());
-//				} catch (Throwable e) {}
+				/*
+				* TEMPORARY CODE
+				* 
+				* For some reason, the graphics configuration of the embedded
+				* frame is not initialized properly. This causes an exception
+				* when the depth of the screen is changed.
+				*/
+				try {
+					clazz = Class.forName("sun.awt.windows.WComponentPeer");
+//					sun.awt.windows.WComponentPeer a;
+					Field field = clazz.getDeclaredField("winGraphicsConfig");
+					if (null != field) {
+						field.setAccessible(true);
+						Field peer = getFieldByName(frame.getClass(), "peer");
+						if (null != peer) {
+							peer.setAccessible(true);
+							Object peerValue = peer.get(frame);
+							field.set(peerValue, frame.getGraphicsConfiguration());
+						}
+
+					}
+				} catch (Throwable e) {}
 				
 				result[0] = frame;
 			} finally {

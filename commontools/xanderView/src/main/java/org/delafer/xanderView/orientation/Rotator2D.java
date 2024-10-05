@@ -1,12 +1,9 @@
 package org.delafer.xanderView.orientation;
 
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
-
-import no.nixx.opencl.ImageRotator;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class Rotator2D extends CommonRotator {
 
