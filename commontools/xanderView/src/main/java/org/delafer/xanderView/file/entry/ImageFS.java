@@ -36,7 +36,7 @@ public class ImageFS extends ImageAbstract<String> {
 
 		if (this.crc == null && null != identifier)
 		try {
-			calcCRC(rawData(identifier, Hasher.HSIZE).get());
+			calcSafeCRC(rawData(identifier, Hasher.HSIZE));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

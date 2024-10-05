@@ -65,9 +65,9 @@ public class ImageEnc<E> extends ImageAbstract<E> {
 
 	@Override
 	protected Buf rawData(E identifier, int size) throws IOException {
-		Buf buf = new Buf(
-				Encryptor.encrypt(new DecData(si.rawData(identifier, size).get(), si.name(), (int)si.size()))
-		);
+		DecData decData = new DecData(si.rawData(identifier, size), si.name(), (int)si.size());
+		Buf buf = new Buf( Encryptor.encrypt(decData) );
+		decData.close();
 		return buf;
 	}
 

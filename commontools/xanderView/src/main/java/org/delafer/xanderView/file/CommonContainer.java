@@ -149,7 +149,7 @@ public class CommonContainer {
 						ImageAbstract<?> entryDel = findByIdentifier(""+id);
 						images.remove(entryDel);
 						if (current != null) {
-							if (Equals.equal(current.getIdentifier(), entryDel.getIdentifier())) {
+							if (entryDel != null && Equals.equal(current.getIdentifier(), entryDel.getIdentifier())) {
 								current = null;
 							}
 						}

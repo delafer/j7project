@@ -29,7 +29,9 @@ public class ImageDec<E> extends ImageAbstract<E> {
 		if (si instanceof ImageFS) {
 			try {
 //				System.out.println("CALCULATION SIZE: "+this.si.identifier);
-				this.size = si.rawData(si.getIdentifier(), 4).get().getInt();
+				Buf buf = si.rawData(si.getIdentifier(), 4);
+				this.size = buf.get().getInt();
+				buf.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -75,7 +77,7 @@ public class ImageDec<E> extends ImageAbstract<E> {
 
 		if (this.crc == null && null != identifier)
 		try {
-			calcCRC(rawData(identifier, Hasher.HSIZE).get());
+			calcSafeCRC(rawData(identifier, Hasher.HSIZE));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

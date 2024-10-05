@@ -1,5 +1,6 @@
 package org.delafer.xanderView.file.entry;
 
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.security.Key;
@@ -140,26 +141,17 @@ public class Encryptor {
 //			System.out.println("Alg type: "+algType);
 
 			int inputSize = input.remaining();
-//			System.out.println("ISIZE: "+inputSize);
 			ByteBuffer output = ByteBuffer.allocate(cipher.getOutputSize(inputSize));
-			// OpensslCipher#update will maintain crypto context.
-			//			int n = cipher.update(input, output);
-			//			if (n < input.remaining()) {
-			//				cipher.doFinal(input, output);
-			//			}
-			//			else {
+
 			cipher.doFinal(input, output);
-			//			}
-			//.flip();
+
 			output.rewind();
 			byte[] len = new byte[2];
 			output.get(len, 0, 2);
 			int length = ByteUtils.Byte2ToUInt(len);
-//			System.out.println(" len: "+length);
 			byte[] name = new byte[length];
 			output.get(name, 0, length);
-//			System.out.println(" name: ["+asString(name)+"]");
-			
+
 			output = output.slice();
 			return new DecData(output, asString(name), fsize);
 		} catch (Exception e) {
@@ -202,6 +194,12 @@ public class Encryptor {
 		private String name;
 		private int size;
 		private ByteBuffer bb;
+		private Buf buf;
+
+		public DecData(Buf buf, String name, int size) {
+			this(buf.get(), name, size);
+			this.buf = buf;
+		}
 
 		public DecData(ByteBuffer bb, String name, int size) {
 			this.bb = bb;
@@ -221,6 +219,16 @@ public class Encryptor {
 			return this.size;
 		}
 
+		public void close() throws IOException  {
+			if (null != buf) {
+				buf.close();
+				buf = null;
+			} else
+			if (null != bb) {
+				HelperFS.closeDirectBuffer(bb);
+			}
+			this.bb = null;
+		}
 
 	}
 	

@@ -39,13 +39,13 @@ public final class Buf implements Closeable {
 		 return bytes;
 	}
 
-	public final void close() throws IOException {
-//		HelperFS.closeDirectBuffer(b);
+	public void close() throws IOException {
+		HelperFS.closeDirectBuffer(b);
 		if (null != c) {
 			c.close();
-//			c = null;
+			c = null;
 		}
-//		b = null;
+		b = null;
 	}
 
 }

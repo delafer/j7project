@@ -19,7 +19,14 @@ public class HelperFS {
 		if (size < 0) {
 			size = (int)fc.size();
 		}
-		MappedByteBuffer buf = fc.map(MapMode.READ_ONLY, 0, size);
+
+		MappedByteBuffer buf = null;
+		try {
+			buf = fc.map(MapMode.READ_ONLY, 0, size);
+		} catch (java.io.IOException e) {
+			System.out.println("filename: "+fileName+" size: "+size);
+			throw e;
+		}
 
 		return new Buf(buf, fis);
 	}
@@ -46,6 +53,7 @@ public class HelperFS {
 	@SuppressWarnings("restriction")
 	public static void closeDirectBuffer(ByteBuffer cb) {
 	    if (!cb.isDirect()) return;
+//      java < 9
 //	    try {
 //	    	((sun.nio.ch.DirectBuffer)cb).cleaner().clean();
 //	    } catch(Exception ex) { }
@@ -61,7 +69,6 @@ public class HelperFS {
         } catch (ReflectiveOperationException e) {
             e.printStackTrace();
         }
-
 
 	}
 

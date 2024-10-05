@@ -6,6 +6,7 @@ import java.util.Objects;
 
 import net.j7.commons.base.Equals;
 import net.j7.commons.io.FileUtils;
+import net.j7.commons.streams.Streams;
 import net.j7.commons.strings.StringUtils;
 
 import org.delafer.xanderView.common.ImageSize;
@@ -91,6 +92,13 @@ public abstract class ImageAbstract<E> implements IImageEntry<E> {
 	protected void calcCRC(ByteBuffer ret) {
 		if (null == crc) {
 			this.crc = Hasher.hash().calc(ret, this.size);
+		}
+	}
+
+	protected void calcSafeCRC(Buf ret) {
+		if (null == crc) {
+			this.crc = Hasher.hash().calc(ret.get(), this.size);
+			Streams.closeSilently(ret);
 		}
 	}
 

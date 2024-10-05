@@ -12,7 +12,9 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Set;
 
+import net.j7.commons.streams.Streams;
 import org.delafer.xanderView.common.SimpleNameIncrementer;
+import org.delafer.xanderView.file.entry.Buf;
 import org.delafer.xanderView.file.entry.ImageAbstract;
 import org.delafer.xanderView.file.entry.ImageAbstract.ImageType;
 import org.delafer.xanderView.file.entry.ImageFS;
@@ -200,7 +202,6 @@ public class CopyService {
 
 			nioTransferCopy(entry, aFile);
 
-
 			ImageFS newEntry = new ImageFS(FileUtils.extractFullPathName(aFile), fileName, entry.size());
 			newEntry.setCRC(entry.CRC());
 
@@ -261,14 +262,16 @@ public class CopyService {
 
     private static void nioTransferCopy(ImageAbstract<?> entry, File target) throws IOException {
         FileChannel out = null;
-
-        try {
-            out = new FileOutputStream(target).getChannel();
+	    Buf content = null;
+	    try (FileOutputStream fos = new FileOutputStream(target)) {
+            out = fos.getChannel();
             //out.write(ByteBuffer.wrap(entry.content()));
-            out.write(entry.content().get());
-            out.force(true);
+	        content = entry.content();
+            out.write(content.get());
+            out.force(false);
         } finally {
-            close(out);
+            //close(out);
+		    Streams.closeSilently(content);
         }
     }
 
@@ -293,6 +296,7 @@ public class CopyService {
 				public void onEvent(FileEvent type, Object id)throws IOException {
 					switch (type) {
 					case Create:
+						//if (1==1) return ;
 						String fileName = id.toString();
 						File aFile = new File(fileName);
 						if (aFile.isDirectory()) return ;

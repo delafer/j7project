@@ -5,15 +5,18 @@ import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Paths;
 
 import javax.imageio.ImageIO;
 
+import net.j7.commons.streams.Streams;
 import net.j7.commons.strings.Args;
 
 import org.delafer.xanderView.common.ImageSize;
 import org.delafer.xanderView.file.CommonContainer;
 import org.delafer.xanderView.file.CopyService;
+import org.delafer.xanderView.file.entry.Buf;
 import org.delafer.xanderView.file.entry.ImageAbstract;
 import org.delafer.xanderView.gui.config.OrientationStore;
 import org.libjpegturbo.turbojpeg.TJ;
@@ -81,9 +84,16 @@ public abstract class ImageLoader {
 		}
 	}
 
+	private BufferedImage loadCommonImageSafe(Buf content) throws IOException {
+		BufferedImage ret = loadCommonImage(content.getArray(false));
+		Streams.closeSilently(content);
+		return ret;
+	}
 
 	private BufferedImage loadCommonImage(byte[] content) throws IOException {
-		return ImageIO.read(new ByteArrayInputStream(content));
+		try (InputStream input = new ByteArrayInputStream(content)) {
+			return ImageIO.read(input);
+		}
 	}
 
 	public abstract ImageSize displaySize();
