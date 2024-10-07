@@ -51,16 +51,6 @@ public abstract class ImageLoader {
 			case AVIF:
 				imgcnt++;
 				img = loadCommonImage(entry.content().getArray(true));
-//				System.out.println(imgcnt);
-//
-//				System.out.println("color: "+img.getColorModel());
-//				ColorSpace x = img.getColorModel().getColorSpace();
-//				System.out.println("cspace: "+x.getType()+":"+x.getNumComponents()+ ":"+x.isCS_sRGB()+":"+img.getType()+"-"+img.getTransparency());
-//				System.out.println("smodel: "+img.getSampleModel());
-//				System.out.println("source: "+img.getSource());
-//				System.out.println("height: "+img.getHeight()+" width: "+img.getWidth());
-//				System.out.println();
-//				ImageIO.write(img, "PNG", Paths.get("a:\\dec_"+imgcnt+".png").toFile());
 				break;
 			case BMP:
 			case PNG:

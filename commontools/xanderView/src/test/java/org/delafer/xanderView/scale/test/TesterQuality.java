@@ -14,6 +14,10 @@ import org.delafer.xanderView.common.ImageSize;
 import org.delafer.xanderView.file.entry.HelperFS;
 import org.delafer.xanderView.orientation.OrientationCommons;
 import org.delafer.xanderView.scale.*;
+import org.delafer.xanderView.scale.others.BufferedImageResizer;
+import org.delafer.xanderView.scale.others.CustomScalers;
+import org.delafer.xanderView.scale.others.Graph2DResizer;
+import org.delafer.xanderView.scale.others.ScalrResizer;
 import org.libjpegturbo.turbojpeg.TJDecompressor;
 import org.libjpegturbo.turbojpeg.TJScalingFactor;
 

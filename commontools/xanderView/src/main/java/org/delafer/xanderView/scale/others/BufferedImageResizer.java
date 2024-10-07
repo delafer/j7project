@@ -1,4 +1,4 @@
-package org.delafer.xanderView.scale.test;
+package org.delafer.xanderView.scale.others;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -103,5 +103,10 @@ public class BufferedImageResizer extends ResizerBase {
 	public int current() {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("BufferedImageResizer [%s]", name());
 	}
 }

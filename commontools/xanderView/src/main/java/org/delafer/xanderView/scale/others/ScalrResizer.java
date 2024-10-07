@@ -1,4 +1,4 @@
-package org.delafer.xanderView.scale.test;
+package org.delafer.xanderView.scale.others;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.BufferedImageOp;
@@ -70,5 +70,10 @@ public class ScalrResizer extends ResizerBase {
 	@Override
 	public int current() {
 		return filterIdx;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("ScalrResizer [%s]", this.name());
 	}
 }

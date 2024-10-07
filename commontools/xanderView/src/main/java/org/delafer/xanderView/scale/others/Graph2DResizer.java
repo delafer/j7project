@@ -1,4 +1,4 @@
-package org.delafer.xanderView.scale.test;
+package org.delafer.xanderView.scale.others;
 
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -102,4 +102,9 @@ public class Graph2DResizer extends ResizerBase {
 //		ResizerBase b = r;
 //		System.out.println(r.name());
 //	}
+
+	@Override
+	public String toString() {
+		return String.format("Graph2DResizer [%s]", name());
+	}
 }

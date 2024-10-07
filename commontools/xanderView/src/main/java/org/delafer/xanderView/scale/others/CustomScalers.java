@@ -1,4 +1,4 @@
-package org.delafer.xanderView.scale.test;
+package org.delafer.xanderView.scale.others;
 
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
@@ -20,12 +20,14 @@ public class CustomScalers extends ResizerBase {
 
 	public static final ResizerBase instance = new CustomScalers(-1);
 
-	public final static int FILTER_CAMBELL_SCALER = 4;
+	public final static int FILTER_CAMBELL_SCALER = 0;
 	public final static int FILTER_NOBEL_MULTISTEPRESCALER  = 1;
 	public final static int FILTER_NOBEL_MULTISTEPRESCALER_HQ  = 2;
 	public final static int FILTER_BRESENHAM = 3;
-	public final static int FILTER_GPU = 0;
-	public final static int FILTER_THUMBNAILATOR = 5;
+
+	public final static int FILTER_THUMBNAILATOR = 4;
+
+	public final static int FILTER_GPU = 5;
 	public final static int FILTER_JAI = 6;
 //	public final static int FILTER_OPENCV = 7;
 
@@ -38,10 +40,11 @@ public class CustomScalers extends ResizerBase {
 		names.put(FILTER_NOBEL_MULTISTEPRESCALER, "Nobel_Mutlistep");
 		names.put(FILTER_NOBEL_MULTISTEPRESCALER_HQ, "Nobel_MutlistepHQ");
 		names.put(FILTER_BRESENHAM, "Bresenham");
-		names.put(FILTER_GPU, "OpenCl");
+
 		names.put(FILTER_THUMBNAILATOR, "thumbnailtr");
-		names.put(FILTER_JAI, "JAI");
-//		names.put(FILTER_OPENCV, "openCV");
+		//names.put(FILTER_JAI, "JAI");
+		//names.put(FILTER_GPU, "OpenCl");
+		//names.put(FILTER_OPENCV, "openCV");
 	}
 
 	@Override
@@ -112,12 +115,17 @@ public class CustomScalers extends ResizerBase {
 
 	@Override
 	public int getMaxFilters() {
-		return 7;
+		return 4;
 	}
 
 	@Override
 	public int current() {
 		return filter;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("CustomScaler [%s]", name());
 	}
 
 }
