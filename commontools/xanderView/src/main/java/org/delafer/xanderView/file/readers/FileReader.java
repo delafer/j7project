@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.delafer.xanderView.comparator.BasicFileComparator;
+import org.delafer.xanderView.comparator.ComparatorFactory;
 import org.delafer.xanderView.file.ContentChangeWatcher;
 import org.delafer.xanderView.file.entry.ImageFS;
 import org.delafer.xanderView.file.entry.ImageAbstract;
@@ -177,7 +178,7 @@ public class FileReader implements IAbstractReader {
 
 	@Override
 	public Comparator<ImageAbstract<?>> getComparator() {
-		return BasicFileComparator.instance();
+		return ComparatorFactory.getComparator();
 	}
 
 	@Override

@@ -19,18 +19,6 @@ public class ImageEnc<E> extends ImageAbstract<E> {
 	ImageAbstract<E> si;
 	Buf buf;
 	
-//	protected String name;
-//
-//	protected long size;
-//	protected Long crc;
-//
-//	protected ImageSize imageSize;
-//	protected ImageType imageType;
-//
-//	protected IAbstractReader parent;
-//
-//	protected E identifier;
-
 	public ImageEnc(ImageAbstract<E> si) {
 		this.si = si;
 		this.parent = si.parent;
@@ -74,6 +62,10 @@ public class ImageEnc<E> extends ImageAbstract<E> {
 	@Override
 	public long size() {
 		return si.size();
+	}
+
+	public long lastModified() throws IOException {
+		return this.si != null ? this.si.lastModified() : 0;
 	}
 
 	@Override

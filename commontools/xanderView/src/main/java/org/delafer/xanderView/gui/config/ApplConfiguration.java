@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
+import java.util.StringJoiner;
 import java.util.TimerTask;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -18,6 +19,8 @@ import net.j7.commons.io.FilePath.PathType;
 import net.j7.commons.io.TextFileUtils;
 import net.j7.commons.io.TextFileUtils.TextWriter;
 import net.j7.commons.utils.BooleanUtils;
+import net.sourceforge.jiu.util.Sort;
+import org.eclipse.swt.internal.win32.SIZE;
 
 public class ApplConfiguration {
 
@@ -44,7 +47,23 @@ public class ApplConfiguration {
 	public static final String LOOP_CURRENT_SOURCE = "loop.source";
 	public static final String CFG_COPY_DIR = "target.folder";
 	public static final String CFG_CRY_DIR = "cry.keyfile";
+	public static final String CFG_SORT = "sort";
+	public static final String CFG_USE_CSV = "csv";
 
+	public enum SortType {
+		UNSORTED,
+		NO,
+		NAME,
+		SIZE,
+		DATE,
+		DATETIME,
+		TIME
+	}
+
+	public enum SortDir {
+		ASC,
+		DESC
+	}
 	/**
 	 * Lazy-loaded Singleton, by Bill Pugh *.
 	 */
@@ -74,39 +93,39 @@ public class ApplConfiguration {
 
 	private Properties defaults() {
 		Properties pro = new Properties();
+		return defaults(pro);
+	}
+
+	private Properties defaults(Properties pro) {
 		pro.setProperty(CFG_HEIGHT, String.valueOf(600));
 		pro.setProperty(CFG_WIDTH, String.valueOf(800));
 		pro.setProperty(SCALER, "1;11,500000;10,665000;6,1850000;5,2500000;6;6000000;4,8000000;2,13000000");
 		pro.setProperty(LOOP_CURRENT_SOURCE, String.valueOf(true));
-		pro.setProperty(CFG_COPY_DIR, "D:\\newtest");
+		pro.setProperty(CFG_COPY_DIR, "A:\\target\\src");
 		pro.setProperty(CFG_FULLSCREEN, "1");
 		pro.setProperty(CFG_CRY_DIR, "A:\\key");
+		pro.setProperty(CFG_SORT, "size,desc");
+		pro.setProperty(CFG_USE_CSV, "1");
 		return pro;
 	}
 
 	private void initialize() {
 		config = FilePath.as().dir(PathType.ApplicationData).dir(XANDER_VIEW).file("xander.properties").forceExists().build();
-		properties = new Properties(defaults());
+		properties = defaults();
 		try {
 		  properties.load(new FileInputStream(config));
 		} catch (IOException e) {
 		  e.printStackTrace();
 		}
 
-//	    Timer timer = new Timer("config"+System.identityHashCode(this), true) {
-//	    	{
-//	    	}
-//	    };
 	    TimerTask task = new TimerTask() {
 			public void run() {
 				if (ApplConfiguration.this.isDirty()) {
 					ApplConfiguration.this.save();
 				}
 			}
-
 	    };
 
-	    //timer.schedule( task, 5000, 5000 );
 	    ScheduledExecutorService timer = Executors.newSingleThreadScheduledExecutor(threadFactory);
 	    timer.scheduleWithFixedDelay(task, 5, 8, TimeUnit.SECONDS);
 	}
@@ -145,6 +164,10 @@ public class ApplConfiguration {
 		} catch (Exception i) {
 			return false;
 		}
+	}
+
+	public SortBy getSort() {
+		return new SortBy(this.get(CFG_SORT));
 	}
 
 	public boolean isDirty() {
@@ -192,7 +215,7 @@ public class ApplConfiguration {
 			fos.close();
 
 
-			if (ApplInstance.lastEntry != null) {
+			if (ApplInstance.lastEntry != null && this.getBoolean(CFG_USE_CSV)) {
 				try {
 					TextWriter tw = TextFileUtils.createTextWriter(ApplInstance.LAST_ENTRY, false);
 					tw.write(ApplInstance.lastEntry);
@@ -223,5 +246,47 @@ public class ApplConfiguration {
 	        return t;
 	    }
 	};
+
+	public static class SortBy {
+		public SortType sort = SortType.UNSORTED;
+		public boolean asc = true;
+
+		public SortBy(String sort) {
+			if (null != sort) {
+				String[] sortArr = sort.split(",");
+				try {
+					this.sort = SortType.valueOf(sortArr[0].trim().toUpperCase());
+					this.asc =  sortArr.length > 1 ? SortDir.valueOf(sortArr[1].trim().toUpperCase()).equals(SortDir.ASC) : true;
+				} catch (IllegalArgumentException ignore) {}
+			}
+		}
+
+		public SortType getSort() {
+			return sort;
+		}
+
+		public boolean isAsc() {
+			return asc;
+		}
+
+//		@Override
+//		public String toString() {
+//			return new StringJoiner(", ", SortBy.class.getSimpleName() + "[", "]")
+//					.add("sort=" + sort)
+//					.add("asc=" + asc)
+//					.toString();
+//		}
+	}
+
+//	public static void main(String[] args) {
+//		System.out.println(new ApplConfiguration.SortBy(null));
+//		System.out.println(new ApplConfiguration.SortBy(""));
+//		System.out.println(new ApplConfiguration.SortBy("Name"));
+//		System.out.println(new ApplConfiguration.SortBy("name,asc"));
+//		System.out.println(new ApplConfiguration.SortBy("NAME,desc"));
+//		System.out.println(new ApplConfiguration.SortBy("date, desc"));
+//		System.out.println(new ApplConfiguration.SortBy("date, asc"));
+//		System.out.println(new ApplConfiguration.SortBy("SIZE,ASC"));
+//	}
 
 }

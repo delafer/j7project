@@ -1,16 +1,24 @@
 package org.delafer.xanderView.file.entry;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.attribute.FileTime;
+import java.util.Date;
 import java.util.Objects;
 
+import net.sf.sevenzipjbinding.PropID;
 import org.delafer.xanderView.hash.Hasher;
 import org.delafer.xanderView.interfaces.IAbstractReader;
 
 public class ImageFS extends ImageAbstract<String> {
 
+	/*
 	public static ImageAbstract<String> getInstance(String fullPath, String name, long size) {
 		return getInstance(null, fullPath, name, size);
-	}
+	}*/
 
 	public static ImageAbstract<String> getInstance(IAbstractReader parent, String fullPath, String name, long size) {
 		ImageFS fs = new ImageFS(parent, fullPath, name, size);
@@ -43,7 +51,18 @@ public class ImageFS extends ImageAbstract<String> {
 
 		return this.crc;
 	}
-	
+
+	private transient long lastModified = -1;
+
+	@Override
+	public long lastModified() throws IOException {
+		if (lastModified == -1) {
+			FileTime date = Files.getLastModifiedTime(Path.of(this.identifier));
+			this.lastModified = date != null ? date.toMillis() : 0;
+		}
+		return lastModified;
+	}
+
 	@Override
 	public boolean isEquals(ImageAbstract<?> thisObj, Object obj) {
 		if (thisObj == obj) return true;

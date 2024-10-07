@@ -4,8 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
+import org.delafer.xanderView.comparator.ComparatorFactory;
 import org.delafer.xanderView.file.ContentChangeWatcher;
 import org.delafer.xanderView.file.entry.ImageAbstract;
 import org.delafer.xanderView.file.entry.ImageZip;
@@ -18,6 +20,8 @@ import net.j7.commons.io.FileUtils;
 import net.sf.sevenzipjbinding.*;
 import net.sf.sevenzipjbinding.impl.RandomAccessFileInStream;
 import net.sf.sevenzipjbinding.impl.RandomAccessNioStream;
+
+import javax.xml.crypto.Data;
 
 public class SevenZipReader implements IAbstractReader {
 
@@ -81,8 +85,7 @@ public class SevenZipReader implements IAbstractReader {
 		Long size = (Long)archive.getProperty(i, PropID.SIZE);
 
 		ImageType imageType = ImageAbstract.getType(pathName);
-		
-		
+
 		if (ImageType.UNKNOWN.equals(imageType)) return null;
 		if (ImageType.ENCRYPTED.equals(imageType) && !ApplConfiguration.instance().hasPwd()) return null;
 
@@ -91,7 +94,7 @@ public class SevenZipReader implements IAbstractReader {
 
 	@Override
 	public Comparator<ImageAbstract<?>> getComparator() {
-		return null;
+		return ComparatorFactory.getComparator();
 	}
 
 	@Override

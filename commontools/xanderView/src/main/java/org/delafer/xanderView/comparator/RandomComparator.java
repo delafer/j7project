@@ -1,12 +1,14 @@
 package org.delafer.xanderView.comparator;
 
 import org.delafer.xanderView.file.entry.ImageAbstract;
+import org.eclipse.swt.widgets.Tree;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class RandomComparator implements Comparator<ImageAbstract<?>> {
     /**  Lazy-loaded Singleton, by Bill Pugh **/
@@ -19,7 +21,7 @@ public class RandomComparator implements Comparator<ImageAbstract<?>> {
     }
 
 
-    private final transient Map<String, Long> stored = new HashMap<>(2048);
+    private final transient Map<String, Long> stored = new TreeMap<>();
 
     private SecureRandom random;
     /**

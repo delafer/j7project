@@ -9,6 +9,7 @@ import net.j7.commons.io.FileUtils;
 import net.j7.commons.streams.Streams;
 import net.j7.commons.strings.StringUtils;
 
+import net.sf.sevenzipjbinding.SevenZipException;
 import org.delafer.xanderView.common.ImageSize;
 import org.delafer.xanderView.gui.config.ApplInstance;
 import org.delafer.xanderView.hash.Hasher;
@@ -72,6 +73,8 @@ public abstract class ImageAbstract<E> implements IImageEntry<E> {
 	public long size() {
 		return size;
 	}
+
+	public abstract long lastModified() throws IOException;
 
 	public E getIdentifier() {
 		return identifier;

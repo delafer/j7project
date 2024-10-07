@@ -45,10 +45,8 @@ public class ImageDec<E> extends ImageAbstract<E> {
 	 * @param si
 	 */
 	private void init() {
-//		new Throwable().printStackTrace();
 		if (!initialized)
 		try {
-//			System.out.println("INITIALIZING: "+this.si.identifier);
 			Buf buff =  si.rawData(si.getIdentifier(), X);
 			DecData dd = Encryptor.decrypt(buff.get());
 			this.name = dd.name();
@@ -74,14 +72,12 @@ public class ImageDec<E> extends ImageAbstract<E> {
 	}
 
 	public Long CRC() {
-
 		if (this.crc == null && null != identifier)
 		try {
 			calcSafeCRC(rawData(identifier, Hasher.HSIZE));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 		return this.crc;
 	}
 
@@ -96,6 +92,10 @@ public class ImageDec<E> extends ImageAbstract<E> {
 	public String shortName() {
 		init();
 		return super.shortName();
+	}
+
+	public long lastModified() throws IOException {
+		return this.si != null ? this.si.lastModified() : 0;
 	}
 
 	@Override

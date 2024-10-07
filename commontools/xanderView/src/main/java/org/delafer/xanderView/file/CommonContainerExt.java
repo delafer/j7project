@@ -1,16 +1,10 @@
 package org.delafer.xanderView.file;
 
-import net.j7.commons.collections.SortedLinkedList;
-import net.j7.commons.utils.RandomUtil;
-
 import org.delafer.xanderView.comparator.RandomComparator;
 import org.delafer.xanderView.file.entry.ImageAbstract;
 import org.delafer.xanderView.general.State;
 import org.delafer.xanderView.gui.SplashWindow;
 import org.delafer.xanderView.gui.helpers.MultiShell;
-
-import java.io.IOException;
-import java.util.Comparator;
 
 public class CommonContainerExt extends CommonContainer{
 
@@ -22,8 +16,6 @@ public class CommonContainerExt extends CommonContainer{
 		super(locationArg);
 		randomMode = false;
 		startAt = this.currentIndex();
-//		ImageAbstract e = this.getCurrent();
-//		System.out.println(e);
 	}
 
 	@Override

@@ -2,6 +2,7 @@ package org.delafer.xanderView.file.entry;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.Date;
 import java.util.Objects;
 
 import net.j7.commons.io.FileUtils;
@@ -15,14 +16,14 @@ public class ImageZip extends ImageAbstract<Integer> {
 
 	IInArchive archive;
 
-
+	/*
 	public static ImageAbstract<Integer> getInstance(IAbstractReader parent, IInArchive archive, Integer id, String name, long size) {
 		ImageZip fs = new ImageZip(parent, archive, id, name, size);
 		if (ImageType.ENCRYPTED.equals(fs.getImageType())) {
 			return new ImageDec<Integer>(fs);
 		}
 		return fs;
-	}
+	}*/
 
 
 	public ImageZip(IAbstractReader parent, IInArchive archive, Integer id, String name, long size) {
@@ -36,6 +37,17 @@ public class ImageZip extends ImageAbstract<Integer> {
 	@Override
 	public String shortName() {
 		return shorten(FileUtils.getFileName(this.name()));
+	}
+
+	private transient long lastModified = -1;
+
+	@Override
+	public long lastModified() throws IOException {
+		if (lastModified == -1) {
+			Date date = (Date) archive.getProperty(this.identifier, PropID.LAST_MODIFICATION_TIME);
+			this.lastModified = date != null ? date.getTime() : 0;
+		}
+		return lastModified;
 	}
 
 	public Buf rawData(Integer identifier, int size) throws IOException {
