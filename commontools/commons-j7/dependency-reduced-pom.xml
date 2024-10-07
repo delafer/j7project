@@ -56,6 +56,14 @@
       <url>https://maven.tmatesoft.com/content/repositories/releases/</url>
     </repository>
   </repositories>
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.8.2</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
   <properties>
     <slf4j.version>1.7.10</slf4j.version>
     <junit.version>4.8.2</junit.version>
