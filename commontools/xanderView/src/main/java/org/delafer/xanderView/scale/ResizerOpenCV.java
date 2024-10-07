@@ -28,7 +28,13 @@ public class ResizerOpenCV extends ResizerBase {
 	}
 
 	static {
-		LibraryLoader.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+//		LibraryLoader.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+		LibraryLoader.loadLibrary("opencv_java460");
+//		LibraryLoader.loadLibrary("opencv_java452");
+//		LibraryLoader.loadLibrary("opencv_java347");
+//		LibraryLoader.loadLibrary("opencv_java320");
+//		LibraryLoader.loadLibrary("opencv_java310");
+//		LibraryLoader.loadLibrary("opencv_java300");
 	}
 
 	private static final ConcurrentMap<Integer, ResizerOpenCV> multitons = new ConcurrentHashMap<>();
@@ -62,7 +68,7 @@ public class ResizerOpenCV extends ResizerBase {
 			byte[] pixels = ((DataBufferByte) db).getData();
 
 		    // Create a Matrix the same size of image
-		    image = new Mat(im.getHeight(), im.getWidth(), CvType.CV_8UC3);
+			    image = new Mat(im.getHeight(), im.getWidth(), im.getColorModel().getPixelSize() > 24 ? CvType.CV_8UC3: CvType.CV_8UC3);
 		    // Fill Matrix with image values
 		    image.put(0, 0, pixels);
 		} else
@@ -102,14 +108,15 @@ public class ResizerOpenCV extends ResizerBase {
 		try {
 			mt = matify(input);
 		} catch (java.lang.UnsupportedOperationException u) {
-			//u.printStackTrace();
+			u.printStackTrace();
 		}
 
 
 		if (mt == null) {
 			//workaround
-			System.out.println("workaround");
+			System.out.println("workaround "+mt);
 			return new ResizerNobel(4).resize(input, width, height);
+			//return new ResizerJava2D(2).resize(input, width, height);
 		}
 		//System.out.println("mt: "+mt+" resize: "+(resizeMat != null ? resizeMat.size() : null)+ " size: "+size+ " current: "+current);
 		Imgproc.resize(mt, resizeMat, size, 0f, 0f, types[current()]);
@@ -140,6 +147,11 @@ public class ResizerOpenCV extends ResizerBase {
 			System.out.println("["+i+"]="+rs.name());
 		}
 
+	}
+
+	@Override
+	public String toString() {
+		return String.format("OpenCV [%s]", this.name());
 	}
 
 }

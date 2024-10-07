@@ -95,4 +95,10 @@ public class ResizerJava2D extends ResizerBase {
 
 	}
 
+
+	@Override
+	public String toString() {
+		return String.format("ResizerJava2D [%s]", name());
+	}
+
 }

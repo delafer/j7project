@@ -71,4 +71,8 @@ public class ResizerNobel extends ResizerBase {
 
 	}
 
+	@Override
+	public String toString() {
+		return String.format("ResizerNobel [%s]", name());
+	}
 }

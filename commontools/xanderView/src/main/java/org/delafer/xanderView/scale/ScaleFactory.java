@@ -1,30 +1,52 @@
 package org.delafer.xanderView.scale;
 
+import com.mortennobel.imagescaling.MultiStepRescaleOp;
+import net.sourceforge.jiu.apps.Strings;
 import org.delafer.xanderView.common.ImageSize;
 import org.delafer.xanderView.gui.config.ApplConfiguration;
 import org.delafer.xanderView.scale.deprecated.ResizeOpenCL;
+
+import java.awt.image.BufferedImage;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class ScaleFactory  {
 
 
-	public static final int SCALER_AWT_2D_NEAREST 		= 1;
-	public static final int SCALER_AWT_2D_BILLINEAR 	= 2;
-	public static final int SCALER_AWT_2D_BICUBIC 		= 3; //skip
-	public static final int SCALER_CV_LINEAR 			= 4;
-	public static final int SCALER_CV_AREA 				= 5;
-	public static final int SCALER_CV_BICUBIC			= 6;
-	public static final int SCALER_CV_LANCZOS4			= 7;
-	public static final int SCALER_NOBEL_HERMITE		= 8;
-	public static final int SCALER_NOBEL_MITCHEL		= 9;
-	public static final int SCALER_NOBEL_BICUBIC_HF		= 10;
-	public static final int SCALER_NOBEL_LANCZOS3		= 11;
+	//CV / OpenCV Quality (upscale): CV_LANCZOS4 > CV_BICUBIC > CV_LINEAR > CV_AREA > CV_NEAREST
+	//CV / OpenCV Quality (downscale): CV_AREA > CV_LINEAR > CV_CUBIC >  CV_LANCZOS4 > CV_NEAREST
+	//CV / OpenCV Speed:  CV_NEAREST > CV_LINEAR > CV_AREA > CV_BICUBIC > CV_LANCZOS4 (* = unstable speed)
+	//While enlarging images, INTER_AREA work same as INTER_NEAREST,  INTER_AREA works better in image decimation and avoiding MOIRE pattern
 
+	//only nearest is faster as opencv, with cpu
+	//Hermite, Mitchel -> Hermite Sharp, but artifacts, Mitchel -> no artifacts, but very unsharp; speed same, slower as Lanczos
 
+	public enum SCALER {
+		AWT_2D_NEAREST          (1), //fastest, but very low quality
+		AWT_2D_BILLINEAR        (2), //fastest for upscale with still good quality (2) ok for downscale, but only little bit faster as nobel multistep
+		AWT_2D_BICUBIC 		    (3), //no usage, because it slower as Lanczos
+		CV_LINEAR 			    (4), //hz
+		CV_AREA 				(5), //good and fast for downscale
+		CV_BICUBIC			    (6), //average performer, but still fast
+		CV_LANCZOS4			    (7), //best for upscale, unstable
+		NOBEL_HERMITE		    (8), //don't know, slower as lanczos
+		NOBEL_MITCHEL		    (9), //don't know, slower as lanczos
+		NOBEL_BICUBIC_HF		(10), //second best for upscale, but slower as Nobel Laczos
+		NOBEL_LANCZOS3		    (11), //III best for upscale, and faster as BicubicHF
+		NOBEL_MULTISTEP         (12); //good for downscale and little faster as lanczos and as fast as bilinear
+		int id;
+		SCALER(int id) { this.id = id; }
+	}
 
+	private static Map<Integer, SCALER> scalerIds = new HashMap<>(12, 1f);
+	static {
+		for (SCALER next : SCALER.values()) {
+			scalerIds.put(next.id, next);
+		}
+	}
 
 	private ScalerHelper scaler;
-
 	/**
 	 * Gets the single instance of ResourcesDR.
 	 * @return single instance of ResourcesDR
@@ -40,34 +62,52 @@ public class ScaleFactory  {
 	}
 
 
-	private IResizer getInstanceByType(int type) {
-		//if (1==1) return new ResizerJava2D(2);
-		//System.out.println("type: "+type);
-		switch (type) {
-		case SCALER_CV_LINEAR:
-//			return ResizerOpenCV.instance(2);
-		case SCALER_CV_AREA:
-//			return ResizerOpenCV.instance(1);
-		case SCALER_CV_BICUBIC:
-//			return ResizerOpenCV.instance(3);
-		case SCALER_CV_LANCZOS4:
-//			return ResizerOpenCV.instance(4);
-			new ResizerJava2D(1);
-		case SCALER_NOBEL_LANCZOS3:
+	static int lastType = -1;
+	//change to private again
+	public IResizer getInstanceByType(int type) {
+		SCALER scaler = scalerIds.get(type);
+
+		if (type != lastType) {
+			System.out.println(String.format("scaler: [%s] = %s", type, scaler));
+			this.lastType = type;
+		}
+//		if (SCALER.CV_AREA.equals(scaler)) {
+//			System.out.println("hmm");
+//		}
+		scaler = SCALER.CV_AREA;
+
+		switch (scaler) {
+		case CV_LINEAR:
+			return ResizerOpenCV.instance(2);
+		case CV_AREA:
+			return ResizerOpenCV.instance(1);
+		case CV_BICUBIC:
+			return ResizerOpenCV.instance(3);
+		case CV_LANCZOS4:
+			return ResizerOpenCV.instance(4);
+		case NOBEL_LANCZOS3:
 			return new ResizerNobel(0);
-		case SCALER_NOBEL_BICUBIC_HF:
+		case NOBEL_BICUBIC_HF:
 			return new ResizerNobel(1);
-		case SCALER_NOBEL_MITCHEL:
+		case NOBEL_MITCHEL:
 			return new ResizerNobel(3);
-		case SCALER_NOBEL_HERMITE:
+		case NOBEL_HERMITE:
 			return new ResizerNobel(4);
-		case SCALER_AWT_2D_BICUBIC:
+		case AWT_2D_BICUBIC:
 			return new ResizerJava2D(2);
-		case SCALER_AWT_2D_BILLINEAR:
+		case AWT_2D_BILLINEAR:
 			return new ResizerJava2D(1);
-		case SCALER_AWT_2D_NEAREST:
-		default:
+		case AWT_2D_NEAREST:
 			return new ResizerJava2D(0);
+		case NOBEL_MULTISTEP:
+		default:
+			return new IResizer() {
+				public BufferedImage resize(BufferedImage sourceImage, int outputWidth, int outputHeight) {
+					MultiStepRescaleOp msOp = new MultiStepRescaleOp(outputWidth, outputHeight);
+					return msOp.filter(sourceImage, null);
+				}
+				public String name() { return "NobelMutlistep"; }
+			};
 		}
 	}
 
