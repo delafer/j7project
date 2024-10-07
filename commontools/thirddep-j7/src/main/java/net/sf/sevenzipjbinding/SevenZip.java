@@ -1,10 +1,13 @@
 package net.sf.sevenzipjbinding;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.AccessController;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,16 +20,21 @@ import net.sf.sevenzipjbinding.impl.RandomAccessFileInStream;
 import net.sf.sevenzipjbinding.impl.VolumedArchiveInStream;
 
 /**
- * 7-Zip-JBinding entry point class. Finds and initializes 7-Zip-JBinding native library. Opens archives and returns
- * implementation of {@link IInArchive}
+ * 7-Zip-JBinding main class.
+ *
+ * <ul>
+ * <li>Finds and initializes 7-Zip-JBinding native library
+ * <li>Opens existing archives and returns implementation of {@link IInArchive}
+ * <li>Create new archives by providing different implementations of the {@link IOutArchive}
+ * </ul>
  *
  * <h3>Initialization of the native library</h3>
  *
- * Typically the library doesn't need an explicit initialization. The first call to an open archive method will try to
- * initialize the native library by calling {@link #initSevenZipFromPlatformJAR()} method. This initialization process
- * requires a platform jar to be in a class path. The automatic initialization starts before the first access to an
- * archive, if native library wasn't already initialized manually with one of the <code>initSevenZip...</code> methods.
- * If manual or automatic initialization failed, no further automatic initialization attempts will be made. The
+ * Typically the library doesn't need an explicit initialization. The first call to an open/create archive method will
+ * try to initialize the native library by calling {@link #initSevenZipFromPlatformJAR()} method. This initialization
+ * process requires a platform jar to be in a class path. The automatic initialization starts before the first access to
+ * an archive, if native library wasn't already initialized manually with one of the <code>initSevenZip...</code>
+ * methods. If manual or automatic initialization failed, no further automatic initialization attempts will be made. The
  * initialization status and error messages can be obtained by following methods:
  * <ul>
  * <li>{@link #isInitializedSuccessfully()} - get initialization status</li>
@@ -49,19 +57,21 @@ import net.sf.sevenzipjbinding.impl.VolumedArchiveInStream;
  * <ul>
  * <li>Initialization using platform jar
  * <ul>
- * <li>First, the list of available native libraries is read out of the
- * <code>/sevenzipjbinding-platforms.properties</code> file in the class path by calling {@link #getPlatformList()}
+ * <li>First, the list of the available native libraries is loaded from the
+ * <code>/sevenzipjbinding-platforms.properties</code> file on the class path by calling {@link #getPlatformList()}
  * method. The list is cached in a static variable.</li>
- * <li>The platform is chosen by calling {@link #getPlatformBestMatch()} method. If the list of available platforms
- * contains exact one platform the platform is always considered the best match. If more, that one platforms are
- * available to choose from, the system properties <code>os.arch</code> and <code>os.name</code> (first part) are used
- * to make the choice.</li>
+ * <li>The platform is chosen by calling <code>getPlatformBestMatch</code> method. If the list of available platforms
+ * contains exact one platform the platform will be always the best match. If more that one platforms are available to
+ * choose from, the system properties <code>os.arch</code> and <code>os.name</code> (first part) are used to make the
+ * choice.</li>
  * <li>The list of the native libraries is determined by reading
- * <code>/ChosenPlatform/sevenzipjbinding-lib.properties</code> in the class path. The list contains names of the
- * dynamic libraries situated in the <code>/ChosenPlatform/</code> directory in the same jar.</li>
- * <li>The dynamic libraries for the chosen platform are copied (if not already) to the unique temporary directory using
- * "build-ref" postfix. If not passed as a parameter for one of <code>initSevenZipFromPlatformJAR(...)</code> methods,
- * the temporary directory is determined using system property <code>java.io.tmpdir</code>.</li>
+ * <code>/ChosenPlatform/sevenzipjbinding-lib.properties</code> on the class path. The list contains names and hashes of
+ * the dynamic libraries located in the <code>/ChosenPlatform/</code> directory in the same jar.</li>
+ * <li>The dynamic libraries for the chosen platform are copied to the unique temporary directory using "build-ref"
+ * postfix. If not passed as a parameter for one of <code>initSevenZipFromPlatformJAR(...)</code> methods, the temporary
+ * directory is determined using system property <code>java.io.tmpdir</code>.</li>
+ * <li>The dynamic libraries are reused, if the files are already present in the temporary directory and the hash sums
+ * are verified
  * <li>The dynamic libraries are loaded into JVM using {@link System#load(String)} method.</li>
  * <li>7-Zip-JBinding native initialization method called to complete initialization process.</li>
  * </ul>
@@ -82,27 +92,28 @@ import net.sf.sevenzipjbinding.impl.VolumedArchiveInStream;
  *
  * <h3>Temporary artifacts</h3>
  *
- * During initialization phase of the 7-Zip-JBinding the native libraries from the platform jar must be extracted to the
- * disk in order to be loaded into the JVM. Since the count of the native libraries (depending on the platform) can be
- * greater than one, a temporary sub-directory is created to hold those native libraries. The path to the directory for
- * the temporary artifacts will determined according to following rules (see {@link #createOrVerifyTmpDir(File)}:
+ * During automatic initialization of the 7-Zip-JBinding the native libraries from the platform jar must be extracted to
+ * the disk in order to be loaded into the JVM. Since the count of the native libraries (depending on the platform) can
+ * be greater than one, a temporary sub-directory is created to hold those native libraries. The path to the directory
+ * for the temporary artifacts will determined according to following rules (see <code>createOrVerifyTmpDir</code>
+ * method):
  * <ul>
  * <li>If path specified directly using <code>tmpDirectory</code> parameter of
  * {@link #initSevenZipFromPlatformJAR(File)} or {@link #initSevenZipFromPlatformJAR(String, File)} it will be used
  * <li>If no path specified directly, the system property <code>java.io.tmpdir</code> get used
  * <li>If the system property <code>java.io.tmpdir</code> isn't set, an exception get raised
  * </ul>
- * <br/>
+ * <br>
  * The list of the temporary created artifact can be obtained with {@link #getTemporaryArtifacts()}. By default,
  * 7-Zip-JBinding doesn't delete those artifacts trying to reduce subsequent initialization overhead. If 7-Zip-JBinding
  * finds the native libraries within the temporary directory, it uses those without further verification. In order to
  * allow smoothly updates, the temporary sub-directory with the native libraries named with a unique build reference
- * number. If 7-Zip-JBinding get updated, a new temporary sub-directory get created and the new native libraries get
+ * number. If 7-Zip-JBinding get updated, a new temporary sub-directory get created and the new native libraries will be
  * copied and used.
  *
- * <h3>Opening archives</h3>
+ * <h3>Opening existing archives</h3>
  *
- * The methods for opening archive files (read-only):
+ * The methods for the opening archive files are
  * <ul>
  * <li>{@link #openInArchive(ArchiveFormat, IInStream)} - simple open archive method.</li>
  * <li>{@link #openInArchive(ArchiveFormat, IInStream, IArchiveOpenCallback)} - generic open archive method. It's
@@ -115,15 +126,75 @@ import net.sf.sevenzipjbinding.impl.VolumedArchiveInStream;
  * {@link VolumedArchiveInStream}.</li>
  * </ul>
  * </li>
- * <li>{@link #openInArchive(ArchiveFormat, IInStream, String)} a shortcut method for opening archives with an encrypted
- * index.</li>
+ * <li>{@link #openInArchive(ArchiveFormat, IInStream, String)} a shortcut method for opening password protected
+ * archives with an encrypted index.</li>
  * </ul>
  *
+ * <h3>Creating new archives</h3>
+ *
+ * There are two ways to create a new archive:
+ * <ul>
+ * <li>Use {@link SevenZip#openOutArchive(ArchiveFormat)} method. It will return an instance of the
+ * {@link IOutCreateArchive}{@code <}{@link IOutItemAllFormats}{@code >} interface allowing creation of an archive of
+ * any supported archive format. To get all currently supported formats see the 'compression' column of the
+ * {@link ArchiveFormat} -JavaDoc.
+ * <li>Use one of the <code>SevenZip.openOutArchiveXxx</code> methods, that provide implementations of corresponding
+ * archive format specific interfaces. Those interfaces contain all supported configuration methods for selected archive
+ * format and are more convenient in cases, where only one archive format should be supported.
+ * </ul>
+ *
+ * For more information see {@link IOutCreateArchive}.
+ *
+ * <h3>Updating existing archives</h3>
+ *
+ * In order to update an existing archive three simple steps are necessary:
+ * <ul>
+ * <li>Open the existing archive need to be modified (getting an instance of the {@link IInArchive} interface)
+ * <li>Call {@link IInArchive#getConnectedOutArchive()} to get connected instance of the {@link IOutUpdateArchive}
+ * interface
+ * <li>Call {@link IOutUpdateArchive#updateItems(ISequentialOutStream, int, IOutCreateCallback)} to start the archive
+ * update operation
+ * </ul>
+ *
+ * During update operation user may copy item properties or item properties and content from the existing archive
+ * significantly improving performance comparing to extract and re-compress alternative.<br>
+ * <br>
+ * For more information see {@link IOutUpdateArchive}.
  *
  * @author Boris Brodski
- * @version 4.65-1
+ * @since 4.65-1
  */
 public class SevenZip {
+    /**
+     * Version information about 7-Zip.
+     *
+     * @author Boris Brodski
+     * @since 9.20-2.00
+     */
+    public static class Version {
+        /** Major version of the 7-Zip engine */
+        public int major;
+
+        /** Minor version of the 7-Zip engine */
+        public int minor;
+
+        /** Build id of the 7-Zip engine */
+
+        public int build;
+
+        /** Formatted version of the 7-Zip engine */
+        public String version;
+
+        /** Version date */
+        public String date;
+
+        /** copyright */
+        public String copyright;
+    }
+
+    // Also change in /CMakeLists.txt
+    private static final String SEVENZIPJBINDING_VERSION = "16.02-2.01";
+
     private static final String SYSTEM_PROPERTY_TMP = "java.io.tmpdir";
     private static final String SYSTEM_PROPERTY_SEVEN_ZIP_NO_DO_PRIVILEGED_INITIALIZATION = "sevenzip.no_doprivileged_initialization";
     private static final String PROPERTY_SEVENZIPJBINDING_LIBNAME = "sevenzipjbinding.libname.%s";
@@ -154,7 +225,7 @@ public class SevenZip {
      * @see #getLastInitializationException()
      * @see #isAutoInitializationWillOccur()
      */
-    public static boolean isInitializedSuccessfully() {
+    public static synchronized boolean isInitializedSuccessfully() {
         return initializationSuccessful;
     }
 
@@ -164,7 +235,7 @@ public class SevenZip {
      * @return <code>null</code> - no initialization exception occurred (yet), else initialization exception
      * @see SevenZip#isInitializedSuccessfully()
      */
-    public static Throwable getLastInitializationException() {
+    public static synchronized Throwable getLastInitializationException() {
         return lastInitializationException;
     }
 
@@ -179,7 +250,7 @@ public class SevenZip {
      * @see #isInitializedSuccessfully()
      * @see #getLastInitializationException()
      */
-    public static boolean isAutoInitializationWillOccur() {
+    public static synchronized boolean isAutoInitializationWillOccur() {
         return autoInitializationWillOccur;
     }
 
@@ -190,19 +261,19 @@ public class SevenZip {
      * @return the platform used for the initialization or <code>null</code> if initialization wasn't performed yet.
      * @see SevenZip#getPlatformList()
      */
-    public static String getUsedPlatform() {
+    public static synchronized String getUsedPlatform() {
         return usedPlatform;
     }
 
     /**
-     * Load list of the available platforms out of <code>sevenzipjbinding-<i>Platform</i>.jar</code> in the class path.
+     * Load list of the available platforms out of <code>sevenzipjbinding-<i>Platform</i>.jar</code> on the class path.
      *
      * @return list of the available platforms
      *
      * @throws SevenZipNativeInitializationException
      *             indicated problems finding or parsing platform property file
      */
-    public static List<String> getPlatformList() throws SevenZipNativeInitializationException {
+    public static synchronized List<String> getPlatformList() throws SevenZipNativeInitializationException {
         if (availablePlatforms != null) {
             return availablePlatforms;
         }
@@ -213,7 +284,7 @@ public class SevenZip {
             throw new SevenZipNativeInitializationException("Can not find 7-Zip-JBinding platform property file "
                     + SEVENZIPJBINDING_PLATFORMS_PROPRETIES_FILENAME
                     + ". Make sure the 'sevenzipjbinding-<Platform>.jar' file is "
-                    + "in the class path or consider initializing SevenZipJBinding manualy using one of "
+                    + "on the class path or consider initializing SevenZipJBinding manualy using one of "
                     + "the offered initialization methods: 'net.sf.sevenzipjbinding.SevenZip.init*()'");
         }
 
@@ -221,8 +292,8 @@ public class SevenZip {
         try {
             properties.load(propertiesInputStream);
         } catch (IOException e) {
-            throwInitException(e, "Error loading existing property file "
-                    + SEVENZIPJBINDING_PLATFORMS_PROPRETIES_FILENAME);
+            throwInitException(e,
+                    "Error loading existing property file " + SEVENZIPJBINDING_PLATFORMS_PROPRETIES_FILENAME);
         }
 
         List<String> platformList = new ArrayList<String>();
@@ -243,7 +314,7 @@ public class SevenZip {
      *
      * @return array of {@link File}s.
      */
-    public static File[] getTemporaryArtifacts() {
+    public static synchronized File[] getTemporaryArtifacts() {
         return temporaryArtifacts;
     }
 
@@ -368,7 +439,7 @@ public class SevenZip {
      * @throws SevenZipNativeInitializationException
      *             by initialization failure
      */
-    private static void initSevenZipFromPlatformJARIntern(String platform, File tmpDirectory)
+    private static synchronized void initSevenZipFromPlatformJARIntern(String platform, File tmpDirectory)
             throws SevenZipNativeInitializationException {
         try {
             autoInitializationWillOccur = false;
@@ -402,13 +473,11 @@ public class SevenZip {
         String pathInJAR = "/" + usedPlatform + "/";
 
         // Load 'sevenzipjbinding-lib.properties'
-        InputStream sevenZipJBindingLibProperties = SevenZip.class.getResourceAsStream(pathInJAR
-                + SEVENZIPJBINDING_LIB_PROPERTIES_FILENAME);
+        InputStream sevenZipJBindingLibProperties = SevenZip.class
+                .getResourceAsStream(pathInJAR + SEVENZIPJBINDING_LIB_PROPERTIES_FILENAME);
         if (sevenZipJBindingLibProperties == null) {
-            throwInitException("error loading property file '"
-                    + pathInJAR
-                    + SEVENZIPJBINDING_LIB_PROPERTIES_FILENAME
-                    + "' from a jar-file 'sevenzipjbinding-<Platform>.jar'. Is the platform jar-file not in the class path?");
+            throwInitException("error loading property file '" + pathInJAR + SEVENZIPJBINDING_LIB_PROPERTIES_FILENAME
+                    + "' from a jar-file 'sevenzipjbinding-<Platform>.jar'. Is the platform jar-file not on the class path?");
         }
 
         Properties properties = new Properties();
@@ -496,6 +565,14 @@ public class SevenZip {
         return nativeLibraries;
     }
 
+    private static String byteArrayToHex(byte[] byteArray) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < byteArray.length; i++) {
+            stringBuilder.append(String.format("%1$02x", 0xFF & byteArray[i]));
+        }
+        return stringBuilder.toString();
+    }
+
     private static void applyTemporaryArtifacts(File sevenZipJBindingTmpDir, List<File> nativeLibraries) {
         temporaryArtifacts = new File[nativeLibraries.size() + 1];
         nativeLibraries.toArray(temporaryArtifacts);
@@ -507,7 +584,7 @@ public class SevenZip {
         for (int i = libraryList.size() - 1; i != -1; i--) {
             String libraryFileName = libraryList.get(i).getAbsolutePath();
             try {
-            	System.out.println(libraryFileName);
+				System.out.println(libraryFileName);
                 System.load(libraryFileName);
             } catch (Throwable t) {
                 throw new SevenZipNativeInitializationException(
@@ -524,8 +601,9 @@ public class SevenZip {
      * load 7-Zip-JBinding native libraries manually.
      *
      * @throws SevenZipNativeInitializationException
+     *             in case of an initialization error
      */
-    public static void initLoadedLibraries() throws SevenZipNativeInitializationException {
+    public static synchronized void initLoadedLibraries() throws SevenZipNativeInitializationException {
         if (initializationSuccessful) {
             return;
         }
@@ -578,7 +656,8 @@ public class SevenZip {
      * @return implementation of {@link IInArchive} which represents opened archive.
      *
      * @throws SevenZipException
-     *             7-Zip or 7-Zip-JBinding intern error occur. Check exception message for more information.
+     *             7-Zip or 7-Zip-JBinding error occur. Use {@link SevenZipException#printStackTraceExtended()} to get
+     *             stack traces of this SevenZipException and of the all thrown 'cause by' exceptions.
      * @throws NullPointerException
      *             is thrown, if inStream is null
      *
@@ -614,7 +693,8 @@ public class SevenZip {
      * @return implementation of {@link IInArchive} which represents opened archive.
      *
      * @throws SevenZipException
-     *             7-Zip or 7-Zip-JBinding intern error occur. Check exception message for more information.
+     *             7-Zip or 7-Zip-JBinding error occur. Use {@link SevenZipException#printStackTraceExtended()} to get
+     *             stack traces of this SevenZipException and of the all thrown 'cause by' exceptions.
      * @throws NullPointerException
      *             is thrown, if inStream is null
      *
@@ -624,10 +704,10 @@ public class SevenZip {
     public static IInArchive openInArchive(ArchiveFormat archiveFormat, IInStream inStream, String passwordForOpen)
             throws SevenZipException {
         ensureLibraryIsInitialized();
-        if (archiveFormat != null) {
-            return callNativeOpenArchive(archiveFormat, inStream, new ArchiveOpenCryptoCallback(passwordForOpen));
+        if (passwordForOpen == null) {
+            return openInArchive(archiveFormat, inStream);
         }
-        return callNativeOpenArchive(null, inStream, new ArchiveOpenCryptoCallback(passwordForOpen));
+        return callNativeOpenArchive(archiveFormat, inStream, new ArchiveOpenCryptoCallback(passwordForOpen));
     }
 
     /**
@@ -641,7 +721,8 @@ public class SevenZip {
      * @return implementation of {@link IInArchive} which represents opened archive.
      *
      * @throws SevenZipException
-     *             7-Zip or 7-Zip-JBinding intern error occur. Check exception message for more information.
+     *             7-Zip or 7-Zip-JBinding error occur. Use {@link SevenZipException#printStackTraceExtended()} to get
+     *             stack traces of this SevenZipException and of the all thrown 'cause by' exceptions.
      * @throws NullPointerException
      *             is thrown, if inStream is null
      *
@@ -650,12 +731,8 @@ public class SevenZip {
      */
     public static IInArchive openInArchive(ArchiveFormat archiveFormat, IInStream inStream) throws SevenZipException {
         ensureLibraryIsInitialized();
-        if (archiveFormat != null) {
-            return callNativeOpenArchive(archiveFormat, inStream, new DummyOpenArchiveCallback());
-        }
-        return callNativeOpenArchive(null, inStream, new DummyOpenArchiveCallback());
+        return callNativeOpenArchive(archiveFormat, inStream, new DummyOpenArchiveCallback());
     }
-
     private static void ensureLibraryIsInitialized() {
     	if (autoInitializationWillOccur) {
     		LibraryLoader.loadLibrary("lib7-Zip-JBinding");
@@ -736,13 +813,12 @@ public class SevenZip {
     /**
      * Return best match for the current platform out of available platforms <code>availablePlatform</code>
      *
-     * @param availablePlatform
-     *            list of the platforms to choose from
+     * @see #getPlatformList()
      * @return platform
      * @throws SevenZipNativeInitializationException
      *             is no platform could be chosen
      */
-    private static String getPlatformBestMatch() throws SevenZipNativeInitializationException {
+    public static String getPlatformBestMatch() throws SevenZipNativeInitializationException {
         List<String> availablePlatform = getPlatformList();
         if (availablePlatform.size() == 1) {
             return availablePlatform.get(0);
@@ -786,30 +862,127 @@ public class SevenZip {
 
     private static native String nativeInitSevenZipLibrary() throws SevenZipNativeInitializationException;
 
+    private static native int nativeGetVersionMajor();
+
+    private static native int nativeGetVersionMinor();
+
+    private static native int nativeGetVersionBuild();
+
+    private static native String nativeGetVersionVersion();
+
+    private static native String nativeGetVersionDate();
+
+    private static native String nativeGetVersionCopyright();
+
+    /**
+     * Return information about native 7-Zip engine.
+     *
+     * @return Version
+     */
+    public static Version getSevenZipVersion() {
+        ensureLibraryIsInitialized();
+
+        Version version = new Version();
+
+        version.major = nativeGetVersionMajor();
+        version.minor = nativeGetVersionMinor();
+        version.build = nativeGetVersionBuild();
+        version.version = nativeGetVersionVersion();
+        version.date = nativeGetVersionDate();
+        version.copyright = nativeGetVersionCopyright();
+
+        return version;
+    }
+
+    /**
+     * Return version of the 7-Zip-JBinding.
+     *
+     * @return version of the 7-Zip-JBinding
+     */
+    public static String getSevenZipJBindingVersion() {
+        return SEVENZIPJBINDING_VERSION;
+    }
+
+    /**
+     * Create a new Zip archive.
+     *
+     * @see IOutCreateArchiveZip
+     * @return an out-archive object initialized to create the new Zip archive
+     * @throws SevenZipException
+     *             7-Zip or 7-Zip-JBinding error occur. Use {@link SevenZipException#printStackTraceExtended()} to get
+     *             stack traces of this SevenZipException and of the all thrown 'cause by' exceptions.
+     */
     public static IOutCreateArchiveZip openOutArchiveZip() throws SevenZipException {
         return (IOutCreateArchiveZip) openOutArchiveIntern(ArchiveFormat.ZIP);
     }
 
+    /**
+     * Create a new 7z archive.
+     *
+     * @see IOutCreateArchive7z
+     * @return an out-archive object initialized to create the new 7z archive
+     * @throws SevenZipException
+     *             7-Zip or 7-Zip-JBinding error occur. Use {@link SevenZipException#printStackTraceExtended()} to get
+     *             stack traces of this SevenZipException and of the all thrown 'cause by' exceptions.
+     */
     public static IOutCreateArchive7z openOutArchive7z() throws SevenZipException {
         return (IOutCreateArchive7z) openOutArchiveIntern(ArchiveFormat.SEVEN_ZIP);
     }
 
+    /**
+     * Create a new 7z archive.
+     *
+     * @see IOutCreateArchiveTar
+     * @return an out-archive object initialized to create the new 7z archive
+     * @throws SevenZipException
+     *             7-Zip or 7-Zip-JBinding error occur. Use {@link SevenZipException#printStackTraceExtended()} to get
+     *             stack traces of this SevenZipException and of the all thrown 'cause by' exceptions.
+     */
     public static IOutCreateArchiveTar openOutArchiveTar() throws SevenZipException {
         return (IOutCreateArchiveTar) openOutArchiveIntern(ArchiveFormat.TAR);
     }
 
+    /**
+     * Create a new BZip2 archive.
+     *
+     * @see IOutCreateArchiveBZip2
+     * @return an out-archive object initialized to create the new BZip2 archive
+     * @throws SevenZipException
+     *             7-Zip or 7-Zip-JBinding error occur. Use {@link SevenZipException#printStackTraceExtended()} to get
+     *             stack traces of this SevenZipException and of the all thrown 'cause by' exceptions.
+     */
     public static IOutCreateArchiveBZip2 openOutArchiveBZip2() throws SevenZipException {
         return (IOutCreateArchiveBZip2) openOutArchiveIntern(ArchiveFormat.BZIP2);
     }
 
+    /**
+     * Create a new GZip archive.
+     *
+     * @see IOutCreateArchiveGZip
+     * @return an out-archive object initialized to create the new GZip archive
+     * @throws SevenZipException
+     *             7-Zip or 7-Zip-JBinding error occur. Use {@link SevenZipException#printStackTraceExtended()} to get
+     *             stack traces of this SevenZipException and of the all thrown 'cause by' exceptions.
+     */
     public static IOutCreateArchiveGZip openOutArchiveGZip() throws SevenZipException {
         return (IOutCreateArchiveGZip) openOutArchiveIntern(ArchiveFormat.GZIP);
     }
 
+    /**
+     * Create a new archive of type <code>archiveFormat</code>.
+     *
+     * @see IOutCreateArchiveZip
+     * @param archiveFormat
+     *            archive format of the new archive
+     * @return an out-archive object initialized to create the new archive
+     * @throws SevenZipException
+     *             7-Zip or 7-Zip-JBinding error occur. Use {@link SevenZipException#printStackTraceExtended()} to get
+     *             stack traces of this SevenZipException and of the all thrown 'cause by' exceptions.
+     */
     @SuppressWarnings("unchecked")
-    public static IOutCreateArchive<IOutItemCallback> openOutArchive(ArchiveFormat archiveFormat)
+    public static IOutCreateArchive<IOutItemAllFormats> openOutArchive(ArchiveFormat archiveFormat)
             throws SevenZipException {
-        return (IOutCreateArchive<IOutItemCallback>) openOutArchiveIntern(archiveFormat);
+        return (IOutCreateArchive<IOutItemAllFormats>) openOutArchiveIntern(archiveFormat);
     }
 
     private static OutArchiveImpl<?> openOutArchiveIntern(ArchiveFormat archiveFormat) throws SevenZipException {

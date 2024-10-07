@@ -1,11 +1,13 @@
 package net.sf.sevenzipjbinding;
 
 /**
+ * Main callback interface for extraction operations.
+ * 
  * If you want to provide a password to extract files, you should also implement {@link ICryptoGetTextPassword} within
  * your IArchiveExtractCallback-implementation.
  * 
  * @author Boris Brodski
- * @version 4.65-1
+ * @since 1.0
  */
 public interface IArchiveExtractCallback extends IProgress {
     /**
@@ -21,9 +23,11 @@ public interface IArchiveExtractCallback extends IProgress {
      * 
      * @throws SevenZipException
      *             in error case. If this method ends with an exception, the current operation will be reported to 7-Zip
-     *             as failed. There are no guarantee, that there are no further call back methods will be called. The
-     *             first thrown exception will be saved and thrown late on from the first called 7-Zip-JBinding main
-     *             method, such as <code>ISevenZipInArchive.extract()</code> or <code>SevenZip.openInArchive()</code>.
+     *             as failed. There are no guarantee, that there are no further call back methods will get called. The
+     *             first and last thrown exceptions will be saved and thrown later on from the originally called method
+     *             such as <code>ISevenZipInArchive.extract()</code> or <code>SevenZip.openInArchive()</code>. Up to
+     *             four exceptions depending on the situation can be saved for further analysis. See
+     *             {@link SevenZipException} and {@link SevenZipException#printStackTraceExtended()} for details.
      */
     public ISequentialOutStream getStream(int index, ExtractAskMode extractAskMode) throws SevenZipException;
 
@@ -36,9 +40,11 @@ public interface IArchiveExtractCallback extends IProgress {
      * 
      * @throws SevenZipException
      *             in error case. If this method ends with an exception, the current operation will be reported to 7-Zip
-     *             as failed. There are no guarantee, that there are no further call back methods will be called. The
-     *             first thrown exception will be saved and thrown late on from the first called 7-Zip-JBinding main
-     *             method, such as <code>ISevenZipInArchive.extract()</code> or <code>SevenZip.openInArchive()</code>.
+     *             as failed. There are no guarantee, that there are no further call back methods will get called. The
+     *             first and last thrown exceptions will be saved and thrown later on from the originally called method
+     *             such as <code>ISevenZipInArchive.extract()</code> or <code>SevenZip.openInArchive()</code>. Up to
+     *             four exceptions depending on the situation can be saved for further analysis. See
+     *             {@link SevenZipException} and {@link SevenZipException#printStackTraceExtended()} for details.
      */
     public void prepareOperation(ExtractAskMode extractAskMode) throws SevenZipException;
 
@@ -51,9 +57,11 @@ public interface IArchiveExtractCallback extends IProgress {
      * 
      * @throws SevenZipException
      *             in error case. If this method ends with an exception, the current operation will be reported to 7-Zip
-     *             as failed. There are no guarantee, that there are no further call back methods will be called. The
-     *             first thrown exception will be saved and thrown late on from the first called 7-Zip-JBinding main
-     *             method, such as <code>ISevenZipInArchive.extract()</code> or <code>SevenZip.openInArchive()</code>.
+     *             as failed. There are no guarantee, that there are no further call back methods will get called. The
+     *             first and last thrown exceptions will be saved and thrown later on from the originally called method
+     *             such as <code>ISevenZipInArchive.extract()</code> or <code>SevenZip.openInArchive()</code>. Up to
+     *             four exceptions depending on the situation can be saved for further analysis. See
+     *             {@link SevenZipException} and {@link SevenZipException#printStackTraceExtended()} for details.
      */
     public void setOperationResult(ExtractOperationResult extractOperationResult) throws SevenZipException;
 

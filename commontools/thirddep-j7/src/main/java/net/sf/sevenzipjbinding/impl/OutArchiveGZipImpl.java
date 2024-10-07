@@ -1,17 +1,16 @@
 package net.sf.sevenzipjbinding.impl;
 
 import net.sf.sevenzipjbinding.IOutCreateArchiveGZip;
-import net.sf.sevenzipjbinding.IOutItemCallbackGZip;
+import net.sf.sevenzipjbinding.IOutItemGZip;
 import net.sf.sevenzipjbinding.IOutUpdateArchiveGZip;
 
 /**
- * TODO
+ * GZip specific archive create and update class.
  * 
  * @author Boris Brodski
- * @version 9.13-2.0
- * 
+ * @since 9.20-2.00
  */
-public class OutArchiveGZipImpl extends OutArchiveImpl<IOutItemCallbackGZip> implements IOutCreateArchiveGZip,
+public class OutArchiveGZipImpl extends OutArchiveImpl<IOutItemGZip> implements IOutCreateArchiveGZip,
         IOutUpdateArchiveGZip {
 
     /**

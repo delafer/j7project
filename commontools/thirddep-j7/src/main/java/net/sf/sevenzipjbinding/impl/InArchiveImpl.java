@@ -6,8 +6,19 @@ import net.sf.sevenzipjbinding.ExtractOperationResult;
 import net.sf.sevenzipjbinding.IArchiveExtractCallback;
 import net.sf.sevenzipjbinding.ICryptoGetTextPassword;
 import net.sf.sevenzipjbinding.IInArchive;
-import net.sf.sevenzipjbinding.IOutArchive;
+import net.sf.sevenzipjbinding.IOutItem7z;
+import net.sf.sevenzipjbinding.IOutItemAllFormats;
+import net.sf.sevenzipjbinding.IOutItemBZip2;
+import net.sf.sevenzipjbinding.IOutItemBase;
+import net.sf.sevenzipjbinding.IOutItemGZip;
+import net.sf.sevenzipjbinding.IOutItemTar;
+import net.sf.sevenzipjbinding.IOutItemZip;
 import net.sf.sevenzipjbinding.IOutUpdateArchive;
+import net.sf.sevenzipjbinding.IOutUpdateArchive7z;
+import net.sf.sevenzipjbinding.IOutUpdateArchiveBZip2;
+import net.sf.sevenzipjbinding.IOutUpdateArchiveGZip;
+import net.sf.sevenzipjbinding.IOutUpdateArchiveTar;
+import net.sf.sevenzipjbinding.IOutUpdateArchiveZip;
 import net.sf.sevenzipjbinding.ISequentialOutStream;
 import net.sf.sevenzipjbinding.NFileTimeType;
 import net.sf.sevenzipjbinding.PropID;
@@ -18,12 +29,11 @@ import net.sf.sevenzipjbinding.simple.impl.SimpleInArchiveImpl;
 
 /**
  * Implementation of {@link IInArchive}.
- * 
+ *
  * @author Boris Brodski
- * @version 4.65-1
- * 
+ * @since 4.65-1
  */
-//TODO null check all parameters: If null slips through into native code there will be no NPE :( 
+//TODO null check all parameters: If null slips through into native code there will be no NPE :(
 public final class InArchiveImpl implements IInArchive {
     private static class ExtractSlowCallback implements IArchiveExtractCallback {
         ISequentialOutStream sequentialOutStreamParam;
@@ -87,18 +97,19 @@ public final class InArchiveImpl implements IInArchive {
     private long jbindingSession;
     private long sevenZipArchiveInstance;
     private long sevenZipInStreamInstance;
-    private OutArchiveImpl outArchiveImpl;
+    private OutArchiveImpl<?> outArchiveImpl;
 
     private int numberOfItems = -1;
 
     private ArchiveFormat archiveFormat;
+    private boolean closed;
 
     /**
      * {@inheritDoc}
      */
     public void extract(int[] indices, boolean testMode, IArchiveExtractCallback extractCallback)
             throws SevenZipException {
-
+        ensureOpened();
         nativeExtract(indices, testMode, extractCallback);
     }
 
@@ -106,6 +117,7 @@ public final class InArchiveImpl implements IInArchive {
      * {@inheritDoc}
      */
     public ExtractOperationResult extractSlow(int index, ISequentialOutStream outStream) throws SevenZipException {
+        ensureOpened();
         ExtractSlowCallback extractCallback = new ExtractSlowCallback(outStream);
         nativeExtract(new int[] { index }, false, extractCallback);
         return extractCallback.getExtractOperationResult();
@@ -117,6 +129,7 @@ public final class InArchiveImpl implements IInArchive {
 
     public ExtractOperationResult extractSlow(int index, ISequentialOutStream outStream, String password)
             throws SevenZipException {
+        ensureOpened();
         ExtractSlowCryptoCallback extractCallback = new ExtractSlowCryptoCallback(outStream, password);
         nativeExtract(new int[] { index }, false, extractCallback);
         return extractCallback.getExtractOperationResult();
@@ -131,7 +144,7 @@ public final class InArchiveImpl implements IInArchive {
      * {@inheritDoc}
      */
     public Object getArchiveProperty(PropID propID) throws SevenZipException {
-
+        ensureOpened();
         return nativeGetArchiveProperty(propID.getPropIDIndex());
     }
 
@@ -141,6 +154,7 @@ public final class InArchiveImpl implements IInArchive {
      * {@inheritDoc}
      */
     public String getStringArchiveProperty(PropID propID) throws SevenZipException {
+        ensureOpened();
         return nativeGetStringArchiveProperty(propID.getPropIDIndex());
     }
 
@@ -150,6 +164,7 @@ public final class InArchiveImpl implements IInArchive {
      * {@inheritDoc}
      */
     public PropertyInfo getArchivePropertyInfo(int index) throws SevenZipException {
+        ensureOpened();
         return nativeGetArchivePropertyInfo(index);
     }
 
@@ -159,6 +174,7 @@ public final class InArchiveImpl implements IInArchive {
      * {@inheritDoc}
      */
     public int getNumberOfArchiveProperties() throws SevenZipException {
+        ensureOpened();
         return nativeGetNumberOfArchiveProperties();
     }
 
@@ -168,6 +184,7 @@ public final class InArchiveImpl implements IInArchive {
      * {@inheritDoc}
      */
     public int getNumberOfProperties() throws SevenZipException {
+        ensureOpened();
         return nativeGetNumberOfProperties();
     }
 
@@ -177,6 +194,7 @@ public final class InArchiveImpl implements IInArchive {
      * {@inheritDoc}
      */
     public PropertyInfo getPropertyInfo(int index) throws SevenZipException {
+        ensureOpened();
         return nativeGetPropertyInfo(index);
     }
 
@@ -186,6 +204,10 @@ public final class InArchiveImpl implements IInArchive {
      * {@inheritDoc}
      */
     public void close() throws SevenZipException {
+        if (closed) {
+            return;
+        }
+        closed = true;
         nativeClose();
     }
 
@@ -195,6 +217,7 @@ public final class InArchiveImpl implements IInArchive {
      * {@inheritDoc}
      */
     public int getNumberOfItems() throws SevenZipException {
+        ensureOpened();
         if (numberOfItems == -1) {
             numberOfItems = nativeGetNumberOfItems();
         }
@@ -207,9 +230,10 @@ public final class InArchiveImpl implements IInArchive {
      * {@inheritDoc}
      */
     public Object getProperty(int index, PropID propID) throws SevenZipException {
+        ensureOpened();
         if (index < 0 || index >= getNumberOfItems()) {
-            throw new SevenZipException("Index out of range. Index: " + index + ", NumberOfItems: "
-                    + getNumberOfItems());
+            throw new SevenZipException(
+                    "Index out of range. Index: " + index + ", NumberOfItems: " + getNumberOfItems());
         }
         // Correct some returned values
         Object returnValue = nativeGetProperty(index, propID.getPropIDIndex());
@@ -253,9 +277,10 @@ public final class InArchiveImpl implements IInArchive {
      * {@inheritDoc}
      */
     public String getStringProperty(int index, PropID propID) throws SevenZipException {
+        ensureOpened();
         if (index < 0 || index >= getNumberOfItems()) {
-            throw new SevenZipException("Index out of range. Index: " + index + ", NumberOfItems: "
-                    + getNumberOfItems());
+            throw new SevenZipException(
+                    "Index out of range. Index: " + index + ", NumberOfItems: " + getNumberOfItems());
         }
         return nativeGetStringProperty(index, propID.getPropIDIndex());
     }
@@ -276,7 +301,7 @@ public final class InArchiveImpl implements IInArchive {
 
     /**
      * Set archive format of the opened archive. This method should be called only through JNI.
-     * 
+     *
      * @param archiveFormat
      *            format of the opened archive
      */
@@ -290,24 +315,79 @@ public final class InArchiveImpl implements IInArchive {
     }
 
     /**
-     * Return instance of {@link IOutArchive} connected the current archive current archive. This method allows
-     * modifications of existing archives. Multiple call of this methods return the same instance. Closing the new
-     * instance of {@link IOutArchive} if not necessary, since it get closed automatically this the current instance of
-     * {@link IInArchive}. Calls to the {@link IOutArchive#close()} methods of such connected instances will be ignored.
-     * 
-     * @return instance of {@link IOutArchive} the current archive current archive
+     * {@inheritDoc}
      */
-    public IOutUpdateArchive getConnectedOutArchive() throws SevenZipException {
+    public IOutUpdateArchive<IOutItemAllFormats> getConnectedOutArchive() throws SevenZipException {
+        ensureOpened();
+        return getConnectedOutArchiveIntern();
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T extends IOutItemBase> IOutUpdateArchive<T> getConnectedOutArchiveIntern() throws SevenZipException {
         if (outArchiveImpl == null) {
             createConnectedOutArchive();
         }
-        return outArchiveImpl;
+        return (IOutUpdateArchive<T>) outArchiveImpl;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public IOutUpdateArchive7z getConnectedOutArchive7z() throws SevenZipException {
+        ensureOpened();
+        ensureArchiveFormatForArchiveFormatSpecificUpdateAPI(ArchiveFormat.SEVEN_ZIP);
+        return (IOutUpdateArchive7z) (this.<IOutItem7z> getConnectedOutArchiveIntern());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public IOutUpdateArchiveZip getConnectedOutArchiveZip() throws SevenZipException {
+        ensureOpened();
+        ensureArchiveFormatForArchiveFormatSpecificUpdateAPI(ArchiveFormat.ZIP);
+        return (IOutUpdateArchiveZip) (this.<IOutItemZip> getConnectedOutArchiveIntern());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public IOutUpdateArchiveTar getConnectedOutArchiveTar() throws SevenZipException {
+        ensureOpened();
+        ensureArchiveFormatForArchiveFormatSpecificUpdateAPI(ArchiveFormat.TAR);
+        return (IOutUpdateArchiveTar) (this.<IOutItemTar> getConnectedOutArchiveIntern());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public IOutUpdateArchiveGZip getConnectedOutArchiveGZip() throws SevenZipException {
+        ensureOpened();
+        ensureArchiveFormatForArchiveFormatSpecificUpdateAPI(ArchiveFormat.GZIP);
+        return (IOutUpdateArchiveGZip) (this.<IOutItemGZip> getConnectedOutArchiveIntern());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public IOutUpdateArchiveBZip2 getConnectedOutArchiveBZip2() throws SevenZipException {
+        ensureOpened();
+        ensureArchiveFormatForArchiveFormatSpecificUpdateAPI(ArchiveFormat.BZIP2);
+        return (IOutUpdateArchiveBZip2) (this.<IOutItemBZip2> getConnectedOutArchiveIntern());
+    }
+
+    private void ensureArchiveFormatForArchiveFormatSpecificUpdateAPI(ArchiveFormat archiveFormat)
+            throws SevenZipException {
+        if (getArchiveFormat() != archiveFormat) {
+            throw new SevenZipException("Archive format specific update API for " + archiveFormat.getMethodName()
+                    + "-archives can't work with the currently opened " + getArchiveFormat().getMethodName()
+                    + "-archive");
+        }
     }
 
     private void createConnectedOutArchive() throws SevenZipException {
         if (!archiveFormat.isOutArchiveSupported()) {
-            throw new IllegalStateException("Archive format '" + archiveFormat
-                    + "' doesn't support archive manipulations.");
+            throw new IllegalStateException(
+                    "Archive format '" + archiveFormat + "' doesn't support archive manipulations.");
         }
 
         try {
@@ -322,6 +402,12 @@ public final class InArchiveImpl implements IInArchive {
         nativeConnectOutArchive(outArchiveImpl, archiveFormat);
     }
 
-    private native void nativeConnectOutArchive(OutArchiveImpl outArchiveImpl, ArchiveFormat archiveFormat)
+    void ensureOpened() throws SevenZipException {
+        if (closed) {
+            throw new SevenZipException("InArchive closed");
+        }
+    }
+
+    private native void nativeConnectOutArchive(OutArchiveImpl<?> outArchiveImpl, ArchiveFormat archiveFormat)
             throws SevenZipException;
 }

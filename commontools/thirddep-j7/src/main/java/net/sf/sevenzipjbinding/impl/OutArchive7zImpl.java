@@ -1,12 +1,17 @@
 package net.sf.sevenzipjbinding.impl;
 
 import net.sf.sevenzipjbinding.IOutCreateArchive7z;
-import net.sf.sevenzipjbinding.IOutItemCallback7z;
+import net.sf.sevenzipjbinding.IOutItem7z;
 import net.sf.sevenzipjbinding.IOutUpdateArchive7z;
 import net.sf.sevenzipjbinding.SevenZipException;
 
-public class OutArchive7zImpl extends OutArchiveImpl<IOutItemCallback7z> implements IOutCreateArchive7z,
-        IOutUpdateArchive7z {
+/**
+ * 7z specific archive create and update class.
+ *
+ * @author Boris Brodski
+ * @since 9.20-2.00
+ */
+public class OutArchive7zImpl extends OutArchiveImpl<IOutItem7z> implements IOutCreateArchive7z, IOutUpdateArchive7z {
     private boolean solid = true;
     private int countOfFilesPerBlock = -1;
     private long countOfBytesPerBlock = -1;
@@ -14,6 +19,10 @@ public class OutArchive7zImpl extends OutArchiveImpl<IOutItemCallback7z> impleme
 
     public void setLevel(int compressionLevel) {
         featureSetLevel(compressionLevel);
+    }
+
+    public void setHeaderEncryption(boolean enabled) throws SevenZipException {
+        featureSetHeaderEncryption(enabled);
     }
 
     /**
