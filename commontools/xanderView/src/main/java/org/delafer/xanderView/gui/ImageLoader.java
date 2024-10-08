@@ -120,7 +120,7 @@ public abstract class ImageLoader {
 				//tjd.set(TJ.PARAM_STOPONWARNING, 0); //default
 				if (bytes.length >= 1750000) {
 					tjd.set(TJ.PARAM_FASTDCT, ON);
-					tjd.set(TJ.PARAM_FASTUPSAMPLE, ON));
+					tjd.set(TJ.PARAM_FASTUPSAMPLE, ON);
 				} else {
 					//tjd.set(TJ.PARAM_FASTDCT, 0); //default
 					//tjd.set(TJ.PARAM_FASTUPSAMPLE, 0); //default
