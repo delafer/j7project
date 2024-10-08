@@ -1,12 +1,10 @@
 package org.delafer.xanderView.gui;
 
 import java.awt.Dimension;
-import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Paths;
 
 import javax.imageio.ImageIO;
 
@@ -25,8 +23,7 @@ import org.libjpegturbo.turbojpeg.TJScalingFactor;
 
 public abstract class ImageLoader {
 
-	public static final int fastDCT = 1;
-	public static final int fastUpsample = 1;
+	public static final int ON = 1;
 
 	public abstract Dimension getSize();
 	public OrientationStore orientator = OrientationStore.instance();
@@ -113,20 +110,22 @@ public abstract class ImageLoader {
 		TJDecompressor tjd = null;
 			try {
 				tjd = new TJDecompressor(bytes);
-//				ImageSize size = new ImageSize(tjd.getWidth(), tjd.getHeight());
-//				TJScalingFactor sf =  new TJScalingFactor(1, getDenom(size));
-//				int width = sf.getScaled(size.width);
-//				int height = sf.getScaled(size.height);
-				tjd.set(TJ.PARAM_STOPONWARNING, 0);
-				if (bytes.length >= 1750000) {
-					tjd.set(TJ.PARAM_FASTDCT, fastDCT);
-					tjd.set(TJ.PARAM_FASTUPSAMPLE, fastUpsample);
-				} else {
-					tjd.set(TJ.PARAM_FASTDCT, 0);
-					tjd.set(TJ.PARAM_FASTUPSAMPLE, 0);
+				ImageSize size = new ImageSize(tjd.getWidth(), tjd.getHeight());
+				int denom = getDenom(size);
+				if (1 != denom) {
+					TJScalingFactor sf =  new TJScalingFactor(1, denom);
+					tjd.setScalingFactor(sf);
 				}
-				BufferedImage img = tjd.decompress8(BufferedImage.TYPE_3BYTE_BGR);
-//				BufferedImage img = tjd.decompress(width, height, BufferedImage.TYPE_INT_RGB, 0);
+
+				//tjd.set(TJ.PARAM_STOPONWARNING, 0); //default
+				if (bytes.length >= 1750000) {
+					tjd.set(TJ.PARAM_FASTDCT, ON);
+					tjd.set(TJ.PARAM_FASTUPSAMPLE, ON));
+				} else {
+					//tjd.set(TJ.PARAM_FASTDCT, 0); //default
+					//tjd.set(TJ.PARAM_FASTUPSAMPLE, 0); //default
+				}
+				BufferedImage img = tjd.decompress8(BufferedImage.TYPE_3BYTE_BGR); //prev.value TYPE_INT_RGB
 				return img;
 			} catch (Exception e) {
 				return loadCommonImage(bytes);
