@@ -34,7 +34,7 @@ public class TesterSingle {
 			TJDecompressor tjd = new TJDecompressor(a);
 			int width = sf.getScaled(tjd.getWidth());
 			int height = sf.getScaled(tjd.getHeight());
-			BufferedImage img = tjd.decompress(width, height, BufferedImage.TYPE_INT_RGB, 0);
+			BufferedImage img = tjd.decompress8(BufferedImage.TYPE_INT_RGB);
 			return img;
 		}  catch (Exception e) {
 			e.printStackTrace();

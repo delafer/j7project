@@ -25,6 +25,9 @@ import org.libjpegturbo.turbojpeg.TJScalingFactor;
 
 public abstract class ImageLoader {
 
+	public static final int fastDCT = 1;
+	public static final int fastUpsample = 1;
+
 	public abstract Dimension getSize();
 	public OrientationStore orientator = OrientationStore.instance();
 
@@ -110,12 +113,19 @@ public abstract class ImageLoader {
 		TJDecompressor tjd = null;
 			try {
 				tjd = new TJDecompressor(bytes);
-				ImageSize size = new ImageSize(tjd.getWidth(), tjd.getHeight());
-				TJScalingFactor sf =  new TJScalingFactor(1, getDenom(size));
-				int width = sf.getScaled(size.width);
-				int height = sf.getScaled(size.height);
-				int flags = bytes.length >= 1750000 ? TJ.FLAG_FASTUPSAMPLE | TJ.FLAG_FASTDCT  : 0;
-				BufferedImage img = tjd.decompress(width, height, BufferedImage.TYPE_3BYTE_BGR, flags);
+//				ImageSize size = new ImageSize(tjd.getWidth(), tjd.getHeight());
+//				TJScalingFactor sf =  new TJScalingFactor(1, getDenom(size));
+//				int width = sf.getScaled(size.width);
+//				int height = sf.getScaled(size.height);
+				tjd.set(TJ.PARAM_STOPONWARNING, 0);
+				if (bytes.length >= 1750000) {
+					tjd.set(TJ.PARAM_FASTDCT, fastDCT);
+					tjd.set(TJ.PARAM_FASTUPSAMPLE, fastUpsample);
+				} else {
+					tjd.set(TJ.PARAM_FASTDCT, 0);
+					tjd.set(TJ.PARAM_FASTUPSAMPLE, 0);
+				}
+				BufferedImage img = tjd.decompress8(BufferedImage.TYPE_3BYTE_BGR);
 //				BufferedImage img = tjd.decompress(width, height, BufferedImage.TYPE_INT_RGB, 0);
 				return img;
 			} catch (Exception e) {

@@ -42,7 +42,7 @@ public class TesterQuality {
 			TJDecompressor tjd = new TJDecompressor(a);
 			int width = sf.getScaled(tjd.getWidth());
 			int height = sf.getScaled(tjd.getHeight());
-			BufferedImage img = tjd.decompress(width, height,type, 0);
+			BufferedImage img = tjd.decompress8(type);
 			return img;
 		} catch (Exception e) {
 			e.printStackTrace();

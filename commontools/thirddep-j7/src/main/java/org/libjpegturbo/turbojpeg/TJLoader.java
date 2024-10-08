@@ -29,12 +29,13 @@
 package org.libjpegturbo.turbojpeg;
 
 import net.j7.commons.jni.LibraryLoader;
+import org.eclipse.swt.internal.Library;
 
 final class TJLoader {
   static void load() {
 //	  System.out.println("loading");
-	  LibraryLoader.loadLibrary("libturbojpeg");
+//	  LibraryLoader.loadLibrary("libturbojpeg");//minGw
     //System.loadLibrary("turbojpeg64");
-	//Library.loadLibrary("turbojpeg");
+	Library.loadLibrary("turbojpeg"); //mvc64
   }
 };

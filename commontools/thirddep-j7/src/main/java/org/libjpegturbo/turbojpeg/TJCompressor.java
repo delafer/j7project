@@ -1,5 +1,6 @@
 /*
- * Copyright (C)2011-2015, 2018, 2020 D. R. Commander.  All Rights Reserved.
+ * Copyright (C)2011-2015, 2018, 2020, 2022-2024 D. R. Commander.
+ *                                               All Rights Reserved.
  * Copyright (C)2015 Viktor Szathmáry.  All Rights Reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -49,9 +50,9 @@ public class TJCompressor implements Closeable {
   }
 
   /**
-   * Create a TurboJPEG compressor instance and associate the uncompressed
-   * source image stored in <code>srcImage</code> with the newly created
-   * instance.
+   * Create a TurboJPEG compressor instance and associate the packed-pixel
+   * source image, stored in <code>srcImage</code> with 2 to 8 bits of data
+   * precision per sample, with the newly created instance.
    *
    * @param srcImage see {@link #setSourceImage} for description
    *
@@ -74,9 +75,9 @@ public class TJCompressor implements Closeable {
   }
 
   /**
-   * Create a TurboJPEG compressor instance and associate the uncompressed
-   * source image stored in <code>srcImage</code> with the newly created
-   * instance.
+   * Create a TurboJPEG compressor instance and associate the 8-bit-per-sample
+   * packed-pixel source image stored in <code>srcImage</code> with the newly
+   * created instance.
    *
    * @param srcImage see
    * {@link #setSourceImage(BufferedImage, int, int, int, int)} for description
@@ -99,11 +100,16 @@ public class TJCompressor implements Closeable {
   }
 
   /**
-   * Associate an uncompressed RGB, grayscale, or CMYK source image with this
-   * compressor instance.
+   * Associate a packed-pixel RGB, grayscale, or CMYK source image with 2 to 8
+   * bits of data precision per sample with this compressor instance.  Note
+   * that packed-pixel source images with 2 to 7 bits of data precision per
+   * sample can only be compressed into lossless JPEG images.
    *
-   * @param srcImage image buffer containing RGB, grayscale, or CMYK pixels to
-   * be compressed or encoded.  This buffer is not modified.
+   * @param srcImage buffer containing a packed-pixel RGB, grayscale, or CMYK
+   * source image to be compressed or encoded.  The data precision of the
+   * source image (from 2 to 8 bits per sample) can be specified using
+   * {@link TJ#PARAM_PRECISION} and defaults to 8 if {@link TJ#PARAM_PRECISION}
+   * is unset or out of range.  This buffer is not modified.
    *
    * @param x x offset (in pixels) of the region in the source image from which
    * the JPEG or YUV image should be compressed/encoded
@@ -114,14 +120,14 @@ public class TJCompressor implements Closeable {
    * @param width width (in pixels) of the region in the source image from
    * which the JPEG or YUV image should be compressed/encoded
    *
-   * @param pitch bytes per line of the source image.  Normally, this should be
-   * <code>width * TJ.pixelSize(pixelFormat)</code> if the source image is
-   * unpadded, but you can use this parameter to, for instance, specify that
-   * the scanlines in the source image are padded to a 4-byte boundary or to
-   * compress/encode a JPEG or YUV image from a region of a larger source
-   * image.  You can also be clever and use this parameter to skip lines, etc.
-   * Setting this parameter to 0 is the equivalent of setting it to
-   * <code>width * TJ.pixelSize(pixelFormat)</code>.
+   * @param pitch bytes per row in the source image.  Normally this should be
+   * <code>width * {@link TJ#getPixelSize TJ.getPixelSize}(pixelFormat)</code>,
+   * if the source image is unpadded.  (Setting this parameter to 0 is the
+   * equivalent of setting it to <code>width *
+   * {@link TJ#getPixelSize TJ.getPixelSize}(pixelFormat)</code>.)  However,
+   * you can also use this parameter to specify the row alignment/padding of
+   * the source image, to skip rows, or to compress/encode a JPEG or YUV image
+   * from a specific region of a larger source image.
    *
    * @param height height (in pixels) of the region in the source image from
    * which the JPEG or YUV image should be compressed/encoded
@@ -136,7 +142,7 @@ public class TJCompressor implements Closeable {
     if (srcImage == null || x < 0 || y < 0 || width < 1 || height < 1 ||
         pitch < 0 || pixelFormat < 0 || pixelFormat >= TJ.NUMPF)
       throw new IllegalArgumentException("Invalid argument in setSourceImage()");
-    srcBuf = srcImage;
+    srcBuf8 = srcImage;
     srcWidth = width;
     if (pitch == 0)
       srcPitch = width * TJ.getPixelSize(pixelFormat);
@@ -146,16 +152,139 @@ public class TJCompressor implements Closeable {
     srcPixelFormat = pixelFormat;
     srcX = x;
     srcY = y;
+    srcBuf12 = null;
+    srcBuf16 = null;
     srcBufInt = null;
     srcYUVImage = null;
   }
 
   /**
-   * Associate an uncompressed RGB or grayscale source image with this
-   * compressor instance.
+   * Associate a packed-pixel RGB, grayscale, or CMYK source image with 9 to 12
+   * bits of data precision per sample with this compressor instance.  Note
+   * that packed-pixel source images with 9 to 11 bits of data precision per
+   * sample can only be compressed into lossless JPEG images.
    *
-   * @param srcImage a <code>BufferedImage</code> instance containing RGB or
-   * grayscale pixels to be compressed or encoded.  This image is not modified.
+   * @param srcImage buffer containing a packed-pixel RGB, grayscale, or CMYK
+   * source image to be compressed.  The data precision of the source image
+   * (from 9 to 12 bits per sample) can be specified using
+   * {@link TJ#PARAM_PRECISION} and defaults to 12 if
+   * {@link TJ#PARAM_PRECISION} is unset or out of range.  This buffer is not
+   * modified.
+   *
+   * @param x x offset (in pixels) of the region in the source image from which
+   * the JPEG image should be compressed
+   *
+   * @param y y offset (in pixels) of the region in the source image from which
+   * the JPEG image should be compressed
+   *
+   * @param width width (in pixels) of the region in the source image from
+   * which the JPEG image should be compressed
+   *
+   * @param pitch samples per row in the source image.  Normally this should be
+   * <code>width * {@link TJ#getPixelSize TJ.getPixelSize}(pixelFormat)</code>,
+   * if the source image is unpadded.  (Setting this parameter to 0 is the
+   * equivalent of setting it to <code>width *
+   * {@link TJ#getPixelSize TJ.getPixelSize}(pixelFormat)</code>.)  However,
+   * you can also use this parameter to specify the row alignment/padding of
+   * the source image, to skip rows, or to compress a JPEG image from a
+   * specific region of a larger source image.
+   *
+   * @param height height (in pixels) of the region in the source image from
+   * which the JPEG image should be compressed
+   *
+   * @param pixelFormat pixel format of the source image (one of
+   * {@link TJ#PF_RGB TJ.PF_*})
+   */
+  public void setSourceImage12(short[] srcImage, int x, int y, int width,
+                               int pitch, int height, int pixelFormat)
+                               throws TJException {
+    if (handle == 0) init();
+    if (srcImage == null || x < 0 || y < 0 || width < 1 || height < 1 ||
+        pitch < 0 || pixelFormat < 0 || pixelFormat >= TJ.NUMPF)
+      throw new IllegalArgumentException("Invalid argument in setSourceImage()");
+    srcBuf12 = srcImage;
+    srcWidth = width;
+    if (pitch == 0)
+      srcPitch = width * TJ.getPixelSize(pixelFormat);
+    else
+      srcPitch = pitch;
+    srcHeight = height;
+    srcPixelFormat = pixelFormat;
+    srcX = x;
+    srcY = y;
+    srcBuf8 = null;
+    srcBuf16 = null;
+    srcBufInt = null;
+    srcYUVImage = null;
+  }
+
+  /**
+   * Associate a packed-pixel RGB, grayscale, or CMYK source image with 13 to
+   * 16 bits of data precision per sample with this compressor instance.  Note
+   * that packed-pixel source images with 13 to 16 bits of data precision per
+   * sample can only be compressed into lossless JPEG images.
+   *
+   * @param srcImage buffer containing a packed-pixel RGB, grayscale, or CMYK
+   * source image to be compressed.  The data precision of the source image
+   * (from 13 to 16 bits per sample) can be specified using
+   * {@link TJ#PARAM_PRECISION} and defaults to 16 if
+   * {@link TJ#PARAM_PRECISION} is unset or out of range.  This buffer is not
+   * modified.
+   *
+   * @param x x offset (in pixels) of the region in the source image from which
+   * the JPEG image should be compressed
+   *
+   * @param y y offset (in pixels) of the region in the source image from which
+   * the JPEG image should be compressed
+   *
+   * @param width width (in pixels) of the region in the source image from
+   * which the JPEG image should be compressed
+   *
+   * @param pitch samples per row in the source image.  Normally this should be
+   * <code>width * {@link TJ#getPixelSize TJ.getPixelSize}(pixelFormat)</code>,
+   * if the source image is unpadded.  (Setting this parameter to 0 is the
+   * equivalent of setting it to <code>width *
+   * {@link TJ#getPixelSize TJ.getPixelSize}(pixelFormat)</code>.)  However,
+   * you can also use this parameter to specify the row alignment/padding of
+   * the source image, to skip rows, or to compress a JPEG image from a
+   * specific region of a larger source image.
+   *
+   * @param height height (in pixels) of the region in the source image from
+   * which the JPEG image should be compressed
+   *
+   * @param pixelFormat pixel format of the source image (one of
+   * {@link TJ#PF_RGB TJ.PF_*})
+   */
+  public void setSourceImage16(short[] srcImage, int x, int y, int width,
+                               int pitch, int height, int pixelFormat)
+                               throws TJException {
+    if (handle == 0) init();
+    if (srcImage == null || x < 0 || y < 0 || width < 1 || height < 1 ||
+        pitch < 0 || pixelFormat < 0 || pixelFormat >= TJ.NUMPF)
+      throw new IllegalArgumentException("Invalid argument in setSourceImage()");
+    srcBuf16 = srcImage;
+    srcWidth = width;
+    if (pitch == 0)
+      srcPitch = width * TJ.getPixelSize(pixelFormat);
+    else
+      srcPitch = pitch;
+    srcHeight = height;
+    srcPixelFormat = pixelFormat;
+    srcX = x;
+    srcY = y;
+    srcBuf8 = null;
+    srcBuf12 = null;
+    srcBufInt = null;
+    srcYUVImage = null;
+  }
+
+  /**
+   * Associate an 8-bit-per-sample packed-pixel RGB or grayscale source image
+   * with this compressor instance.
+   *
+   * @param srcImage a <code>BufferedImage</code> instance containing a
+   * packed-pixel RGB or grayscale source image to be compressed or encoded.
+   * This image is not modified.
    *
    * @param x x offset (in pixels) of the region in the source image from which
    * the JPEG or YUV image should be compressed/encoded
@@ -218,10 +347,12 @@ public class TJCompressor implements Closeable {
     if (intPixels) {
       SinglePixelPackedSampleModel sm =
         (SinglePixelPackedSampleModel)srcImage.getSampleModel();
-      srcStride = sm.getScanlineStride();
+      srcPitch = sm.getScanlineStride();
       DataBufferInt db = (DataBufferInt)wr.getDataBuffer();
       srcBufInt = db.getData();
-      srcBuf = null;
+      srcBuf8 = null;
+      srcBuf12 = null;
+      srcBuf16 = null;
     } else {
       ComponentSampleModel sm =
         (ComponentSampleModel)srcImage.getSampleModel();
@@ -230,231 +361,374 @@ public class TJCompressor implements Closeable {
         throw new IllegalArgumentException("Inconsistency between pixel format and pixel size in BufferedImage");
       srcPitch = sm.getScanlineStride();
       DataBufferByte db = (DataBufferByte)wr.getDataBuffer();
-      srcBuf = db.getData();
+      srcBuf8 = db.getData();
+      srcBuf12 = null;
+      srcBuf16 = null;
       srcBufInt = null;
     }
     srcYUVImage = null;
   }
 
   /**
-   * Associate an uncompressed YUV planar source image with this compressor
-   * instance.
+   * Associate an 8-bit-per-sample planar YUV source image with this compressor
+   * instance.  This method sets {@link TJ#PARAM_SUBSAMP} to the chrominance
+   * subsampling level of the source image.
    *
-   * @param srcImage YUV planar image to be compressed.  This image is not
-   * modified.
+   * @param srcImage planar YUV source image to be compressed.  This image is
+   * not modified.
    */
   public void setSourceImage(YUVImage srcImage) throws TJException {
     if (handle == 0) init();
     if (srcImage == null)
       throw new IllegalArgumentException("Invalid argument in setSourceImage()");
     srcYUVImage = srcImage;
-    srcBuf = null;
+    set(TJ.PARAM_SUBSAMP, srcImage.getSubsamp());
+    srcBuf8 = null;
+    srcBuf12 = null;
+    srcBuf16 = null;
     srcBufInt = null;
   }
 
   /**
-   * Set the level of chrominance subsampling for subsequent compress/encode
-   * operations.  When pixels are converted from RGB to YCbCr (see
-   * {@link TJ#CS_YCbCr}) or from CMYK to YCCK (see {@link TJ#CS_YCCK}) as part
-   * of the JPEG compression process, some of the Cb and Cr (chrominance)
-   * components can be discarded or averaged together to produce a smaller
-   * image with little perceptible loss of image clarity (the human eye is more
-   * sensitive to small changes in brightness than to small changes in color.)
-   * This is called "chrominance subsampling".
-   * <p>
-   * NOTE: This method has no effect when compressing a JPEG image from a YUV
-   * planar source.  In that case, the level of chrominance subsampling in
-   * the JPEG image is determined by the source.  Furthermore, this method has
-   * no effect when encoding to a pre-allocated {@link YUVImage} instance.  In
-   * that case, the level of chrominance subsampling is determined by the
-   * destination.
+   * Load a packed-pixel RGB or grayscale source image with 2 to 16 bits of
+   * data precision per sample from disk into memory and associate it with this
+   * compressor instance.  Note that packed-pixel source images with 2 to 7, 9
+   * to 11, or 13 to 16 bits of data precision per sample can only be
+   * compressed into lossless JPEG images.
    *
-   * @param newSubsamp the level of chrominance subsampling to use in
-   * subsequent compress/encode oeprations (one of
-   * {@link TJ#SAMP_444 TJ.SAMP_*})
+   * <p>{@link #getWidth()}, {@link #getPitch()}, {@link #getHeight()},
+   * {@link #getPixelFormat()}, and {@link #getSourceBuf()} can be used to
+   * obtain the source image's dimensions, pixel format, and buffer after it is
+   * loaded.
+   *
+   * @param fileName name of a file containing a packed-pixel image in Windows
+   * BMP or PBMPLUS (PPM/PGM) format.  Windows BMP files require
+   * 8-bit-per-sample data precision.  When loading a PBMPLUS file, the target
+   * data precision (from 2 to 16 bits per sample) can be specified using
+   * {@link TJ#PARAM_PRECISION} and defaults to 8 if {@link TJ#PARAM_PRECISION}
+   * is unset.  If the data precision of the PBMPLUS file does not match the
+   * target data precision, then upconverting or downconverting will be
+   * performed.
+   *
+   * @param align row alignment (in samples) of the packed-pixel buffer into
+   * which the source image will be loaded (must be a power of 2.)  Setting
+   * this parameter to n will cause all rows in the buffer to be padded to the
+   * nearest multiple of n samples (1 = unpadded.)
+   *
+   * @param pixelFormat pixel format of the packed-pixel buffer into which the
+   * source image will be loaded.  The behavior of this method varies depending
+   * on the value of <code>pixelFormat</code>:
+   * <ul>
+   * <li> {@link TJ#PF_UNKNOWN} : The packed-pixel buffer created by this
+   * method will use the most optimal pixel format for the file type.  Use
+   * {@link #getPixelFormat()} to obtain the ID of that pixel format.
+   * <li> {@link TJ#PF_GRAY} : Only PGM files and 8-bit-per-pixel BMP files
+   * with a grayscale colormap can be loaded.
+   * <li> {@link TJ#PF_CMYK} : The RGB or grayscale pixels stored in the file
+   * will be converted using a quick &amp; dirty algorithm that is suitable
+   * only for testing purposes.  (Proper conversion between CMYK and other
+   * formats requires a color management system.)
+   * <li> Other {@link TJ#PF_RGB pixel formats} : The packed-pixel buffer
+   * will use the specified pixel format, and pixel format conversion will be
+   * performed if necessary.
+   * </ul>
    */
-  public void setSubsamp(int newSubsamp) {
-    if (newSubsamp < 0 || newSubsamp >= TJ.NUMSAMP)
-      throw new IllegalArgumentException("Invalid argument in setSubsamp()");
-    subsamp = newSubsamp;
+  public void loadSourceImage(String fileName, int align, int pixelFormat)
+                              throws TJException {
+    int precision = get(TJ.PARAM_PRECISION);
+    if (precision < 2 || precision > 16)
+      precision = 8;
+    Object srcBuf = loadSourceImage(precision, fileName, align, pixelFormat);
+    if (precision <= 8)
+      srcBuf8 = (byte[])srcBuf;
+    else if (precision <= 12)
+      srcBuf12 = (short[])srcBuf;
+    else
+      srcBuf16 = (short[])srcBuf;
+    srcBufInt = null;
   }
 
   /**
-   * Set the JPEG image quality level for subsequent compress operations.
+   * Returns the width of the source image (packed-pixel or YUV) associated
+   * with this compressor instance.
    *
-   * @param quality the new JPEG image quality level (1 to 100, 1 = worst,
-   * 100 = best)
+   * @return the width of the source image (packed-pixel or YUV) associated
+   * with this compressor instance.
    */
-  public void setJPEGQuality(int quality) {
-    if (quality < 1 || quality > 100)
-      throw new IllegalArgumentException("Invalid argument in setJPEGQuality()");
-    jpegQuality = quality;
+  public int getWidth() {
+    if (srcYUVImage != null)
+      return srcYUVImage.getWidth();
+    if (srcWidth < 1)
+      throw new IllegalStateException(NO_ASSOC_ERROR);
+    return srcWidth;
   }
 
   /**
-   * Compress the uncompressed source image associated with this compressor
-   * instance and output a JPEG image to the given destination buffer.
+   * Returns the pitch (samples per row) of the packed-pixel source image
+   * associated with this compressor instance.  If the source image is a
+   * <code>BufferedImage</code> instance with integer pixels, then the stride
+   * (pixels per row) is returned instead.
+   *
+   * @return the pitch (samples per row) of the packed-pixel source image
+   * associated with this compressor instance.
+   */
+  public int getPitch() {
+    if (srcPitch < 1)
+      throw new IllegalStateException(NO_ASSOC_ERROR);
+    return srcPitch;
+  }
+
+  /**
+   * Returns the height of the source image (packed-pixel or YUV) associated
+   * with this compressor instance.
+   *
+   * @return the height of the source image (packed-pixel or YUV) associated
+   * with this compressor instance.
+   */
+  public int getHeight() {
+    if (srcYUVImage != null)
+      return srcYUVImage.getHeight();
+    if (srcHeight < 1)
+      throw new IllegalStateException(NO_ASSOC_ERROR);
+    return srcHeight;
+  }
+
+  /**
+   * Returns the pixel format of the packed-pixel source image associated with
+   * this compressor instance.  The pixel format is one of
+   * {@link TJ#PF_RGB TJ.PF_*}.
+   *
+   * @return the pixel format of the packed-pixel source image associated with
+   * this compressor instance.
+   */
+  public int getPixelFormat() {
+    if (srcPixelFormat == TJ.PF_UNKNOWN)
+      throw new IllegalStateException(NO_ASSOC_ERROR);
+    return srcPixelFormat;
+  }
+
+  /**
+   * Returns the buffer containing the packed-pixel image associated with this
+   * compressor instance.  The buffer is a <code>byte</code> array if the
+   * source image has 2 to 8 bits of data precision per sample, a
+   * <code>short</code> array if the source image has 9 to 16 bits of data
+   * precision per sample, and either a <code>byte</code> or an
+   * <code>int</code> array (depending on the image type) if the source image
+   * is a <code>BufferedImage</code> instance.
+   *
+   * @return the buffer containing the packed-pixel image associated with this
+   * compressor instance.
+   */
+  public Object getSourceBuf() {
+    if (srcBuf8 != null)
+      return srcBuf8;
+    else if (srcBuf12 != null)
+      return srcBuf12;
+    else if (srcBuf16 != null)
+      return srcBuf16;
+    else if (srcBufInt != null)
+      return srcBufInt;
+    else
+      throw new IllegalStateException(NO_ASSOC_ERROR);
+  }
+
+  /**
+   * Set the value of a compression parameter.
+   *
+   * @param param one of {@link TJ#PARAM_STOPONWARNING TJ.PARAM_*}
+   *
+   * @param value value of the compression parameter (refer to
+   * {@link TJ#PARAM_STOPONWARNING parameter documentation})
+   */
+  public native void set(int param, int value);
+
+  /**
+   * Get the value of a compression parameter.
+   *
+   * @param param one of {@link TJ#PARAM_STOPONWARNING TJ.PARAM_*}
+   *
+   * @return the value of the specified compression parameter, or -1 if the
+   * value is unknown.
+   */
+  public native int get(int param);
+
+  /**
+   * Embed an ICC (International Color Consortium) color management profile in
+   * JPEG images generated by subsequent compression operations.
+   *
+   * @param iccBuf buffer containing an ICC profile.  (The size of the ICC
+   * profile is assumed to be the length of the array.)  A copy is made of the
+   * ICC profile, so this buffer can be reused as soon as this method returns.
+   * Setting this parameter to null removes any ICC profile that was previously
+   * associated with this compressor instance.
+   */
+  public native void setICCProfile(byte[] iccBuf) throws TJException;
+
+  /**
+   * Compress the packed-pixel or planar YUV source image associated with this
+   * compressor instance and output a JPEG image to the given destination
+   * buffer.
    *
    * @param dstBuf buffer that will receive the JPEG image.  Use
-   * {@link TJ#bufSize} to determine the maximum size for this buffer based on
-   * the source image's width and height and the desired level of chrominance
-   * subsampling.
-   *
-   * @param flags the bitwise OR of one or more of
-   * {@link TJ#FLAG_BOTTOMUP TJ.FLAG_*}
+   * {@link TJ#bufSize TJ.bufSize()} to determine the maximum size for this
+   * buffer based on the source image's width and height and the desired level
+   * of chrominance subsampling (see {@link TJ#PARAM_SUBSAMP}), then add the
+   * size of the ICC profile (if any) that was previously associated with this
+   * compressor instance (see {@link #setICCProfile setICCProfile()}.)
    */
-  public void compress(byte[] dstBuf, int flags) throws TJException {
-    if (dstBuf == null || flags < 0)
+  public void compress(byte[] dstBuf) throws TJException {
+    if (dstBuf == null)
       throw new IllegalArgumentException("Invalid argument in compress()");
-    if (srcBuf == null && srcBufInt == null && srcYUVImage == null)
-      throw new IllegalStateException(NO_ASSOC_ERROR);
-    if (jpegQuality < 0)
-      throw new IllegalStateException("JPEG Quality not set");
-    if (subsamp < 0 && srcYUVImage == null)
-      throw new IllegalStateException("Subsampling level not set");
 
-    if (srcYUVImage != null)
-      compressedSize = compressFromYUV(srcYUVImage.getPlanes(),
-                                       srcYUVImage.getOffsets(),
-                                       srcYUVImage.getWidth(),
-                                       srcYUVImage.getStrides(),
-                                       srcYUVImage.getHeight(),
-                                       srcYUVImage.getSubsamp(),
-                                       dstBuf, jpegQuality, flags);
-    else if (srcBuf != null)
-      compressedSize = compress(srcBuf, srcX, srcY, srcWidth, srcPitch,
-                                srcHeight, srcPixelFormat, dstBuf, subsamp,
-                                jpegQuality, flags);
+    if (srcYUVImage != null) {
+      checkSubsampling();
+      if (get(TJ.PARAM_SUBSAMP) != srcYUVImage.getSubsamp())
+        throw new IllegalStateException("TJ.PARAM_SUBSAMP must match subsampling level of YUV image");
+      compressedSize = compressFromYUV8(srcYUVImage.getPlanes(),
+                                        srcYUVImage.getOffsets(),
+                                        srcYUVImage.getWidth(),
+                                        srcYUVImage.getStrides(),
+                                        srcYUVImage.getHeight(), dstBuf);
+    } else if (srcBuf8 != null)
+      compressedSize = compress8(srcBuf8, srcX, srcY, srcWidth, srcPitch,
+                                 srcHeight, srcPixelFormat, dstBuf);
+    else if (srcBuf12 != null)
+      compressedSize = compress12(srcBuf12, srcX, srcY, srcWidth, srcPitch,
+                                  srcHeight, srcPixelFormat, dstBuf);
+    else if (srcBuf16 != null)
+      compressedSize = compress16(srcBuf16, srcX, srcY, srcWidth, srcPitch,
+                                  srcHeight, srcPixelFormat, dstBuf);
     else if (srcBufInt != null)
-      compressedSize = compress(srcBufInt, srcX, srcY, srcWidth, srcStride,
-                                srcHeight, srcPixelFormat, dstBuf, subsamp,
-                                jpegQuality, flags);
+      compressedSize = compress8(srcBufInt, srcX, srcY, srcWidth, srcPitch,
+                                 srcHeight, srcPixelFormat, dstBuf);
+    else
+      throw new IllegalStateException("No source image is associated with this instance");
   }
 
   /**
-   * Compress the uncompressed source image associated with this compressor
-   * instance and return a buffer containing a JPEG image.
-   *
-   * @param flags the bitwise OR of one or more of
-   * {@link TJ#FLAG_BOTTOMUP TJ.FLAG_*}
+   * Compress the packed-pixel or planar YUV source image associated with this
+   * compressor instance and return a buffer containing a JPEG image.
    *
    * @return a buffer containing a JPEG image.  The length of this buffer will
-   * not be equal to the size of the JPEG image.  Use {@link
-   * #getCompressedSize} to obtain the size of the JPEG image.
+   * not be equal to the size of the JPEG image.  Use
+   * {@link #getCompressedSize} to obtain the size of the JPEG image.
    */
-  public byte[] compress(int flags) throws TJException {
+  public byte[] compress() throws TJException {
     byte[] buf;
     if (srcYUVImage != null) {
       buf = new byte[TJ.bufSize(srcYUVImage.getWidth(),
                                 srcYUVImage.getHeight(),
                                 srcYUVImage.getSubsamp())];
     } else {
-      checkSourceImage();
-      buf = new byte[TJ.bufSize(srcWidth, srcHeight, subsamp)];
+      checkSubsampling();
+      int subsamp = get(TJ.PARAM_SUBSAMP);
+      if (get(TJ.PARAM_LOSSLESS) == 1 && subsamp != TJ.SAMP_GRAY)
+        subsamp = TJ.SAMP_444;
+      buf = new byte[TJ.bufSize(srcWidth, srcHeight, subsamp) + iccSize];
     }
-    compress(buf, flags);
+    compress(buf);
     return buf;
   }
 
   /**
-   * Encode the uncompressed source image associated with this compressor
-   * instance into a YUV planar image and store it in the given
-   * <code>YUVImage</code> instance.   This method uses the accelerated color
-   * conversion routines in TurboJPEG's underlying codec but does not execute
-   * any of the other steps in the JPEG compression process.  Encoding
-   * CMYK source images to YUV is not supported.
+   * Encode the 8-bit-per-sample packed-pixel source image associated with this
+   * compressor instance into an 8-bit-per-sample planar YUV image and store it
+   * in the given {@link YUVImage} instance.  This method performs color
+   * conversion (which is accelerated in the libjpeg-turbo implementation) but
+   * does not execute any of the other steps in the JPEG compression process.
+   * Encoding CMYK source images into YUV images is not supported.  This method
+   * sets {@link TJ#PARAM_SUBSAMP} to the chrominance subsampling level of the
+   * destination image.
    *
-   * @param dstImage {@link YUVImage} instance that will receive the YUV planar
+   * @param dstImage {@link YUVImage} instance that will receive the planar YUV
    * image
-   *
-   * @param flags the bitwise OR of one or more of
-   * {@link TJ#FLAG_BOTTOMUP TJ.FLAG_*}
    */
-  public void encodeYUV(YUVImage dstImage, int flags) throws TJException {
-    if (dstImage == null || flags < 0)
+  public void encodeYUV(YUVImage dstImage) throws TJException {
+    if (dstImage == null)
       throw new IllegalArgumentException("Invalid argument in encodeYUV()");
-    if (srcBuf == null && srcBufInt == null)
-      throw new IllegalStateException(NO_ASSOC_ERROR);
+    if (srcBuf8 == null && srcBufInt == null)
+      throw new IllegalStateException("No 8-bit-per-sample source image is associated with this instance");
     if (srcYUVImage != null)
       throw new IllegalStateException("Source image is not correct type");
-    checkSubsampling();
     if (srcWidth != dstImage.getWidth() || srcHeight != dstImage.getHeight())
       throw new IllegalStateException("Destination image is the wrong size");
+    set(TJ.PARAM_SUBSAMP, dstImage.getSubsamp());
 
     if (srcBufInt != null) {
-      encodeYUV(srcBufInt, srcX, srcY, srcWidth, srcStride, srcHeight,
-                srcPixelFormat, dstImage.getPlanes(), dstImage.getOffsets(),
-                dstImage.getStrides(), dstImage.getSubsamp(), flags);
+      encodeYUV8(srcBufInt, srcX, srcY, srcWidth, srcPitch, srcHeight,
+                 srcPixelFormat, dstImage.getPlanes(), dstImage.getOffsets(),
+                 dstImage.getStrides());
     } else {
-      encodeYUV(srcBuf, srcX, srcY, srcWidth, srcPitch, srcHeight,
-                srcPixelFormat, dstImage.getPlanes(), dstImage.getOffsets(),
-                dstImage.getStrides(), dstImage.getSubsamp(), flags);
+      encodeYUV8(srcBuf8, srcX, srcY, srcWidth, srcPitch, srcHeight,
+                 srcPixelFormat, dstImage.getPlanes(), dstImage.getOffsets(),
+                 dstImage.getStrides());
     }
     compressedSize = 0;
   }
 
   /**
-   * Encode the uncompressed source image associated with this compressor
-   * instance into a unified YUV planar image buffer and return a
-   * <code>YUVImage</code> instance containing the encoded image.  This method
-   * uses the accelerated color conversion routines in TurboJPEG's underlying
-   * codec but does not execute any of the other steps in the JPEG compression
-   * process.  Encoding CMYK source images to YUV is not supported.
+   * Encode the 8-bit-per-sample packed-pixel source image associated with this
+   * compressor instance into an 8-bit-per-sample unified planar YUV image and
+   * return a {@link YUVImage} instance containing the encoded image.  This
+   * method performs color conversion (which is accelerated in the
+   * libjpeg-turbo implementation) but does not execute any of the other steps
+   * in the JPEG compression process.  Encoding CMYK source images into YUV
+   * images is not supported.
    *
-   * @param pad the width of each line in each plane of the YUV image will be
-   * padded to the nearest multiple of this number of bytes (must be a power of
-   * 2.)
+   * @param align row alignment (in bytes) of the YUV image (must be a power of
+   * 2.)  Setting this parameter to n will cause each row in each plane of the
+   * YUV image to be padded to the nearest multiple of n bytes (1 = unpadded.)
    *
-   * @param flags the bitwise OR of one or more of
-   * {@link TJ#FLAG_BOTTOMUP TJ.FLAG_*}
-   *
-   * @return a YUV planar image.
+   * @return a {@link YUVImage} instance containing the unified planar YUV
+   * encoded image
    */
-  public YUVImage encodeYUV(int pad, int flags) throws TJException {
-    checkSourceImage();
+  public YUVImage encodeYUV(int align) throws TJException {
+    if (srcBuf8 == null && srcBufInt == null)
+      throw new IllegalStateException("No 8-bit-per-sample source image is associated with this instance");
     checkSubsampling();
-    if (pad < 1 || ((pad & (pad - 1)) != 0))
+    if (align < 1 || ((align & (align - 1)) != 0))
       throw new IllegalStateException("Invalid argument in encodeYUV()");
-    YUVImage dstYUVImage = new YUVImage(srcWidth, pad, srcHeight, subsamp);
-    encodeYUV(dstYUVImage, flags);
+    YUVImage dstYUVImage = new YUVImage(srcWidth, align, srcHeight,
+                                        get(TJ.PARAM_SUBSAMP));
+    encodeYUV(dstYUVImage);
     return dstYUVImage;
   }
 
   /**
-   * Encode the uncompressed source image associated with this compressor
-   * instance into separate Y, U (Cb), and V (Cr) image planes and return a
-   * <code>YUVImage</code> instance containing the encoded image planes.  This
-   * method uses the accelerated color conversion routines in TurboJPEG's
-   * underlying codec but does not execute any of the other steps in the JPEG
-   * compression process.  Encoding CMYK source images to YUV is not supported.
+   * Encode the 8-bit-per-sample packed-pixel source image associated with this
+   * compressor instance into separate 8-bit-per-sample Y, U (Cb), and V (Cr)
+   * image planes and return a {@link YUVImage} instance containing the encoded
+   * image planes.  This method performs color conversion (which is accelerated
+   * in the libjpeg-turbo implementation) but does not execute any of the other
+   * steps in the JPEG compression process.  Encoding CMYK source images into
+   * YUV images is not supported.
    *
    * @param strides an array of integers, each specifying the number of bytes
-   * per line in the corresponding plane of the output image.  Setting the
-   * stride for any plane to 0 is the same as setting it to the component width
-   * of the plane.  If <code>strides</code> is null, then the strides for all
-   * planes will be set to their respective component widths.  You can adjust
-   * the strides in order to add an arbitrary amount of line padding to each
-   * plane.
+   * per row in the corresponding plane of the YUV source image.  Setting the
+   * stride for any plane to 0 is the same as setting it to the plane width
+   * (see {@link YUVImage}.)  If <code>strides</code> is null, then the strides
+   * for all planes will be set to their respective plane widths.  You can
+   * adjust the strides in order to add an arbitrary amount of row padding to
+   * each plane.
    *
-   * @param flags the bitwise OR of one or more of
-   * {@link TJ#FLAG_BOTTOMUP TJ.FLAG_*}
-   *
-   * @return a YUV planar image.
+   * @return a {@link YUVImage} instance containing the encoded image planes
    */
-  public YUVImage encodeYUV(int[] strides, int flags) throws TJException {
-    checkSourceImage();
+  public YUVImage encodeYUV(int[] strides) throws TJException {
+    if (srcBuf8 == null && srcBufInt == null)
+      throw new IllegalStateException("No 8-bit-per-sample source image is associated with this instance");
     checkSubsampling();
-    YUVImage dstYUVImage = new YUVImage(srcWidth, strides, srcHeight, subsamp);
-    encodeYUV(dstYUVImage, flags);
+    YUVImage dstYUVImage = new YUVImage(srcWidth, strides, srcHeight,
+                                        get(TJ.PARAM_SUBSAMP));
+    encodeYUV(dstYUVImage);
     return dstYUVImage;
   }
 
   /**
    * Returns the size of the image (in bytes) generated by the most recent
-   * compress operation.
+   * compression operation.
    *
    * @return the size of the image (in bytes) generated by the most recent
-   * compress operation.
+   * compression operation.
    */
   public int getCompressedSize() {
     return compressedSize;
@@ -480,67 +754,68 @@ public class TJCompressor implements Closeable {
     }
   };
 
+  private void checkSubsampling() {
+    if (get(TJ.PARAM_SUBSAMP) == TJ.SAMP_UNKNOWN)
+      throw new IllegalStateException("TJ.PARAM_SUBSAMP must be specified");
+  }
+
   private native void init() throws TJException;
 
   private native void destroy() throws TJException;
 
   // JPEG size in bytes is returned
   @SuppressWarnings("checkstyle:HiddenField")
-  private native int compress(byte[] srcBuf, int x, int y, int width,
-    int pitch, int height, int pixelFormat, byte[] jpegBuf, int jpegSubsamp,
-    int jpegQual, int flags) throws TJException;
+  private native int compress8(byte[] srcBuf, int x, int y, int width,
+    int pitch, int height, int pixelFormat, byte[] jpegBuf) throws TJException;
 
   @SuppressWarnings("checkstyle:HiddenField")
-  private native int compress(int[] srcBuf, int x, int y, int width,
-    int stride, int height, int pixelFormat, byte[] jpegBuf, int jpegSubsamp,
-    int jpegQual, int flags) throws TJException;
+  private native int compress12(short[] srcBuf, int x, int y, int width,
+    int pitch, int height, int pixelFormat, byte[] jpegBuf) throws TJException;
 
   @SuppressWarnings("checkstyle:HiddenField")
-  private native int compressFromYUV(byte[][] srcPlanes, int[] srcOffsets,
-    int width, int[] srcStrides, int height, int subsamp, byte[] jpegBuf,
-    int jpegQual, int flags)
+  private native int compress16(short[] srcBuf, int x, int y, int width,
+    int pitch, int height, int pixelFormat, byte[] jpegBuf) throws TJException;
+
+  @SuppressWarnings("checkstyle:HiddenField")
+  private native int compress8(int[] srcBuf, int x, int y, int width,
+    int stride, int height, int pixelFormat, byte[] jpegBuf)
     throws TJException;
 
   @SuppressWarnings("checkstyle:HiddenField")
-  private native void encodeYUV(byte[] srcBuf, int x, int y, int width,
+  private native int compressFromYUV8(byte[][] srcPlanes, int[] srcOffsets,
+    int width, int[] srcStrides, int height, byte[] jpegBuf)
+    throws TJException;
+
+  @SuppressWarnings("checkstyle:HiddenField")
+  private native void encodeYUV8(byte[] srcBuf, int x, int y, int width,
     int pitch, int height, int pixelFormat, byte[][] dstPlanes,
-    int[] dstOffsets, int[] dstStrides, int subsamp, int flags)
-    throws TJException;
+    int[] dstOffsets, int[] dstStrides) throws TJException;
 
   @SuppressWarnings("checkstyle:HiddenField")
-  private native void encodeYUV(int[] srcBuf, int x, int y, int width,
+  private native void encodeYUV8(int[] srcBuf, int x, int y, int width,
     int srcStride, int height, int pixelFormat, byte[][] dstPlanes,
-    int[] dstOffsets, int[] dstStrides, int subsamp, int flags)
-    throws TJException;
+    int[] dstOffsets, int[] dstStrides) throws TJException;
+
+  private native Object loadSourceImage(int precision, String fileName,
+    int align, int pixelFormat) throws TJException;
 
   static {
     TJLoader.load();
   }
 
-  private void checkSourceImage() {
-    if (srcWidth < 1 || srcHeight < 1)
-      throw new IllegalStateException(NO_ASSOC_ERROR);
-  }
-
-  private void checkSubsampling() {
-    if (subsamp < 0)
-      throw new IllegalStateException("Subsampling level not set");
-  }
-
   private long handle = 0;
-  private byte[] srcBuf = null;
+  private byte[] srcBuf8 = null;
+  private short[] srcBuf12 = null;
+  private short[] srcBuf16 = null;
   private int[] srcBufInt = null;
   private int srcWidth = 0;
   private int srcHeight = 0;
   private int srcX = -1;
   private int srcY = -1;
-  private int srcPitch = 0;
-  private int srcStride = 0;
-  private int srcPixelFormat = -1;
+  private int srcPitch = -1;
+  private int srcPixelFormat = TJ.PF_UNKNOWN;
   private YUVImage srcYUVImage = null;
-  private int subsamp = -1;
-  private int jpegQuality = -1;
   private int compressedSize = 0;
-  private int yuvPad = 4;
   private ByteOrder byteOrder = null;
+  private int iccSize = 0;
 }
