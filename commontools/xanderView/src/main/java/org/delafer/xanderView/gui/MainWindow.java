@@ -17,6 +17,8 @@ import org.delafer.xanderView.general.State;
 import org.delafer.xanderView.gui.config.ApplConfiguration;
 import org.delafer.xanderView.gui.config.OrientationStore;
 import org.delafer.xanderView.gui.helpers.*;
+import org.delafer.xanderView.gui.splash.SplashText;
+import org.delafer.xanderView.gui.splash.SplashWindow;
 import org.delafer.xanderView.orientation.OrientationCommons.Action;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
@@ -245,11 +247,18 @@ public final class MainWindow extends ImageLoader{
 			break;
 		case 16777226:
 			//F1 F1 F1
+			//copy encrypted
+			//enc -> enc
+			//dec -> enc
 			System.out.println("F1:"+e.keyCode);
+			//copy always encrypted
 			CopyService.instance().copy(ImageEnc.getEncrypted(pointer.getCurrent()), new CopyObserver(shell, panel));
 			UIHelpers.sleep(COPY_DELAY);
 			break;
 		case 16777228:
+			//copy decrypted
+			//enc -> dec
+			//dec -> dec
 			System.out.println("F3:"+e.keyCode);
 			CopyService.instance().copy(pointer.getCurrent(), new CopyObserver(shell, panel));
 			UIHelpers.sleep(COPY_DELAY);
@@ -257,6 +266,9 @@ public final class MainWindow extends ImageLoader{
 		case 16777233://F8
 		case 16777232://F7
 		case 16777234://F9
+			//copy "as is" unchanged
+			//enc -> enc
+			//dec -> dec
 			System.out.println("F7-F9");
 			CopyService.instance().copy(ImageDec.getOriginal(pointer.getCurrent()), new CopyObserver(shell, panel));
 			UIHelpers.sleep(COPY_DELAY);
@@ -291,10 +303,34 @@ public final class MainWindow extends ImageLoader{
 		case SWT.CR:
 			toggleFullscreen();
 			break;
+		case 109:
+			changeCopyDir(true);
+
+			break;
+		case 110:
+			changeCopyDir(false);
+			break;
 		default:
 			System.out.println("code:"+e.keyCode);
 			break;
 		}
+	}
+
+	private void changeCopyDir(boolean forward) {
+		ApplConfiguration cfg = ApplConfiguration.instance();
+		if (forward) cfg.nextCopyDir(); else cfg.prevCopyDir();
+		new SplashText(shell.active(), ApplConfiguration.instance().getCopyDir());
+		MainWindow.this.shell.updateInfo();
+		CopyService.checkAsync(new CopyService.Observer() {
+			public void done(CopyService instance) {
+				boolean exist = instance.imageExist(pointer.getCurrent());
+
+				if (exist && !panel.text.endsWith("*")) panel.text = panel.text + "*";
+				if (!exist && panel.text.endsWith("*")) panel.text = panel.text.substring(0, panel.text.length()-1);
+
+				panel.showImage();
+			}
+		});
 	}
 
 	private void changeGamma(boolean direct) {
@@ -352,10 +388,10 @@ public final class MainWindow extends ImageLoader{
 		UIHelpers.addMenuItem(submenu, "Select target copy &Directory\tCtrl+D", SWT.MOD1 + 'D', new Listener() {
 			public void handleEvent(Event event) {
 				 DirectoryDialog dialog = new DirectoryDialog(MainWindow.this.shell.wndShell(), SWT.OPEN);
-				 dialog.setFilterPath(ApplConfiguration.instance().get(ApplConfiguration.CFG_COPY_DIR));
+				 dialog.setFilterPath(ApplConfiguration.instance().getCopyDir());
    			     String result = dialog.open();
    			     if (StringUtils.isEmpty(result)) return ;
-   			     ApplConfiguration.instance().set(ApplConfiguration.CFG_COPY_DIR, result);
+   			     ApplConfiguration.instance().setCopyDir(result);
    			     MainWindow.this.shell.updateInfo();
    			     CopyService.instance().init();
 			}

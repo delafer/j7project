@@ -21,6 +21,7 @@ public class ScaleFactory  {
 
 	//only nearest is faster as opencv, with cpu
 	//Hermite, Mitchel -> Hermite Sharp, but artifacts, Mitchel -> no artifacts, but very unsharp; speed same, slower as Lanczos
+	//speed: AWT_2D_NEAREST > AWT_2D_BILLINEAR >  NOBEL_MULTISTEP > NOBEL_LANCZOS3
 
 	public enum SCALER {
 		AWT_2D_NEAREST          (1), //fastest, but very low quality
@@ -63,8 +64,16 @@ public class ScaleFactory  {
 
 
 	static int lastType = -1;
-	//change to private again
+
 	public IResizer getInstanceByType(int type) {
+		IResizer resizer = getInstanceByType0(type);
+		return resizer;
+		//IResizer ret =  resizer instanceof ResizerOpenCV ? getInstanceByType0(12) : resizer;
+		//return ret;
+	}
+
+	//change to private again
+	public IResizer getInstanceByType0(int type) {
 		SCALER scaler = scalerIds.get(type);
 
 		if (type != lastType) {
@@ -74,17 +83,18 @@ public class ScaleFactory  {
 //		if (SCALER.CV_AREA.equals(scaler)) {
 //			System.out.println("hmm");
 //		}
-		scaler = SCALER.CV_AREA;
+		//scaler = SCALER.CV_AREA;
+		//if (1==1)  scaler = SCALER.AWT_2D_BILLINEAR;
 
 		switch (scaler) {
 		case CV_LINEAR:
-			return ResizerOpenCV.instance(2);
+			return ResizerNewOpenCV.instance(2);
 		case CV_AREA:
-			return ResizerOpenCV.instance(1);
+			return ResizerNewOpenCV.instance(1);
 		case CV_BICUBIC:
-			return ResizerOpenCV.instance(3);
+			return ResizerNewOpenCV.instance(3);
 		case CV_LANCZOS4:
-			return ResizerOpenCV.instance(4);
+			return ResizerNewOpenCV.instance(4);
 		case NOBEL_LANCZOS3:
 			return new ResizerNobel(0);
 		case NOBEL_BICUBIC_HF:

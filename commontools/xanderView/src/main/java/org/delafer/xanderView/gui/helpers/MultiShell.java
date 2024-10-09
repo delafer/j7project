@@ -52,7 +52,7 @@ public class MultiShell  {
 	}
 
 	public void updateInfo() {
-		wndShell.setText("COPY DIR = "+ApplConfiguration.instance().get(ApplConfiguration.CFG_COPY_DIR));
+		wndShell.setText("COPY DIR = "+ApplConfiguration.instance().getCopyDir());
 	}
 
 	public void addIcons() {

@@ -3,6 +3,7 @@ package org.delafer.xanderView.file.entry;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.ByteBuffer;
 import java.nio.MappedByteBuffer;
@@ -67,7 +68,15 @@ public class HelperFS {
 			Method invokeCleaner = unsafeClass.getMethod("invokeCleaner", ByteBuffer.class);
 			invokeCleaner.invoke(unsafe, cb);
         } catch (ReflectiveOperationException e) {
-            e.printStackTrace();
+
+			boolean skip = false;
+			if (e instanceof InvocationTargetException ite && ite.getTargetException() != null) {
+				String msg = ite.getTargetException().getMessage();
+				skip = msg != null && (msg.contains("duplicate") || msg.contains("slice"));
+			}
+			if (!skip) {
+				e.printStackTrace();
+			}
         }
 
 	}

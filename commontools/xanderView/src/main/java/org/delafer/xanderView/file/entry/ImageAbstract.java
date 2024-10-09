@@ -18,7 +18,7 @@ import org.delafer.xanderView.interfaces.IImageEntry;
 
 public abstract class ImageAbstract<E> implements IImageEntry<E> {
 
-	public enum ImageType{JPEG, BMP, PNG, AVIF, ENCRYPTED, UNKNOWN};
+	public enum ImageType{JPEG, BMP, PNG, AVIF, WEBP, JXL, AIM, ENCRYPTED, UNKNOWN};
 
 	protected String name;
 
@@ -33,10 +33,12 @@ public abstract class ImageAbstract<E> implements IImageEntry<E> {
 	protected E identifier;
 
 	public static ImageType getType(String name) {
-		String ext = FileUtils.getExtension(name);
+		return getTypeByExt(FileUtils.getExtension(name));
+	}
+
+	public static ImageType getTypeByExt(String ext) {
 		ext = ext.trim().toLowerCase();
 		ImageType tmp = types.get(ext);
-
 		return tmp != null ? tmp : ImageType.UNKNOWN;
 	}
 

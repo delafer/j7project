@@ -14,6 +14,7 @@ import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -40,12 +41,13 @@ public class FileReader implements IAbstractReader {
 	private WatchService watchService;
 	private File sourceFile;
 	private Recurse mode;
-
+	private LinkedList<SevenZipReader> subReaders;
 
 	public FileReader(File sourceFile, Recurse mode) {
 		super();
 		this.sourceFile = sourceFile;
 		this.mode = mode;
+		this.subReaders = new LinkedList<>();
 	}
 
 	public void read(final List<ImageAbstract<?>> entries) {
@@ -53,25 +55,29 @@ public class FileReader implements IAbstractReader {
 
 			AbstractFileProcessor scanner = new AbstractFileProcessor(getContainerPath()) {
 
-
-				@Override
-				public boolean accept(File entry, FileInfo fileData) {
-//					try {Thread.currentThread().sleep( 50 );}catch(Exception e){}
-					ImageType imageType = ImageAbstract.getType(fileData.getNameWithPath());
-					
+				public boolean accept(FileInfo fileInfo, boolean isArc, String ext) {
+					if (isArc && Recurse.Recursiv.equals(FileReader.this.mode)) return true;
+					ImageType imageType = ImageAbstract.getTypeByExt(ext);
 					if (ImageType.UNKNOWN.equals(imageType)) return false;
 					if (ImageType.ENCRYPTED.equals(imageType) && !ApplConfiguration.instance().hasPwd()) return false;
-					
 					return true;
 				}
 
 				@Override
 				public void processFile(File file, FileInfo fileInfo) throws Exception {
-//					System.out.println(fileInfo.getNameWithPath());
-					ImageAbstract<?> entry = ImageFS.getInstance(FileReader.this, fileInfo.getNameWithPath(), fileInfo.getFileName(), fileInfo.getFileSize());
-					entries.add(entry);
-
-
+					String ext = fileInfo.getExtension();
+					boolean isArc = ArcTypes.isArcType(ext);
+					if (!accept(fileInfo, isArc, ext)) return;
+					if (isArc) {
+						if (Recurse.Recursiv.equals(FileReader.this.mode)) {
+							SevenZipReader szr = new SevenZipReader(file);
+							szr.read(entries);
+							FileReader.this.subReaders.add(szr);
+						}
+					} else {
+						ImageAbstract<?> entry = ImageFS.getInstance(FileReader.this, fileInfo.getNameWithPath(), fileInfo.getFileName(), fileInfo.getFileSize());
+						entries.add(entry);
+					}
 				}
 
 				public void onFinish() {
@@ -94,6 +100,8 @@ public class FileReader implements IAbstractReader {
 			watchService.close();
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			subReaders.stream().parallel().forEach(SevenZipReader::close);
 		}
 	}
 

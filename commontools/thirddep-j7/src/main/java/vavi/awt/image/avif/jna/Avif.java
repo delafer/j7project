@@ -7,11 +7,13 @@ import com.sun.jna.Native;
 import com.sun.jna.NativeLong;
 import com.sun.jna.Pointer;
 import net.j7.commons.jni.LibraryLoader;
+import net.j7.commons.strings.BogusComparator;
 import vavi.awt.image.jna.avif.*;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.nio.ByteBuffer;
+import java.util.Comparator;
 
 
 /**
@@ -21,12 +23,10 @@ import java.nio.ByteBuffer;
  */
 public class Avif {
 
-//    static {
-//        LibraryLoader.checkLibrary("libavif", false);
-//    }
-    private static final Avif avif = new Avif();
-
-
+	/**  Lazy-loaded Singleton, by Bill Pugh **/
+	private static class Holder {
+		private final static Avif INSTANCE = new Avif();
+	}
 
     // This is a utility class and cannot be instantiated.
     private Avif() {
@@ -44,7 +44,7 @@ public class Avif {
     }
 
     public static Avif getInstance() {
-        return avif;
+        return Avif.Holder.INSTANCE;
     }
 
     /**

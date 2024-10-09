@@ -1,62 +1,43 @@
 package org.delafer.xanderView.file;
 
-import java.io.Closeable;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.channels.FileChannel;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
-import java.util.Set;
-
-import net.j7.commons.streams.Streams;
-import org.delafer.xanderView.common.SimpleNameIncrementer;
-import org.delafer.xanderView.file.entry.Buf;
-import org.delafer.xanderView.file.entry.ImageAbstract;
-import org.delafer.xanderView.file.entry.ImageAbstract.ImageType;
-import org.delafer.xanderView.file.entry.ImageFS;
-import org.delafer.xanderView.file.readers.FileReader;
-import org.delafer.xanderView.general.State;
-import org.delafer.xanderView.gui.ImageCanvas;
-import org.delafer.xanderView.gui.SplashWindow;
-import org.delafer.xanderView.gui.config.ApplConfiguration;
-import org.delafer.xanderView.gui.config.ApplInstance;
-import org.delafer.xanderView.gui.helpers.MultiShell;
-import org.delafer.xanderView.gui.helpers.UIHelpers;
-import org.delafer.xanderView.interfaces.IAbstractReader.FileEvent;
-import org.eclipse.swt.widgets.Display;
-
 import net.j7.commons.base.Equals;
 import net.j7.commons.io.AbstractFileProcessor.Recurse;
 import net.j7.commons.io.FilePath;
 import net.j7.commons.io.FileUtils;
+import net.j7.commons.streams.Streams;
+import org.delafer.xanderView.common.SimpleNameIncrementer;
+import org.delafer.xanderView.file.entry.*;
+import org.delafer.xanderView.file.entry.ImageAbstract.ImageType;
+import org.delafer.xanderView.file.readers.FileReader;
+import org.delafer.xanderView.general.State;
+import org.delafer.xanderView.gui.ImageCanvas;
+import org.delafer.xanderView.gui.config.ApplConfiguration;
+import org.delafer.xanderView.gui.config.ApplInstance;
+import org.delafer.xanderView.gui.helpers.MultiShell;
+import org.delafer.xanderView.gui.helpers.UIHelpers;
+import org.delafer.xanderView.gui.splash.SplashWindow;
+import org.delafer.xanderView.interfaces.IAbstractReader.FileEvent;
+import org.eclipse.swt.widgets.Display;
+
+import java.io.*;
+import java.nio.channels.FileChannel;
+import java.util.*;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class CopyService {
 
+	private static final Map<String, CopyService> multitons = Collections.synchronizedMap(new TreeMap<>());
 
-	/**
-	 * Lazy-loaded Singleton, by Bill Pugh *.
-	 */
-	private static final class Holder {
-		/** The Constant INSTANCE. */
-		private final static transient CopyService INSTANCE = new CopyService();
+	public static CopyService getInstance(final String key) {
+		return multitons.computeIfAbsent(key, CopyService::new);
 	}
 
-	/**
-	 * Gets the single instance of ResourcesDR.
-	 *
-	 * @return single instance of ResourcesDR
-	 */
 	public final static CopyService instance() {
-		return Holder.INSTANCE;
+		return getInstance(ApplConfiguration.instance().getCopyDir());
 	}
 
-
-	private CopyService() {
-		init();
+	private CopyService(String path) {
+		init(path);
 	}
 
 
@@ -75,14 +56,21 @@ public class CopyService {
 	}
 
 
+	public static void checkAsync(Observer observer) {
+		CopyService cs = CopyService.instance();
+		cs.addObserver(observer);
+		if (null != cs.initialized && cs.initialized) {
+			cs.notifyObservers();
+		}
+	}
 
 	public static boolean exists(ImageAbstract<?> img) {
-//		ImageAbstract<String> e = ImageFS.getInstance(UIHelpers.asString(img.getIdentifier()), img.name(), img.size());
-//		e.setCRC(img.CRC());
-		
-		Set<ImageAbstract<?>> imgs = CopyService.instance().images;
+		return CopyService.instance().imageExist(img);
+	}
+
+	public boolean imageExist(ImageAbstract<?> img) {
 		boolean found = false;
-		for (ImageAbstract<?> next : imgs) {
+		for (ImageAbstract<?> next : this.images) {
 			if (img.size()==next.size()) {
 				next.CRC();
 				found = true;
@@ -90,12 +78,14 @@ public class CopyService {
 		}
 		if (!found) return false;
 		img.CRC();
-		
-		return found && CopyService.instance().images.contains(img);
+		return found && this.images.contains(img);
 	}
 
 	public void init() {
-		String locationArg = ApplConfiguration.instance().get(ApplConfiguration.CFG_COPY_DIR);
+		this.init(ApplConfiguration.instance().getCopyDir());
+	}
+
+	private void init(String locationArg) {
 		String location = FilePath.as().dir(locationArg).div(true).forceExists().build();
 		queue = new LinkedList<Runnable>();
 		initializeByPath(location);
@@ -328,7 +318,7 @@ public class CopyService {
 	}
 
 	protected void readStructure() throws Exception {
-		Thread th = new Thread("idxDstDir") {
+		Thread th = new Thread() {
 
 			public void run() {
 				synchronized (lockObj) {
@@ -343,6 +333,7 @@ public class CopyService {
 
 				initialized = Boolean.TRUE;
 				lockObj.notify();
+				notifyObservers();
 				}
 			}
 
@@ -350,6 +341,19 @@ public class CopyService {
 		th.setDaemon(true);
 		th.start();
 
+	}
+
+	final Queue<Observer> stack = new LinkedBlockingQueue<>();
+
+	private void notifyObservers() {
+		while (!stack.isEmpty()) {
+			Observer observer = stack.poll();
+			observer.done(this);
+		}
+	}
+
+	protected void addObserver(Observer observer) {
+		stack.add(observer);
 	}
 
 //	public void test() {
@@ -398,6 +402,10 @@ public class CopyService {
 			});
 		}
 
+	}
+
+	public interface Observer {
+		void done(CopyService instance);
 	}
 
 }

@@ -45,10 +45,11 @@ public class ApplConfiguration {
 	public static final String CFG_FULLSCREEN = "fullscreen";
 	public static final String SCALER = "Scaler";
 	public static final String LOOP_CURRENT_SOURCE = "loop.source";
-	public static final String CFG_COPY_DIR = "target.folder";
+	private static final String CFG_COPY_DIR = "target.folder";
 	public static final String CFG_CRY_DIR = "cry.keyfile";
 	public static final String CFG_SORT = "sort";
 	public static final String CFG_USE_CSV = "csv";
+	public static final String CFG_RECURSIVE = "recursive";
 
 	public enum SortType {
 		UNSORTED,
@@ -288,5 +289,41 @@ public class ApplConfiguration {
 //		System.out.println(new ApplConfiguration.SortBy("date, asc"));
 //		System.out.println(new ApplConfiguration.SortBy("SIZE,ASC"));
 //	}
+
+	private static String[] dirs;
+	private String[] getCopyDirs() {
+		if (null == dirs) {
+			String dest = this.get(CFG_COPY_DIR);
+			dirs = dest.split(";");
+		}
+		return dirs;
+	}
+	private static int currentDir = 0;
+	public String nextCopyDir() {
+		if (++currentDir == getCopyDirs().length) {
+			currentDir = 0;
+		}
+		return getCopyDir();
+	}
+	public String prevCopyDir() {
+		if (--currentDir < 0) {
+			currentDir = getCopyDirs().length - 1;
+		}
+		return getCopyDir();
+	}
+	public int currentDir() {
+		return this.currentDir;
+	}
+	public String getCopyDir() {
+		return getCopyDirs()[currentDir];
+	}
+
+	public void setCopyDir(String dir) {
+		getCopyDirs()[currentDir] = dir;
+	}
+
+	public boolean isRecursive() {
+		return this.getBoolean(CFG_RECURSIVE);
+	}
 
 }

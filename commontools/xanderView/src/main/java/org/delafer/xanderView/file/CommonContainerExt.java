@@ -3,7 +3,7 @@ package org.delafer.xanderView.file;
 import org.delafer.xanderView.comparator.RandomComparator;
 import org.delafer.xanderView.file.entry.ImageAbstract;
 import org.delafer.xanderView.general.State;
-import org.delafer.xanderView.gui.SplashWindow;
+import org.delafer.xanderView.gui.splash.SplashWindow;
 import org.delafer.xanderView.gui.helpers.MultiShell;
 
 public class CommonContainerExt extends CommonContainer{

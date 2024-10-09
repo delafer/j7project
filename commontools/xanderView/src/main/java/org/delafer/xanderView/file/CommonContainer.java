@@ -4,11 +4,16 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.SecureRandom;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.ListIterator;
 
+import net.j7.commons.io.FileUtils;
+import org.delafer.xanderView.comparator.RandomComparator;
 import org.delafer.xanderView.file.entry.ImageAbstract;
 import org.delafer.xanderView.file.entry.ImageAbstract.ImageType;
+import org.delafer.xanderView.file.readers.ArcTypes;
 import org.delafer.xanderView.file.readers.FileReader;
 import org.delafer.xanderView.file.readers.SevenZipReader;
 import org.delafer.xanderView.gui.config.ApplConfiguration;
@@ -98,6 +103,9 @@ public class CommonContainer {
 			comparator = this.reader.getComparator();
 		}
 		this.images = new SortedLinkedList<ImageAbstract<?>>(this.images, comparator);
+		if (comparator instanceof RandomComparator) {
+			Collections.shuffle(this.images, RandomComparator.getStrongRandom());
+		}
 		updateIterator();
 	}
 	
@@ -116,13 +124,14 @@ public class CommonContainer {
 
 		if (isFile) {
 			String name = aFile.getName().toLowerCase();
-			if (name.endsWith(".zip") || name.endsWith(".rar") || name.endsWith(".7z") || name.endsWith(".jzip")) {
+			String ext = FileUtils.getExtension(name);
+			if (ArcTypes.isArcType(ext)) {
 				return new SevenZipReader(aFile);
 			}
 
 		}
-
-		return new FileReader(aFile, Recurse.FNE);
+		Recurse mode = ApplConfiguration.instance().isRecursive() ? Recurse.Recursiv : Recurse.FNE;
+		return new FileReader(aFile, mode);
 	}
 
 	public void initialize() {

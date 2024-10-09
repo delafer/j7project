@@ -18,7 +18,7 @@
         <com.carrotsearch.version>0.7.1</com.carrotsearch.version> 
         <com.jhlabs.version>2.0.235-1</com.jhlabs.version> 
         <org.eclipse.swt.version>4.3</org.eclipse.swt.version> 
-        <org.opencv.version>3.0.0</org.opencv.version> 
+        <org.opencv.version>4.6.0</org.opencv.version>
         <net.coobird.version>0.4.8</net.coobird.version> 
     </properties> 
     <modules> 

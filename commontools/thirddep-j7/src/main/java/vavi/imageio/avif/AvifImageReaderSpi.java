@@ -17,6 +17,7 @@ import javax.imageio.ImageReader;
 import javax.imageio.spi.ImageReaderSpi;
 import javax.imageio.stream.ImageInputStream;
 
+import net.j7.commons.datatypes.CheckSignature;
 import vavi.awt.image.avif.jna.Avif;
 import vavi.util.Debug;
 
@@ -99,7 +100,13 @@ public class AvifImageReaderSpi extends ImageReaderSpi {
 
     @Override
     public boolean canDecodeInput(Object obj) throws IOException {
-Debug.println(Level.FINE, "input: " + obj);
+	    if (obj instanceof ImageInputStream stream) {
+			return CheckSignature.checkImageSpi(stream, CheckSignature.AVIF);
+	    } else {
+			return false;
+	    }
+		/*
+		Debug.println(Level.FINE, "input: " + obj);
         if (obj instanceof ImageInputStream stream) {
             stream.mark();
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -110,7 +117,7 @@ Debug.println(Level.FINE, "input: " + obj);
                 baos.write(b, 0, r);
             }
             int l = baos.size();
-Debug.println(Level.FINE, "size: " + l);
+			Debug.println(Level.FINE, "size: " + l);
             ByteBuffer bb = ByteBuffer.allocateDirect(l);
             bb.put(baos.toByteArray(), 0, l);
             stream.reset();
@@ -118,6 +125,7 @@ Debug.println(Level.FINE, "size: " + l);
         } else {
             return false;
         }
+		*/
     }
 
     @Override

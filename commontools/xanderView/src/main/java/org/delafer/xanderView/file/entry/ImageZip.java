@@ -16,17 +16,16 @@ public class ImageZip extends ImageAbstract<Integer> {
 
 	IInArchive archive;
 
-	/*
 	public static ImageAbstract<Integer> getInstance(IAbstractReader parent, IInArchive archive, Integer id, String name, long size) {
 		ImageZip fs = new ImageZip(parent, archive, id, name, size);
 		if (ImageType.ENCRYPTED.equals(fs.getImageType())) {
 			return new ImageDec<Integer>(fs);
 		}
 		return fs;
-	}*/
+	}
 
 
-	public ImageZip(IAbstractReader parent, IInArchive archive, Integer id, String name, long size) {
+	private ImageZip(IAbstractReader parent, IInArchive archive, Integer id, String name, long size) {
 		this.parent = parent;
 		this.archive = archive;
 		this.name = name;
@@ -56,7 +55,7 @@ public class ImageZip extends ImageAbstract<Integer> {
 		}
 		MyExtractCallback extract = new MyExtractCallback(archive, size);
 		archive.extract(new int[] {identifier}, false, extract);
-		Buf ret =  new Buf(extract.data(), null);
+		Buf ret =  new Buf(extract.data());
 		return ret;
 	}
 

@@ -6,11 +6,16 @@ import java.nio.ByteBuffer;
 
 public final class Buf implements Closeable {
 
-	private transient ByteBuffer b;
+	private transient ByteBuffer b, owner;
 	private transient Closeable c;
 
 	Buf(final ByteBuffer bb) {
 		this.b = bb;
+	}
+
+	Buf(final ByteBuffer bb, final ByteBuffer owner) {
+		this.b = bb;
+		this.owner = owner;
 	}
 
 	Buf(final ByteBuffer bb,final Closeable c) {
@@ -40,12 +45,12 @@ public final class Buf implements Closeable {
 	}
 
 	public void close() throws IOException {
-		HelperFS.closeDirectBuffer(b);
+		HelperFS.closeDirectBuffer(null == owner ? b : owner);
 		if (null != c) {
 			c.close();
 			c = null;
 		}
-		b = null;
+		//b = null;
 	}
 
 }

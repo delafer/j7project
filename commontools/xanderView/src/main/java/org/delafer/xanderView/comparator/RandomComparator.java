@@ -1,38 +1,42 @@
 package org.delafer.xanderView.comparator;
 
 import org.delafer.xanderView.file.entry.ImageAbstract;
-import org.eclipse.swt.widgets.Tree;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.TreeMap;
 
 public class RandomComparator implements Comparator<ImageAbstract<?>> {
-    /**  Lazy-loaded Singleton, by Bill Pugh **/
-    private static class Holder {
-        private final static Comparator<ImageAbstract<?>> INSTANCE = new RandomComparator();
-    }
 
     public static Comparator<ImageAbstract<?>> instance() {
-        return RandomComparator.Holder.INSTANCE;
+        return new RandomComparator();
     }
 
 
     private final transient Map<String, Long> stored = new TreeMap<>();
 
-    private SecureRandom random;
+    private Random random;
     /**
      *
      */
     public RandomComparator() {
-        try {
-            random = SecureRandom.getInstanceStrong();
-            random.setSeed(random.generateSeed(24));
-        } catch (NoSuchAlgorithmException ignore) {}
+            random = getWeakRandom();
     }
+
+	public static java.util.Random getWeakRandom() {
+		return new Random(System.nanoTime());
+	}
+
+	public static java.util.Random getStrongRandom() {
+		try {
+			return SecureRandom.getInstanceStrong();
+		} catch (NoSuchAlgorithmException e) {
+			return getWeakRandom();
+		}
+	}
 
     @Override
     public int compare(ImageAbstract<?> o1, ImageAbstract<?> o2) {
@@ -40,11 +44,6 @@ public class RandomComparator implements Comparator<ImageAbstract<?>> {
     }
 
     private final Long getId(final ImageAbstract<?> ia) {
-        Long id = stored.get(ia.name());
-        if (null == id) {
-            id = random.nextLong();
-            stored.put(ia.name(), id);
-        }
-        return id;
+	    return stored.computeIfAbsent(ia.name(), k -> random.nextLong());
     }
 }

@@ -56,7 +56,7 @@ public abstract class AbstractFileProcessor {
 	 * @param basePath the base path
 	 */
 	public AbstractFileProcessor(String basePath) {
-		this(basePath, ALL_FILES);
+		this(basePath, null);
 	}
 
 	/**
@@ -69,7 +69,7 @@ public abstract class AbstractFileProcessor {
 		rootPath = new File(basePath);
 		if (!rootPath.exists())
 			rootPath = new File(FileUtils.correctPath(basePath));
-		wildcard = new WildcardMask(wildcardMask);
+		wildcard = WildcardMask.of(wildcardMask);
 		mode = Recurse.Recursiv;
 		flagStopped = false;
 	}
@@ -120,11 +120,14 @@ public abstract class AbstractFileProcessor {
 	 * @throws Exception the exception
 	 * @see stopProcessing()
 	 */
-	public abstract void processFile(File file, FileInfo fileInfo) throws Exception;
-
-	public void processDir(File file, FileInfo fileInfo) throws Exception {
-
+	public void processFile(File file, FileInfo fileInfo) throws Exception {
+		if (skip(file, fileInfo) || !accept(file, fileInfo)) return;
+		processFilteredFile(file, fileInfo);
 	}
+
+	public void processFilteredFile(File file, FileInfo fileInfo) {}
+
+	public void processDir(File file, FileInfo fileInfo) throws Exception {}
 
 	/**
 	 * Start.
@@ -219,9 +222,8 @@ public abstract class AbstractFileProcessor {
 	 */
 	private void doFile(File entry) throws IOException {
 		final String fullName = entry.getCanonicalPath();
-		if (!wildcard.accept(fullName)) return;
+		if (null != wildcard && !wildcard.accept(fullName)) return;
 		FileInfo fileData = new FileInfo(entry);
-		if (skip(entry, fileData) || !accept(entry, fileData)) return;
 		try {
 			processFile(entry, fileData);
 		} catch (Exception e) {
@@ -383,6 +385,10 @@ public abstract class AbstractFileProcessor {
 				mask = ALL_FILES;
 			wildcard = mask;
 			noFilter = ALL_FILES.equals(mask) || "*".equals(mask);
+		}
+
+		public static WildcardMask of(String mask) {
+			return mask == null ? null : new WildcardMask(mask);
 		}
 
 		/**

@@ -16,6 +16,8 @@ import org.delafer.xanderView.file.CommonContainer;
 import org.delafer.xanderView.file.CopyService;
 import org.delafer.xanderView.file.entry.Buf;
 import org.delafer.xanderView.file.entry.ImageAbstract;
+import org.delafer.xanderView.file.entry.ImageAimDec;
+import org.delafer.xanderView.file.entry.ImageDec;
 import org.delafer.xanderView.gui.config.OrientationStore;
 import org.libjpegturbo.turbojpeg.TJ;
 import org.libjpegturbo.turbojpeg.TJDecompressor;
@@ -43,8 +45,14 @@ public abstract class ImageLoader {
 	protected void loadImage(ImageAbstract<?> entry, String text, ImageCanvas panel) {
 		try {
 			BufferedImage img = null;
-			//TODO CRY
 			switch (entry.getImageType()) {
+			case AIM:
+				loadImage(new ImageAimDec(entry), text, panel);
+				break;
+			/*CRY - to work correctly, it should be instantiated earlier
+			case ENCRYPTED:
+				loadImage(new ImageDec<>(entry), text, panel); break;
+			*/
 			case JPEG:
 				img = loadJpegImage(entry.content().getArray(true));
 				break;
@@ -54,6 +62,8 @@ public abstract class ImageLoader {
 				break;
 			case BMP:
 			case PNG:
+			case WEBP:
+			case JXL:
 			default:
 				img = loadCommonImage(entry.content().getArray(true));
 				break;
@@ -82,7 +92,11 @@ public abstract class ImageLoader {
 
 	private BufferedImage loadCommonImage(byte[] content) throws IOException {
 		try (InputStream input = new ByteArrayInputStream(content)) {
-			return ImageIO.read(input);
+			long t1 = System.currentTimeMillis();
+			BufferedImage ret =  ImageIO.read(input);
+			long t2 = System.currentTimeMillis();
+			System.out.println("Decoding time: "+(t2-t1));
+			return ret;
 		}
 	}
 

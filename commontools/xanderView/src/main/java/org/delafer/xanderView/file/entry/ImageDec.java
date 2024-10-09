@@ -22,7 +22,7 @@ public class ImageDec<E> extends ImageAbstract<E> {
 	
 	private boolean initialized;
 
-	protected ImageDec(ImageAbstract<E> si) {
+	public ImageDec(ImageAbstract<E> si) {
 		this.si = si;
 		this.parent = si.parent;
 		this.identifier = si.identifier;
