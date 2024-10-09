@@ -24,6 +24,8 @@ public interface IImageEntry<E> extends IFileEntry<E> {
 		put("dib", 	ImageType.BMP);
 		put("png", 	ImageType.PNG);
 		put("avif",	ImageType.AVIF);
+		put("webp",	ImageType.WEBP);
+		put("aim",	ImageType.AIM);
 		put("cry", 	ImageType.ENCRYPTED);
 	}};
 

@@ -33,7 +33,7 @@ public class ImageFS extends ImageAbstract<String> {
 	}
 
 
-	public ImageFS(IAbstractReader parent, String fullPath, String name, long size) {
+	private ImageFS(IAbstractReader parent, String fullPath, String name, long size) {
 		this.parent = parent;
 		this.name = name;
 		this.size = size;

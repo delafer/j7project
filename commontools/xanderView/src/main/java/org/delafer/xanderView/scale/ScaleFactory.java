@@ -21,6 +21,7 @@ public class ScaleFactory  {
 
 	//only nearest is faster as opencv, with cpu
 	//Hermite, Mitchel -> Hermite Sharp, but artifacts, Mitchel -> no artifacts, but very unsharp; speed same, slower as Lanczos
+	//speed: AWT_2D_NEAREST > AWT_2D_BILLINEAR >  NOBEL_MULTISTEP > NOBEL_LANCZOS3
 
 	public enum SCALER {
 		AWT_2D_NEAREST          (1), //fastest, but very low quality
@@ -63,8 +64,15 @@ public class ScaleFactory  {
 
 
 	static int lastType = -1;
-	//change to private again
+
 	public IResizer getInstanceByType(int type) {
+		IResizer resizer = getInstanceByType0(type);
+		IResizer ret =  resizer instanceof ResizerOpenCV ? getInstanceByType0(12) : resizer;
+		return ret;
+	}
+
+	//change to private again
+	public IResizer getInstanceByType0(int type) {
 		SCALER scaler = scalerIds.get(type);
 
 		if (type != lastType) {
@@ -74,7 +82,7 @@ public class ScaleFactory  {
 //		if (SCALER.CV_AREA.equals(scaler)) {
 //			System.out.println("hmm");
 //		}
-		scaler = SCALER.CV_AREA;
+		//scaler = SCALER.CV_AREA;
 
 		switch (scaler) {
 		case CV_LINEAR:

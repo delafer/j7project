@@ -48,7 +48,7 @@ public class SevenZipReader implements IAbstractReader {
 			int numberOfItems = archive.getNumberOfItems();
 
 			for (int i = 0; i < numberOfItems; i++) {
-				ImageZip entry = getEntryByIdentifier(i);
+				ImageAbstract<?> entry = getEntryByIdentifier(i);
 //				System.out.println(entry);
 				if (entry != null) entries.add(entry);
 			}
@@ -78,7 +78,7 @@ public class SevenZipReader implements IAbstractReader {
 	}
 
 	@SuppressWarnings("unchecked")
-	public  ImageZip getEntryByIdentifier(Object id) throws IOException {
+	public  ImageAbstract<?> getEntryByIdentifier(Object id) throws IOException {
 		if (id == null) return null;
 		int i = ((Number)id).intValue();
 		String pathName = (String)archive.getProperty(i, PropID.PATH);
@@ -89,7 +89,7 @@ public class SevenZipReader implements IAbstractReader {
 		if (ImageType.UNKNOWN.equals(imageType)) return null;
 		if (ImageType.ENCRYPTED.equals(imageType) && !ApplConfiguration.instance().hasPwd()) return null;
 
-		return new ImageZip(this, archive, i, pathName, size);
+		return ImageZip.getInstance(this, archive, i, pathName, size);
 	}
 
 	@Override

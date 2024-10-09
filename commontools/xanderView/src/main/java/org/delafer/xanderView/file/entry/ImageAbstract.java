@@ -18,7 +18,7 @@ import org.delafer.xanderView.interfaces.IImageEntry;
 
 public abstract class ImageAbstract<E> implements IImageEntry<E> {
 
-	public enum ImageType{JPEG, BMP, PNG, AVIF, ENCRYPTED, UNKNOWN};
+	public enum ImageType{JPEG, BMP, PNG, AVIF, WEBP, AIM, ENCRYPTED, UNKNOWN};
 
 	protected String name;
 

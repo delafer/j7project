@@ -245,11 +245,18 @@ public final class MainWindow extends ImageLoader{
 			break;
 		case 16777226:
 			//F1 F1 F1
+			//copy encrypted
+			//enc -> enc
+			//dec -> enc
 			System.out.println("F1:"+e.keyCode);
+			//copy always encrypted
 			CopyService.instance().copy(ImageEnc.getEncrypted(pointer.getCurrent()), new CopyObserver(shell, panel));
 			UIHelpers.sleep(COPY_DELAY);
 			break;
 		case 16777228:
+			//copy decrypted
+			//enc -> dec
+			//dec -> dec
 			System.out.println("F3:"+e.keyCode);
 			CopyService.instance().copy(pointer.getCurrent(), new CopyObserver(shell, panel));
 			UIHelpers.sleep(COPY_DELAY);
@@ -257,6 +264,9 @@ public final class MainWindow extends ImageLoader{
 		case 16777233://F8
 		case 16777232://F7
 		case 16777234://F9
+			//copy "as is" unchanged
+			//enc -> enc
+			//dec -> dec
 			System.out.println("F7-F9");
 			CopyService.instance().copy(ImageDec.getOriginal(pointer.getCurrent()), new CopyObserver(shell, panel));
 			UIHelpers.sleep(COPY_DELAY);
