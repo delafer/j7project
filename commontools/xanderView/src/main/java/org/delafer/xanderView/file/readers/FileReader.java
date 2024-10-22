@@ -12,12 +12,10 @@ import java.nio.file.WatchEvent;
 import java.nio.file.WatchEvent.Kind;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
+import org.delafer.xanderView.common.Selector;
 import org.delafer.xanderView.comparator.BasicFileComparator;
 import org.delafer.xanderView.comparator.ComparatorFactory;
 import org.delafer.xanderView.file.ContentChangeWatcher;
@@ -55,6 +53,8 @@ public class FileReader implements IAbstractReader {
 
 			AbstractFileProcessor scanner = new AbstractFileProcessor(getContainerPath()) {
 
+				private ArrayList<FileInfo> buffer = new ArrayList<>();
+				private Path last;
 				public boolean accept(FileInfo fileInfo, boolean isArc, String ext) {
 					if (isArc && Recurse.Recursiv.equals(FileReader.this.mode)) return true;
 					ImageType imageType = ImageAbstract.getTypeByExt(ext);
@@ -64,25 +64,61 @@ public class FileReader implements IAbstractReader {
 				}
 
 				@Override
-				public void processFile(File file, FileInfo fileInfo) throws Exception {
+				public void processFile(Path file, FileInfo fileInfo, Path parent) throws Exception {
 					String ext = fileInfo.getExtension();
 					boolean isArc = ArcTypes.isArcType(ext);
 					if (!accept(fileInfo, isArc, ext)) return;
 					if (isArc) {
 						if (Recurse.Recursiv.equals(FileReader.this.mode)) {
-							SevenZipReader szr = new SevenZipReader(file);
+							SevenZipReader szr = new SevenZipReader(file.toFile());
 							szr.read(entries);
 							FileReader.this.subReaders.add(szr);
 						}
 					} else {
-						ImageAbstract<?> entry = ImageFS.getInstance(FileReader.this, fileInfo.getNameWithPath(), fileInfo.getFileName(), fileInfo.getFileSize());
-						entries.add(entry);
+						if (last != parent) {
+							flushFiles();
+							last = parent;
+						}
+						//System.out.println(fileInfo.getFileName());
+						buffer.add(fileInfo);
+						//ImageAbstract<?> entry = ImageFS.getInstance(FileReader.this, fileInfo.getNameWithPath(), fileInfo.getFileName(), fileInfo.getFileSize());
+						//entries.add(entry);
 					}
 				}
 
-				public void onFinish() {
-					// TODO Auto-generated method stub
+				void addImage(FileInfo fileInfo) throws IOException {
+					ImageAbstract<?> entry = ImageFS.getInstance(FileReader.this, fileInfo.getNameWithPath(), fileInfo.getFileName(), fileInfo.getFileSize());
+					entries.add(entry);
+				}
 
+				private void flushFiles() throws IOException {
+					if (buffer.isEmpty()) return;
+					int numberOfItems = buffer.size();
+					int desired = Selector.getElements(ApplConfiguration.getFilterCount(), numberOfItems);
+					if (desired == 0) {
+						for (int i = 0; i < numberOfItems; i++) {
+							FileInfo entry = buffer.get(i);
+							addImage(entry);
+						}
+					} else {
+						Selector sel = new Selector(numberOfItems, desired);
+						int added = 0;
+						int next;
+						while (-1 != (next = sel.next()) && added < desired) {
+							FileInfo entry = buffer.get(next);
+							added++;
+							addImage(entry);
+						}
+					}
+					buffer.clear();
+				}
+
+				public void onFinish() {
+					try {
+						flushFiles();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 				}
 			};
 			scanner.setMode(mode);
@@ -176,11 +212,8 @@ public class FileReader implements IAbstractReader {
 	public ImageAbstract<?> getEntryByIdentifier(Object id) throws IOException {
 		String filePath = (String) id;
 
-
-
-		FileInfo fileInfo = new FileInfo(new File(filePath));
+		FileInfo fileInfo = new FileInfo(Path.of(filePath));
 		ImageAbstract<?> entry = ImageFS.getInstance(this, fileInfo.getNameWithPath(), fileInfo.getFileName(), fileInfo.getFileSize());
-
 		return entry;
 	}
 

@@ -8,11 +8,11 @@ import java.util.Objects;
 import net.j7.commons.io.FileUtils;
 import net.sf.sevenzipjbinding.*;
 
+import org.delafer.xanderView.file.readers.SevenZipReader;
 import org.delafer.xanderView.gui.config.ApplInstance;
 import org.delafer.xanderView.interfaces.IAbstractReader;
 
 public class ImageZip extends ImageAbstract<Integer> {
-
 
 	IInArchive archive;
 
@@ -61,6 +61,10 @@ public class ImageZip extends ImageAbstract<Integer> {
 
 	protected String lastEntryId(ImageAbstract<Integer> ia) {
 		return ia.parent.getContainerPath()+ApplInstance.LAST_ENTRY_DIV+ia.identifier;
+	}
+
+	public String getSourcePath() {
+		return this.parent.getContainerPath();
 	}
 
 	@Override

@@ -110,5 +110,9 @@ public class ImageFS extends ImageAbstract<String> {
 //		return ia.identifier;
 //	}
 
+	public String getSourcePath() {
+		return this.identifier;
+	}
+
 
 }

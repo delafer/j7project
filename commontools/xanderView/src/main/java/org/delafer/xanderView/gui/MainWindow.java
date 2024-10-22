@@ -296,19 +296,21 @@ public final class MainWindow extends ImageLoader{
 			loadImage(pointer, pointer.getNext10(), panel);
 			break;
 		case SWT.ARROW_RIGHT:
-		case SWT.SPACE:
 		case SWT.PAGE_DOWN:
 			loadImage(pointer, pointer.getNext(), panel);
 			break;
 		case SWT.CR:
 			toggleFullscreen();
 			break;
+		case SWT.SPACE:
+			changeCopyDir(0);
+			break;
 		case 109:
-			changeCopyDir(true);
+			changeCopyDir(1);
 
 			break;
 		case 110:
-			changeCopyDir(false);
+			changeCopyDir(-1);
 			break;
 		default:
 			System.out.println("code:"+e.keyCode);
@@ -316,12 +318,15 @@ public final class MainWindow extends ImageLoader{
 		}
 	}
 
-	private void changeCopyDir(boolean forward) {
-		ApplConfiguration cfg = ApplConfiguration.instance();
-		if (forward) cfg.nextCopyDir(); else cfg.prevCopyDir();
+
+	private void changeCopyDir(int forward) {
+		if (forward != 0) {
+			ApplConfiguration cfg = ApplConfiguration.instance();
+			if (forward > 0) cfg.nextCopyDir(); else cfg.prevCopyDir();
+		}
 		new SplashText(shell.active(), ApplConfiguration.instance().getCopyDir());
 		MainWindow.this.shell.updateInfo();
-		CopyService.checkAsync(new CopyService.Observer() {
+		if (forward != 0) CopyService.checkAsync(new CopyService.Observer() {
 			public void done(CopyService instance) {
 				boolean exist = instance.imageExist(pointer.getCurrent());
 

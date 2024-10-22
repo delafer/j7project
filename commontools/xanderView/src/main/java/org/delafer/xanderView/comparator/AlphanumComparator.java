@@ -1,5 +1,7 @@
 package org.delafer.xanderView.comparator;
 
+import org.delafer.xanderView.file.entry.ImageAbstract;
+
 import java.nio.CharBuffer;
 import java.text.Collator;
 import java.util.Comparator;
@@ -8,9 +10,17 @@ import java.util.Locale;
 import static java.nio.CharBuffer.wrap;
 import static java.util.Objects.requireNonNull;
 
-public class AlphanumComparator implements Comparator<String> {
+public class AlphanumComparator implements Comparator<ImageAbstract<?>> {
 
-    private final Collator collator;
+	private static class Holder {
+		private final static Comparator<ImageAbstract<?>> INSTANCE = new AlphanumComparator();
+	}
+
+	public static Comparator<ImageAbstract<?>> instance() {
+		return Holder.INSTANCE;
+	}
+
+	private final Collator collator;
 
     /**
      * Creates a comparator that will use lexicographical sorting of the non-numerical parts of the compared strings.
@@ -42,8 +52,16 @@ public class AlphanumComparator implements Comparator<String> {
         return v != null ? v : EMPTY;
     }
 
-    @Override
-    public int compare(final String v1, final String v2) {
+	private String asString(ImageAbstract<?> entry) {
+		return entry != null ? entry.name() : null;
+	}
+
+	@Override
+	public int compare(ImageAbstract<?> o1, ImageAbstract<?> o2) {
+		return cmp(asString(o1), asString(o2));
+	}
+
+    public int cmp(final String v1, final String v2) {
         return compare0(nullSafe(v1), nullSafe(v2));
     }
 

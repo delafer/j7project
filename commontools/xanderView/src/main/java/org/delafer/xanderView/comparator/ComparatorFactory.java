@@ -27,6 +27,10 @@ public class ComparatorFactory {
 				return FileDateComparator.instance();
 			case SIZE:
 				return FileSizeComparator.instance();
+			case RANDOM:
+				return RandomComparator.instance();
+			case NATURAL:
+				return AlphanumComparator.instance();
 			case UNSORTED:
 			case NO:
 			default:

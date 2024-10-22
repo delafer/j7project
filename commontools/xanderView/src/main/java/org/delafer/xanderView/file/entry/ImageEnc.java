@@ -104,4 +104,8 @@ public class ImageEnc<E> extends ImageAbstract<E> {
 		return cloned;
 	}
 
+	public String getSourcePath() {
+		return this.si.getSourcePath();
+	}
+
 }

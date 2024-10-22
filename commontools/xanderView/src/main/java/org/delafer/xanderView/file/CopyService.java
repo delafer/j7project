@@ -5,6 +5,7 @@ import net.j7.commons.io.AbstractFileProcessor.Recurse;
 import net.j7.commons.io.FilePath;
 import net.j7.commons.io.FileUtils;
 import net.j7.commons.streams.Streams;
+import org.delafer.xanderView.common.CopyLogger;
 import org.delafer.xanderView.common.SimpleNameIncrementer;
 import org.delafer.xanderView.file.entry.*;
 import org.delafer.xanderView.file.entry.ImageAbstract.ImageType;
@@ -260,6 +261,7 @@ public class CopyService {
             out.write(content.get());
             out.force(false);
         } finally {
+		    if (ApplConfiguration.instance().isHistory()) CopyLogger.getInstance().add(entry, target);
             //close(out);
 		    Streams.closeSilently(content);
         }

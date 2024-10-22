@@ -122,4 +122,8 @@ public class ImageAimDec<E> extends ImageAbstract<E> {
 //			e.printStackTrace();
 //		}
 //	}
+
+	public String getSourcePath() {
+		return this.si.getSourcePath();
+	}
 }

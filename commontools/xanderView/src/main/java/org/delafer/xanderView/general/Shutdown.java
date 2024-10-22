@@ -3,6 +3,7 @@ package org.delafer.xanderView.general;
 import java.io.IOException;
 import java.util.Scanner;
 
+import org.delafer.xanderView.common.CopyLogger;
 import org.delafer.xanderView.gui.config.ApplConfiguration;
 import org.delafer.xanderView.gui.config.ApplInstance;
 import org.delafer.xanderView.gui.config.OrientationStore;
@@ -17,6 +18,7 @@ public class Shutdown {
 				ApplConfiguration.instance().save();
 				try {
 					OrientationStore.instance().save();
+					CopyLogger.flushIfNeeded();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}

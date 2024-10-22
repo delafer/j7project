@@ -13,6 +13,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import net.j7.commons.io.FilePath;
 import net.j7.commons.io.FilePath.PathType;
@@ -20,6 +21,7 @@ import net.j7.commons.io.TextFileUtils;
 import net.j7.commons.io.TextFileUtils.TextWriter;
 import net.j7.commons.utils.BooleanUtils;
 import net.sourceforge.jiu.util.Sort;
+import org.delafer.xanderView.common.CopyLogger;
 import org.eclipse.swt.internal.win32.SIZE;
 
 public class ApplConfiguration {
@@ -50,12 +52,16 @@ public class ApplConfiguration {
 	public static final String CFG_SORT = "sort";
 	public static final String CFG_USE_CSV = "csv";
 	public static final String CFG_RECURSIVE = "recursive";
+	public static final String CFG_FILTER_COUNT = "filterCount";
+	public static final String CFG_HISTORY = "history";
 
 	public enum SortType {
 		UNSORTED,
 		NO,
 		NAME,
 		SIZE,
+		RANDOM,
+		NATURAL,
 		DATE,
 		DATETIME,
 		TIME
@@ -119,8 +125,12 @@ public class ApplConfiguration {
 		  e.printStackTrace();
 		}
 
+		final AtomicInteger started = new AtomicInteger(0);
 	    TimerTask task = new TimerTask() {
 			public void run() {
+				if (started.incrementAndGet() % 8 == 0) {
+					CopyLogger.flushIfNeeded();
+				}
 				if (ApplConfiguration.this.isDirty()) {
 					ApplConfiguration.this.save();
 				}
@@ -167,8 +177,23 @@ public class ApplConfiguration {
 		}
 	}
 
+	private Boolean history;
+	public boolean isHistory() {
+		if (history == null) {
+			history = getBoolean(CFG_HISTORY);
+		}
+		return history;
+	}
+
 	public SortBy getSort() {
 		return new SortBy(this.get(CFG_SORT));
+	}
+	static int filterCount = -1;
+	public static int getFilterCount() {
+		if (filterCount == -1) {
+			filterCount = ApplConfiguration.instance().getInt(CFG_FILTER_COUNT);
+		}
+		return filterCount;
 	}
 
 	public boolean isDirty() {

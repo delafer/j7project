@@ -62,29 +62,14 @@ public class ScaleFactory  {
 //		System.out.println("Used scaler: "+scaler);
 	}
 
-
-	static int lastType = -1;
-
 	public IResizer getInstanceByType(int type) {
 		IResizer resizer = getInstanceByType0(type);
 		return resizer;
-		//IResizer ret =  resizer instanceof ResizerOpenCV ? getInstanceByType0(12) : resizer;
-		//return ret;
 	}
 
 	//change to private again
 	public IResizer getInstanceByType0(int type) {
 		SCALER scaler = scalerIds.get(type);
-
-		if (type != lastType) {
-			System.out.println(String.format("scaler: [%s] = %s", type, scaler));
-			this.lastType = type;
-		}
-//		if (SCALER.CV_AREA.equals(scaler)) {
-//			System.out.println("hmm");
-//		}
-		//scaler = SCALER.CV_AREA;
-		//if (1==1)  scaler = SCALER.AWT_2D_BILLINEAR;
 
 		switch (scaler) {
 		case CV_LINEAR:
@@ -113,6 +98,7 @@ public class ScaleFactory  {
 		default:
 			return new IResizer() {
 				public BufferedImage resize(BufferedImage sourceImage, int outputWidth, int outputHeight) {
+					//System.out.println(String.format("resized to %s - %s", outputWidth, outputHeight));
 					MultiStepRescaleOp msOp = new MultiStepRescaleOp(outputWidth, outputHeight);
 					return msOp.filter(sourceImage, null);
 				}

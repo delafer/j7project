@@ -158,4 +158,5 @@ public abstract class ImageAbstract<E> implements IImageEntry<E> {
 		return String.format("ImageAbstract [name=%s, imageType=%s, size=%s, crc=%s]", name, imageType, size, crc);
 	}
 
+	public abstract String getSourcePath();
 }

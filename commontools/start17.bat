@@ -1,5 +1,6 @@
 rem set JAVA_HOME=C:\devtools\java\jdk-9
-set JAVA_HOME=D:\Program Files\Java\jdk-17.0.12
+rem set JAVA_HOME=D:\Program Files\Java\jdk-17.0.12
+set JAVA_HOME=D:\Program Files\Java\jdk-23
 
 
 set PATH=%JAVA_HOME%\bin;%PATH%

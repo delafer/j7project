@@ -63,7 +63,7 @@ public class SplashText extends BaseSplash{
 
         splash.open();
         GC gc = new GC(splash);
-        Font boldFont = new Font(display, "Arial", width / 18, SWT.BOLD);
+        Font boldFont = new Font(display, "Arial", width / 24, SWT.BOLD);
         gc.setFont(boldFont);
         gc.setForeground(display.getSystemColor(SWT.COLOR_WHITE));
         String message = this.text;

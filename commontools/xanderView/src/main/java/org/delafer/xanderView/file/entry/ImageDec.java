@@ -160,4 +160,8 @@ public class ImageDec<E> extends ImageAbstract<E> {
 		return cloned;
 	}
 
+	public String getSourcePath() {
+		return this.si.getSourcePath();
+	}
+
 }

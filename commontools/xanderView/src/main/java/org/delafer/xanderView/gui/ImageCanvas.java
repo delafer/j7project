@@ -11,6 +11,7 @@ import java.text.AttributedString;
 import net.j7.commons.base.CommonUtils;
 import net.j7.commons.strings.StringUtils;
 
+import org.delafer.xanderView.common.FifoMap;
 import org.delafer.xanderView.common.ImageSize;
 import org.delafer.xanderView.gui.config.OrientationStore.ImageData;
 import org.delafer.xanderView.gui.helpers.MultiShell;
@@ -23,7 +24,7 @@ import org.delafer.xanderView.scale.ScaleFactory;
 import com.carrotsearch.hppc.IntFloatHashMap;
 
 public class ImageCanvas extends Canvas implements MouseListener  {
-
+	public static final Color l_red       = new Color(255, 16, 52);
 	private static final float scaleFactor = 1.05f;
 	private static final float gammaFactor = 1.05f;
 	private static final long serialVersionUID = 9162619010168531038L;
@@ -62,7 +63,19 @@ public class ImageCanvas extends Canvas implements MouseListener  {
 
 //	LazyUpdater updater;
 	MultiShell shell;
-	private final static transient Font font = new Font("MS Reference Sans Serif", Font.BOLD, 20);
+
+	private static FifoMap<Integer, Font> fonts = new FifoMap<Integer, Font>(4) {
+		public void dispose(Integer key, Font value) {}
+	};
+	static int lastFontSize = 20;
+
+	private final static Font getFont(int size) {
+		Font font = fonts.get(size);
+		lastFontSize = size;
+		return fonts.computeIfAbsent(size, k -> new Font("MS Reference Sans Serif", Font.BOLD, size));
+	}
+
+
 
     public ImageCanvas(MultiShell shell) {
     	super();
@@ -239,22 +252,27 @@ public class ImageCanvas extends Canvas implements MouseListener  {
         }
 
         if (!StringUtils.isEmpty(panel.text)) {
-
-
-
         	AttributedString as = new AttributedString(panel.text);
-
-            as.addAttribute(TextAttribute.FONT,font);
-            as.addAttribute(TextAttribute.FOREGROUND,  (panel.text.indexOf('*')<0 ? Color.GREEN : Color.RED));
+	        fontSize(this.getBounds().width);
+			Font font = getFont(fontSize(this.getBounds().width));
+            as.addAttribute(TextAttribute.FONT, font);
+            as.addAttribute(TextAttribute.FOREGROUND,  (panel.text.indexOf('*')<0 ? Color.GREEN : l_red));
             g.setFont(font);
 
             drawText(g, as);
         }
 	}
 
+	private int fontSize(int width) {
+		int part2 =  (int) ( Math.round(Math.pow(width, 1.0f / 1.3f)) / 15f);
+		int size = 10 + part2;
+		//System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+size);
+		return size;
+	}
+
 	private void drawText(Graphics g, AttributedString as) {
-		int y =  this.getBounds().height - 15;
-		int x =  (shell.getFullScreen()) ? 25 : 15;
+		int y =  this.getBounds().height - (lastFontSize/2);
+		int x =  lastFontSize /*+ ((shell.getFullScreen()) ? 10 : 0)*/;
 
 		if (shell.getFullScreen()) {
 		AffineTransform at = new AffineTransform();

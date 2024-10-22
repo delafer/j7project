@@ -2,19 +2,17 @@ package net.j7.commons.io;
 
 /*
  * @File: AbstractFileProcessor.java
- *
- *
- *
  * All rights reserved.
- *
  * @Author:  tavrovsa
- *
  * @Version $Revision: #1 $Date: $
- *
  *
  */
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -37,7 +35,7 @@ public abstract class AbstractFileProcessor {
 
 	private final static String ALL_FILES = "*.*"; // The Constant ALL_FILES.
 
-	public File rootPath;
+	public Path rootPath;
 
 	private int doneFiles;
 	private int doneDirs;
@@ -66,9 +64,9 @@ public abstract class AbstractFileProcessor {
 	 * @param wildcardMask the wildcard mask
 	 */
 	public AbstractFileProcessor(String basePath, String wildcardMask) {
-		rootPath = new File(basePath);
-		if (!rootPath.exists())
-			rootPath = new File(FileUtils.correctPath(basePath));
+		rootPath = Paths.get(basePath);
+		if (Files.notExists(rootPath))
+			rootPath = Paths.get(FileUtils.correctPath(basePath));
 		wildcard = WildcardMask.of(wildcardMask);
 		mode = Recurse.Recursiv;
 		flagStopped = false;
@@ -90,7 +88,7 @@ public abstract class AbstractFileProcessor {
 	 * @param fileData the file data
 	 * @return true, if successful
 	 */
-	public boolean accept(File entry, FileInfo fileData) {
+	public boolean accept(Path entry, FileInfo fileData) {
 		return true;
 	}
 
@@ -101,7 +99,7 @@ public abstract class AbstractFileProcessor {
 	 * @param fileData the file data
 	 * @return true, if successful
 	 */
-	public boolean skip(File entry, FileInfo fileData) {
+	public boolean skip(Path entry, FileInfo fileData) {
 		return false;
 	}
 
@@ -118,16 +116,16 @@ public abstract class AbstractFileProcessor {
 	 * @param file the file
 	 * @param fileInfo the file info
 	 * @throws Exception the exception
-	 * @see stopProcessing()
+	 * see stopProcessing
 	 */
-	public void processFile(File file, FileInfo fileInfo) throws Exception {
+	public void processFile(Path file, FileInfo fileInfo, Path parent) throws Exception {
 		if (skip(file, fileInfo) || !accept(file, fileInfo)) return;
 		processFilteredFile(file, fileInfo);
 	}
 
-	public void processFilteredFile(File file, FileInfo fileInfo) {}
+	public void processFilteredFile(Path file, FileInfo fileInfo) {}
 
-	public void processDir(File file, FileInfo fileInfo) throws Exception {}
+	public void processDir(Path file, FileInfo fileInfo) throws Exception {}
 
 	/**
 	 * Start.
@@ -148,6 +146,31 @@ public abstract class AbstractFileProcessor {
 
 	public abstract void onFinish();
 
+
+	private void listContents(Path entry, Recurse recurse) throws IOException {
+		if (flagStopped || Files.notExists(entry)) return ;
+		if (Files.isDirectory(entry)) {
+			if (Recurse.Flat.equals(recurse)) return;
+			doDir(entry);
+			try (final var stream = Files.list(entry)) {
+				final List<Path> dirs = new ArrayList<>(0);
+				stream.forEach(record -> {
+			       if (Files.isDirectory(record)) {
+				       dirs.add(record);
+			       } else {
+				       doFile(record, entry);
+			       }
+				});
+				if ((Recurse.Recursiv.equals(mode) || doneFiles == 0) && null != dirs) {
+					for (Path next : dirs) {
+						listContents(next, mode);
+					}
+				}
+			}
+		} else
+			doFile(entry, entry.getParent());
+	}
+
 	/**
 	 * List contents.
 	 *
@@ -155,14 +178,11 @@ public abstract class AbstractFileProcessor {
 	 * @param recurse the recurse
 	 * @throws IOException
 	 */
-	private void listContents(File entry, Recurse recurse) throws IOException {
+	/* private void listContents(File entry, Recurse recurse) throws IOException {
 		if (flagStopped || entry == null || !entry.exists()) return ;
-
 		if (entry.isDirectory()) {
-
 			if (Recurse.Flat.equals(recurse)) return;
 			doDir(entry);
-
 			String[] children = entry.list();
 			if (null != children) {
 				List<File> dirs = null;
@@ -175,22 +195,14 @@ public abstract class AbstractFileProcessor {
 						doFile(record);
 					}
 				}
-
-//				if (Recurse.FNE.equals(mode) && doneFiles > 0) {
-//					flagStopped = true;
-//				}
-
 				if ((Recurse.Recursiv.equals(mode) || doneFiles == 0) && null != dirs) {
 					for (File next : dirs) {
 						listContents(next, mode);
 					}
 				}
 			}
-
-		} else
-			doFile(entry);
-
-	}
+		} else doFile(entry);
+	}*/
 
 	/**
 	 * @param mode the mode to set
@@ -199,7 +211,7 @@ public abstract class AbstractFileProcessor {
 		this.mode = mode;
 	}
 
-	private void doDir(File entry) throws IOException {
+	private void doDir(Path entry) throws IOException {
 		FileInfo fileData = new FileInfo(entry);
 		if (skip(entry, fileData) || !accept(entry, fileData))
 			return;
@@ -220,12 +232,12 @@ public abstract class AbstractFileProcessor {
 	 * @param entry the entry
 	 * @throws IOException
 	 */
-	private void doFile(File entry) throws IOException {
-		final String fullName = entry.getCanonicalPath();
-		if (null != wildcard && !wildcard.accept(fullName)) return;
-		FileInfo fileData = new FileInfo(entry);
+	private void doFile(Path entry, Path parent)  {
 		try {
-			processFile(entry, fileData);
+			final String fullName = entry.toRealPath().toString();
+			if (null != wildcard && !wildcard.accept(fullName)) return;
+			FileInfo fileData = new FileInfo(entry);
+			processFile(entry, fileData, parent);
 		} catch (Exception e) {
 			logger.error("Error processing file", e);
 			if (stopOnException)
@@ -243,21 +255,19 @@ public abstract class AbstractFileProcessor {
 		/**
 		 * The file.
 		 */
-		private final File file;
+		private final Path file;
 
 		/**
 		 * The full name.
 		 */
 		private final String fullName;
 
-		private String getFullPath(File file) {
-			if (file == null)
-				return "";
+		private String getFullPath(Path file) {
+			if (file == null) return "";
 			try {
-				return file.getCanonicalPath();
-			} catch (IOException e) {
-			}
-			return file.getAbsolutePath();
+				return file.toRealPath().toString();
+			} catch (IOException ignore) {}
+			return file.toFile().getAbsolutePath();
 		}
 
 
@@ -267,7 +277,7 @@ public abstract class AbstractFileProcessor {
 		 * @param file the file
 		 * @throws IOException
 		 */
-		public FileInfo(File file) throws IOException {
+		public FileInfo(Path file) throws IOException {
 			this.file = file;
 			fullName = getFullPath(file);
 		}
@@ -309,6 +319,10 @@ public abstract class AbstractFileProcessor {
 		 * @return Returns the file.
 		 */
 		public File getFile() {
+			return file.toFile();
+		}
+
+		public Path getPath() {
 			return file;
 		}
 
@@ -317,8 +331,8 @@ public abstract class AbstractFileProcessor {
 		 *
 		 * @return the file size
 		 */
-		public long getFileSize() {
-			return file.length();
+		public long getFileSize() throws IOException {
+			return Files.size(file);
 		}
 
 		/**
@@ -336,26 +350,30 @@ public abstract class AbstractFileProcessor {
 		 *
 		 * @return the path
 		 */
-		public String getPath() {
-			if (file.getParentFile() == null) return "";
-			return file.getParentFile().getPath();
+		public Path getParentPath() {
+			return file.getParent();
+		}
+
+		@Deprecated
+		public String getPathRelative(File rootPath) {
+			try {
+				String fullPath = getParentPath().toAbsolutePath().toString();
+				return fullPath.startsWith(rootPath.getPath()) ? fullPath.substring(rootPath.getPath().length() + 1) : fullPath;
+			} catch (Exception ignore) {}
+			return "";
 		}
 
 		/**
 		 * Gets the relative path (without base Path).
-		 *
 		 * @return the path relative
 		 */
-		public String getPathRelative(File rootPath) {
-			String fullPath = getPath();
-			String relativePath = "";
-			try {
-				relativePath = fullPath.startsWith(rootPath.getPath())
-						? fullPath.substring(rootPath.getPath().length() + 1)
-								: fullPath;
-			} catch (Exception e) {
+		public String getPathRelative(Path rootPath) {
+			Path fullPath = getParentPath();
+			if (fullPath.startsWith(rootPath)) {
+				Path relativePath = rootPath.relativize(fullPath);
+				return relativePath.toAbsolutePath().toString();
 			}
-			return relativePath;
+			return "";
 		}
 
 	}

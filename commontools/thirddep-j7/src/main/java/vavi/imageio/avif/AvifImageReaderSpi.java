@@ -6,20 +6,15 @@
 
 package vavi.imageio.avif;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.ByteBuffer;
-import java.util.Locale;
-import java.util.Properties;
-import java.util.logging.Level;
+import net.j7.commons.datatypes.CheckSignature;
+
 import javax.imageio.ImageReader;
 import javax.imageio.spi.ImageReaderSpi;
 import javax.imageio.stream.ImageInputStream;
-
-import net.j7.commons.datatypes.CheckSignature;
-import vavi.awt.image.avif.jna.Avif;
-import vavi.util.Debug;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Locale;
+import java.util.Properties;
 
 
 /**

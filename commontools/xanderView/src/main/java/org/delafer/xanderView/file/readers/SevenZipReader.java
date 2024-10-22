@@ -7,6 +7,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
+import org.delafer.xanderView.common.Selector;
 import org.delafer.xanderView.comparator.ComparatorFactory;
 import org.delafer.xanderView.file.ContentChangeWatcher;
 import org.delafer.xanderView.file.entry.ImageAbstract;
@@ -47,11 +48,25 @@ public class SevenZipReader implements IAbstractReader {
 			archive = SevenZip.openInArchive(null, stream);
 			int numberOfItems = archive.getNumberOfItems();
 
-			for (int i = 0; i < numberOfItems; i++) {
-				ImageAbstract<?> entry = getEntryByIdentifier(i);
-//				System.out.println(entry);
-				if (entry != null) entries.add(entry);
+			int desired = Selector.getElements(ApplConfiguration.getFilterCount(), numberOfItems);
+			if (desired == 0) {
+				for (int i = 0; i < numberOfItems; i++) {
+					ImageAbstract<?> entry = getEntryByIdentifier(i);
+					if (entry != null) entries.add(entry);
+				}
+			} else {
+				Selector sel = new Selector(numberOfItems, desired);
+				int added = 0;
+				int next;
+				while (-1 != (next = sel.next()) && added < desired) {
+					ImageAbstract<?> entry = getEntryByIdentifier(next);
+					if (entry != null) {
+						added++;
+						entries.add(entry);
+					}
+				}
 			}
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
