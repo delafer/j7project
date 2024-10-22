@@ -15,6 +15,12 @@ public class MainEntryPoint {
 
 
 	public static void main(String[] args) {
+		System.setProperty("sun.java2d.dpiaware", "false");
+		System.setProperty("prism.allowhidpi", "false");
+		System.setProperty("sun.java2d.win.uiScaleX", "1");
+		System.setProperty("sun.java2d.win.uiScaleY", "1");
+		System.setProperty("sun.java2d.uiScale", "1");
+		System.setProperty("sun.java2d.uiScale.enabled", "false");
 
 //		URL url  = LibraryLoader.class.getResource("/dummy.cl");
 //		System.out.println(">>>>"+url);
