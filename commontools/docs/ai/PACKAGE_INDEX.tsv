@@ -1,0 +1,110 @@
+module	package	role	important_classes	notes	evidence
+commons-j7	net.j7.commons.base	util	CommonUtils,Equals,NotNull,Numbers		commons-j7/src/main/java/net/j7/commons/base/CommonUtils.java
+commons-j7	net.j7.commons.collections	util	CIdentityLazyCache,CIdentityMapByObj,Datasets,FastStack		commons-j7/src/main/java/net/j7/commons/collections/CIdentityLazyCache.java
+commons-j7	net.j7.commons.datatypes	image-decoding	CheckSignature	signature checks reused by AVIF SPI	commons-j7/src/main/java/net/j7/commons/datatypes/CheckSignature.java
+commons-j7	net.j7.commons.io	io	AbstractFileProcessor,ByteBufferFileUtils,EncryptionUtils,FilePath	filesystem traversal, text helpers, resource and path utilities	commons-j7/src/main/java/net/j7/commons/io/AbstractFileProcessor.java
+commons-j7	net.j7.commons.io.compare	test	DeleteMe,TempComparator	test or local harness sources	commons-j7/src/test/java/net/j7/commons/io/compare/DeleteMe.java
+commons-j7	net.j7.commons.io.helpers	io	WildcardMatcher		commons-j7/src/main/java/net/j7/commons/io/helpers/WildcardMatcher.java
+commons-j7	net.j7.commons.io.zip	archive	AbstractZipParser,AbstractZipReader,ReZipper,ZipDecryptInputStream	shared zip helpers; not the active xanderView archive path	commons-j7/src/main/java/net/j7/commons/io/zip/AbstractZipParser.java
+commons-j7	net.j7.commons.jni	native-interop	LibraryLoader	extracts native libraries using libs.properties and appdata paths	commons-j7/src/main/java/net/j7/commons/jni/LibraryLoader.java
+commons-j7	net.j7.commons.logger	logging	LogFactory,LoggerJUL		commons-j7/src/main/java/net/j7/commons/logger/LogFactory.java
+commons-j7	net.j7.commons.net	util	CountryCode,CurrencyHelper,EmailValidator,MimeConstants		commons-j7/src/main/java/net/j7/commons/net/CountryCode.java
+commons-j7	net.j7.commons.reflection	test	TestMain	test or local harness sources	commons-j7/src/test/java/net/j7/commons/reflection/TestMain.java
+commons-j7	net.j7.commons.reflection	util	AbstractWalker,ModulesLoader,Obj,ObjArgs		commons-j7/src/main/java/net/j7/commons/reflection/AbstractWalker.java
+commons-j7	net.j7.commons.streams	util	ByteArrayOS,CircularByteBuffer,DummyOutputStream,ReusableStream		commons-j7/src/main/java/net/j7/commons/streams/ByteArrayOS.java
+commons-j7	net.j7.commons.strings	util	Args,BasicComparator,BogusComparator,Comparators		commons-j7/src/main/java/net/j7/commons/strings/Args.java
+commons-j7	net.j7.commons.types	util	BitNumber,BitNumberRange,CompositeValue,DatePeriod		commons-j7/src/main/java/net/j7/commons/types/BitNumber.java
+commons-j7	net.j7.commons.ui	util	Convertors,FormatUtils,StackTrace		commons-j7/src/main/java/net/j7/commons/ui/Convertors.java
+commons-j7	net.j7.commons.utils	util	BitUtils,BooleanUtils,ByteUtils,DateUtils		commons-j7/src/main/java/net/j7/commons/utils/BitUtils.java
+commons-j7	net.j7.commons.xml	util	NamespaceFilter,ReaderJAXB,XmlParser,XMLTools		commons-j7/src/main/java/net/j7/commons/xml/NamespaceFilter.java
+commons-j7	org.apache.commons.io	util	ByteOrderMark,Charsets,IOUtils,LineIterator		commons-j7/src/main/java/org/apache/commons/io/ByteOrderMark.java
+commons-j7	org.apache.commons.io.input	util	BOMInputStream,ClosedInputStream,ProxyInputStream,XmlStreamReader		commons-j7/src/main/java/org/apache/commons/io/input/BOMInputStream.java
+commons-j7	org.apache.commons.io.output	util	ByteArrayOutputStream,StringBuilderWriter		commons-j7/src/main/java/org/apache/commons/io/output/ByteArrayOutputStream.java
+commons-j7	org.eclipse.osgi.storage.url	util	BundleEntry,BundleURLConnection		commons-j7/src/main/java/org/eclipse/osgi/storage/url/BundleEntry.java
+security	(default)	unknown	Helper,ListAlgorithms,ListAlgorithmsMT,ListAlgorithmsMTE	crypto playground outside the active reactor	security/src/main/java/Helper.java
+thirddep-j7	com.luciad.imageio.webp	image-decoding	VP8StatusCode,WebP,WebPDecoderOptions,WebPEncoderOptions	ImageIO WebP codec plus native loader	thirddep-j7/src/main/java/com/luciad/imageio/webp/VP8StatusCode.java
+thirddep-j7	com.mortennobel.imagescaling	image-decoding	AdvancedResizeOp,BellFilter,BiCubicFilter,BiCubicHighFreqResponse	vendored Nobel resampling algorithms used by ScaleFactory	thirddep-j7/src/main/java/com/mortennobel/imagescaling/AdvancedResizeOp.java
+thirddep-j7	com.mortennobel.imagescaling.experimental	image-decoding	ImprovedMultistepRescaleOp,ResampleOpSingleThread	vendored Nobel resampling algorithms used by ScaleFactory	thirddep-j7/src/main/java/com/mortennobel/imagescaling/experimental/ImprovedMultistepRescaleOp.java
+thirddep-j7	net.sf.sevenzipjbinding	archive	ArchiveFormat,ExtractAskMode,ExtractOperationResult,IArchiveExtractCallback	7-Zip archive API with custom lazy native init	thirddep-j7/src/main/java/net/sf/sevenzipjbinding/ArchiveFormat.java
+thirddep-j7	net.sf.sevenzipjbinding.impl	archive	InArchiveImpl,InputStreamSequentialInStream,OutArchive7zImpl,OutArchiveBZip2Impl		thirddep-j7/src/main/java/net/sf/sevenzipjbinding/impl/InArchiveImpl.java
+thirddep-j7	net.sf.sevenzipjbinding.simple	archive	ISimpleInArchive,ISimpleInArchiveItem,package-info		thirddep-j7/src/main/java/net/sf/sevenzipjbinding/simple/ISimpleInArchive.java
+thirddep-j7	net.sf.sevenzipjbinding.simple.impl	archive	package-info,SimpleInArchiveImpl,SimpleInArchiveItemImpl		thirddep-j7/src/main/java/net/sf/sevenzipjbinding/simple/impl/package-info.java
+thirddep-j7	net.sf.sevenzipjbinding.util	archive	ByteArrayStream		thirddep-j7/src/main/java/net/sf/sevenzipjbinding/util/ByteArrayStream.java
+thirddep-j7	no.nixx.opencl	native-interop	ImageRotator	OpenCL rotation helpers; GPU path exists but is not default	thirddep-j7/src/main/java/no/nixx/opencl/ImageRotator.java
+thirddep-j7	no.nixx.opencl.util	native-interop	BufferedImageUtils,ClasspathUtils,JOCLDeviceQuery,JOCLFindFastestDevice	OpenCL rotation helpers; GPU path exists but is not default	thirddep-j7/src/main/java/no/nixx/opencl/util/BufferedImageUtils.java
+thirddep-j7	org.eclipse.swt	UI	SWT,SWTError,SWTException	vendored SWT UI toolkit sources bundled in thirddep-j7	thirddep-j7/src/main/java/org/eclipse/swt/SWT.java
+thirddep-j7	org.eclipse.swt.accessibility	UI	ACC,Accessible,AccessibleActionAdapter,AccessibleActionEvent	vendored SWT UI toolkit sources bundled in thirddep-j7	thirddep-j7/src/main/java/org/eclipse/swt/accessibility/ACC.java
+thirddep-j7	org.eclipse.swt.awt	native-interop	SWT_AWT	SWT/AWT bridge used by MainWindow.createImageCanvas	thirddep-j7/src/main/java/org/eclipse/swt/awt/SWT_AWT.java
+thirddep-j7	org.eclipse.swt.browser	UI	AppFileLocProvider,AuthenticationEvent,AuthenticationListener,Browser	vendored SWT UI toolkit sources bundled in thirddep-j7	thirddep-j7/src/main/java/org/eclipse/swt/browser/AppFileLocProvider.java
+thirddep-j7	org.eclipse.swt.custom	UI	AnimatedProgress,BidiSegmentEvent,BidiSegmentListener,Bullet	vendored SWT UI toolkit sources bundled in thirddep-j7	thirddep-j7/src/main/java/org/eclipse/swt/custom/AnimatedProgress.java
+thirddep-j7	org.eclipse.swt.dnd	UI	ByteArrayTransfer,Clipboard,DND,DNDEvent	vendored SWT UI toolkit sources bundled in thirddep-j7	thirddep-j7/src/main/java/org/eclipse/swt/dnd/ByteArrayTransfer.java
+thirddep-j7	org.eclipse.swt.events	UI	ArmEvent,ArmListener,ControlAdapter,ControlEvent	vendored SWT UI toolkit sources bundled in thirddep-j7	thirddep-j7/src/main/java/org/eclipse/swt/events/ArmEvent.java
+thirddep-j7	org.eclipse.swt.graphics	UI	Color,Cursor,Device,DeviceData	vendored SWT UI toolkit sources bundled in thirddep-j7	thirddep-j7/src/main/java/org/eclipse/swt/graphics/Color.java
+thirddep-j7	org.eclipse.swt.internal	native-interop	BidiUtil,C,Callback,CloneableCompatibility	vendored SWT native bridge internals	thirddep-j7/src/main/java/org/eclipse/swt/internal/BidiUtil.java
+thirddep-j7	org.eclipse.swt.internal.gdip	native-interop	BitmapData,ColorPalette,Gdip,GdiplusStartupInput	vendored SWT native bridge internals	thirddep-j7/src/main/java/org/eclipse/swt/internal/gdip/BitmapData.java
+thirddep-j7	org.eclipse.swt.internal.image	native-interop	FileFormat,GIFFileFormat,JPEGAppn,JPEGArithmeticConditioningTable	vendored SWT native bridge internals	thirddep-j7/src/main/java/org/eclipse/swt/internal/image/FileFormat.java
+thirddep-j7	org.eclipse.swt.internal.mozilla	native-interop	Execute,IIDStore,MozillaVersion,nsDynamicFunctionLoad	vendored SWT native bridge internals	thirddep-j7/src/main/java/org/eclipse/swt/internal/mozilla/Execute.java
+thirddep-j7	org.eclipse.swt.internal.mozilla.init	native-interop	GREProperty,GREVersionRange,XPCOMInit	vendored SWT native bridge internals	thirddep-j7/src/main/java/org/eclipse/swt/internal/mozilla/init/GREProperty.java
+thirddep-j7	org.eclipse.swt.internal.ole.win32	native-interop	CAUUID,COM,COMObject,CONTROLINFO	vendored SWT native bridge internals	thirddep-j7/src/main/java/org/eclipse/swt/internal/ole/win32/CAUUID.java
+thirddep-j7	org.eclipse.swt.internal.opengl.win32	native-interop	LAYERPLANEDESCRIPTOR,PIXELFORMATDESCRIPTOR,WGL	vendored SWT native bridge internals	thirddep-j7/src/main/java/org/eclipse/swt/internal/opengl/win32/LAYERPLANEDESCRIPTOR.java
+thirddep-j7	org.eclipse.swt.internal.theme	native-interop	ButtonDrawData,ComboDrawData,DrawData,ExpanderDrawData	vendored SWT native bridge internals	thirddep-j7/src/main/java/org/eclipse/swt/internal/theme/ButtonDrawData.java
+thirddep-j7	org.eclipse.swt.internal.webkit	native-interop	IWebCookieManager,IWebDataSource,IWebDocumentRepresentation,IWebDownload	vendored SWT native bridge internals	thirddep-j7/src/main/java/org/eclipse/swt/internal/webkit/IWebCookieManager.java
+thirddep-j7	org.eclipse.swt.internal.win32	native-interop	ACCEL,ACTCTX,BITMAP,BITMAPINFOHEADER	vendored Win32 SWT internals	thirddep-j7/src/main/java/org/eclipse/swt/internal/win32/ACCEL.java
+thirddep-j7	org.eclipse.swt.layout	UI	FillData,FillLayout,FormAttachment,FormData	vendored SWT UI toolkit sources bundled in thirddep-j7	thirddep-j7/src/main/java/org/eclipse/swt/layout/FillData.java
+thirddep-j7	org.eclipse.swt.ole.win32	UI	OLE,OleAutomation,OleClientSite,OleControlSite	vendored SWT UI toolkit sources bundled in thirddep-j7	thirddep-j7/src/main/java/org/eclipse/swt/ole/win32/OLE.java
+thirddep-j7	org.eclipse.swt.opengl	UI	GLCanvas,GLData	vendored SWT UI toolkit sources bundled in thirddep-j7	thirddep-j7/src/main/java/org/eclipse/swt/opengl/GLCanvas.java
+thirddep-j7	org.eclipse.swt.printing	UI	PrintDialog,Printer,PrinterData	vendored SWT UI toolkit sources bundled in thirddep-j7	thirddep-j7/src/main/java/org/eclipse/swt/printing/PrintDialog.java
+thirddep-j7	org.eclipse.swt.program	UI	Program	vendored SWT UI toolkit sources bundled in thirddep-j7	thirddep-j7/src/main/java/org/eclipse/swt/program/Program.java
+thirddep-j7	org.eclipse.swt.widgets	UI	Button,Canvas,Caret,ColorDialog	vendored SWT UI toolkit sources bundled in thirddep-j7	thirddep-j7/src/main/java/org/eclipse/swt/widgets/Button.java
+thirddep-j7	org.jpeg.jpegxl.wrapper	native-interop	Decoder,DecoderJni,ImageData,PixelFormat	JPEG XL decoder wrapper classes	thirddep-j7/src/main/java/org/jpeg/jpegxl/wrapper/Decoder.java
+thirddep-j7	org.libjpegturbo.turbojpeg	native-interop	TJ,TJCompressor,TJCustomFilter,TJDecompressor	TurboJPEG bindings used for fast JPEG decode	thirddep-j7/src/main/java/org/libjpegturbo/turbojpeg/TJ.java
+thirddep-j7	org.libjpegturbo.turbojpeg.test	test	Aaaa,ImageViewer4,Main,Rotate	test or local harness sources	thirddep-j7/src/test/java/org/libjpegturbo/turbojpeg/test/Aaaa.java
+thirddep-j7	org.libjpegturbo.turbojpeg.test.turbojpeg	test	TJBench,TJComp,TJDecomp,TJTran	test or local harness sources	thirddep-j7/src/test/java/org/libjpegturbo/turbojpeg/test/turbojpeg/TJBench.java
+thirddep-j7	vavi.awt.image.avif.jna	native-interop	Avif	low-level AVIF/JPEG XL native struct bindings	thirddep-j7/src/main/java/vavi/awt/image/avif/jna/Avif.java
+thirddep-j7	vavi.awt.image.jna.avif	native-interop	avifCleanApertureBox,avifContentLightLevelInformationBox,avifCropRect,avifDecoder	low-level AVIF/JPEG XL native struct bindings	thirddep-j7/src/main/java/vavi/awt/image/jna/avif/avifCleanApertureBox.java
+thirddep-j7	vavi.awt.image.jna.jpegxl	native-interop	JxlAnimationHeader,JxlBasicInfo,JxlBitDepth,JxlBlendInfo	low-level AVIF/JPEG XL native struct bindings	thirddep-j7/src/main/java/vavi/awt/image/jna/jpegxl/JxlAnimationHeader.java
+thirddep-j7	vavi.awt.image.jna.jpegxl.decode	native-interop	DecodeLibrary	low-level AVIF/JPEG XL native struct bindings	thirddep-j7/src/main/java/vavi/awt/image/jna/jpegxl/decode/DecodeLibrary.java
+thirddep-j7	vavi.awt.image.jna.jpegxl.encode	native-interop	EncodeLibrary,JxlChunkedFrameInputSource,JxlEncoderFrameSettings,JxlEncoderOutputProcessor	low-level AVIF/JPEG XL native struct bindings	thirddep-j7/src/main/java/vavi/awt/image/jna/jpegxl/encode/EncodeLibrary.java
+thirddep-j7	vavi.image.jpegxl	util	JpegXL		thirddep-j7/src/main/java/vavi/image/jpegxl/JpegXL.java
+thirddep-j7	vavi.imageio.avif	image-decoding	AvifImageReader,AvifImageReaderSpi,AvifImageWriter,AvifImageWriterSpi	ImageIO AVIF codec exposed through SPI	thirddep-j7/src/main/java/vavi/imageio/avif/AvifImageReader.java
+thirddep-j7	vavi.imageio.jpegxl.jna	image-decoding	JpegXLImageReader,JpegXLImageReaderSpi	alternative JPEG XL reader via JNA	thirddep-j7/src/main/java/vavi/imageio/jpegxl/jna/JpegXLImageReader.java
+thirddep-j7	vavi.imageio.jpegxl.jni	image-decoding	JpegXLImageReader,JpegXLImageReaderSpi	ImageIO JPEG XL reader backed by JNI libjxl_jni	thirddep-j7/src/main/java/vavi/imageio/jpegxl/jni/JpegXLImageReader.java
+xanderView	(default)	unknown	ImageScaler	package-less deprecated scaler implementation	xanderView/src/main/java/org/delafer/xanderView/scale/deprecated/ImageScaler.java
+xanderView	org.delafer.xanderView.common	util	CopyLogger,FifoMap,ImageSize,NameIncrementer	copy logging, selection helpers, lightweight support types	xanderView/src/main/java/org/delafer/xanderView/common/CopyLogger.java
+xanderView	org.delafer.xanderView.common.arcs	test	ArcFormats	test or local harness sources	xanderView/src/test/java/org/delafer/xanderView/common/ArcFormats.java
+xanderView	org.delafer.xanderView.comparator	actions	AlphanumComparator,BasicFileComparator,ComparatorFactory,FileDateComparator	sort rules for name, date, size, random, and natural ordering	xanderView/src/main/java/org/delafer/xanderView/comparator/AlphanumComparator.java
+xanderView	org.delafer.xanderView.file	services	CommonContainer,CommonContainerExt,ContentChangeWatcher,CopyService	container navigation, copy target index, live content updates	xanderView/src/main/java/org/delafer/xanderView/file/CommonContainer.java
+xanderView	org.delafer.xanderView.file.entry	io	Buf,Bytes,CipherKey,EncodeName	image abstractions, mmap reads, crypto wrappers, custom AIM decode	xanderView/src/main/java/org/delafer/xanderView/file/entry/Buf.java
+xanderView	org.delafer.xanderView.file.readers	archive	ArcTypes,FileReader,SevenZipReader	filesystem and archive readers selected by path and extension	xanderView/src/main/java/org/delafer/xanderView/file/readers/ArcTypes.java
+xanderView	org.delafer.xanderView.filter	actions	FilterFactory,FilterParser,FilterSize,IFilter	dormant filter classes; no confirmed integration path	xanderView/src/main/java/org/delafer/xanderView/filter/FilterFactory.java
+xanderView	org.delafer.xanderView.general	startup	Shutdown,State	shutdown persistence and small app state enums	xanderView/src/main/java/org/delafer/xanderView/general/Shutdown.java
+xanderView	org.delafer.xanderView.gui	UI	ImageCanvas,ImageLoader,MainEntryPoint,MainWindow	startup entrypoint, shell creation, image decode dispatch	xanderView/src/main/java/org/delafer/xanderView/gui/ImageCanvas.java
+xanderView	org.delafer.xanderView.gui.config	config	ApplConfiguration,ApplInstance,OrientationStore	appdata-backed properties and persisted per-image view state	xanderView/src/main/java/org/delafer/xanderView/gui/config/ApplConfiguration.java
+xanderView	org.delafer.xanderView.gui.helpers	UI	Geometry,ImageRepository,LazyUpdater,LazyUpdaterAbstract	window helpers, icon repository, deferred repaint helpers	xanderView/src/main/java/org/delafer/xanderView/gui/helpers/Geometry.java
+xanderView	org.delafer.xanderView.gui.splash	UI	BaseSplash,SplashText,SplashWindow	transient on-screen feedback for copy mode and state toggles	xanderView/src/main/java/org/delafer/xanderView/gui/splash/BaseSplash.java
+xanderView	org.delafer.xanderView.hash	test	Test	test or local harness sources	xanderView/src/test/java/org/delafer/xanderView/hash/Test.java
+xanderView	org.delafer.xanderView.hash	util	Hasher	xxhash-based CRC surrogate used for identity and persistence keys	xanderView/src/main/java/org/delafer/xanderView/hash/Hasher.java
+xanderView	org.delafer.xanderView.interfaces	model	IAbstractReader,IFileEntry,IImageEntry	reader and image abstractions shared across fs and archive sources	xanderView/src/main/java/org/delafer/xanderView/interfaces/IAbstractReader.java
+xanderView	org.delafer.xanderView.orientation	image-decoding	CommonRotator,OrientationCommons,Rotator2D,RotatorCPU	rotate and flip state machine plus image transforms	xanderView/src/main/java/org/delafer/xanderView/orientation/CommonRotator.java
+xanderView	org.delafer.xanderView.process	image-decoding	GammaCorrection	gamma correction pixel loop	xanderView/src/main/java/org/delafer/xanderView/process/GammaCorrection.java
+xanderView	org.delafer.xanderView.scale	image-decoding	IResizer,ResizerBase,ResizerJAI,ResizerJava2D	active resizer selection across Java2D, OpenCV, and Nobel scaling	xanderView/src/main/java/org/delafer/xanderView/scale/IResizer.java
+xanderView	org.delafer.xanderView.scale.deprecated	image-decoding	BresenhamResizer,ClassicJava,ResizeJavaScaledInstance,ResizeOpenCL	retained experimental and historical scaling implementations	xanderView/src/main/java/org/delafer/xanderView/scale/deprecated/BresenhamResizer.java
+xanderView	org.delafer.xanderView.scale.deprecated	test	SomeTest,Test2,Tester	test or local harness sources	xanderView/src/test/java/org/delafer/xanderView/scale/deprecated/SomeTest.java
+xanderView	org.delafer.xanderView.scale.others	image-decoding	BufferedImageResizer,CustomScalers,Graph2DResizer,ScalrResizer	auxiliary resizer wrappers and experiments	xanderView/src/main/java/org/delafer/xanderView/scale/others/BufferedImageResizer.java
+xanderView	org.delafer.xanderView.scale.test	test	TestDownscale,Tester,TesterQuality,TesterSingle	test or local harness sources	xanderView/src/test/java/org/delafer/xanderView/scale/test/TestDownscale.java
+xanderView	org.delafer.xanderView.sound	UI	SoundBeep	loads /audio/sound01.wav for loop boundary beeps	xanderView/src/main/java/org/delafer/xanderView/sound/SoundBeep.java
+xanderView	org.delafer.xanderView.tests	test	EncryptorOld,Test,TestRead,Testttt	test or local harness sources	xanderView/src/test/java/org/delafer/xanderView/tests/EncryptorOld.java
+xmlbench	org.delafer.xmlbench	UI	MainWindow,Shutdown,TimeUtils	legacy SWT and XML compression workbench outside root reactor	xmlbench/src/main/java/org/delafer/xmlbench/MainWindow.java
+xmlbench	org.delafer.xmlbench.compressors	UI	CompressionFactory,DummyCompressionOutputStream,Exificient,FixedDeflaterOutputStream	legacy SWT and XML compression workbench outside root reactor	xmlbench/src/main/java/org/delafer/xmlbench/compressors/CompressionFactory.java
+xmlbench	org.delafer.xmlbench.config	UI	Config,Constants,Helpers,StreamHelpers	legacy SWT and XML compression workbench outside root reactor	xmlbench/src/main/java/org/delafer/xmlbench/config/Config.java
+xmlbench	org.delafer.xmlbench.dialogs	UI	FileOpenDialog	legacy SWT and XML compression workbench outside root reactor	xmlbench/src/main/java/org/delafer/xmlbench/dialogs/FileOpenDialog.java
+xmlbench	org.delafer.xmlbench.gui	UI	FlowLayout	legacy SWT and XML compression workbench outside root reactor	xmlbench/src/main/java/org/delafer/xmlbench/gui/FlowLayout.java
+xmlbench	org.delafer.xmlbench.resources	UI	ByteArrayOS,CompressedFile,Convertors,ExternalFile	legacy SWT and XML compression workbench outside root reactor	xmlbench/src/main/java/org/delafer/xmlbench/resources/ByteArrayOS.java
+xmlbench	org.delafer.xmlbench.stats	UI	Statistic,StatsUpdaterThread	legacy SWT and XML compression workbench outside root reactor	xmlbench/src/main/java/org/delafer/xmlbench/stats/Statistic.java
+xmlbench	org.delafer.xmlbench.test	UI	FindIt	legacy SWT and XML compression workbench outside root reactor	xmlbench/src/main/java/org/delafer/xmlbench/test/FindIt.java
+xmlbench	org.delafer.xmlbench.wizard	UI	LinkedChain,SmartWizard,UIHelpers	legacy SWT and XML compression workbench outside root reactor	xmlbench/src/main/java/org/delafer/xmlbench/wizard/LinkedChain.java
+xmlbench	org.delafer.xmlbench.wizard.buttons	UI	AbstractBtnData,ButtonManager,DynamicBtnData,IActivateBtnTask	legacy SWT and XML compression workbench outside root reactor	xmlbench/src/main/java/org/delafer/xmlbench/wizard/buttons/AbstractBtnData.java
+xmlbench	org.delafer.xmlbench.wizard.buttons.tasks	UI	AsyncButtonTask,ButtonsEnabler,IButtonTask	legacy SWT and XML compression workbench outside root reactor	xmlbench/src/main/java/org/delafer/xmlbench/wizard/buttons/tasks/AsyncButtonTask.java
+xmlbench	org.delafer.xmlbench.wizard.job	UI	CompressorThread,TaskChain,ThreadController	legacy SWT and XML compression workbench outside root reactor	xmlbench/src/main/java/org/delafer/xmlbench/wizard/job/CompressorThread.java
+xmlbench	org.delafer.xmlbench.wizard.pages	UI	AbstractPage,AbstractWizardPage,CachePage,CachePageWP	legacy SWT and XML compression workbench outside root reactor	xmlbench/src/main/java/org/delafer/xmlbench/wizard/pages/AbstractPage.java
+zip5j	org.delafer.zip5j	archive	MainWindow,Starter,SuperPi,Test	legacy zip utility playground outside root reactor	zip5j/src/main/java/org/delafer/zip5j/MainWindow.java

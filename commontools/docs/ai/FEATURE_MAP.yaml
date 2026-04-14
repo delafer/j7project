@@ -1,0 +1,894 @@
+features:
+  - id: archive_browsing
+    title: Archive Browsing
+    summary: Opens supported archives as virtual image containers and exposes image entries through the same navigation model used for directories.
+    status: confirmed
+    owning_module: xanderView
+    packages:
+      - org.delafer.xanderView.file
+      - org.delafer.xanderView.file.readers
+      - org.delafer.xanderView.file.entry
+      - net.sf.sevenzipjbinding
+    classes:
+      - org.delafer.xanderView.file.CommonContainer
+      - org.delafer.xanderView.file.readers.ArcTypes
+      - org.delafer.xanderView.file.readers.SevenZipReader
+      - org.delafer.xanderView.file.entry.ImageZip
+      - net.sf.sevenzipjbinding.SevenZip
+    entry_points:
+      - org.delafer.xanderView.file.CommonContainer.getReader
+      - org.delafer.xanderView.file.readers.SevenZipReader.read
+      - org.delafer.xanderView.file.readers.SevenZipReader.getEntryByIdentifier
+    ui_surfaces:
+      - org.delafer.xanderView.gui.MainWindow.createFileMenu
+      - org.delafer.xanderView.gui.MainWindow.bindKeyEvent
+    collaborators:
+      - org.delafer.xanderView.file.entry.ImageAbstract
+      - org.delafer.xanderView.comparator.ComparatorFactory
+      - net.sf.sevenzipjbinding.impl.RandomAccessNioStream
+    configs: []
+    resources: []
+    native_dependencies:
+      - lib7-Zip-JBinding
+      - libgcc_s_seh-1
+    persistence:
+      - _zlst.csv
+    tests:
+      - xanderView/src/test/java/org/delafer/xanderView/common/ArcFormats.java
+    related_features:
+      - recursive_scan_and_live_watch
+      - image_decode_pipeline
+      - native_codec_and_library_loading
+    evidence:
+      - path: xanderView/src/main/java/org/delafer/xanderView/file/CommonContainer.java
+        symbols:
+          - org.delafer.xanderView.file.CommonContainer.getReader
+        note: Selects SevenZipReader when the opened path is a file whose extension matches ArcTypes.
+      - path: xanderView/src/main/java/org/delafer/xanderView/file/readers/SevenZipReader.java
+        symbols:
+          - org.delafer.xanderView.file.readers.SevenZipReader.read
+          - org.delafer.xanderView.file.readers.SevenZipReader.getEntryByIdentifier
+        note: Opens the archive and wraps each supported image member as ImageZip or ImageDec.
+      - path: xanderView/src/main/java/org/delafer/xanderView/file/entry/ImageZip.java
+        symbols:
+          - org.delafer.xanderView.file.entry.ImageZip.rawData
+          - org.delafer.xanderView.file.entry.ImageZip.MyExtractCallback
+        note: Extracts one archive member into a ByteBuffer-backed Buf for downstream decoding.
+      - path: thirddep-j7/src/main/java/net/sf/sevenzipjbinding/SevenZip.java
+        symbols:
+          - net.sf.sevenzipjbinding.SevenZip.openInArchive
+          - net.sf.sevenzipjbinding.SevenZip.ensureLibraryIsInitialized
+        note: The bundled 7-Zip binding performs lazy native initialization before opening archives.
+
+  - id: recursive_scan_and_live_watch
+    title: Recursive Scan And Live Watch
+    summary: Walks directories, optionally descends into archives, and updates in-memory image sets when files are created or deleted.
+    status: confirmed
+    owning_module: xanderView
+    packages:
+      - org.delafer.xanderView.file
+      - org.delafer.xanderView.file.readers
+      - net.j7.commons.io
+    classes:
+      - org.delafer.xanderView.file.CommonContainer
+      - org.delafer.xanderView.file.CopyService
+      - org.delafer.xanderView.file.readers.FileReader
+      - net.j7.commons.io.AbstractFileProcessor
+    entry_points:
+      - org.delafer.xanderView.file.readers.FileReader.read
+      - org.delafer.xanderView.file.readers.FileReader.initialize
+      - org.delafer.xanderView.file.CommonContainer.initialize
+      - org.delafer.xanderView.file.CopyService.initializeInternal
+    ui_surfaces:
+      - org.delafer.xanderView.gui.MainWindow.open
+    collaborators:
+      - org.delafer.xanderView.file.entry.ImageFS
+      - org.delafer.xanderView.file.readers.SevenZipReader
+      - org.delafer.xanderView.gui.config.ApplConfiguration
+    configs:
+      - recursive
+      - filterCount
+    resources: []
+    native_dependencies: []
+    persistence: []
+    tests: []
+    related_features:
+      - archive_browsing
+      - sort_navigation_and_selection
+      - copy_collect_export
+    evidence:
+      - path: xanderView/src/main/java/org/delafer/xanderView/file/readers/FileReader.java
+        symbols:
+          - org.delafer.xanderView.file.readers.FileReader.read
+        note: Uses AbstractFileProcessor and optionally opens nested archives when recursive mode is enabled.
+      - path: xanderView/src/main/java/org/delafer/xanderView/file/readers/FileReader.java
+        symbols:
+          - org.delafer.xanderView.file.readers.FileReader.initialize
+        note: Registers a WatchService with ExtendedWatchEventModifier.FILE_TREE and forwards create/delete events.
+      - path: xanderView/src/main/java/org/delafer/xanderView/file/CommonContainer.java
+        symbols:
+          - org.delafer.xanderView.file.CommonContainer.initialize
+        note: Applies reader events to the sorted image list and current pointer.
+      - path: xanderView/src/main/java/org/delafer/xanderView/file/CopyService.java
+        symbols:
+          - org.delafer.xanderView.file.CopyService.readStructure
+          - org.delafer.xanderView.file.CopyService.initializeInternal
+        note: Builds and maintains a live index of the current copy target directory.
+
+  - id: image_decode_pipeline
+    title: Image Decode Pipeline
+    summary: Resolves an image entry to bytes, chooses a decode path by image type, then feeds a BufferedImage into the canvas renderer.
+    status: confirmed
+    owning_module: xanderView
+    packages:
+      - org.delafer.xanderView.gui
+      - org.delafer.xanderView.file.entry
+      - org.delafer.xanderView.interfaces
+    classes:
+      - org.delafer.xanderView.gui.ImageLoader
+      - org.delafer.xanderView.file.entry.ImageAbstract
+      - org.delafer.xanderView.file.entry.Buf
+      - org.libjpegturbo.turbojpeg.TJDecompressor
+    entry_points:
+      - org.delafer.xanderView.gui.ImageLoader.loadImage
+      - org.delafer.xanderView.file.entry.ImageAbstract.content
+      - org.delafer.xanderView.gui.ImageLoader.loadJpegImage
+    ui_surfaces:
+      - org.delafer.xanderView.gui.MainWindow.open
+      - org.delafer.xanderView.gui.MainWindow.bindKeyEvent
+    collaborators:
+      - org.delafer.xanderView.gui.ImageCanvas
+      - org.delafer.xanderView.gui.config.OrientationStore
+      - javax.imageio.ImageIO
+    configs: []
+    resources:
+      - thirddep-j7/src/main/resources/META-INF/services/javax.imageio.spi.ImageReaderSpi
+      - thirddep-j7/src/main/resources/META-INF/services/javax.imageio.spi.ImageWriterSpi
+    native_dependencies:
+      - turbojpeg
+      - webp-imageio
+      - libjxl_jni
+    persistence:
+      - _zlst.csv
+    tests:
+      - xanderView/src/test/java/org/delafer/xanderView/tests/TestRead.java
+      - xanderView/src/test/java/org/delafer/xanderView/scale/test/TestOpenCvResizer.java
+    related_features:
+      - encrypted_image_flow
+      - aim_container_decode
+      - native_codec_and_library_loading
+      - resize_orientation_gamma
+    evidence:
+      - path: xanderView/src/main/java/org/delafer/xanderView/gui/ImageLoader.java
+        symbols:
+          - org.delafer.xanderView.gui.ImageLoader.loadImage
+          - org.delafer.xanderView.gui.ImageLoader.loadJpegImage
+        note: Switches on ImageType and uses TurboJPEG for JPEG with an ImageIO fallback for other formats.
+      - path: xanderView/src/main/java/org/delafer/xanderView/file/entry/ImageAbstract.java
+        symbols:
+          - org.delafer.xanderView.file.entry.ImageAbstract.content
+          - org.delafer.xanderView.file.entry.ImageAbstract.getTypeByExt
+        note: Normalizes image type dispatch and records the last opened entry before reading bytes.
+      - path: xanderView/src/main/java/org/delafer/xanderView/interfaces/IImageEntry.java
+        symbols:
+          - org.delafer.xanderView.interfaces.IImageEntry.types
+        note: Confirms supported extensions including jpg, png, avif, webp, jxl, aim, cry, and xav.
+      - path: thirddep-j7/src/main/resources/META-INF/services/javax.imageio.spi.ImageReaderSpi
+        symbols:
+          - vavi.imageio.avif.AvifImageReaderSpi
+          - com.luciad.imageio.webp.WebPImageReaderSpi
+          - vavi.imageio.jpegxl.jni.JpegXLImageReaderSpi
+        note: Registers additional ImageIO codecs consumed by the default ImageIO path.
+
+  - id: encrypted_image_flow
+    title: Encrypted Image Flow
+    summary: Detects `.cry` entries, derives an AES key from the configured keyfile, decrypts data on demand, and can re-export images as encrypted copies.
+    status: confirmed
+    owning_module: xanderView
+    packages:
+      - org.delafer.xanderView.file.entry
+      - org.delafer.xanderView.gui.config
+    classes:
+      - org.delafer.xanderView.file.entry.ImageDec
+      - org.delafer.xanderView.file.entry.ImageEnc
+      - org.delafer.xanderView.file.entry.Encryptor
+      - org.delafer.xanderView.gui.config.ApplConfiguration
+    entry_points:
+      - org.delafer.xanderView.file.entry.ImageFS.getInstance
+      - org.delafer.xanderView.file.entry.ImageZip.getInstance
+      - org.delafer.xanderView.file.entry.Encryptor.decrypt
+      - org.delafer.xanderView.file.entry.ImageEnc.getEncrypted
+    ui_surfaces:
+      - org.delafer.xanderView.gui.MainWindow.bindKeyEvent
+    collaborators:
+      - org.delafer.xanderView.file.CopyService
+      - org.delafer.xanderView.hash.Hasher
+      - org.delafer.xanderView.file.entry.CipherKey
+    configs:
+      - cry.keyfile
+    resources: []
+    native_dependencies: []
+    persistence:
+      - xander.properties
+    tests:
+      - xanderView/src/test/java/org/delafer/xanderView/tests/EncryptorOld.java
+    related_features:
+      - image_decode_pipeline
+      - copy_collect_export
+      - config_and_state_persistence
+    evidence:
+      - path: xanderView/src/main/java/org/delafer/xanderView/file/entry/ImageFS.java
+        symbols:
+          - org.delafer.xanderView.file.entry.ImageFS.getInstance
+        note: Wraps ENCRYPTED filesystem entries in ImageDec.
+      - path: xanderView/src/main/java/org/delafer/xanderView/file/entry/ImageZip.java
+        symbols:
+          - org.delafer.xanderView.file.entry.ImageZip.getInstance
+        note: Wraps ENCRYPTED archive members in ImageDec as well.
+      - path: xanderView/src/main/java/org/delafer/xanderView/file/entry/Encryptor.java
+        symbols:
+          - org.delafer.xanderView.file.entry.Encryptor.getCipher
+          - org.delafer.xanderView.file.entry.Encryptor.decrypt
+          - org.delafer.xanderView.file.entry.Encryptor.encrypt
+        note: Uses AES_128/ECB/NoPadding with a key derived from ApplConfiguration.pwd().
+      - path: xanderView/src/main/java/org/delafer/xanderView/gui/MainWindow.java
+        symbols:
+          - org.delafer.xanderView.gui.MainWindow.bindKeyEvent
+        note: F1 copies encrypted output and F3 copies decrypted output through CopyService.
+
+  - id: aim_container_decode
+    title: AIM Container Decode
+    summary: Treats `.aim` files as small custom containers that expose the first embedded image as a normal image entry.
+    status: confirmed
+    owning_module: xanderView
+    packages:
+      - org.delafer.xanderView.file.entry
+      - org.delafer.xanderView.gui
+    classes:
+      - org.delafer.xanderView.file.entry.ImageAimDec
+      - org.delafer.xanderView.gui.ImageLoader
+    entry_points:
+      - org.delafer.xanderView.gui.ImageLoader.loadImage
+      - org.delafer.xanderView.file.entry.ImageAimDec.extractFirstFile
+    ui_surfaces:
+      - org.delafer.xanderView.gui.MainWindow.open
+    collaborators:
+      - org.delafer.xanderView.file.entry.Buf
+      - org.delafer.xanderView.file.entry.ImageAbstract
+    configs: []
+    resources: []
+    native_dependencies: []
+    persistence: []
+    tests: []
+    related_features:
+      - image_decode_pipeline
+      - native_codec_and_library_loading
+    evidence:
+      - path: xanderView/src/main/java/org/delafer/xanderView/gui/ImageLoader.java
+        symbols:
+          - org.delafer.xanderView.gui.ImageLoader.loadImage
+        note: Detects ImageType.AIM and recursively loads a new ImageAimDec wrapper.
+      - path: xanderView/src/main/java/org/delafer/xanderView/file/entry/ImageAimDec.java
+        symbols:
+          - org.delafer.xanderView.file.entry.ImageAimDec.extractFirstFile
+          - org.delafer.xanderView.file.entry.ImageAimDec.FirstImage
+        note: Parses a 4-byte header plus CRC and embedded payload metadata to expose the first internal image.
+
+  - id: resize_orientation_gamma
+    title: Resize, Orientation, And Gamma
+    summary: Resizes images to the current canvas, applies rotate/flip state, and optionally runs gamma correction before painting.
+    status: confirmed
+    owning_module: xanderView
+    packages:
+      - org.delafer.xanderView.gui
+      - org.delafer.xanderView.scale
+      - org.delafer.xanderView.orientation
+      - org.delafer.xanderView.process
+    classes:
+      - org.delafer.xanderView.gui.ImageCanvas
+      - org.delafer.xanderView.scale.ScaleFactory
+      - org.delafer.xanderView.scale.ResizerNewOpenCV
+      - org.delafer.xanderView.orientation.OrientationCommons
+      - org.delafer.xanderView.orientation.Rotator2D
+      - org.delafer.xanderView.process.GammaCorrection
+    entry_points:
+      - org.delafer.xanderView.gui.ImageCanvas.preRenderImage
+      - org.delafer.xanderView.scale.ScaleFactory.getInstanceByType0
+      - org.delafer.xanderView.orientation.OrientationCommons.getNewSize
+    ui_surfaces:
+      - org.delafer.xanderView.gui.MainWindow.bindKeyEvent
+      - org.delafer.xanderView.gui.MainWindow.show
+    collaborators:
+      - org.delafer.xanderView.gui.config.OrientationStore
+      - net.j7.commons.jni.LibraryLoader
+      - com.mortennobel.imagescaling.MultiStepRescaleOp
+    configs:
+      - Scaler
+    resources: []
+    native_dependencies:
+      - opencv_java460
+    persistence:
+      - imagedata.bin
+    tests:
+      - xanderView/src/test/java/org/delafer/xanderView/scale/test/TestDownscale.java
+      - xanderView/src/test/java/org/delafer/xanderView/scale/test/TestUpscale.java
+      - xanderView/src/test/java/org/delafer/xanderView/scale/test/TestOpenCvResizer.java
+    related_features:
+      - image_decode_pipeline
+      - config_and_state_persistence
+      - native_codec_and_library_loading
+    evidence:
+      - path: xanderView/src/main/java/org/delafer/xanderView/gui/ImageCanvas.java
+        symbols:
+          - org.delafer.xanderView.gui.ImageCanvas.preRenderImage
+          - org.delafer.xanderView.gui.ImageCanvas.rotate
+          - org.delafer.xanderView.gui.ImageCanvas.changeGamma
+        note: Applies size fitting, scale factor adjustments, orientation transforms, and gamma correction before paint.
+      - path: xanderView/src/main/java/org/delafer/xanderView/scale/ScaleFactory.java
+        symbols:
+          - org.delafer.xanderView.scale.ScaleFactory.getInstanceByType0
+        note: Chooses Java2D, OpenCV, or Nobel resizers based on the configured scaler schedule.
+      - path: xanderView/src/main/java/org/delafer/xanderView/scale/ResizerNewOpenCV.java
+        symbols:
+          - org.delafer.xanderView.scale.ResizerNewOpenCV
+        note: Loads opencv_java460 and performs Mat-based resizing for active OpenCV modes.
+      - path: xanderView/src/main/java/org/delafer/xanderView/process/GammaCorrection.java
+        symbols:
+          - org.delafer.xanderView.process.GammaCorrection.gammaCorrection
+        note: Performs per-pixel gamma lookup after scaling and orientation.
+
+  - id: copy_collect_export
+    title: Copy, Collect, And Export
+    summary: Copies the current image to the configured target directory, tracks existing copies, and supports encrypted, decrypted, and original-output variants.
+    status: confirmed
+    owning_module: xanderView
+    packages:
+      - org.delafer.xanderView.file
+      - org.delafer.xanderView.file.entry
+      - org.delafer.xanderView.gui
+      - org.delafer.xanderView.common
+    classes:
+      - org.delafer.xanderView.file.CopyService
+      - org.delafer.xanderView.file.entry.ImageEnc
+      - org.delafer.xanderView.file.entry.ImageDec
+      - org.delafer.xanderView.common.CopyLogger
+      - org.delafer.xanderView.gui.MainWindow
+    entry_points:
+      - org.delafer.xanderView.file.CopyService.copy
+      - org.delafer.xanderView.file.CopyService.copySync
+      - org.delafer.xanderView.gui.MainWindow.changeCopyDir
+      - org.delafer.xanderView.gui.MainWindow.bindKeyEvent
+    ui_surfaces:
+      - org.delafer.xanderView.gui.MainWindow.bindKeyEvent
+      - org.delafer.xanderView.gui.MainWindow.createFileMenu
+      - org.delafer.xanderView.gui.splash.SplashWindow
+    collaborators:
+      - org.delafer.xanderView.gui.config.ApplConfiguration
+      - org.delafer.xanderView.gui.helpers.MultiShell
+      - net.j7.commons.io.FilePath
+    configs:
+      - target.folder
+      - history
+    resources: []
+    native_dependencies: []
+    persistence:
+      - history_*.log
+      - target copy directory contents
+    tests: []
+    related_features:
+      - encrypted_image_flow
+      - history_logging
+      - config_and_state_persistence
+      - recursive_scan_and_live_watch
+    evidence:
+      - path: xanderView/src/main/java/org/delafer/xanderView/gui/MainWindow.java
+        symbols:
+          - org.delafer.xanderView.gui.MainWindow.bindKeyEvent
+          - org.delafer.xanderView.gui.MainWindow.changeCopyDir
+          - org.delafer.xanderView.gui.MainWindow.createFileMenu
+        note: Exposes copy variants on F1/F3/F7-F9, copy-directory cycling on Space/M/N, and a menu action to choose the target directory.
+      - path: xanderView/src/main/java/org/delafer/xanderView/file/CopyService.java
+        symbols:
+          - org.delafer.xanderView.file.CopyService.copy
+          - org.delafer.xanderView.file.CopyService.copySync
+          - org.delafer.xanderView.file.CopyService.imageExist
+        note: Queues copy work, de-duplicates by size and CRC, writes files, and maintains a live target index.
+      - path: xanderView/src/main/java/org/delafer/xanderView/file/entry/ImageEnc.java
+        symbols:
+          - org.delafer.xanderView.file.entry.ImageEnc.getEncrypted
+        note: Produces encrypted export bytes from plaintext or decrypted entries.
+      - path: xanderView/src/main/java/org/delafer/xanderView/common/CopyLogger.java
+        symbols:
+          - org.delafer.xanderView.common.CopyLogger.add
+        note: Writes target-to-source history lines when history logging is enabled.
+
+  - id: sort_navigation_and_selection
+    title: Sort, Navigation, And Selection
+    summary: Sorts entries by configured order, supports random mode and copy-existence filtering, and persists the last opened entry for restart.
+    status: confirmed
+    owning_module: xanderView
+    packages:
+      - org.delafer.xanderView.file
+      - org.delafer.xanderView.comparator
+      - org.delafer.xanderView.gui.config
+      - org.delafer.xanderView.common
+    classes:
+      - org.delafer.xanderView.file.CommonContainer
+      - org.delafer.xanderView.file.CommonContainerExt
+      - org.delafer.xanderView.comparator.ComparatorFactory
+      - org.delafer.xanderView.gui.config.ApplConfiguration
+    entry_points:
+      - org.delafer.xanderView.comparator.ComparatorFactory.getComparator
+      - org.delafer.xanderView.file.CommonContainer.getNext
+      - org.delafer.xanderView.file.CommonContainerExt.switchRandomAccess
+      - org.delafer.xanderView.file.CommonContainerExt.switchOnlyExisting
+    ui_surfaces:
+      - org.delafer.xanderView.gui.MainWindow.bindKeyEvent
+    collaborators:
+      - org.delafer.xanderView.file.CopyService
+      - org.delafer.xanderView.gui.splash.SplashWindow
+      - net.j7.commons.collections.SortedLinkedList
+    configs:
+      - sort
+      - loop.source
+      - csv
+    resources: []
+    native_dependencies: []
+    persistence:
+      - _zlst.csv
+      - xander.properties
+    tests: []
+    related_features:
+      - recursive_scan_and_live_watch
+      - copy_collect_export
+      - config_and_state_persistence
+    evidence:
+      - path: xanderView/src/main/java/org/delafer/xanderView/comparator/ComparatorFactory.java
+        symbols:
+          - org.delafer.xanderView.comparator.ComparatorFactory.getComparator
+        note: Maps configured sort values to name/date/size/random/natural comparators.
+      - path: xanderView/src/main/java/org/delafer/xanderView/file/CommonContainer.java
+        symbols:
+          - org.delafer.xanderView.file.CommonContainer
+        note: Keeps a sorted list iterator, loops optionally, and restores the last entry from _zlst.csv.
+      - path: xanderView/src/main/java/org/delafer/xanderView/file/CommonContainerExt.java
+        symbols:
+          - org.delafer.xanderView.file.CommonContainerExt.switchRandomAccess
+          - org.delafer.xanderView.file.CommonContainerExt.switchOnlyExisting
+        note: Adds random order and only-not-yet-copied traversal modes on top of CommonContainer.
+      - path: xanderView/src/main/java/org/delafer/xanderView/gui/MainWindow.java
+        symbols:
+          - org.delafer.xanderView.gui.MainWindow.bindKeyEvent
+        note: Binds P to random mode, Q to only-existing mode, arrows/page keys to navigation, and Enter to fullscreen.
+
+  - id: config_and_state_persistence
+    title: Config And State Persistence
+    summary: Stores window settings, copy targets, sort order, keyfile location, recursion mode, and per-image view state under the application data directory.
+    status: confirmed
+    owning_module: xanderView
+    packages:
+      - org.delafer.xanderView.gui.config
+      - org.delafer.xanderView.general
+      - net.j7.commons.io
+    classes:
+      - org.delafer.xanderView.gui.config.ApplConfiguration
+      - org.delafer.xanderView.gui.config.OrientationStore
+      - org.delafer.xanderView.general.Shutdown
+      - net.j7.commons.io.FilePath
+    entry_points:
+      - org.delafer.xanderView.gui.config.ApplConfiguration.initialize
+      - org.delafer.xanderView.gui.config.ApplConfiguration.save
+      - org.delafer.xanderView.gui.config.OrientationStore.load
+      - org.delafer.xanderView.gui.config.OrientationStore.save
+      - org.delafer.xanderView.general.Shutdown.addHook
+    ui_surfaces:
+      - org.delafer.xanderView.gui.MainWindow.show
+      - org.delafer.xanderView.gui.MainWindow.bindKeyEvent
+    collaborators:
+      - org.delafer.xanderView.common.CopyLogger
+      - org.delafer.xanderView.gui.MainEntryPoint
+      - org.delafer.xanderView.gui.ImageCanvas
+    configs:
+      - xander.properties
+      - PosX
+      - PosY
+      - Width
+      - Height
+      - fullscreen
+      - target.folder
+      - cry.keyfile
+      - sort
+      - recursive
+      - filterCount
+      - history
+    resources:
+      - xanderView/src/main/resources/xander.properties
+      - commons-j7/src/main/resources/libs.properties
+    native_dependencies: []
+    persistence:
+      - %APPDATA%/xanderView/xander.properties
+      - %APPDATA%/xanderView/imagedata.bin
+      - _zlst.csv
+    tests: []
+    related_features:
+      - copy_collect_export
+      - resize_orientation_gamma
+      - history_logging
+    evidence:
+      - path: xanderView/src/main/java/org/delafer/xanderView/gui/config/ApplConfiguration.java
+        symbols:
+          - org.delafer.xanderView.gui.config.ApplConfiguration.initialize
+          - org.delafer.xanderView.gui.config.ApplConfiguration.save
+        note: Loads and periodically saves xander.properties under the ApplicationData/xanderView directory.
+      - path: xanderView/src/main/java/org/delafer/xanderView/gui/config/OrientationStore.java
+        symbols:
+          - org.delafer.xanderView.gui.config.OrientationStore.load
+          - org.delafer.xanderView.gui.config.OrientationStore.save
+        note: Persists orientation, scale, pan, and gamma per image CRC in imagedata.bin.
+      - path: xanderView/src/main/java/org/delafer/xanderView/general/Shutdown.java
+        symbols:
+          - org.delafer.xanderView.general.Shutdown.addHook
+        note: Saves configuration, orientation state, and buffered history during JVM shutdown.
+      - path: xanderView/src/main/resources/xander.properties
+        symbols: []
+        note: Documents default properties including Scaler, sort, cry.keyfile, and target.folder.
+
+  - id: history_logging
+    title: History Logging
+    summary: Buffers copy history lines in memory and flushes them to a date-stamped log file inside the active copy directory.
+    status: confirmed
+    owning_module: xanderView
+    packages:
+      - org.delafer.xanderView.common
+      - org.delafer.xanderView.file
+      - org.delafer.xanderView.gui.config
+    classes:
+      - org.delafer.xanderView.common.CopyLogger
+      - org.delafer.xanderView.file.CopyService
+      - org.delafer.xanderView.gui.config.ApplConfiguration
+    entry_points:
+      - org.delafer.xanderView.common.CopyLogger.getInstance
+      - org.delafer.xanderView.common.CopyLogger.add
+      - org.delafer.xanderView.common.CopyLogger.flushIfNeeded
+    ui_surfaces: []
+    collaborators:
+      - org.delafer.xanderView.general.Shutdown
+      - java.nio.file.Files
+    configs:
+      - history
+    resources: []
+    native_dependencies: []
+    persistence:
+      - history_*.log
+    tests: []
+    related_features:
+      - copy_collect_export
+      - config_and_state_persistence
+    evidence:
+      - path: xanderView/src/main/java/org/delafer/xanderView/common/CopyLogger.java
+        symbols:
+          - org.delafer.xanderView.common.CopyLogger.generateFileName
+          - org.delafer.xanderView.common.CopyLogger.add
+          - org.delafer.xanderView.common.CopyLogger.flush
+        note: Generates history_dd_MM_yy.log, buffers copy lines, and flushes to disk with retries.
+      - path: xanderView/src/main/java/org/delafer/xanderView/file/CopyService.java
+        symbols:
+          - org.delafer.xanderView.file.CopyService.nioTransferCopy
+        note: Adds copy history entries when ApplConfiguration.history is enabled.
+      - path: xanderView/src/main/java/org/delafer/xanderView/general/Shutdown.java
+        symbols:
+          - org.delafer.xanderView.general.Shutdown.addHook
+        note: Calls CopyLogger.flushIfNeeded during shutdown.
+
+  - id: native_codec_and_library_loading
+    title: Native Codec And Library Loading
+    summary: Extracts native libraries to disk, wires JNA and JNI search paths, and registers bundled codecs and archive libraries used by the viewer.
+    status: confirmed
+    owning_module: commons-j7
+    packages:
+      - net.j7.commons.jni
+      - net.sf.sevenzipjbinding
+      - org.libjpegturbo.turbojpeg
+      - com.luciad.imageio.webp
+      - vavi.imageio.jpegxl.jni
+      - org.delafer.xanderView.scale
+    classes:
+      - net.j7.commons.jni.LibraryLoader
+      - net.sf.sevenzipjbinding.SevenZip
+      - org.libjpegturbo.turbojpeg.TJLoader
+      - com.luciad.imageio.webp.WebP
+      - vavi.imageio.jpegxl.jni.JpegXLImageReader
+      - org.delafer.xanderView.scale.ResizerNewOpenCV
+    entry_points:
+      - net.j7.commons.jni.LibraryLoader.loadLibrary
+      - net.sf.sevenzipjbinding.SevenZip.ensureLibraryIsInitialized
+      - org.libjpegturbo.turbojpeg.TJLoader.load
+      - com.luciad.imageio.webp.WebP.loadNativeLibrary
+      - vavi.imageio.jpegxl.jni.JpegXLImageReader.<clinit>
+      - org.delafer.xanderView.scale.ResizerNewOpenCV.<clinit>
+    ui_surfaces: []
+    collaborators:
+      - commons-j7/src/main/resources/libs.properties
+      - thirddep-j7/src/main/resources/META-INF/services/javax.imageio.spi.ImageReaderSpi
+      - thirddep-j7/src/main/resources/win32-x86-64
+    configs:
+      - libs.properties location
+    resources:
+      - commons-j7/src/main/resources/libs.properties
+      - thirddep-j7/src/main/resources/win32-x86-64/jxl_jni.dll
+      - thirddep-j7/src/main/resources/win32-x86-64/jxl.dll
+      - thirddep-j7/src/main/resources/win32-x86-64/jxl_threads.dll
+    native_dependencies:
+      - opencv_java460
+      - lib7-Zip-JBinding
+      - libgcc_s_seh-1
+      - turbojpeg
+      - webp-imageio
+      - libjxl_jni
+    persistence:
+      - extracted native library cache under application data
+    tests:
+      - thirddep-j7/src/test/java/org/libjpegturbo/turbojpeg/test/SWTDraw.java
+    related_features:
+      - archive_browsing
+      - image_decode_pipeline
+      - resize_orientation_gamma
+      - swt_awt_threading_bridge
+    evidence:
+      - path: commons-j7/src/main/java/net/j7/commons/jni/LibraryLoader.java
+        symbols:
+          - net.j7.commons.jni.LibraryLoader.loadLibrary
+          - net.j7.commons.jni.LibraryLoader.getJARPath
+          - net.j7.commons.jni.LibraryLoader.load0
+        note: Resolves OS and arch-specific paths, copies libraries to disk, calls System.load, and sets JNA library paths when loading is deferred.
+      - path: commons-j7/src/main/resources/libs.properties
+        symbols: []
+        note: Declares an external location hint currently defaulting to C:/Program Files/xview.
+      - path: thirddep-j7/src/main/java/net/sf/sevenzipjbinding/SevenZip.java
+        symbols:
+          - net.sf.sevenzipjbinding.SevenZip.ensureLibraryIsInitialized
+        note: Forces lib7-Zip-JBinding and libgcc_s_seh-1 through LibraryLoader before first archive access.
+      - path: thirddep-j7/src/main/resources/META-INF/services/javax.imageio.spi.ImageReaderSpi
+        symbols:
+          - vavi.imageio.avif.AvifImageReaderSpi
+          - com.luciad.imageio.webp.WebPImageReaderSpi
+          - vavi.imageio.jpegxl.jni.JpegXLImageReaderSpi
+        note: Confirms bundled ImageIO codec registration for AVIF, WebP, and JPEG XL.
+
+  - id: swt_awt_threading_bridge
+    title: SWT, AWT, And Threading Bridge
+    summary: Hosts an AWT Canvas inside an SWT shell and crosses between SWT and AWT thread models during load, repaint, and copy feedback.
+    status: confirmed
+    owning_module: xanderView
+    packages:
+      - org.delafer.xanderView.gui
+      - org.delafer.xanderView.gui.helpers
+      - org.eclipse.swt.awt
+    classes:
+      - org.delafer.xanderView.gui.MainWindow
+      - org.delafer.xanderView.gui.ImageCanvas
+      - org.delafer.xanderView.gui.helpers.MultiShell
+      - org.eclipse.swt.awt.SWT_AWT
+    entry_points:
+      - org.delafer.xanderView.gui.MainWindow.createImageCanvas
+      - org.delafer.xanderView.gui.MainWindow.runGlobalEventLoop
+      - org.delafer.xanderView.file.CopyService.CopyObserver.done
+    ui_surfaces:
+      - org.delafer.xanderView.gui.MainWindow.createImageCanvas
+      - org.delafer.xanderView.gui.MainWindow.bindKeyEvent
+    collaborators:
+      - java.awt.EventQueue
+      - org.eclipse.swt.widgets.Display
+      - org.delafer.xanderView.gui.helpers.LazyUpdater
+    configs:
+      - fullscreen
+    resources:
+      - resources/large_ico.png
+      - resources/small_ico.png
+    native_dependencies:
+      - jawt
+      - swt-awt
+    persistence: []
+    tests:
+      - thirddep-j7/src/test/java/org/libjpegturbo/turbojpeg/test/SWTDraw.java
+    related_features:
+      - image_decode_pipeline
+      - resize_orientation_gamma
+      - copy_collect_export
+    evidence:
+      - path: xanderView/src/main/java/org/delafer/xanderView/gui/MainWindow.java
+        symbols:
+          - org.delafer.xanderView.gui.MainWindow.createImageCanvas
+          - org.delafer.xanderView.gui.MainWindow.runGlobalEventLoop
+        note: Creates an embedded AWT Frame with SWT_AWT.new_Frame and drives the SWT event loop.
+      - path: xanderView/src/main/java/org/delafer/xanderView/gui/MainWindow.java
+        symbols:
+          - org.delafer.xanderView.gui.MainWindow.show
+        note: Uses java.awt.EventQueue.invokeLater for the first image load after opening the shell.
+      - path: xanderView/src/main/java/org/delafer/xanderView/file/CopyService.java
+        symbols:
+          - org.delafer.xanderView.file.CopyService.CopyObserver.done
+        note: Uses Display.getDefault().asyncExec to report copy results back onto the SWT side.
+      - path: thirddep-j7/src/main/java/org/eclipse/swt/awt/SWT_AWT.java
+        symbols:
+          - org.eclipse.swt.awt.SWT_AWT
+        note: The vendored SWT bridge contains both EventQueue.invokeLater and Display.asyncExec handoff points.
+
+  - id: filter_subsystem
+    title: Filter Subsystem
+    summary: Contains package-level filter parser and size-filter scaffolding, but no confirmed runtime integration was found in the current viewer path.
+    status: weak-signal
+    owning_module: xanderView
+    packages:
+      - org.delafer.xanderView.filter
+    classes:
+      - org.delafer.xanderView.filter.FilterParser
+      - org.delafer.xanderView.filter.FilterFactory
+      - org.delafer.xanderView.filter.FilterSize
+      - org.delafer.xanderView.filter.MultiFilter
+    entry_points:
+      - org.delafer.xanderView.filter.FilterParser.parse
+    ui_surfaces: []
+    collaborators: []
+    configs:
+      - filterCount
+    resources: []
+    native_dependencies: []
+    persistence:
+      - xander.properties
+    tests: []
+    related_features:
+      - sort_navigation_and_selection
+    evidence:
+      - path: xanderView/src/main/java/org/delafer/xanderView/filter/FilterParser.java
+        symbols:
+          - org.delafer.xanderView.filter.FilterParser.parse
+        note: Filter parser exists, but its public parse method recurses into itself instead of parseChunk.
+      - path: xanderView/src/main/java/org/delafer/xanderView/filter/FilterFactory.java
+        symbols:
+          - org.delafer.xanderView.filter.FilterFactory.getFilter
+        note: Only a size filter is registered.
+      - path: xanderView/src/main/java/org/delafer/xanderView/gui/config/ApplConfiguration.java
+        symbols:
+          - org.delafer.xanderView.gui.config.ApplConfiguration.CFG_FILTER_COUNT
+          - org.delafer.xanderView.gui.config.ApplConfiguration.getFilterCount
+        note: The live scan path uses a numeric sampling filter count, not the string filter subsystem.
+
+modules:
+  - name: commons-j7
+    role: Shared utility and native-loader module used by the active reactor.
+    depends_on: []
+    key_packages:
+      - net.j7.commons.io
+      - net.j7.commons.jni
+      - net.j7.commons.streams
+      - net.j7.commons.types
+    key_entry_points:
+      - net.j7.commons.jni.LibraryLoader.loadLibrary
+    notes: Java 16 jar. Provides reusable filesystem and path helpers, buffer utilities, hash and bit-range helpers, and the native library extraction path used by xanderView and thirddep-j7.
+  - name: thirddep-j7
+    role: Vendored dependency wrapper jar containing SWT sources, archive bindings, codec integrations, and native wrappers.
+    depends_on:
+      - commons-j7
+    key_packages:
+      - net.sf.sevenzipjbinding
+      - org.libjpegturbo.turbojpeg
+      - com.luciad.imageio.webp
+      - vavi.imageio.avif
+      - vavi.imageio.jpegxl.jni
+      - org.eclipse.swt.awt
+    key_entry_points:
+      - net.sf.sevenzipjbinding.SevenZip.ensureLibraryIsInitialized
+      - org.libjpegturbo.turbojpeg.TJLoader.load
+      - com.luciad.imageio.webp.WebP.loadNativeLibrary
+    notes: Java 16 jar. Packages additional ImageIO readers and writers plus Windows-native DLLs under src/main/resources.
+  - name: xanderView
+    role: Main Java 21 desktop image viewer application.
+    depends_on:
+      - commons-j7
+      - thirddep-j7
+    key_packages:
+      - org.delafer.xanderView.gui
+      - org.delafer.xanderView.file
+      - org.delafer.xanderView.file.entry
+      - org.delafer.xanderView.file.readers
+      - org.delafer.xanderView.scale
+    key_entry_points:
+      - org.delafer.xanderView.gui.MainEntryPoint.main
+      - org.delafer.xanderView.gui.MainWindow.open
+    notes: Shaded jar main class is org.delafer.xanderView.gui.MainEntryPoint. Owns viewer UI, container navigation, decode and export workflows, config, and view-state persistence.
+  - name: filecleaner-j7
+    role: Legacy CLI and utility module outside the active reactor.
+    depends_on:
+      - commons-j7
+    key_packages: []
+    key_entry_points: []
+    notes: Present in the repository tree but commented out in the root reactor.
+  - name: security
+    role: Standalone crypto playground outside the active reactor.
+    depends_on:
+      - commons-j7
+    key_packages:
+      - (default)
+    key_entry_points: []
+    notes: Not listed in the root reactor; useful only as exploratory crypto code.
+  - name: xmlbench
+    role: Legacy SWT and XML compression workbench outside the active reactor.
+    depends_on:
+      - commons-j7
+      - thirddep-j7
+    key_packages:
+      - org.delafer.xmlbench
+      - org.delafer.xmlbench.compressors
+      - org.delafer.xmlbench.wizard
+    key_entry_points:
+      - org.delafer.xmlbench.MainWindow
+    notes: Not part of the root reactor. Shares the repo but does not participate in xanderView startup.
+  - name: zip5j
+    role: Legacy zip utility playground outside the active reactor.
+    depends_on:
+      - commons-j7
+      - thirddep-j7
+    key_packages:
+      - org.delafer.zip5j
+    key_entry_points:
+      - org.delafer.zip5j.MainWindow
+    notes: Not part of the root reactor. Kept in the tree as a side module.
+
+startup:
+  entry_class: org.delafer.xanderView.gui.MainEntryPoint
+  sequence:
+    - step: jar_and_script_launch
+      path: xanderView/pom.xml
+      symbol: org.apache.maven.plugins.shade.resource.ManifestResourceTransformer.mainClass
+      note: The shaded jar manifest points to org.delafer.xanderView.gui.MainEntryPoint; start17.bat and start23.bat run that jar.
+    - step: main_properties_and_shutdown
+      path: xanderView/src/main/java/org/delafer/xanderView/gui/MainEntryPoint.java
+      symbol: org.delafer.xanderView.gui.MainEntryPoint.main
+      note: Disables several Java2D HiDPI flags, registers the shutdown hook, disables Metrics, and starts initialization.
+    - step: preload_resources
+      path: xanderView/src/main/java/org/delafer/xanderView/gui/MainEntryPoint.java
+      symbol: org.delafer.xanderView.gui.MainEntryPoint.initializeApp
+      note: Loads image resources, orientation state, and initializes CopyService.
+    - step: copy_target_index_boot
+      path: xanderView/src/main/java/org/delafer/xanderView/file/CopyService.java
+      symbol: org.delafer.xanderView.file.CopyService.instance
+      note: Builds a multiton keyed by the current copy directory and starts an asynchronous target scan.
+    - step: main_window_creation
+      path: xanderView/src/main/java/org/delafer/xanderView/gui/MainEntryPoint.java
+      symbol: org.delafer.xanderView.gui.MainEntryPoint.main
+      note: Constructs MainWindow and forwards the first CLI argument as the path to open.
+    - step: container_resolution
+      path: xanderView/src/main/java/org/delafer/xanderView/gui/MainWindow.java
+      symbol: org.delafer.xanderView.gui.MainWindow.open
+      note: Creates CommonContainerExt for the requested path, which in turn selects FileReader or SevenZipReader.
+    - step: container_scan
+      path: xanderView/src/main/java/org/delafer/xanderView/file/CommonContainer.java
+      symbol: org.delafer.xanderView.file.CommonContainer.initialize
+      note: Registers content watchers, scans initial entries, sorts them, and restores the last-entry pointer when possible.
+    - step: swt_bootstrap
+      path: xanderView/src/main/java/org/delafer/xanderView/gui/MainWindow.java
+      symbol: org.delafer.xanderView.gui.MainWindow.intitialize
+      note: Creates Display, records display size, and installs a global SWT KeyDown filter.
+    - step: shell_and_canvas_setup
+      path: xanderView/src/main/java/org/delafer/xanderView/gui/MainWindow.java
+      symbol: org.delafer.xanderView.gui.MainWindow.show
+      note: Creates MultiShell, menu bar, icons, embedded SWT and AWT canvas, and opens the active shell.
+    - step: first_image_dispatch
+      path: xanderView/src/main/java/org/delafer/xanderView/gui/MainWindow.java
+      symbol: org.delafer.xanderView.gui.MainWindow.show
+      note: If a current image exists, the first load is scheduled onto the AWT EventQueue.
+    - step: decode_and_render
+      path: xanderView/src/main/java/org/delafer/xanderView/gui/ImageLoader.java
+      symbol: org.delafer.xanderView.gui.ImageLoader.loadImage
+      note: Reads bytes, chooses a codec path, applies copy-state and CRC-backed orientation data, and paints via ImageCanvas.
+    - step: event_loop_and_shutdown
+      path: xanderView/src/main/java/org/delafer/xanderView/general/Shutdown.java
+      symbol: org.delafer.xanderView.general.Shutdown.addHook
+      note: The SWT loop runs until the window closes; shutdown then persists xander.properties, imagedata.bin, and buffered history.
+
+open_questions:
+  - MainWindow.open dereferences path without a null check, but MainEntryPoint.main passes null when no CLI argument exists; confirm whether production always launches with a path.
+  - The filter package exists, but no confirmed runtime call path was found and FilterParser.parse currently recurses into itself; determine whether the subsystem is abandoned.
+  - ImageType.XAV is treated as a virtual directory in HelperFS, but no concrete XAV reader or decoder implementation was found.
+  - commons-j7/src/main/resources/libs.properties points at C:/Program Files/xview; confirm the intended native deployment story for production jars.
