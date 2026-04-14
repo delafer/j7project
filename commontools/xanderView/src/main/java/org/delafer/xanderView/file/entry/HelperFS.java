@@ -1,5 +1,6 @@
 package org.delafer.xanderView.file.entry;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.lang.reflect.Field;
@@ -12,6 +13,18 @@ import java.nio.channels.FileChannel.MapMode;
 
 public class HelperFS {
 
+	public final static boolean isVirtualDirectory(String path) {
+		if (path == null || path.isEmpty())  return false;
+		return ImageAbstract.ImageType.XAV.equals(ImageAbstract.getType(path));
+	}
+
+	public final static boolean isAnyDirectory(File file) {
+		return file != null && (file.isDirectory() || isVirtualDirectory(file.getPath()));
+	}
+
+	public final static boolean isAnyFile(File file) {
+		return file != null && !isAnyDirectory(file);
+	}
 
 	public final static Buf readDataBuf(String fileName, int size) throws IOException {
 

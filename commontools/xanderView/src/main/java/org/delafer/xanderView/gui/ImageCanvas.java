@@ -69,7 +69,7 @@ public class ImageCanvas extends Canvas implements MouseListener  {
 	};
 	static int lastFontSize = 20;
 
-	private final static Font getFont(int size) {
+	private synchronized final static Font getFont(int size) {
 		Font font = fonts.get(size);
 		lastFontSize = size;
 		return fonts.computeIfAbsent(size, k -> new Font("MS Reference Sans Serif", Font.BOLD, size));

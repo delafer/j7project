@@ -51,7 +51,8 @@ public class ImageZip extends ImageAbstract<Integer> {
 
 	public Buf rawData(Integer identifier, int size) throws IOException {
 		if (size < 0) {
-			size = (int) size();
+			Long longSize = (Long) archive.getProperty(this.identifier, PropID.SIZE);
+			size = null != longSize ? longSize.intValue() : size;
 		}
 		MyExtractCallback extract = new MyExtractCallback(archive, size);
 		archive.extract(new int[] {identifier}, false, extract);

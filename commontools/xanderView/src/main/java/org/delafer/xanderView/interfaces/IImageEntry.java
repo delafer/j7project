@@ -12,7 +12,7 @@ public interface IImageEntry<E> extends IFileEntry<E> {
 
 	static final int X = -1;
 
-	final static Map<String, ImageType> types= new HashMap<String, ImageAbstract.ImageType>() {{
+	final static Map<String, ImageType> types= new HashMap<String, ImageAbstract.ImageType>(16, 1f) {{
 		put("jpg", 	ImageType.JPEG);
 		put("jpeg", ImageType.JPEG);
 		put("jpe", 	ImageType.JPEG);
@@ -28,6 +28,7 @@ public interface IImageEntry<E> extends IFileEntry<E> {
 		put("jxl",	ImageType.JXL);
 		put("aim",	ImageType.AIM);
 		put("cry", 	ImageType.ENCRYPTED);
+		put("xav", 	ImageType.XAV);
 	}};
 
 	public ImageSize getImageSize();

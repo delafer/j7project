@@ -15,6 +15,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import net.j7.commons.io.helpers.WildcardMatcher;
 
@@ -146,13 +147,31 @@ public abstract class AbstractFileProcessor {
 
 	public abstract void onFinish();
 
+	public abstract boolean isVirtualDirectory(String path);
+
+	public boolean isDirectory(Path entry) {
+		return Files.isDirectory(entry) || isVirtualDirectory(entry.toString());
+	}
+
+	private Stream<Path> list(Path entry) throws IOException {
+		if (Files.isDirectory(entry)) return Files.list(entry);
+		long s = Files.size(entry);
+		return s >= 3 && s <= 36864 ?
+				Files.lines(entry).
+				map(String::strip).
+				filter((line -> !line.isBlank() && !line.startsWith("-"))).
+				map(next -> Path.of(next)).
+				filter(next -> Files.exists(next))
+				: Stream.empty();
+	}
+
 
 	private void listContents(Path entry, Recurse recurse) throws IOException {
 		if (flagStopped || Files.notExists(entry)) return ;
-		if (Files.isDirectory(entry)) {
+		if (isDirectory(entry)) {
 			if (Recurse.Flat.equals(recurse)) return;
 			doDir(entry);
-			try (final var stream = Files.list(entry)) {
+			try (final var stream = list(entry)) {
 				final List<Path> dirs = new ArrayList<>(0);
 				stream.forEach(record -> {
 			       if (Files.isDirectory(record)) {

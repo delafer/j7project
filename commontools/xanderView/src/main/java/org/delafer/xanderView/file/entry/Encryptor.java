@@ -43,7 +43,7 @@ public class Encryptor {
 		return bytes;
 	};
 
-	private static Cipher getCipher(boolean mode) {
+	private synchronized static Cipher getCipher(boolean mode) {
 		Cipher r = null;
 		try {
 			r = Cipher.getInstance("AES_128/ECB/NoPadding", "SunJCE");
@@ -82,7 +82,7 @@ public class Encryptor {
 	}
 
 	private static ByteBuffer header(byte[] name) {
-		ByteBuffer bb  = ByteBuffer.allocateDirect(NAME_LENGTH_BYTES + name.length);
+		ByteBuffer bb  = ByteBuffer.allocate(NAME_LENGTH_BYTES + name.length);
 		bb.put(ByteUtils.UIntToByte2(name.length));
 		bb.put(name);
 		bb.rewind();

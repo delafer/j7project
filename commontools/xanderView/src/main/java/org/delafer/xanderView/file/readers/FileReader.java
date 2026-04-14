@@ -5,13 +5,8 @@ import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardWatchEventKinds;
-import java.nio.file.WatchEvent;
+import java.nio.file.*;
 import java.nio.file.WatchEvent.Kind;
-import java.nio.file.WatchKey;
-import java.nio.file.WatchService;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -19,6 +14,7 @@ import org.delafer.xanderView.common.Selector;
 import org.delafer.xanderView.comparator.BasicFileComparator;
 import org.delafer.xanderView.comparator.ComparatorFactory;
 import org.delafer.xanderView.file.ContentChangeWatcher;
+import org.delafer.xanderView.file.entry.HelperFS;
 import org.delafer.xanderView.file.entry.ImageFS;
 import org.delafer.xanderView.file.entry.ImageAbstract;
 import org.delafer.xanderView.file.entry.ImageAbstract.ImageType;
@@ -56,6 +52,7 @@ public class FileReader implements IAbstractReader {
 				private ArrayList<FileInfo> buffer = new ArrayList<>();
 				private Path last;
 				public boolean accept(FileInfo fileInfo, boolean isArc, String ext) {
+					//System.out.println("0:::::"+fileInfo.getPath().toString());
 					if (isArc && Recurse.Recursiv.equals(FileReader.this.mode)) return true;
 					ImageType imageType = ImageAbstract.getTypeByExt(ext);
 					if (ImageType.UNKNOWN.equals(imageType)) return false;
@@ -120,6 +117,10 @@ public class FileReader implements IAbstractReader {
 						e.printStackTrace();
 					}
 				}
+
+				public boolean isVirtualDirectory(String path) {
+					return HelperFS.isVirtualDirectory(path);
+				}
 			};
 			scanner.setMode(mode);
 			scanner.start();
@@ -156,6 +157,7 @@ public class FileReader implements IAbstractReader {
 			public void run() {
 				try {
 					Path path = Paths.get(getContainerPath());
+					if (!Files.isDirectory(path)) return ;
 					watchService = path.getFileSystem().newWatchService();
 
 					path.register(watchService,new Kind[] {ENTRY_CREATE,ENTRY_DELETE}, ExtendedWatchEventModifier.FILE_TREE);
@@ -225,16 +227,17 @@ public class FileReader implements IAbstractReader {
 	@Override
 	public String getContainerPath() {
 		File aFile = sourceFile;
-		if (aFile.isFile()) {
+		boolean isDir = HelperFS.isAnyDirectory(aFile);
+		if (!isDir) {
 			aFile = aFile.getParentFile();
 		}
 
-		return aFile.isDirectory() && aFile.exists() ? FileUtils.extractFullPathName(aFile) : "";
+		return isDir && aFile.exists() ? FileUtils.extractFullPathName(aFile) : "";
 	}
 
 	@Override
 	public Object getSingleEntry() {
-		return sourceFile.isFile() ? FileUtils.extractFullPathName(sourceFile) : null ;
+		return HelperFS.isAnyFile(sourceFile) ? FileUtils.extractFullPathName(sourceFile) : null ;
 	}
 
 //	public static void main(String[] args) {

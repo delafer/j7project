@@ -29,14 +29,15 @@ public class ImageDec<E> extends ImageAbstract<E> {
 		if (si instanceof ImageFS) {
 			try {
 //				System.out.println("CALCULATION SIZE: "+this.si.identifier);
-				Buf buf = si.rawData(si.getIdentifier(), 4);
+				Buf buf = si.rawData(si.getIdentifier(), X);
 				this.size = buf.get().getInt();
 				buf.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		} else {
-			init();
+			//init(); //speedup decoding cry
+			//this.size = buf.get().remaining();
 		}
 		
 	}
